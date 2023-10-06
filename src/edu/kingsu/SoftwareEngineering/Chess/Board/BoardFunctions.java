@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 
 /**
- * @author
+ * @author Daniell Buchner
+ * @version 0.1.0
  */
 public interface BoardFunctions {
 
