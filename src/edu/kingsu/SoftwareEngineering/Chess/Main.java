@@ -1,5 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess;
 
+import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
+
 /**
  * Tell me about this class
  *
@@ -8,19 +10,19 @@ package edu.kingsu.SoftwareEngineering.Chess;
  */
 public class Main {
 
-  /**
-  * Replace me with something useful
-  *
-  * @param args What is args for?
-  */
-  public static void main(String[] args) {
-    System.out.println("Hello World ...");
-    System.out.println("Don't forget to update the build file...");
-  }
+	/**
+	 * Replace me with something useful
+	 *
+	 * @param args What is args for?
+	 */
+	public static void main(String[] args) {
+		Board b = new Board();
+		System.out.println(b.toString());
+	}
 
-  /**
-  * The "default" construtor—take it or leave it
-  */
-  public Main() {
-  }
+	/**
+	 * The "default" construtor—take it or leave it
+	 */
+	public Main() {
+	}
 }
