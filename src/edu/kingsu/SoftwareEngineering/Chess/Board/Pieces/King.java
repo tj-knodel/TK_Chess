@@ -19,7 +19,7 @@ public class King extends Piece {
      */
     @Override
     public String getPieceName() {
-        return "King";
+        return "K";
     }
 
     /**
@@ -37,8 +37,54 @@ public class King extends Piece {
 
     @Override
     public ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPossibleMoves'");
+        ArrayList<Move> moves = new ArrayList<>();
+        Move endMove = new Move(startMove.column, startMove.row);
+        // Top Left
+        endMove.column--;
+        endMove.row--;
+        if (IsMoveValid(board, endMove))
+            moves.add(new Move(endMove.column, endMove.row));
+        endMove = new Move(startMove.column, startMove.row);
+        // Top
+        endMove.row--;
+        if (IsMoveValid(board, endMove))
+            moves.add(new Move(endMove.column, endMove.row));
+        endMove = new Move(startMove.column, startMove.row);
+        // Top Right
+        endMove.column++;
+        endMove.row--;
+        if (IsMoveValid(board, endMove))
+            moves.add(new Move(endMove.column, endMove.row));
+        endMove = new Move(startMove.column, startMove.row);
+        // Right
+        endMove.column++;
+        if (IsMoveValid(board, endMove))
+            moves.add(new Move(endMove.column, endMove.row));
+        endMove = new Move(startMove.column, startMove.row);
+        // Bottom Right
+        endMove.column++;
+        endMove.row++;
+        if (IsMoveValid(board, endMove))
+            moves.add(new Move(endMove.column, endMove.row));
+        endMove = new Move(startMove.column, startMove.row);
+        // Bottom
+        endMove.row++;
+        if (IsMoveValid(board, endMove))
+            moves.add(new Move(endMove.column, endMove.row));
+        endMove = new Move(startMove.column, startMove.row);
+        // Bottom Left
+        endMove.column--;
+        endMove.row++;
+        if (IsMoveValid(board, endMove))
+            moves.add(new Move(endMove.column, endMove.row));
+        endMove = new Move(startMove.column, startMove.row);
+        // Left
+        endMove.column--;
+        if (IsMoveValid(board, endMove))
+            moves.add(new Move(endMove.column, endMove.row));
+        endMove = new Move(startMove.column, startMove.row);
+
+        return moves;
     }
 
 }

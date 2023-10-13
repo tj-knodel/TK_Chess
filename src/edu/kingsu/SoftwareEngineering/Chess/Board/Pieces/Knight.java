@@ -19,7 +19,7 @@ public class Knight extends Piece {
      */
     @Override
     public String getPieceName() {
-        return "Knight";
+        return "N";
     }
 
     /**
@@ -37,8 +37,81 @@ public class Knight extends Piece {
 
     @Override
     public ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPossibleMoves'");
+        ArrayList<Move> moves = new ArrayList<>();
+
+        // Up Left
+        Move endMove = new Move(startMove.column, startMove.row);
+        if (IsMoveValid(board, endMove)) {
+            endMove.row -= 2;
+            endMove.column--;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+        }
+
+        // Left Up
+        endMove = new Move(startMove.column, startMove.row);
+        if (IsMoveValid(board, endMove)) {
+            endMove.row--;
+            endMove.column -= 2;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+        }
+
+        // Up Right
+        endMove = new Move(startMove.column, startMove.row);
+        if (IsMoveValid(board, endMove)) {
+            endMove.row -= 2;
+            endMove.column++;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+        }
+
+        // Right Up
+        endMove = new Move(startMove.column, startMove.row);
+        if (IsMoveValid(board, endMove)) {
+            endMove.row--;
+            endMove.column += 2;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+        }
+
+        // Down Right
+        endMove = new Move(startMove.column, startMove.row);
+        if (IsMoveValid(board, endMove)) {
+            endMove.row += 2;
+            endMove.column++;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+        }
+
+        // Right Down
+        endMove = new Move(startMove.column, startMove.row);
+        if (IsMoveValid(board, endMove)) {
+            endMove.row++;
+            endMove.column += 2;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+        }
+
+        // Down Left
+        endMove = new Move(startMove.column, startMove.row);
+        if (IsMoveValid(board, endMove)) {
+            endMove.row += 2;
+            endMove.column--;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+        }
+
+        // Left Down
+        endMove = new Move(startMove.column, startMove.row);
+        if (IsMoveValid(board, endMove)) {
+            endMove.row++;
+            endMove.column -= 2;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+        }
+
+        return moves;
     }
 
 }

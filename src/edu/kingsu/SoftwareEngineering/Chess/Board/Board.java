@@ -59,18 +59,31 @@ public class Board {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter move (column row): ");
         String line = scanner.nextLine();
-        while (line != null) {
-            String[] split = line.split(" ");
-            Integer column = Integer.parseInt(split[0]);
-            Integer row = Integer.parseInt(split[1]);
-            for (var move : board[row][column].getPossibleMoves(getBoard(), new Move(column, row))) {
-                System.out.println(
-                        board[row][column].getPieceName() + " can move to row: " + move.row + " col: " + move.column);
-            }
-            System.out.println(this.toString() + "\n");
-            System.out.print("Enter move (column row): ");
-            line = scanner.nextLine();
+        String[] split = line.split(" ");
+        Integer column = Integer.parseInt(split[0]);
+        Integer row = Integer.parseInt(split[1]);
+        for (var move : board[row][column].getPossibleMoves(getBoard(), new Move(column, row))) {
+            System.out.println(
+                    board[row][column].getPieceName() + " can move to row: " + move.row + " col: " + move.column);
+            board[move.row][move.column] = new TestPiece();
         }
+        System.out.println(this.toString() + "\n\n\n");
+        initializeGame();
+        // while (line != null) {
+        // String[] split = line.split(" ");
+        // Integer column = Integer.parseInt(split[0]);
+        // Integer row = Integer.parseInt(split[1]);
+        // for (var move : board[row][column].getPossibleMoves(getBoard(), new
+        // Move(column, row))) {
+        // System.out.println(
+        // board[row][column].getPieceName() + " can move to row: " + move.row + " col:
+        // " + move.column);
+        // board[move.row][move.column] = new TestPiece();
+        // }
+        // System.out.println(this.toString() + "\n");
+        // System.out.print("Enter move (column row): ");
+        // line = scanner.nextLine();
+        // }
 
     }
 
@@ -124,8 +137,9 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder boardString = new StringBuilder();
+        boardString.append("    0   1   2   3   4   5   6   7  ").append(System.lineSeparator());
         for (int row = 0; row < board.length; row++) {
-            boardString.append("row: " + row + " ");
+            boardString.append(row + " | ");
             for (int col = 0; col < board[row].length; col++) {
                 boardString.append(board[row][col].getPieceName()).append(" | ");
             }

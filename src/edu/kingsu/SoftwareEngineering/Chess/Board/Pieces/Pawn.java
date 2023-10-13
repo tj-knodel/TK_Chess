@@ -21,7 +21,7 @@ public class Pawn extends Piece {
      */
     @Override
     public String getPieceName() {
-        return "Pawn";
+        return "P";
     }
 
     /**

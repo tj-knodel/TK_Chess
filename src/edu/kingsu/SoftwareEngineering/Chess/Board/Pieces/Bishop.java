@@ -19,7 +19,7 @@ public class Bishop extends Piece {
      */
     @Override
     public String getPieceName() {
-        return "Bishop";
+        return "B";
     }
 
     /**

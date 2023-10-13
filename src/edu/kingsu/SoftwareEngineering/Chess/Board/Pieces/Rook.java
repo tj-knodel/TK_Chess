@@ -19,7 +19,7 @@ public class Rook extends Piece {
      */
     @Override
     public String getPieceName() {
-        return "Rook";
+        return "R";
     }
 
     /**
@@ -37,8 +37,44 @@ public class Rook extends Piece {
 
     @Override
     public ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPossibleMoves'");
+        ArrayList<Move> moves = new ArrayList<>();
+        Move endMove = new Move(startMove.column, startMove.row);
+        // Up
+        while (IsMoveValid(board, endMove)) {
+            endMove.row--;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+            else
+                break;
+        }
+        // Right
+        endMove = new Move(startMove.column, startMove.row);
+        while (IsMoveValid(board, endMove)) {
+            endMove.column++;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+            else
+                break;
+        }
+        // Down
+        endMove = new Move(startMove.column, startMove.row);
+        while (IsMoveValid(board, endMove)) {
+            endMove.row++;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+            else
+                break;
+        }
+        // Left
+        endMove = new Move(startMove.column, startMove.row);
+        while (IsMoveValid(board, endMove)) {
+            endMove.column--;
+            if (IsMoveValid(board, endMove))
+                moves.add(new Move(endMove.column, endMove.row));
+            else
+                break;
+        }
+        return moves;
     }
 
 }
