@@ -1,5 +1,9 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
+import java.util.ArrayList;
+
+import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+
 /**
  * The generic piece representation. Does not hold data
  * besides the piece id for the pieces to access.
@@ -54,6 +58,14 @@ public abstract class Piece {
     public int getTeam() {
         return team;
     }
+
+    // TODO: Split up IsMoveValid to two functions to handle if the move is within
+    // the board, and if there is a piece at the location.
+    protected boolean IsMoveValid(Piece[][] board, Move move) {
+        return move.column >= 0 && move.column < board.length && move.row >= 0 && move.row < board.length;
+    }
+
+    public abstract ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove);
 
     protected static int EMPTY_PIECE = -1;
     protected static int PAWN = 0;

@@ -1,6 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 
@@ -53,11 +54,29 @@ public class Board {
                 { new Rook(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1),
                         new Rook(1) }
         };
+
+        System.out.println(this.toString());
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter move (column row): ");
+        String line = scanner.nextLine();
+        while (line != null) {
+            String[] split = line.split(" ");
+            Integer column = Integer.parseInt(split[0]);
+            Integer row = Integer.parseInt(split[1]);
+            for (var move : board[row][column].getPossibleMoves(getBoard(), new Move(column, row))) {
+                System.out.println(
+                        board[row][column].getPieceName() + " can move to row: " + move.row + " col: " + move.column);
+            }
+            System.out.println(this.toString() + "\n");
+            System.out.print("Enter move (column row): ");
+            line = scanner.nextLine();
+        }
+
     }
 
     /**
      * Gets a deep copy of the board
-     * 
+     *
      * @return A deep copy of the board
      */
     Piece[][] getBoard() {
@@ -72,7 +91,7 @@ public class Board {
 
     /**
      * Check if a move can be applied, then do it.
-     * 
+     *
      * @param pieceMoving The chess piece being moved.
      * @param startMove   The starting move of the piece.
      * @param endMove     The target location of the piece.
@@ -84,7 +103,7 @@ public class Board {
 
     /**
      * Returns all possible moves for the current piece.
-     * 
+     *
      * @param piece
      * @param location
      * @return
@@ -95,7 +114,7 @@ public class Board {
 
     /**
      * Gets the algebraic notation string.
-     * 
+     *
      * @return The algebraic notation string of the current board.
      */
     public String getAlgebraicNotation() {
@@ -106,6 +125,7 @@ public class Board {
     public String toString() {
         StringBuilder boardString = new StringBuilder();
         for (int row = 0; row < board.length; row++) {
+            boardString.append("row: " + row + " ");
             for (int col = 0; col < board[row].length; col++) {
                 boardString.append(board[row][col].getPieceName()).append(" | ");
             }

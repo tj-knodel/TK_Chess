@@ -2,9 +2,14 @@ package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 /**
  * @author Daniell Buchner
- * @version 0.1.0
+ * @version 0.1.1
  */
 public class Move {
-    private int column;
-    private int row;
+    public int column;
+    public int row;
+
+    public Move(int column, int row) {
+        this.column = column;
+        this.row = row;
+    }
 }
