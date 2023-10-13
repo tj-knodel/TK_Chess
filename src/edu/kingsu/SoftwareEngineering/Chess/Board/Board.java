@@ -92,7 +92,7 @@ public class Board {
      *
      * @return A deep copy of the board
      */
-    Piece[][] getBoard() {
+    public Piece[][] getBoard() {
         Piece[][] copiedBoard = new Piece[8][8];
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
@@ -110,7 +110,7 @@ public class Board {
      * @param endMove     The target location of the piece.
      * @return True if the move was successful.
      */
-    boolean applyMove(Piece pieceMoving, Move startMove, Move endMove) {
+    public boolean applyMove(Piece pieceMoving, Move startMove, Move endMove) {
         return false;
     }
 
@@ -121,7 +121,7 @@ public class Board {
      * @param location
      * @return
      */
-    ArrayList<Move> getPossibleMoves(Piece piece, Location location) {
+    public ArrayList<Move> getPossibleMoves(Piece piece, Location location) {
         return null;
     }
 

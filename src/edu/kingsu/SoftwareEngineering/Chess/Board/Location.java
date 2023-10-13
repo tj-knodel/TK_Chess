@@ -5,6 +5,11 @@ package edu.kingsu.SoftwareEngineering.Chess.Board;
  * @version 0.1.0
  */
 public class Location {
-    private int column;
-    private int row;
+    public int column;
+    public int row;
+
+    public Location(int column, int row) {
+        this.column = column;
+        this.row = row;
+    }
 }
