@@ -3,6 +3,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 import java.util.ArrayList;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
  * @author Daniell Buchner
@@ -41,26 +42,61 @@ public class Pawn extends Piece {
     public ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove) {
         ArrayList<Move> moves = new ArrayList<>();
         Move endMove = new Move(startMove.column, startMove.row);
-        if (team == 0)
-            endMove.row++;
-        else if (team == 1)
-            endMove.row--;
 
-        if (endMove.row < board.length && endMove.row >= 0) {
-            moves.add(endMove);
+        if (team == 0) {
+            endMove.row++;
+        }
+        else if (team == 1) {
+            endMove.row--;
+        }
+
+        MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+        if (moveValid.isInBoard) {
+            if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                if (moveValid.isEmptySpace) {
+                    moves.add(new Move(endMove.column, endMove.row));
+                }
+                if (moveValid.isOtherTeam) {
+                    moves.add(new Move(endMove.column, endMove.row));
+                }
+            }
         }
 
         if (!hasMoved) {
-            Move endMove2 = new Move(startMove.column, startMove.row);
+            endMove = new Move(startMove.column, startMove.row);
             if (team == 0)
-                endMove2.row += 2;
+                endMove.row += 2;
             else if (team == 1)
-                endMove2.row -= 2;
+                endMove.row -= 2;
 
-            if (endMove2.row < board.length && endMove2.row >= 0) {
-                moves.add(endMove2);
+            moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if (moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
             }
         }
+//
+//        if (endMove.row < board.length && endMove.row >= 0) {
+//            moves.add(endMove);
+//        }
+//
+//        if (!hasMoved) {
+//            Move endMove2 = new Move(startMove.column, startMove.row);
+//            if (team == 0)
+//                endMove2.row += 2;
+//            else if (team == 1)
+//                endMove2.row -= 2;
+//
+//            if (endMove2.row < board.length && endMove2.row >= 0) {
+//                moves.add(endMove2);
+//            }
+//        }
         return moves;
     }
 

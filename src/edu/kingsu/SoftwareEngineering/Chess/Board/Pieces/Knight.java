@@ -3,6 +3,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 import java.util.ArrayList;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
  * @author Daniell Buchner
@@ -44,8 +45,20 @@ public class Knight extends Piece {
         if (IsMoveValid(board, endMove)) {
             endMove.row -= 2;
             endMove.column--;
-            if (IsMoveValid(board, endMove))
-                moves.add(new Move(endMove.column, endMove.row));
+            // Keep adding moves as long as we have empty space, otherwise add
+            // the first enemy player move and then break out of the loop.
+            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if(moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace)
+                        moves.add(new Move(endMove.column, endMove.row));
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
+            }
+//            if (IsMoveValid(board, endMove))
+//                moves.add(new Move(endMove.column, endMove.row));
         }
 
         // Left Up
@@ -53,8 +66,18 @@ public class Knight extends Piece {
         if (IsMoveValid(board, endMove)) {
             endMove.row--;
             endMove.column -= 2;
-            if (IsMoveValid(board, endMove))
-                moves.add(new Move(endMove.column, endMove.row));
+            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if(moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace)
+                        moves.add(new Move(endMove.column, endMove.row));
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
+            }
+//            if (IsMoveValid(board, endMove))
+//                moves.add(new Move(endMove.column, endMove.row));
         }
 
         // Up Right
@@ -62,8 +85,18 @@ public class Knight extends Piece {
         if (IsMoveValid(board, endMove)) {
             endMove.row -= 2;
             endMove.column++;
-            if (IsMoveValid(board, endMove))
-                moves.add(new Move(endMove.column, endMove.row));
+            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if(moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace)
+                        moves.add(new Move(endMove.column, endMove.row));
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
+            }
+//            if (IsMoveValid(board, endMove))
+//                moves.add(new Move(endMove.column, endMove.row));
         }
 
         // Right Up
@@ -71,8 +104,18 @@ public class Knight extends Piece {
         if (IsMoveValid(board, endMove)) {
             endMove.row--;
             endMove.column += 2;
-            if (IsMoveValid(board, endMove))
-                moves.add(new Move(endMove.column, endMove.row));
+            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if(moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace)
+                        moves.add(new Move(endMove.column, endMove.row));
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
+            }
+//            if (IsMoveValid(board, endMove))
+//                moves.add(new Move(endMove.column, endMove.row));
         }
 
         // Down Right
@@ -80,8 +123,18 @@ public class Knight extends Piece {
         if (IsMoveValid(board, endMove)) {
             endMove.row += 2;
             endMove.column++;
-            if (IsMoveValid(board, endMove))
-                moves.add(new Move(endMove.column, endMove.row));
+            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if(moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace)
+                        moves.add(new Move(endMove.column, endMove.row));
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
+            }
+//            if (IsMoveValid(board, endMove))
+//                moves.add(new Move(endMove.column, endMove.row));
         }
 
         // Right Down
@@ -89,8 +142,18 @@ public class Knight extends Piece {
         if (IsMoveValid(board, endMove)) {
             endMove.row++;
             endMove.column += 2;
-            if (IsMoveValid(board, endMove))
-                moves.add(new Move(endMove.column, endMove.row));
+            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if(moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace)
+                        moves.add(new Move(endMove.column, endMove.row));
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
+            }
+//            if (IsMoveValid(board, endMove))
+//                moves.add(new Move(endMove.column, endMove.row));
         }
 
         // Down Left
@@ -98,8 +161,18 @@ public class Knight extends Piece {
         if (IsMoveValid(board, endMove)) {
             endMove.row += 2;
             endMove.column--;
-            if (IsMoveValid(board, endMove))
-                moves.add(new Move(endMove.column, endMove.row));
+            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if(moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace)
+                        moves.add(new Move(endMove.column, endMove.row));
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
+            }
+//            if (IsMoveValid(board, endMove))
+//                moves.add(new Move(endMove.column, endMove.row));
         }
 
         // Left Down
@@ -107,8 +180,18 @@ public class Knight extends Piece {
         if (IsMoveValid(board, endMove)) {
             endMove.row++;
             endMove.column -= 2;
-            if (IsMoveValid(board, endMove))
-                moves.add(new Move(endMove.column, endMove.row));
+            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+            if(moveValid.isInBoard) {
+                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+                    if (moveValid.isEmptySpace)
+                        moves.add(new Move(endMove.column, endMove.row));
+                    if (moveValid.isOtherTeam) {
+                        moves.add(new Move(endMove.column, endMove.row));
+                    }
+                }
+            }
+//            if (IsMoveValid(board, endMove))
+//                moves.add(new Move(endMove.column, endMove.row));
         }
 
         return moves;
