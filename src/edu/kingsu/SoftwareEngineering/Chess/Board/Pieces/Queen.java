@@ -7,7 +7,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
  * @author Daniell Buchner
- * @version 0.1.0
+ * @version 1.1.0
  */
 public class Queen extends Piece {
 

@@ -10,7 +10,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
  * besides the piece id for the pieces to access.
  *
  * @author Daniell Buchner
- * @version 0.2.0
+ * @version 1.2.0
  */
 public abstract class Piece {
 
