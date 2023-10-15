@@ -67,7 +67,7 @@
   </target>
 
 
-  <target name="compile" depends="init" description="Compile the code into classes">
+  <target name="compile" depends="init,clean" description="Compile the code into classes">
     <mkdir dir="${classes.dir}"/>
     <javac  debug="true"
             debuglevel="lines,vars,source"
@@ -82,6 +82,7 @@
   <target name="jar" depends="compile" description="Bundle application into a distributable JAR file">
     <mkdir dir="${jar.dir}"/>
     <jar destfile="${jar.file}" basedir="${classes.dir}">
+      <!--<fileset dir="${src.dir}\edu\kingsu\SoftwareEngineering\Chess\GUI\GUIImages"/> <! Added, TODO, maybe change later-->
       <fileset dir="${assets.dir}"/>
       <manifest>
         <attribute name="Main-Class" value="${Main-Class}"/>

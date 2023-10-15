@@ -1,5 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess;
 
+import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 
 /**
@@ -16,7 +17,10 @@ public class Main {
 	 * @param args What is args for?
 	 */
 	public static void main(String[] args) {
-		Board b = new Board();
+
+	//	Board b = new Board();
+	
+		GUIManager ui = new GUIManager();
 	}
 
 	/**
