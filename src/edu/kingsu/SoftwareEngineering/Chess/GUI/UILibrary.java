@@ -16,7 +16,7 @@ public abstract class UILibrary  {
 
 
     public static final int uiSize_X = 1455; //  JFrame x Size // 1440
-    public static final int uiSize_Y = 1065; //  JFrame y Size // 1024
+    public static final int uiSize_Y = 1085; //  JFrame y Size // 1024
 
 
 
@@ -29,11 +29,19 @@ public abstract class UILibrary  {
     public static JTextField EnterMove_TextField;
 
     // MenuBar  / Menu items
-    //public static JMenuItem FileExploreButton; // Select Image Directory
-
-
-
-
+    public static JMenuItem NewGame_JMenuItem; 
+    public static JMenuItem ImportGame_JMenuItem;
+    public static JMenuItem ExportGame_JMenuItem; 
+    public static JMenuItem RestartGame_JMenuItem; 
+    public static JMenuItem TogglePossibleMoves_JMenuItem;
+    public static JMenuItem TogglePreviousMoves_JMenuItem;
+    public static JMenuItem SetBoardAppearance_JMenuItem;
+    public static JMenuItem ToggleCoordinates_JMenuItem;
+    public static JMenuItem SetAIStrengthEasy_JMenuItem;
+    public static JMenuItem SetAIStrengthMedium_JMenuItem;
+    public static JMenuItem SetAIStrengthMax_JMenuItem;
+    public static JMenuItem ToggleAIStrengthSlider_JMenuItem;
+    public static JMenuItem About_JMenuItem;
 
     // Colors
     public static final Color BackgroundColor = new Color(54,53,48); // Main JFrame Background Color

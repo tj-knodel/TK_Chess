@@ -6,21 +6,24 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI.PIECES_ENUM;
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.util.Set;
+
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI.PIECES_ENUM;
 
 /**
  * Creates the JFrame
  * 
  * @author Noah Bulas
- * @version V1 Se,23
+ * @version V1
  */
 public class CreateMainFrame {
 
@@ -89,7 +92,6 @@ public class CreateMainFrame {
             // DEFINE MOVES JLabel OR WHATEVER TO DISPLAY MOVE STRINGS "1. Qe4 "
             // TODO
 
-
             JLabel MovesFrame = new JLabel("", SwingConstants.CENTER);
             MovesFrame.setBounds(935,91,470,778); // Numbers from Figma Design
             MovesFrame.setIcon(new ImageIcon(getImage("MovesFrame.png").getImage().getScaledInstance(470, 778, Image.SCALE_DEFAULT)));
@@ -111,7 +113,7 @@ public class CreateMainFrame {
         // -----------------------------------------------------
 
         ///////////////////// TEMPORARY /////////////////////////
-        private final String[][] board_TEMP = new String[][] { 
+    private final String[][] board_TEMP = new String[][] { 
             {"R_B", "N_B", "B_B", "Q_B", "K_B", "B_B", "K_B", "R_B" },
             {"P_B", "P_B", "P_B", "P_B", "P_B", "P_B", "P_B", "P_B" },
             {"", "", "", "", "", "", "", ""},
@@ -205,10 +207,111 @@ public class CreateMainFrame {
         // -----------------------------------------------------
         // -----------------------------------------------------
 
+        private void createJMenus() {
+            JMenuBar bar = new JMenuBar();
+            bar.setBackground(UILibrary.ForegroundColor);
+            bar.setForeground(UILibrary.TextColor_White);
+            UILibrary.MainFrame.setJMenuBar(bar);
+            
+            // ---- GAME -------
+            JMenu Game_JMenu = new JMenu("Game"); // button on the bar
+            bar.add(Game_JMenu);
+            Game_JMenu.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Game_JMenu.setForeground(UILibrary.TextColor_White);
+
+            JMenuItem NewGame_Item = new JMenuItem("New Game");
+            NewGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Game_JMenu.add(NewGame_Item);
+            UILibrary.NewGame_JMenuItem = NewGame_Item;
+            
+            JMenuItem ImportGame_Item = new JMenuItem("Import Game");
+            ImportGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Game_JMenu.add(ImportGame_Item);
+            UILibrary.ImportGame_JMenuItem = ImportGame_Item;
+            
+            JMenuItem ExportGame_Item = new JMenuItem("Export Game");
+            ExportGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Game_JMenu.add(ExportGame_Item);  
+             UILibrary.ExportGame_JMenuItem = ExportGame_Item;
+            
+             JMenuItem RestartGame_Item = new JMenuItem("Restart Game");
+            RestartGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Game_JMenu.add(RestartGame_Item);
+            UILibrary.RestartGame_JMenuItem = RestartGame_Item;
+        
+
+             // ---- BoardAppearance -------
+            JMenu Appearance_JMenu = new JMenu("Board Appearance"); // button on the bar
+            bar.add(Appearance_JMenu);
+            Appearance_JMenu.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Appearance_JMenu.setForeground(UILibrary.TextColor_White);
+
+            JMenuItem Possible_Item = new JMenuItem("Toggle Possible Moves");
+            Possible_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Appearance_JMenu.add(Possible_Item);
+            UILibrary.TogglePossibleMoves_JMenuItem = Possible_Item;
+            
+            JMenuItem Previous_Item = new JMenuItem("Toggle Previous Moves");
+            Previous_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Appearance_JMenu.add(Previous_Item);
+            UILibrary.TogglePreviousMoves_JMenuItem = Previous_Item;
+            
+            JMenuItem Coordinates_Item = new JMenuItem("Toggle Coordinates");
+            Coordinates_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Appearance_JMenu.add(Coordinates_Item);  
+             UILibrary.ToggleCoordinates_JMenuItem = Coordinates_Item;
+            
+            JMenuItem Appearance_Item = new JMenuItem("Set Board Appearance");
+            Appearance_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Appearance_JMenu.add(Appearance_Item);
+            UILibrary.SetBoardAppearance_JMenuItem = Appearance_Item;
+
+             // ---- Set Computer Strength -------
+            JMenu ComputerStrength_JMenu = new JMenu("Set Computer Strength"); // button on the bar
+            bar.add(ComputerStrength_JMenu);
+            ComputerStrength_JMenu.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            ComputerStrength_JMenu.setForeground(UILibrary.TextColor_White);
+
+            JMenuItem AiEasy_Item = new JMenuItem("Easy");
+            AiEasy_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            ComputerStrength_JMenu.add(AiEasy_Item);
+            UILibrary.SetAIStrengthEasy_JMenuItem = AiEasy_Item;
+            
+            JMenuItem AiMedium_Item = new JMenuItem("Medium");
+            AiMedium_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            ComputerStrength_JMenu.add(AiMedium_Item);
+            UILibrary.SetAIStrengthMedium_JMenuItem = AiMedium_Item;
+            
+            JMenuItem AiMax_Item = new JMenuItem("Max");
+            AiMax_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            ComputerStrength_JMenu.add(AiMax_Item);  
+             UILibrary.SetAIStrengthMax_JMenuItem = AiMax_Item;
+            
+            JMenuItem StrengthSlider_Item = new JMenuItem("Toggle Strength Slider");
+            StrengthSlider_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            ComputerStrength_JMenu.add(StrengthSlider_Item);
+            UILibrary.ToggleAIStrengthSlider_JMenuItem = StrengthSlider_Item;
+
+            // ---- Help -------
+            JMenu Help_JMenu = new JMenu("Help"); // button on the bar
+            bar.add(Help_JMenu);
+            Help_JMenu.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Help_JMenu.setForeground(UILibrary.TextColor_White);
+
+            JMenuItem About_Item = new JMenuItem("About");
+            About_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+            Help_JMenu.add(About_Item);
+            UILibrary.SetAIStrengthEasy_JMenuItem = About_Item;
+        }
+
+        // -----------------------------------------------------
+        // -----------------------------------------------------
+
         public CreateMainFrame() {
             createJFrame();
             createUIElements();
             createChessBoard();
+            createJMenus();
         }
 
     }
