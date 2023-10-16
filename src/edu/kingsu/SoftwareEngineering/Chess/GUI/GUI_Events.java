@@ -23,8 +23,9 @@ public class GUI_Events {
 
     }
 
+        // Event is received from ChessTileUI
         public static void chessTileWasClicked(char row, char column) {
-              System.out.println("Tile " + row + " " + column + " was clicked.");
+              System.out.println("Tile " + (int)row + " " + (int)column + " was clicked.");
         }
 
 }

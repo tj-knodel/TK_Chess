@@ -6,29 +6,57 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JLayeredPane;
-import javax.swing.SwingConstants;
 
 public class ChessTileUI extends JLayeredPane {
     
+    /**
+     * Used to specify pieces to display
+     */
     public static enum PIECES_ENUM {
         Pawn, Rook, Knight, Bishop, Queen, King, None
     }
 
-    public char row;
+    /**
+     * Row of the Tile
+     */
+    public char row; 
+    
+    /**
+     * Column of the tile
+     */
     public char column;
 
+    /**
+     * How big the tile is in pixels
+     */
     private static final int TILE_SIZE = 106;
+    
+    /**
+     * The UI element which displays the tile as a possible move
+     */
     private JLabel PossibleMoveCircle;
+
+    /**
+     * UI element which displays the tile as a previous move
+     */
     private JPanel PreviousMoveSquare;
+
+    /**
+     * UI element which holds the piece image
+     */
     private JLabel PieceImage;
     
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Show the specific piece in the tile
+     * Resizes and positions the image to fit perfectly within the tile
+     * @param imageString
+     */
     private void assignImage(String imageString) {
         if (imageString.equals("")) {
             PieceImage.setVisible(false);
@@ -63,10 +91,18 @@ public class ChessTileUI extends JLayeredPane {
         PieceImage.setVisible(true);
         PieceImage.setIcon(new ImageIcon(getBoardImage(imageString).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT)));
         PieceImage.setBounds(xPosition, yPosition, newWidth, newHeight);
-
     }
 
-    public void setPieceImage(PIECES_ENUM piece, boolean isWhite) { // TODO, redo parameters to align with board class
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+
+    /**
+     * Sets the piece  to be displayed on the tile
+     * Maybe consider changing parameters later
+     * @param piece Piece type to be shown,
+     * @param isWhite true = white piece, false = black piece
+     */
+    public void setPieceImage(PIECES_ENUM piece, boolean isWhite) {
         
             // Many `if` statements to display the correct image
             if (piece == PIECES_ENUM.Pawn) {
@@ -95,10 +131,18 @@ public class ChessTileUI extends JLayeredPane {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-
+    /**
+     * Set the visibility of this tile being  a possible position to be moved to
+     * @param visibility true = show tile, false = hide tile
+     */
     public void setPossibleMoveCircleVisibility(boolean visibility) {
         PossibleMoveCircle.setVisible(visibility);
     }
+
+    /**
+     * Set the visibility of this tile displaying the previous move
+     * @param visibility true = show tile, false = hide tile
+     */
     public void setPreviousMoveSquareVisibility(boolean visibility) {
         PreviousMoveSquare.setVisible(visibility);
     }
@@ -118,6 +162,10 @@ public class ChessTileUI extends JLayeredPane {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Creates the UI Layers for a tile
+         * @param displayWhite Is it a light color tile or a dark color tile
+     */
     private void createTile(boolean displayWhite) {
         this.setLayout(null);
         this.setBackground(new Color(0, 0, 0, 0));
@@ -131,13 +179,15 @@ public class ChessTileUI extends JLayeredPane {
             boardSquare.setIcon(new ImageIcon(getBoardImage("square_black.png").getImage().getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT)));
         this.add(boardSquare, Integer.valueOf(1));
     
-        // Foreground
+        // Yellow circle which indicates a possible move when selecting a piece. 
+        // maybe consider switching to a Graphics2D drawing instead of a image
         PossibleMoveCircle = new JLabel();
         PossibleMoveCircle.setBounds(33, 33, 40, 40);
         PossibleMoveCircle.setIcon(new ImageIcon(getBoardImage("PossibleMoveCircle.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
         PossibleMoveCircle.setVisible(false);
         this.add(PossibleMoveCircle, Integer.valueOf(5));
 
+        // Yellow Square which indicated previous move
         PreviousMoveSquare = new JPanel();
         PreviousMoveSquare.setBounds(0,0, 105,105); // This cant be 106x106 or else java doesn't render whats underneath
         PreviousMoveSquare.setOpaque(true);
@@ -145,41 +195,36 @@ public class ChessTileUI extends JLayeredPane {
         PreviousMoveSquare.setVisible(true);
         this.add(PreviousMoveSquare, Integer.valueOf(2));
 
+        // Piece Image
         PieceImage = new JLabel();
         this.add(PieceImage, Integer.valueOf(4));
-
     }
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-    private void detectTileClicks() {
 
+    /**
+     * Detects when the tile is clicked, sends event to GUI_Events
+     */
+    private void detectTileClicks() { // This click thing works but not super reliable, 
+        // see Commit Tile Click for Version 2, which has better clicking but visual bug after click
+        this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    GUI_Events.chessTileWasClicked(row, column);
+                }
+            });
+        }
 
-        JButton ClickDetector = new JButton();
-        ClickDetector.setBounds(0,0, 105,105); // This cant be 106x106 or else java doesn't render whats underneath
-        //ClickDetector.setOpaque(false);
-        ClickDetector.setContentAreaFilled(false);
-        ClickDetector.setBorderPainted(false);
-        ClickDetector.setRolloverEnabled(false);
-        ClickDetector.setFocusable(false);
-        ClickDetector.setBackground(new Color(255,255,255, 0));
-        ClickDetector.setForeground(new Color(255,255,255, 0));
-        ClickDetector.setSelectedIcon(new ImageIcon());
-        this.add(ClickDetector, Integer.valueOf(6));
-       
-        ClickDetector.addActionListener(e-> {
-            GUI_Events.chessTileWasClicked(row, column);
-            ClickDetector.setContentAreaFilled(false);
-            ClickDetector.setBorderPainted(false);
-            ClickDetector.setRolloverEnabled(false);
-            ClickDetector.setFocusable(false);
-            ClickDetector.setBackground(new Color(255,255,255, 0));
-            ClickDetector.setForeground(new Color(255,255,255, 0));
-         });
-    }
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+         * Constructor for a chess UI Tile
+         * @param row Which row the tile is in (only used to send data to mouse click function)
+         * @param column Which column the tile is in (only used to send data to mouse click function)
+         * @param displayWhite Is it a light color tile or a dark color tile
+     */
     public ChessTileUI(char row, char column, boolean displayWhite) {
         this.row = row;
         this.column = column;
