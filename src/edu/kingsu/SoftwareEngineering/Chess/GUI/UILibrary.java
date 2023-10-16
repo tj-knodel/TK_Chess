@@ -43,6 +43,13 @@ public abstract class UILibrary  {
     public static JMenuItem ToggleAIStrengthSlider_JMenuItem;
     public static JMenuItem About_JMenuItem;
 
+    /*
+      JMenuItems can be connected by doing:
+      UILibrary.myJMenuItem.addActionListener(e -> {
+           System.out.println("My JMenu Item was clicked");
+      });
+     */
+
     // Colors
     public static final Color BackgroundColor = new Color(54,53,48); // Main JFrame Background Color
     public static final Color ForegroundColor = new Color(42,41,37); // Main JFrame Foreground Color
