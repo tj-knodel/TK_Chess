@@ -21,8 +21,10 @@ public class GUI_Events {
             System.out.println("The text box detected input: " + input);
         });
 
-
-
     }
+
+        public static void chessTileWasClicked(char row, char column) {
+              System.out.println("Tile " + row + " " + column + " was clicked.");
+        }
 
 }

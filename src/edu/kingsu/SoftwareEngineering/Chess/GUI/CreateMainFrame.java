@@ -9,6 +9,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI.PIECES_ENUM;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -108,7 +110,7 @@ public class CreateMainFrame {
         // -----------------------------------------------------
         // -----------------------------------------------------
 
-        // TEMPORARY
+        ///////////////////// TEMPORARY /////////////////////////
         private final String[][] board_TEMP = new String[][] { 
             {"R_B", "N_B", "B_B", "Q_B", "K_B", "B_B", "K_B", "R_B" },
             {"P_B", "P_B", "P_B", "P_B", "P_B", "P_B", "P_B", "P_B" },
@@ -119,6 +121,8 @@ public class CreateMainFrame {
             {"P_W", "P_W", "P_W", "P_W", "P_W", "P_W", "P_W", "P_W" },
              {"R_W", "N_W", "B_W", "Q_W", "K_W", "B_W", "K_W", "R_W" },
         };
+        ///////////////////// TEMPORARY /////////////////////////
+
 
     /**
          * Gets the image from the local jar File
@@ -142,6 +146,52 @@ public class CreateMainFrame {
 
                     boardTilesUI[row][column] = new ChessTileUI((char)row, (char)column, displayWhite);
                     boardUI.add(boardTilesUI[row][column]);
+
+
+                    //////////// TEMP ////////////
+                  PIECES_ENUM piece = PIECES_ENUM.None;
+                  boolean isWhite = true;
+                     if (board_TEMP[row][column] == "R_B") {
+                        piece = PIECES_ENUM.Rook;
+                        isWhite = false;
+                     } else if (board_TEMP[row][column] == "N_B") {
+                        piece = PIECES_ENUM.Knight;
+                        isWhite = false;
+                     } else if (board_TEMP[row][column] == "B_B") {
+                        piece = PIECES_ENUM.Bishop;
+                        isWhite = false;
+                     } else if (board_TEMP[row][column] == "Q_B") {
+                        piece = PIECES_ENUM.Queen;
+                        isWhite = false;
+                     } else if (board_TEMP[row][column] == "K_B") {
+                        piece = PIECES_ENUM.King;
+                        isWhite = false;
+                     } else if (board_TEMP[row][column] == "P_B") {
+                        piece = PIECES_ENUM.Pawn;
+                        isWhite = false;
+                     } else if (board_TEMP[row][column] == "R_W") {
+                         piece = PIECES_ENUM.Rook;
+                         isWhite = true;
+                     } else if (board_TEMP[row][column] == "N_W") {
+                         piece = PIECES_ENUM.Knight;
+                         isWhite = true;
+                     } else if (board_TEMP[row][column] == "B_W") {
+                         piece = PIECES_ENUM.Bishop;
+                         isWhite = true;
+                     } else if (board_TEMP[row][column] == "Q_W") {
+                         piece = PIECES_ENUM.Queen;
+                         isWhite = true;
+                     } else if (board_TEMP[row][column] == "K_W") {
+                         piece = PIECES_ENUM.King;
+                         isWhite = true;
+                     } else if (board_TEMP[row][column] == "P_W") {
+                         piece = PIECES_ENUM.Pawn;
+                         isWhite = true;
+                     }
+   
+                     boardTilesUI[row][column].setPieceImage(piece, isWhite);
+
+                    ////////////// TEMP /////////////////////
 
                     if (column != 7)
                         displayWhite = !displayWhite;
