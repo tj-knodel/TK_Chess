@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JLayeredPane;
@@ -152,13 +153,30 @@ public class ChessTileUI extends JLayeredPane {
     // -----------------------------------------------------
     // -----------------------------------------------------
     private void detectTileClicks() {
-        this.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    GUI_Events.chessTileWasClicked(row, column);
-                }
-            });
-        }
+
+
+        JButton ClickDetector = new JButton();
+        ClickDetector.setBounds(0,0, 105,105); // This cant be 106x106 or else java doesn't render whats underneath
+        //ClickDetector.setOpaque(false);
+        ClickDetector.setContentAreaFilled(false);
+        ClickDetector.setBorderPainted(false);
+        ClickDetector.setRolloverEnabled(false);
+        ClickDetector.setFocusable(false);
+        ClickDetector.setBackground(new Color(255,255,255, 0));
+        ClickDetector.setForeground(new Color(255,255,255, 0));
+        ClickDetector.setSelectedIcon(new ImageIcon());
+        this.add(ClickDetector, Integer.valueOf(6));
+       
+        ClickDetector.addActionListener(e-> {
+            GUI_Events.chessTileWasClicked(row, column);
+            ClickDetector.setContentAreaFilled(false);
+            ClickDetector.setBorderPainted(false);
+            ClickDetector.setRolloverEnabled(false);
+            ClickDetector.setFocusable(false);
+            ClickDetector.setBackground(new Color(255,255,255, 0));
+            ClickDetector.setForeground(new Color(255,255,255, 0));
+         });
+    }
     // -----------------------------------------------------
     // -----------------------------------------------------
 
