@@ -40,6 +40,8 @@ public abstract class UILibrary  {
     public static final Color ForegroundColor = new Color(42,41,37); // Main JFrame Foreground Color
     public static final Color TextColor_White = new Color(255,255,255); // Text Color for all text
     public static final Color TextColor_Gray = new Color(192,192,192); // Text Color
+    public static final Color ForegroundTileColor = new Color(255,227,115, 70); // Text Color
+
 
     /**
      * Constructor not Used

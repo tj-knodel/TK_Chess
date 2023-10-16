@@ -129,7 +129,7 @@ public class CreateMainFrame {
         return new ImageIcon(getClass().getClassLoader().getResource("BoardImages_Clash/" + imageToGet));
     }
 
-
+    public ChessTileUI boardTilesUI[][] = new ChessTileUI[8][8];
 
         public void createChessBoard() {
             JLayeredPane boardUI = new JLayeredPane();
@@ -139,30 +139,15 @@ public class CreateMainFrame {
             boolean displayWhite = false;
             for (int row = 0; row < 8; ++row) {
                   for (int column = 0; column < 8; ++column) {
-                    
-                        JLabel boardSquare = new JLabel("", SwingConstants.CENTER);
-                        boardSquare.setSize(106,106); // Numbers from Figma Design
 
-                        if (displayWhite) 
-                            boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(106, 106, Image.SCALE_DEFAULT)));
-                        else
-                            boardSquare.setIcon(new ImageIcon(getBoardImage("square_black.png").getImage().getScaledInstance(106, 106, Image.SCALE_DEFAULT)));
-
-                    boardUI.add(boardSquare);
+                    boardTilesUI[row][column] = new ChessTileUI((char)row, (char)column, displayWhite);
+                    boardUI.add(boardTilesUI[row][column]);
 
                     if (column != 7)
                         displayWhite = !displayWhite;
-    
+                    
                 }
             }
-
-
-
-            //for (String[] row: board) {
-             //   for (String piece: row ) {
-
-              //  }
-           // }
 
            UILibrary.MainFrame.add(boardUI);
         }
