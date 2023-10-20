@@ -1,6 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.GUI;
 
 import java.awt.Color;
+import java.awt.Container;
 
 import javax.swing.*;
 
@@ -19,19 +20,39 @@ public abstract class UILibrary  {
     public static final int uiSize_Y = 1085; //  JFrame y Size // 1024
 
 
-
     //----- UI-------------
     
     // Main
-    public static JFrame MainFrame; // Main JFrame
+    public static JFrame ChessJFrame; // Main JFrame
+
+    public static JLabel MainFrame; // Was a Container, but background was broken
+    public static JLabel NewGameFrame;
+    public static JLabel SetAIStrengthSliderFrame;
+    public static JLabel PuzzleFrame;
+
+    // Main Frame
     public static JButton StepBackwards_Button;
     public static JButton StepForwards_Button;
     public static JTextField EnterMove_TextField;
 
+    // New Game Frame
+    public static JButton WhitePlayer_VS_BlackPlayer_Button;
+    public static JButton WhitePlayer_VS_BlackComp_Button;
+    public static JButton WhiteComp_VS_BlackComp_Button;
+    public static JButton WhiteComp_VS_BlackPlayer_Button;
+    public static JButton RDMPlayer_VS_RDMComp_Button;
+    public static JButton LearnChessButton;  
+
+    // Set Ai Strength Slider Frame
+    public static JButton ConfirmSliderButton;
+    public static JButton CancelSliderButton;
+    public static JSlider SetAiStrengthSlider;
+
+
     // MenuBar  / Menu items
     public static JMenuItem NewGame_JMenuItem; 
-    public static JMenuItem ImportGame_JMenuItem;
-    public static JMenuItem ExportGame_JMenuItem; 
+    public static JMenuItem LoadGame_JMenuItem;
+    public static JMenuItem SaveGame_JMenuItem; 
     public static JMenuItem RestartGame_JMenuItem; 
     public static JMenuItem TogglePossibleMoves_JMenuItem;
     public static JMenuItem TogglePreviousMoves_JMenuItem;

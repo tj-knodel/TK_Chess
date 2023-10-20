@@ -7,7 +7,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
  * Tell me about this class
  *
  * @author Who are you?
- * @version 1.2.3.4.5
+ * @version 1.2.3.4.5.6
  */
 public class Main {
 
@@ -20,7 +20,7 @@ public class Main {
 
 	//	Board b = new Board();
 	
-		GUIManager ui = new GUIManager();
+		new GUIManager();
 	}
 
 	/**
