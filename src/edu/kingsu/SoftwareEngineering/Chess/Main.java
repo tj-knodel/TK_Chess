@@ -8,7 +8,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
  * Tell me about this class
  *
  * @author Who are you?
- * @version 1.2.3.4.5
+ * @version 1.2.3.4.5.6
  */
 public class Main {
 
@@ -22,6 +22,7 @@ public class Main {
 
 	//	Board b = new Board();
 	
+<<<<<<< HEAD
 
 	Timer timer = new Timer();
 	timer.startTimer();
@@ -35,6 +36,9 @@ public class Main {
     
 	 timer.stopTimer();
 		
+=======
+		new GUIManager();
+>>>>>>> e94f6c75a5c3e411df37823864999e18885405a6
 	}
 
 	/**

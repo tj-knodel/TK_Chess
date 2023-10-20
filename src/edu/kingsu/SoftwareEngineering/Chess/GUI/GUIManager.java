@@ -17,8 +17,12 @@ public class GUIManager {
 
         new CreateMainFrame(); // Create the frame
         new GUI_Events();
-        
-        UILibrary.MainFrame.setVisible(true);
+        new CreateStartFrame();
+        new CreateCompSliderFrame();
+
+        UILibrary.ChessJFrame.add(UILibrary.SetAIStrengthSliderFrame);
+        UILibrary.ChessJFrame.setVisible(true);
+
 
     }
 
