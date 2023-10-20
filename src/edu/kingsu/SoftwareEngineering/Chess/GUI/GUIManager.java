@@ -20,7 +20,7 @@ public class GUIManager {
         new CreateStartFrame();
         new CreateCompSliderFrame();
 
-        UILibrary.ChessJFrame.add(UILibrary.SetAIStrengthSliderFrame);
+        UILibrary.ChessJFrame.add(UILibrary.MainFrame);
         UILibrary.ChessJFrame.setVisible(true);
 
 

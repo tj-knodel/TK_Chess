@@ -9,6 +9,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -95,9 +97,15 @@ public class CreateMainFrame {
         UILibrary.MainFrame.add(StepForwards_Button);
         UILibrary.StepForwards_Button = StepForwards_Button;
 
-        // TODO
-        // DEFINE MOVES JLabel OR WHATEVER TO DISPLAY MOVE STRINGS "1. Qe4 "
-        // TODO
+        
+        JTextArea MovesLabel = new JTextArea("Hello World");
+        MovesLabel.setBounds(935, 890, 470, 49); // Numbers from Figma Design
+        MovesLabel.setBackground(UILibrary.ForegroundColor);
+        MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
+        MovesLabel.setForeground(UILibrary.TextColor_White);
+        //MovesLabel.setBorder(BorderFactory.createEmptyBorder());
+        UILibrary.MainFrame.add(MovesLabel);
+        //UILibrary.MovesLabel = MovesLabel;
 
         JLabel MovesFrame = new JLabel("", SwingConstants.CENTER);
         MovesFrame.setBounds(935, 91, 470, 778); // Numbers from Figma Design
@@ -106,6 +114,7 @@ public class CreateMainFrame {
         MovesFrame.setOpaque(false);
         UILibrary.MainFrame.add(MovesFrame);
 
+        
         JTextField EnterMove_TextField = new JTextField("To enter a move click here");
         EnterMove_TextField.setBounds(935, 890, 470, 49); // Numbers from Figma Design
         EnterMove_TextField.setBackground(UILibrary.ForegroundColor);

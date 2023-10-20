@@ -34,6 +34,7 @@ public abstract class UILibrary  {
     public static JButton StepBackwards_Button;
     public static JButton StepForwards_Button;
     public static JTextField EnterMove_TextField;
+    public static JLabel MovesLabel;
 
     // New Game Frame
     public static JButton WhitePlayer_VS_BlackPlayer_Button;
