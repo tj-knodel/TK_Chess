@@ -59,17 +59,6 @@ public class Board {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter move (column row): ");
         String line = scanner.nextLine();
-        String[] split = line.split(" ");
-        Integer column = Integer.parseInt(split[0]);
-        Integer row = Integer.parseInt(split[1]);
-        for (var move : board[row][column].getPossibleMoves(getBoard(), new Move(column, row))) {
-            System.out.println(
-                    board[row][column].getPieceName() + " can move to row: " + move.row + " col: " + move.column);
-            board[move.row][move.column] = new TestPiece();
-        }
-        System.out.println(this.toString() + "\n\n\n");
-        initializeGame();
-        // while (line != null) {
         // String[] split = line.split(" ");
         // Integer column = Integer.parseInt(split[0]);
         // Integer row = Integer.parseInt(split[1]);
@@ -80,10 +69,21 @@ public class Board {
         // " + move.column);
         // board[move.row][move.column] = new TestPiece();
         // }
-        // System.out.println(this.toString() + "\n");
-        // System.out.print("Enter move (column row): ");
-        // line = scanner.nextLine();
-        // }
+        // System.out.println(this.toString() + "\n\n\n");
+        // initializeGame();
+        while (line != null) {
+            String[] split = line.split(" ");
+            Integer column = Integer.parseInt(split[0]);
+            Integer row = Integer.parseInt(split[1]);
+            for (var move : board[row][column].getPossibleMoves(getBoard(), new Move(column, row))) {
+                System.out.println(
+                        board[row][column].getPieceName() + " can move to row: " + move.row + " col: " + move.column);
+                board[move.row][move.column] = new TestPiece();
+            }
+            System.out.println(this.toString() + "\n");
+            System.out.print("Enter move (column row): ");
+            line = scanner.nextLine();
+        }
 
     }
 
