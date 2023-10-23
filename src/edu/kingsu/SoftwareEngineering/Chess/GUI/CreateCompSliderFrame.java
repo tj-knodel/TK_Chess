@@ -56,7 +56,7 @@ public class CreateCompSliderFrame {
         JLabel TitleLabel = new JLabel("Set Computer Chess AI Strength", SwingConstants.CENTER);
         TitleLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 55));
         TitleLabel.setForeground(UILibrary.TextColor_White);
-        TitleLabel.setBounds(175, 287, 1089, 63); // Numbers from Figma Design
+        TitleLabel.setBounds(175, 169, 1089, 63); // Numbers from Figma Design
         TitleLabel.setOpaque(false);
         UILibrary.SetAIStrengthSliderFrame.add(TitleLabel);
 
@@ -105,6 +105,18 @@ public class CreateCompSliderFrame {
         UILibrary.CancelSliderButton.setContentAreaFilled(false);
         UILibrary.CancelSliderButton.setBorderPainted(false);
 
+        UILibrary.CurrentSelectedComputer_ImageLabel = new JLabel();
+        UILibrary.CurrentSelectedComputer_ImageLabel.setBounds(659, 286, 112, 105); // Numbers from Figma Design
+        UILibrary.CurrentSelectedComputer_ImageLabel.setIcon(
+            new ImageIcon(getImage("computer_white.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
+        UILibrary.SetAIStrengthSliderFrame.add( UILibrary.CurrentSelectedComputer_ImageLabel);
+
+        UILibrary.CurrentSelectedComputer_TextLabel = new JLabel("White Computer", SwingConstants.CENTER);
+        UILibrary.CurrentSelectedComputer_TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+        UILibrary.CurrentSelectedComputer_TextLabel.setForeground(UILibrary.TextColor_White);
+        UILibrary.CurrentSelectedComputer_TextLabel.setBounds(621, 419, 187, 29); // Numbers from Figma Design
+        UILibrary.CurrentSelectedComputer_TextLabel.setOpaque(false);
+        UILibrary.SetAIStrengthSliderFrame.add(UILibrary.CurrentSelectedComputer_TextLabel);
 
         UILibrary.SetAiStrengthSlider = new JSlider(JSlider.HORIZONTAL);
         UILibrary.SetAiStrengthSlider.setBounds(250, 561, 950, 29);

@@ -32,7 +32,7 @@ public class GUIStarter{
 
         // Show UI
         UILibrary.ChessJFrame.setVisible(true);
-        ChessUIManager.showMainFrame();
+        ChessUIManager.showSliderFrame();
 
 
     }

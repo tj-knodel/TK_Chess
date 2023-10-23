@@ -55,6 +55,8 @@ public abstract class UILibrary  {
     public static JButton ConfirmSliderButton;
     public static JButton CancelSliderButton;
     public static JSlider SetAiStrengthSlider;
+    public static JLabel CurrentSelectedComputer_ImageLabel;
+    public static JLabel CurrentSelectedComputer_TextLabel;
 
     // Accessory Frames
     public static JLabel UpgradePieceFrame;
