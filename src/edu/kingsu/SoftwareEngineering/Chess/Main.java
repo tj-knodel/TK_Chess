@@ -18,25 +18,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-	//	Board b = new Board();
-	
-<<<<<<< HEAD
+		// Board b = new Board();
 
-	Timer timer = new Timer();
-	timer.startTimer();
-
-		//GUIManager ui = new GUIManager();
-		
-
-		while (timer.getSeconds() < 10){
-			Thread.sleep(6000);
-		}
-    
-	 timer.stopTimer();
-		
-=======
-		new GUIManager();
->>>>>>> e94f6c75a5c3e411df37823864999e18885405a6
+		GUIManager ui = new GUIManager();
 	}
 
 	/**

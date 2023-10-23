@@ -122,7 +122,48 @@ public class Board {
      * @return
      */
     public ArrayList<Move> getPossibleMoves(Piece piece, Location location) {
-        return null;
+        return piece.getPossibleMoves(board, new Move(location.column, location.row));
+    }
+
+    /**
+     * Gets all the possible moves for a specific team
+     * 
+     * @param team
+     * @return
+     */
+    public ArrayList<Move> getPossibleMovesForTeam(int team) {
+        ArrayList<Move> possibleMoves = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j].getTeam() == team) {
+                    for (Move m : board[i][j].getPossibleMoves(board, new Move(j, i))) {
+                        possibleMoves.add(m);
+                    }
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
+    /**
+     * Gets all possible moves for a specific piece on the board
+     * 
+     * @param team
+     * @param pieceId
+     * @return
+     */
+    public ArrayList<Move> getPossibleMovesForTeamFromPiece(int team, int pieceId) {
+        ArrayList<Move> possibleMoves = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j].getTeam() == team && board[i][j].getPieceID() == pieceId) {
+                    for (Move m : board[i][j].getPossibleMoves(board, new Move(j, i))) {
+                        possibleMoves.add(m);
+                    }
+                }
+            }
+        }
+        return possibleMoves;
     }
 
     /**
