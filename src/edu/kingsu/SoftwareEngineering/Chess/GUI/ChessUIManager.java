@@ -19,57 +19,77 @@ import java.awt.Image;
  * Connection script between the Chess UI and game loop / board.
  */
 public class ChessUIManager {
-    
+
     // ----------------------------------------------------------------------------------------------------------
     // ----------------------------------------------------------------------------------------------------------
-
-
-
 
     // ----------------------------------------------------------------------------------------------------------
     // -----------------------------------Drawing UI Board----------------------------------------------
     // ----------------------------------------------------------------------------------------------------------
 
-        /**
+    /**
      * Array which holds the ChessTileUI squares
      */
     public ChessTileUI boardTiles[][];
 
     /**
      * Draws the board with the specific pieces in the certain positions
+     * 
      * @param pieces 2d array of Piece Objects
      */
     public void drawBoard(Piece[][] pieces) {
 
         for (int row = 0; row < 8; ++row) {
             for (int column = 0; column < 8; ++column) {
-                
+
                 Piece pieceObject = pieces[row][column];
-                if (pieceObject == null) {
+                /**
+                 
+                TEMPLATE IF-ELSE Chain to display board, if conditions can change, the function calls should stay the same
+                // Many `if` statements to display the correct image
+                if (piece == PIECES_ENUM.Pawn) {
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Pawn, isWhite);
+                } else if (piece == PIECES_ENUM.Rook) {
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Rook, isWhite);
+                } else if (piece == PIECES_ENUM.Knight) {
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Knight, isWhite);
+                } else if (piece == PIECES_ENUM.Bishop) {
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Bishop, isWhite);
+                } else if (piece == PIECES_ENUM.Queen) {
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Queen, isWhite);
+                } else if (piece == PIECES_ENUM.King) {
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.King, isWhite);
+                } else {
                     boardTiles[row][column].setPieceImage(PIECES_ENUM.None, true);
-                } // Keep doing if else statements,  for each piece
-                
-            }
+                }
+            } 
+            */
+
         }
     }
 
-    //  TEMPORARY, To be implemented
-    public void setPossibleMovesConfiguration() {}
+    }
 
-    //  TEMPORARY, To be implemented
-    public void setPreviousMovesConfiguration() {}
+    // TEMPORARY, To be implemented
+    public void setPossibleMovesConfiguration() {
+    }
+
+    // TEMPORARY, To be implemented
+    public void setPreviousMovesConfiguration() {
+    }
 
     // ----------------------------------------------------------------------------------------------------------
     // ---------------------------------Managing Upgrading Pieces-----------------------------------
     // ----------------------------------------------------------------------------------------------------------
-     private CreateAccessoryUIs accessoryUI; // Variable cant be static because of how images are retrieved
-    
+    private CreateAccessoryUIs accessoryUI; // Variable cant be static because of how images are retrieved
+
     /**
      * Shows the upgrade frame for when a player is upgrading a piece
+     * 
      * @param isWhite true if the upgrading player is playing white, false otherwise
      */
     public void showUpgradeFrame(boolean isWhite) {
-        accessoryUI.showUpgradeFrame( isWhite );
+        accessoryUI.showUpgradeFrame(isWhite);
     }
 
     /**
@@ -80,29 +100,30 @@ public class ChessUIManager {
     }
 
     // ----------------------------------------------------------------------------------------------------------
-    // -----------------------------------Managing Moves Label----------------------------------------
+    // -----------------------------------Managing MovesLabel----------------------------------------
     // ----------------------------------------------------------------------------------------------------------
 
     /**
      * Clears the JTextArea which displays all the moves in chess notation
      */
-    public static  void clearMovesLabel() {
+    public static void clearMovesLabel() {
         UILibrary.MovesLabel.setText("");
     }
 
     /**
      * Add a string to the end of the Moves Label
-     * @param move Adds string to move label, does not include escape sequences, must be sent with the string
+     * 
+     * @param move Adds string to move label, does not include escape sequences,
+     *             must be sent with the string
      */
     public static void appendMovesLabel(String move) {
-        UILibrary.MovesLabel.setText(    UILibrary.MovesLabel.getText() + move   );
+        UILibrary.MovesLabel.setText(UILibrary.MovesLabel.getText() + move);
     }
-
 
     // ----------------------------------------------------------------------------------------------------------
     // ------------------------------Managing Which Frames are Visible-----------------------------
     // ----------------------------------------------------------------------------------------------------------
-    
+
     /**
      * Shows the Main Frame in the chess JFrame
      */
@@ -131,11 +152,10 @@ public class ChessUIManager {
         UILibrary.NewGameFrame.setVisible(false);
     }
 
-
     // ----------------------------------------------------------------------------------------------------------
     // -----------------Managing Changing the Computer Difficulty Slider Frame-------------
     // ----------------------------------------------------------------------------------------------------------
-    
+
     /**
      * Gets the image from the local jar File
      * 
@@ -148,19 +168,21 @@ public class ChessUIManager {
 
     /**
      * Sets the image description of what color computer Ai your changing in the UI
-     * @param isWhite true if the computer AI is playing white, false if playing black
+     * 
+     * @param isWhite true if the computer AI is playing white, false if playing
+     *                black
      */
     public void setSliderFrameToColor(boolean isWhite) {
         if (isWhite) {
-            UILibrary.CurrentSelectedComputer_ImageLabel.setIcon( new ImageIcon(getImage("computer_white.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
+            UILibrary.CurrentSelectedComputer_ImageLabel.setIcon(new ImageIcon(
+                    getImage("computer_white.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
             UILibrary.CurrentSelectedComputer_TextLabel.setText("White Computer");
-        }  else {
-            UILibrary.CurrentSelectedComputer_ImageLabel.setIcon( new ImageIcon(getImage("computer_black.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
+        } else {
+            UILibrary.CurrentSelectedComputer_ImageLabel.setIcon(new ImageIcon(
+                    getImage("computer_black.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
             UILibrary.CurrentSelectedComputer_TextLabel.setText("Black Computer");
         }
     }
-
-    
 
     // -----------------------------------------------------
     // -----------------------------------------------------
@@ -176,8 +198,9 @@ public class ChessUIManager {
     }
 
     /**
-     *  Constructor 2
-     * For use with anything thats not static but doesn't need additional constructing parameters
+     * Constructor 2
+     * For use with anything thats not static but doesn't need additional
+     * constructing parameters
      * SliderFrame Configuration
      */
     public ChessUIManager() {
