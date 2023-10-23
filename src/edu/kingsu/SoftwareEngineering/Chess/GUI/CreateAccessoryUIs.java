@@ -61,6 +61,7 @@ public class CreateAccessoryUIs {
         int xPosition = xPos - (newWidth / 2);
         int yPosition = 154 - newHeight;
 
+		System.out.println(imageString + " made visible,");
         upgradeButton.setVisible(true);
         upgradeButton.setIcon(new ImageIcon(getBoardImage(imageString).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT)));
         upgradeButton.setBounds(xPosition, yPosition, newWidth, newHeight);
@@ -77,19 +78,25 @@ public class CreateAccessoryUIs {
 		UILibrary.UpgradePieceFrame.setIcon(
 			new ImageIcon(getImage("UpgradeFrameBackground.png").getImage().getScaledInstance(624, 173, Image.SCALE_DEFAULT)));
 
+		upgradeQueenButton = new JButton("A");
+		upgradeRookButton = new JButton("B");
+		upgradeKnightButton = new JButton("C");
+		upgradeBishopButton = new JButton("D");
+		upgradeQueenButton.add(UILibrary.UpgradePieceFrame);
+		upgradeRookButton.add(UILibrary.UpgradePieceFrame);
+		upgradeKnightButton.add(UILibrary.UpgradePieceFrame);
+		upgradeBishopButton.add(UILibrary.UpgradePieceFrame);
+
+		UILibrary.MainFrame.add(UILibrary.UpgradePieceFrame);
 	}
 
 	public void showUpgradeFrame(boolean isWhite) {
 		String text = (isWhite) ? "white" : "black";
 
-		upgradeQueenButton = new JButton();
 		assignImage("queen_" + text + ".png", 266, upgradeQueenButton);
-		upgradeRookButton = new JButton();
 		assignImage("rook_" + text + ".png", 414, upgradeRookButton);
-		upgradeQueenButton = new JButton();
-		assignImage("knight_" + text + ".png", 570, upgradeQueenButton);
-		upgradeQueenButton = new JButton();
-		assignImage("queen_" + text + ".png", 726, upgradeQueenButton);
+		assignImage("knight_" + text + ".png", 570, upgradeKnightButton);
+		assignImage("bishop_" + text + ".png", 726, upgradeBishopButton);
 		UILibrary.UpgradePieceFrame.setVisible(true);
 	}
 
@@ -124,7 +131,7 @@ public class CreateAccessoryUIs {
 	private static JButton endNewGameButton;
 
 	private void createEndGameUI() {
-
+		
 	}
 
 	// -----------------------------------------------------
@@ -132,8 +139,9 @@ public class CreateAccessoryUIs {
 
 	public CreateAccessoryUIs() {
 		createUpgradePieceFrame();
+		showUpgradeFrame(true);
 		addUpgradeButtonsActionListeners();
-	
+		
 	}
 
 }

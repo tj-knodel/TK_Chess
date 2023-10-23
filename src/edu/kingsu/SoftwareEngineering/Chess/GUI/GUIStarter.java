@@ -17,9 +17,9 @@ public class GUIStarter{
 
         new CreateMainFrame(); // Create the frame
         new GUI_Events();
-        new CreateStartFrame();
-        new CreateCompSliderFrame();
-        new ChessUIManager();
+        //new CreateStartFrame();
+        //new CreateCompSliderFrame();
+        //new ChessUIManager(new CreateAccessoryUIs());
         
         UILibrary.ChessJFrame.add(UILibrary.MainFrame);
         UILibrary.ChessJFrame.setVisible(true);

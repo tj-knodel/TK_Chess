@@ -69,6 +69,7 @@ public abstract class UILibrary  {
     public static JMenuItem TogglePreviousMoves_JMenuItem;
     public static JMenuItem SetBoardAppearance_JMenuItem;
     public static JMenuItem ToggleCoordinates_JMenuItem;
+    public static JMenuItem FlipBoard_JMenuItem;
     public static JMenuItem SetAIStrengthEasy_JMenuItem;
     public static JMenuItem SetAIStrengthMedium_JMenuItem;
     public static JMenuItem SetAIStrengthMax_JMenuItem;

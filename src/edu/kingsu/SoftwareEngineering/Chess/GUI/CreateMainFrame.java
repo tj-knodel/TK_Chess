@@ -18,7 +18,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 
-import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI.PIECES_ENUM;
 
 /**
  * Creates the Main Chess Frame
@@ -94,16 +93,16 @@ public class CreateMainFrame {
         UILibrary.MainFrame.add(StepForwards_Button);
         UILibrary.StepForwards_Button = StepForwards_Button;
 
-        JTextArea MovesLabel = new JTextArea("Hello World");
-        MovesLabel.setBounds(935, 890, 470, 49); // Numbers from Figma Design
+        JTextArea MovesLabel = new JTextArea("1.");
+        MovesLabel.setBounds(984, 219, 372, 531); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
         MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
         MovesLabel.setForeground(UILibrary.TextColor_White);
-        // MovesLabel.setBorder(BorderFactory.createEmptyBorder());
+        MovesLabel.setEditable(false);
+        MovesLabel.setHighlighter(null);
         UILibrary.MainFrame.add(MovesLabel);
-        // UILibrary.MovesLabel = MovesLabel;
 
-        JLabel MovesFrame = new JLabel("", SwingConstants.CENTER);
+        JLabel MovesFrame = new JLabel();
         MovesFrame.setBounds(935, 91, 470, 778); // Numbers from Figma Design
         MovesFrame.setIcon(
                 new ImageIcon(getImage("MovesFrame.png").getImage().getScaledInstance(470, 778, Image.SCALE_DEFAULT)));
@@ -207,6 +206,11 @@ public class CreateMainFrame {
         Appearance_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
         Appearance_JMenu.add(Appearance_Item);
         UILibrary.SetBoardAppearance_JMenuItem = Appearance_Item;
+
+        JMenuItem FlipBoard = new JMenuItem("Flip Chess Board");
+        FlipBoard.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        Appearance_JMenu.add(FlipBoard);
+        UILibrary.FlipBoard_JMenuItem = FlipBoard;
 
         // ---- Set Computer Strength -------
         JMenu ComputerStrength_JMenu = new JMenu("Set Computer Strength"); // button on the bar

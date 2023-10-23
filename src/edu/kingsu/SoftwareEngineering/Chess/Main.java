@@ -20,7 +20,7 @@ public class Main {
 
 	//	Board b = new Board();
 	
-		new GUIManager();
+		new GUIStarter();
 	}
 
 	/**
