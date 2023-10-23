@@ -1,5 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess.GUI;
 
+import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI.PIECES_ENUM;
 
@@ -24,7 +25,8 @@ public class ChessUIManager {
     // ----------------------------------------------------------------------------------------------------------
 
     // ----------------------------------------------------------------------------------------------------------
-    // -----------------------------------Drawing UI Board----------------------------------------------
+    // -----------------------------------Drawing UI
+    // Board----------------------------------------------
     // ----------------------------------------------------------------------------------------------------------
 
     /**
@@ -43,30 +45,46 @@ public class ChessUIManager {
             for (int column = 0; column < 8; ++column) {
 
                 Piece pieceObject = pieces[row][column];
-                /**
-                 
-                TEMPLATE IF-ELSE Chain to display board, if conditions can change, the function calls should stay the same
-                // Many `if` statements to display the correct image
-                if (piece == PIECES_ENUM.Pawn) {
-                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Pawn, isWhite);
-                } else if (piece == PIECES_ENUM.Rook) {
-                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Rook, isWhite);
-                } else if (piece == PIECES_ENUM.Knight) {
-                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Knight, isWhite);
-                } else if (piece == PIECES_ENUM.Bishop) {
-                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Bishop, isWhite);
-                } else if (piece == PIECES_ENUM.Queen) {
-                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Queen, isWhite);
-                } else if (piece == PIECES_ENUM.King) {
-                    boardTiles[row][column].setPieceImage(PIECES_ENUM.King, isWhite);
-                } else {
-                    boardTiles[row][column].setPieceImage(PIECES_ENUM.None, true);
-                }
-            } 
-            */
 
+                if (pieceObject.getPieceID() == Piece.EMPTY_PIECE)
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.None, false);
+                else if (pieceObject.getPieceID() == Piece.PAWN)
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Pawn, pieceObject.getTeam() == Team.WHITE_TEAM);
+                else if (pieceObject.getPieceID() == Piece.BISHOP)
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Bishop, pieceObject.getTeam() == Team.WHITE_TEAM);
+                else if (pieceObject.getPieceID() == Piece.KNIGHT)
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Knight, pieceObject.getTeam() == Team.WHITE_TEAM);
+                else if (pieceObject.getPieceID() == Piece.ROOK)
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Rook, pieceObject.getTeam() == Team.WHITE_TEAM);
+                else if (pieceObject.getPieceID() == Piece.KING)
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.King, pieceObject.getTeam() == Team.WHITE_TEAM);
+                else if (pieceObject.getPieceID() == Piece.QUEEN)
+                    boardTiles[row][column].setPieceImage(PIECES_ENUM.Queen, pieceObject.getTeam() == Team.WHITE_TEAM);
+                /**
+                 * 
+                 * TEMPLATE IF-ELSE Chain to display board, if conditions can change, the
+                 * function calls should stay the same
+                 * Many `if` statements to display the correct image
+                 * if (piece == PIECES_ENUM.Pawn) {
+                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Pawn, isWhite);
+                 * } else if (piece == PIECES_ENUM.Rook) {
+                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Rook, isWhite);
+                 * } else if (piece == PIECES_ENUM.Knight) {
+                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Knight, isWhite);
+                 * } else if (piece == PIECES_ENUM.Bishop) {
+                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Bishop, isWhite);
+                 * } else if (piece == PIECES_ENUM.Queen) {
+                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Queen, isWhite);
+                 * } else if (piece == PIECES_ENUM.King) {
+                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.King, isWhite);
+                 * } else {
+                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.None, true);
+                 * }
+                 * }
+                 */
+
+            }
         }
-    }
 
     }
 
@@ -79,7 +97,8 @@ public class ChessUIManager {
     }
 
     // ----------------------------------------------------------------------------------------------------------
-    // ---------------------------------Managing Upgrading Pieces-----------------------------------
+    // ---------------------------------Managing Upgrading
+    // Pieces-----------------------------------
     // ----------------------------------------------------------------------------------------------------------
     private CreateAccessoryUIs accessoryUI; // Variable cant be static because of how images are retrieved
 
@@ -100,7 +119,8 @@ public class ChessUIManager {
     }
 
     // ----------------------------------------------------------------------------------------------------------
-    // -----------------------------------Managing MovesLabel----------------------------------------
+    // -----------------------------------Managing
+    // MovesLabel----------------------------------------
     // ----------------------------------------------------------------------------------------------------------
 
     /**
@@ -121,7 +141,8 @@ public class ChessUIManager {
     }
 
     // ----------------------------------------------------------------------------------------------------------
-    // ------------------------------Managing Which Frames are Visible-----------------------------
+    // ------------------------------Managing Which Frames are
+    // Visible-----------------------------
     // ----------------------------------------------------------------------------------------------------------
 
     /**
@@ -153,7 +174,8 @@ public class ChessUIManager {
     }
 
     // ----------------------------------------------------------------------------------------------------------
-    // -----------------Managing Changing the Computer Difficulty Slider Frame-------------
+    // -----------------Managing Changing the Computer Difficulty Slider
+    // Frame-------------
     // ----------------------------------------------------------------------------------------------------------
 
     /**
