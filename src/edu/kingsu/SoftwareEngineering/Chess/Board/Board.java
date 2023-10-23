@@ -1,7 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 
@@ -26,16 +25,17 @@ public class Board {
     private final StringBuilder algebraicRepresentation;
 
     public Board() {
-        board = new Piece[8][8];
+//        board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
-        initializeGame();
+        initializeGameTwoPlayersWhiteOnly();
     }
 
     /**
      * Initializes the board to play a game and not to
      * read the PGN game.
      */
-    public void initializeGame() {
+    // TODO: Change this function to take in a "settings" variable to initialize the side based on that
+    public void initializeGameTwoPlayersWhiteOnly() {
         board = new Piece[][] {
                 { new Rook(0), new Knight(0), new Bishop(0), new Queen(0), new King(0), new Bishop(0), new Knight(0),
                         new Rook(0) },
@@ -54,36 +54,6 @@ public class Board {
                 { new Rook(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1),
                         new Rook(1) }
         };
-
-        System.out.println(this.toString());
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter move (column row): ");
-        String line = scanner.nextLine();
-        // String[] split = line.split(" ");
-        // Integer column = Integer.parseInt(split[0]);
-        // Integer row = Integer.parseInt(split[1]);
-        // for (var move : board[row][column].getPossibleMoves(getBoard(), new
-        // Move(column, row))) {
-        // System.out.println(
-        // board[row][column].getPieceName() + " can move to row: " + move.row + " col:
-        // " + move.column);
-        // board[move.row][move.column] = new TestPiece();
-        // }
-        // System.out.println(this.toString() + "\n\n\n");
-        // initializeGame();
-        while (line != null) {
-            String[] split = line.split(" ");
-            Integer column = Integer.parseInt(split[0]);
-            Integer row = Integer.parseInt(split[1]);
-            for (var move : board[row][column].getPossibleMoves(getBoard(), new Move(column, row))) {
-                System.out.println(
-                        board[row][column].getPieceName() + " can move to row: " + move.row + " col: " + move.column);
-                board[move.row][move.column] = new TestPiece();
-            }
-            System.out.println(this.toString() + "\n");
-            System.out.print("Enter move (column row): ");
-            line = scanner.nextLine();
-        }
 
     }
 
