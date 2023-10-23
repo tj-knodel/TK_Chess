@@ -74,7 +74,7 @@ public abstract class UILibrary  {
     public static JMenuItem SetAIStrengthEasy_JMenuItem;
     public static JMenuItem SetAIStrengthMedium_JMenuItem;
     public static JMenuItem SetAIStrengthMax_JMenuItem;
-    public static JMenuItem ToggleAIStrengthSlider_JMenuItem;
+    public static JMenuItem ShowAIStrengthSlider_JMenuItem;
     public static JMenuItem About_JMenuItem;
 
     /*

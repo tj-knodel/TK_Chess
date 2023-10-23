@@ -233,10 +233,10 @@ public class CreateMainFrame {
         ComputerStrength_JMenu.add(AiMax_Item);
         UILibrary.SetAIStrengthMax_JMenuItem = AiMax_Item;
 
-        JMenuItem StrengthSlider_Item = new JMenuItem("Toggle Strength Slider");
+        JMenuItem StrengthSlider_Item = new JMenuItem("Show Strength Slider");
         StrengthSlider_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
         ComputerStrength_JMenu.add(StrengthSlider_Item);
-        UILibrary.ToggleAIStrengthSlider_JMenuItem = StrengthSlider_Item;
+        UILibrary.ShowAIStrengthSlider_JMenuItem = StrengthSlider_Item;
 
         // ---- Help -------
         JMenu Help_JMenu = new JMenu("Help"); // button on the bar
