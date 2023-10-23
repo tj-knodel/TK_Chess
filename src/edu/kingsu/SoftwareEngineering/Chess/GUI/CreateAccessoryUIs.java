@@ -61,10 +61,12 @@ public class CreateAccessoryUIs {
         int xPosition = xPos - (newWidth / 2);
         int yPosition = 154 - newHeight;
 
-		System.out.println(imageString + " made visible,");
         upgradeButton.setVisible(true);
         upgradeButton.setIcon(new ImageIcon(getBoardImage(imageString).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT)));
         upgradeButton.setBounds(xPosition, yPosition, newWidth, newHeight);
+		upgradeButton.setOpaque(false);
+		upgradeButton.setContentAreaFilled(false);
+		upgradeButton.setBorderPainted(false);
     }
 
 	private static JButton upgradeQueenButton;
@@ -78,25 +80,26 @@ public class CreateAccessoryUIs {
 		UILibrary.UpgradePieceFrame.setIcon(
 			new ImageIcon(getImage("UpgradeFrameBackground.png").getImage().getScaledInstance(624, 173, Image.SCALE_DEFAULT)));
 
-		upgradeQueenButton = new JButton("A");
-		upgradeRookButton = new JButton("B");
-		upgradeKnightButton = new JButton("C");
-		upgradeBishopButton = new JButton("D");
-		upgradeQueenButton.add(UILibrary.UpgradePieceFrame);
-		upgradeRookButton.add(UILibrary.UpgradePieceFrame);
-		upgradeKnightButton.add(UILibrary.UpgradePieceFrame);
-		upgradeBishopButton.add(UILibrary.UpgradePieceFrame);
+		upgradeQueenButton = new JButton();
+		upgradeRookButton = new JButton();
+		upgradeKnightButton = new JButton();
+		upgradeBishopButton = new JButton();
+		UILibrary.UpgradePieceFrame.add(upgradeQueenButton);
+		UILibrary.UpgradePieceFrame.add(upgradeRookButton);
+		UILibrary.UpgradePieceFrame.add(upgradeKnightButton);
+		UILibrary.UpgradePieceFrame.add(upgradeBishopButton);
 
 		UILibrary.MainFrame.add(UILibrary.UpgradePieceFrame);
+		UILibrary.UpgradePieceFrame.setVisible(false);
 	}
 
 	public void showUpgradeFrame(boolean isWhite) {
 		String text = (isWhite) ? "white" : "black";
 
-		assignImage("queen_" + text + ".png", 266, upgradeQueenButton);
-		assignImage("rook_" + text + ".png", 414, upgradeRookButton);
-		assignImage("knight_" + text + ".png", 570, upgradeKnightButton);
-		assignImage("bishop_" + text + ".png", 726, upgradeBishopButton);
+		assignImage("queen_" + text + ".png", 89, upgradeQueenButton); 
+		assignImage("rook_" + text + ".png", 231, upgradeRookButton); 
+		assignImage("knight_" + text + ".png", 393, upgradeKnightButton); 
+		assignImage("bishop_" + text + ".png", 541, upgradeBishopButton); 
 		UILibrary.UpgradePieceFrame.setVisible(true);
 	}
 
@@ -139,7 +142,6 @@ public class CreateAccessoryUIs {
 
 	public CreateAccessoryUIs() {
 		createUpgradePieceFrame();
-		showUpgradeFrame(true);
 		addUpgradeButtonsActionListeners();
 		
 	}

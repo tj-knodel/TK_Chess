@@ -27,7 +27,7 @@ public class ChessUIManager {
      */
     public ChessTileUI boardTiles[][];
     
-    private CreateAccessoryUIs accessoryUI;
+    private CreateAccessoryUIs accessoryUI; // Variable cant be static because of how images are retrieved
 
     // -----------------------------------------------------
     // -----------------------------------------------------
@@ -86,9 +86,45 @@ public class ChessUIManager {
     public void appendMovesLabel(String move) {
         UILibrary.MovesLabel.setText(    UILibrary.MovesLabel.getText() + move   );
     }
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    
+    /**
+     * Shows the Main Frame in the chess JFrame
+     */
+    public static void showMainFrame() {
+        UILibrary.MainFrame.setVisible(true);
+        UILibrary.NewGameFrame.setVisible(false);
+        UILibrary.SetAIStrengthSliderFrame.setVisible(false);
+    }
+
+    /**
+     * Shows the NewGameFrame in the chess JFrame
+     * Button connections can be gotten directly from UILibrary
+     */
+    public static void showNewGameFrame() {
+        UILibrary.NewGameFrame.setVisible(true);
+        UILibrary.SetAIStrengthSliderFrame.setVisible(false);
+        UILibrary.MainFrame.setVisible(false);
+    }
+
+    /**
+     * 
+     */
+    public static void showSliderFrame() {
+        UILibrary.SetAIStrengthSliderFrame.setVisible(true);
+        UILibrary.MainFrame.setVisible(false);
+        UILibrary.NewGameFrame.setVisible(false);
+    }
+
+        
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Initializes connections between board and gui
+     */
     public ChessUIManager(CreateAccessoryUIs accessoryUI) {
         boardTiles = CreateMainFrame.createChessBoard();
         this.accessoryUI = accessoryUI;
