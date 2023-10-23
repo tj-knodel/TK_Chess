@@ -1,6 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess;
 
-import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIManager;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 
 /**
@@ -20,7 +20,7 @@ public class Main {
 
 	//	Board b = new Board();
 	
-		new GUIManager();
+		new GUIStarter();
 	}
 
 	/**

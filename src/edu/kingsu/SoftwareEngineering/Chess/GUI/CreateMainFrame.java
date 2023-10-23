@@ -9,17 +9,14 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.util.Set;
 
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI.PIECES_ENUM;
 
@@ -97,15 +94,14 @@ public class CreateMainFrame {
         UILibrary.MainFrame.add(StepForwards_Button);
         UILibrary.StepForwards_Button = StepForwards_Button;
 
-        
         JTextArea MovesLabel = new JTextArea("Hello World");
         MovesLabel.setBounds(935, 890, 470, 49); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
         MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
         MovesLabel.setForeground(UILibrary.TextColor_White);
-        //MovesLabel.setBorder(BorderFactory.createEmptyBorder());
+        // MovesLabel.setBorder(BorderFactory.createEmptyBorder());
         UILibrary.MainFrame.add(MovesLabel);
-        //UILibrary.MovesLabel = MovesLabel;
+        // UILibrary.MovesLabel = MovesLabel;
 
         JLabel MovesFrame = new JLabel("", SwingConstants.CENTER);
         MovesFrame.setBounds(935, 91, 470, 778); // Numbers from Figma Design
@@ -114,7 +110,6 @@ public class CreateMainFrame {
         MovesFrame.setOpaque(false);
         UILibrary.MainFrame.add(MovesFrame);
 
-        
         JTextField EnterMove_TextField = new JTextField("To enter a move click here");
         EnterMove_TextField.setBounds(935, 890, 470, 49); // Numbers from Figma Design
         EnterMove_TextField.setBackground(UILibrary.ForegroundColor);
@@ -128,36 +123,13 @@ public class CreateMainFrame {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-
-    ///////////////////// TEMPORARY /////////////////////////
-    private final String[][] board_TEMP = new String[][] {
-            { "R_B", "N_B", "B_B", "Q_B", "K_B", "B_B", "K_B", "R_B" },
-            { "P_B", "P_B", "P_B", "P_B", "P_B", "P_B", "P_B", "P_B" },
-            { "", "", "", "", "", "", "", "" },
-            { "", "", "", "", "", "", "", "" },
-            { "", "", "", "", "", "", "", "" },
-            { "", "", "", "", "", "", "", "" },
-            { "P_W", "P_W", "P_W", "P_W", "P_W", "P_W", "P_W", "P_W" },
-            { "R_W", "N_W", "B_W", "Q_W", "K_W", "B_W", "K_W", "R_W" },
-    };
-    ///////////////////// TEMPORARY /////////////////////////
-
-    /**
-     * Gets the image from the local jar File
-     * 
-     * @param imageToGet Name of the image + type
-     * @return The image
-     */
-    public ImageIcon getBoardImage(String imageToGet) {
-        return new ImageIcon(getClass().getClassLoader().getResource("BoardImages_Clash/" + imageToGet));
-    }
-
-    public ChessTileUI boardTilesUI[][] = new ChessTileUI[8][8];
-
-    public void createChessBoard() {
+    
+    public static ChessTileUI[][] createChessBoard() {
         JLayeredPane boardUI = new JLayeredPane();
         boardUI.setBounds(52, 91, 848, 850);
         boardUI.setLayout(new GridLayout(8, 8));
+
+        ChessTileUI boardTilesUI[][] = new ChessTileUI[8][8];
 
         boolean displayWhite = false;
         for (int row = 0; row < 8; ++row) {
@@ -166,58 +138,13 @@ public class CreateMainFrame {
                 boardTilesUI[row][column] = new ChessTileUI((char) row, (char) column, displayWhite);
                 boardUI.add(boardTilesUI[row][column]);
 
-                //////////// TEMP ////////////
-                PIECES_ENUM piece = PIECES_ENUM.None;
-                boolean isWhite = true;
-                if (board_TEMP[row][column] == "R_B") {
-                    piece = PIECES_ENUM.Rook;
-                    isWhite = false;
-                } else if (board_TEMP[row][column] == "N_B") {
-                    piece = PIECES_ENUM.Knight;
-                    isWhite = false;
-                } else if (board_TEMP[row][column] == "B_B") {
-                    piece = PIECES_ENUM.Bishop;
-                    isWhite = false;
-                } else if (board_TEMP[row][column] == "Q_B") {
-                    piece = PIECES_ENUM.Queen;
-                    isWhite = false;
-                } else if (board_TEMP[row][column] == "K_B") {
-                    piece = PIECES_ENUM.King;
-                    isWhite = false;
-                } else if (board_TEMP[row][column] == "P_B") {
-                    piece = PIECES_ENUM.Pawn;
-                    isWhite = false;
-                } else if (board_TEMP[row][column] == "R_W") {
-                    piece = PIECES_ENUM.Rook;
-                    isWhite = true;
-                } else if (board_TEMP[row][column] == "N_W") {
-                    piece = PIECES_ENUM.Knight;
-                    isWhite = true;
-                } else if (board_TEMP[row][column] == "B_W") {
-                    piece = PIECES_ENUM.Bishop;
-                    isWhite = true;
-                } else if (board_TEMP[row][column] == "Q_W") {
-                    piece = PIECES_ENUM.Queen;
-                    isWhite = true;
-                } else if (board_TEMP[row][column] == "K_W") {
-                    piece = PIECES_ENUM.King;
-                    isWhite = true;
-                } else if (board_TEMP[row][column] == "P_W") {
-                    piece = PIECES_ENUM.Pawn;
-                    isWhite = true;
-                }
-
-                boardTilesUI[row][column].setPieceImage(piece, isWhite);
-
-                ////////////// TEMP /////////////////////
-
                 if (column != 7)
                     displayWhite = !displayWhite;
-
             }
         }
 
         UILibrary.MainFrame.add(boardUI);
+        return boardTilesUI;
     }
 
     // -----------------------------------------------------
@@ -326,7 +253,6 @@ public class CreateMainFrame {
         createJFrame();
         CreateMainContentPane();
         createUIElements();
-        createChessBoard();
         createJMenus();
     }
 

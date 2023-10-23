@@ -28,4 +28,10 @@ public class GUI_Events {
               System.out.println("Tile " + (int)row + " " + (int)column + " was clicked.");
         }
 
+        // Event is received from CreateAccessoryUIs
+        public static void upgradeChessPieceWasClicked(String piece) {
+            // will be either "queen", "rook", "bishop", "knight"
+            System.out.println(piece + " was clicked.");
+        }
+
 }

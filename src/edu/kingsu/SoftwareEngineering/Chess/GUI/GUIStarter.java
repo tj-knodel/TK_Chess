@@ -7,19 +7,20 @@ package edu.kingsu.SoftwareEngineering.Chess.GUI;
  * @author Noah Bulas
  * @version V1
  */
-public class GUIManager {
+public class GUIStarter{
 
 
     /**
      * Starts up the GUI
      */
-    public GUIManager(){
+    public GUIStarter(){
 
         new CreateMainFrame(); // Create the frame
         new GUI_Events();
         new CreateStartFrame();
         new CreateCompSliderFrame();
-
+        new ChessUIManager();
+        
         UILibrary.ChessJFrame.add(UILibrary.MainFrame);
         UILibrary.ChessJFrame.setVisible(true);
 

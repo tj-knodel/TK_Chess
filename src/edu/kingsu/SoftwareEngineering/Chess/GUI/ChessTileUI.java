@@ -48,14 +48,20 @@ public class ChessTileUI extends JLayeredPane {
      * UI element which holds the piece image
      */
     private JLabel PieceImage;
-    
-    /**
-     * The board appearance folder
-     * to be used, either make it point to a different folder in src/assets or change
-     * ChessTileUI.getBoardImage() to be absolute file path, not relative.
-     */
-    private static String boardAppearanceFolder = "BoardImages_Clash/";
 
+
+
+
+    /**
+     * Gets the image from the local jar File
+     * 
+     * @param imageToGet Name of the image + type
+     * @return The image
+     */
+    private ImageIcon getBoardImage(String imageToGet) {
+        return new ImageIcon(getClass().getClassLoader().getResource(UILibrary.boardAppearanceFolder + imageToGet));
+    }
+    
     // -----------------------------------------------------
     // -----------------------------------------------------
 
@@ -154,17 +160,6 @@ public class ChessTileUI extends JLayeredPane {
         PreviousMoveSquare.setVisible(visibility);
     }
 
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-
-    /**
-         * Gets the image from the local jar File
-         * @param imageToGet Name of the image + type
-         * @return The image
-    */
-    private  ImageIcon getBoardImage(String imageToGet) {
-        return new ImageIcon(getClass().getClassLoader().getResource(boardAppearanceFolder + imageToGet));
-    }
 
     // -----------------------------------------------------
     // -----------------------------------------------------
