@@ -80,7 +80,7 @@ public class Board {
      * @param endMove     The target location of the piece.
      * @return True if the move was successful.
      */
-    public boolean applyMove(Piece pieceMoving, Move startMove, Move endMove) {
+    public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         return false;
     }
 
@@ -91,8 +91,8 @@ public class Board {
      * @param location
      * @return
      */
-    public ArrayList<Move> getPossibleMoves(Piece piece, Location location) {
-        return piece.getPossibleMoves(board, new Move(location.column, location.row));
+    public ArrayList<BoardLocation> getPossibleMoves(Piece piece, BoardLocation location) {
+        return piece.getPossibleMoves(board, location);
     }
 
     /**
@@ -101,12 +101,12 @@ public class Board {
      * @param team
      * @return
      */
-    public ArrayList<Move> getPossibleMovesForTeam(int team) {
-        ArrayList<Move> possibleMoves = new ArrayList<>();
+    public ArrayList<BoardLocation> getPossibleMovesForTeam(int team) {
+        ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].getTeam() == team) {
-                    for (Move m : board[i][j].getPossibleMoves(board, new Move(j, i))) {
+                    for (BoardLocation m : board[i][j].getPossibleMoves(board, new BoardLocation(j, i))) {
                         possibleMoves.add(m);
                     }
                 }
@@ -122,12 +122,12 @@ public class Board {
      * @param pieceId
      * @return
      */
-    public ArrayList<Move> getPossibleMovesForTeamFromPiece(int team, int pieceId) {
-        ArrayList<Move> possibleMoves = new ArrayList<>();
+    public ArrayList<BoardLocation> getPossibleMovesForTeamFromPiece(int team, int pieceId) {
+        ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].getTeam() == team && board[i][j].getPieceID() == pieceId) {
-                    for (Move m : board[i][j].getPossibleMoves(board, new Move(j, i))) {
+                    for (BoardLocation m : board[i][j].getPossibleMoves(board, new BoardLocation(j, i))) {
                         possibleMoves.add(m);
                     }
                 }

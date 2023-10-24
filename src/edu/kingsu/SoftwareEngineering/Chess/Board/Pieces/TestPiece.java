@@ -2,7 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
 import java.util.ArrayList;
 
-import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 
 public class TestPiece extends Piece {
 
@@ -27,7 +27,7 @@ public class TestPiece extends Piece {
     }
 
     @Override
-    public ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPossibleMoves'");
     }

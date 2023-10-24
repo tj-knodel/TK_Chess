@@ -2,7 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
 import java.util.ArrayList;
 
-import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
@@ -62,7 +62,7 @@ public abstract class Piece {
 
     // TODO: Split up IsMoveValid to two functions to handle if the move is within
     // the board, and if there is a piece at the location.
-    protected boolean IsMoveValid(Piece[][] board, Move move) {
+    protected boolean IsMoveValid(Piece[][] board, BoardLocation move) {
         // if(move.column >= 0 && move.column < board.length && move.row >= 0 &&
         // move.row < board.length)
         // {
@@ -78,7 +78,7 @@ public abstract class Piece {
      * @param move  The location to move to
      * @return
      */
-    protected MoveValidity IsMoveValidWithoutPiece(Piece[][] board, Move move) {
+    protected MoveValidity IsMoveValidWithoutPiece(Piece[][] board, BoardLocation move) {
         MoveValidity moveValidity = new MoveValidity();
         if (!IsMoveValid(board, move)) {
             moveValidity.isInBoard = false;
@@ -122,7 +122,7 @@ public abstract class Piece {
         return moveValidity;
     }
 
-    public abstract ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove);
+    public abstract ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove);
 
     public final static int EMPTY_PIECE = -1;
     public final static int PAWN = 0;

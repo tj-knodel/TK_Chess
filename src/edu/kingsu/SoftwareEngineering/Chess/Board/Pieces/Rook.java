@@ -2,7 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
 import java.util.ArrayList;
 
-import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
@@ -37,9 +37,9 @@ public class Rook extends Piece {
     }
 
     @Override
-    public ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove) {
-        ArrayList<Move> moves = new ArrayList<>();
-        Move endMove = new Move(startMove.column, startMove.row);
+    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
+        ArrayList<BoardLocation> moves = new ArrayList<>();
+        BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
         // Up
         while (IsMoveValid(board, endMove)) {
             endMove.row--;
@@ -51,9 +51,9 @@ public class Rook extends Piece {
             if(!moveValid.isOtherTeam && !moveValid.isEmptySpace)
                 break;
             if(moveValid.isEmptySpace)
-                moves.add(new Move(endMove.column, endMove.row));
+                moves.add(new BoardLocation(endMove.column, endMove.row));
             if(moveValid.isOtherTeam) {
-                moves.add(new Move(endMove.column, endMove.row));
+                moves.add(new BoardLocation(endMove.column, endMove.row));
                 break;
             }
 //            if (IsMoveValid(board, endMove))
@@ -62,7 +62,7 @@ public class Rook extends Piece {
 //                break;
         }
         // Right
-        endMove = new Move(startMove.column, startMove.row);
+        endMove = new BoardLocation(startMove.column, startMove.row);
         while (IsMoveValid(board, endMove)) {
             endMove.column++;
             // Keep adding moves as long as we have empty space, otherwise add
@@ -73,9 +73,9 @@ public class Rook extends Piece {
             if(!moveValid.isOtherTeam && !moveValid.isEmptySpace)
                 break;
             if(moveValid.isEmptySpace)
-                moves.add(new Move(endMove.column, endMove.row));
+                moves.add(new BoardLocation(endMove.column, endMove.row));
             if(moveValid.isOtherTeam) {
-                moves.add(new Move(endMove.column, endMove.row));
+                moves.add(new BoardLocation(endMove.column, endMove.row));
                 break;
             }
 //            if (IsMoveValid(board, endMove))
@@ -84,7 +84,7 @@ public class Rook extends Piece {
 //                break;
         }
         // Down
-        endMove = new Move(startMove.column, startMove.row);
+        endMove = new BoardLocation(startMove.column, startMove.row);
         while (IsMoveValid(board, endMove)) {
             endMove.row++;
             // Keep adding moves as long as we have empty space, otherwise add
@@ -95,9 +95,9 @@ public class Rook extends Piece {
             if(!moveValid.isOtherTeam && !moveValid.isEmptySpace)
                 break;
             if(moveValid.isEmptySpace)
-                moves.add(new Move(endMove.column, endMove.row));
+                moves.add(new BoardLocation(endMove.column, endMove.row));
             if(moveValid.isOtherTeam) {
-                moves.add(new Move(endMove.column, endMove.row));
+                moves.add(new BoardLocation(endMove.column, endMove.row));
                 break;
             }
 //            if (IsMoveValid(board, endMove))
@@ -106,7 +106,7 @@ public class Rook extends Piece {
 //                break;
         }
         // Left
-        endMove = new Move(startMove.column, startMove.row);
+        endMove = new BoardLocation(startMove.column, startMove.row);
         while (IsMoveValid(board, endMove)) {
             endMove.column--;
             // Keep adding moves as long as we have empty space, otherwise add
@@ -117,9 +117,9 @@ public class Rook extends Piece {
             if(!moveValid.isOtherTeam && !moveValid.isEmptySpace)
                 break;
             if(moveValid.isEmptySpace)
-                moves.add(new Move(endMove.column, endMove.row));
+                moves.add(new BoardLocation(endMove.column, endMove.row));
             if(moveValid.isOtherTeam) {
-                moves.add(new Move(endMove.column, endMove.row));
+                moves.add(new BoardLocation(endMove.column, endMove.row));
                 break;
             }
 //            if (IsMoveValid(board, endMove))

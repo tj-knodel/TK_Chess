@@ -2,7 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
 import java.util.ArrayList;
 
-import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 
 /**
  * @author Daniell Buchner
@@ -30,7 +30,7 @@ public class EmptyPiece extends Piece {
     }
 
     @Override
-    public ArrayList<Move> getPossibleMoves(Piece[][] board, Move startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
         throw new UnsupportedOperationException("Empty Piece has no possible moves!");
     }
 
