@@ -6,8 +6,8 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
  * @version 0.1.0
  */
 public abstract class Player {
-    private int colour;
-    private String name;
+    protected int colour;
+    protected String name;
 
     /**
      * Gets a move from the player and returns it
