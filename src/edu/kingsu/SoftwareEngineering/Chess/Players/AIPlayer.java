@@ -1,5 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 /**
  * @author Thaler Knodel
  * @version 0.1.0
@@ -33,7 +34,15 @@ public class AIPlayer extends Player {
      * Gets a move from the AI
      * @return a move
      */
-    public Move getMove() {
+    public BoardLocation getMove() {
         return null;
+    }
+
+    /**
+     * The minimax algorithm for the AI player
+     * @return
+     */
+    private int minimax(Board board, int depth, boolean player) {
+        return 0;
     }
 }
