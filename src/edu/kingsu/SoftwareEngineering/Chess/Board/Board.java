@@ -25,7 +25,7 @@ public class Board {
     private final StringBuilder algebraicRepresentation;
 
     public Board() {
-//        board = new Piece[8][8];
+        // board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
         initializeGameTwoPlayersWhiteOnly();
     }
@@ -34,7 +34,8 @@ public class Board {
      * Initializes the board to play a game and not to
      * read the PGN game.
      */
-    // TODO: Change this function to take in a "settings" variable to initialize the side based on that
+    // TODO: Change this function to take in a "settings" variable to initialize the
+    // side based on that
     public void initializeGameTwoPlayersWhiteOnly() {
         board = new Piece[][] {
                 { new Rook(0), new Knight(0), new Bishop(0), new Queen(0), new King(0), new Bishop(0), new Knight(0),
@@ -81,6 +82,8 @@ public class Board {
      * @return True if the move was successful.
      */
     public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+        board[endMove.row][endMove.column] = pieceMoving;
+        board[startMove.row][startMove.column] = new EmptyPiece();
         return false;
     }
 
