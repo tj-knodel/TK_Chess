@@ -1,8 +1,8 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 
 public class HumanPlayer extends Player {
-    public Move getMove() {
+    public BoardLocation getMove() {
         return null;
     }
     

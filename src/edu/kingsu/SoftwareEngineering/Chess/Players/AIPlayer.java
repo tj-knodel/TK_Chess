@@ -1,5 +1,5 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 /**
  * @author Thaler Knodel

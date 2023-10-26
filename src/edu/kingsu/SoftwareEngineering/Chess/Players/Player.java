@@ -1,5 +1,5 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Move;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 
 /**
  * @author Thaler Knodel
@@ -13,7 +13,7 @@ public abstract class Player {
      * Gets a move from the player and returns it
      * @return the selected move
      */
-    public abstract Move getMove();
+    public abstract BoardLocation getMove();
 
     /**
      * Gets the colour of the players pieces (i.e white or black)
