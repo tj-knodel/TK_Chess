@@ -1,4 +1,5 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 
 public class AIPlayer extends Player {
     /**
@@ -6,7 +7,7 @@ public class AIPlayer extends Player {
      * 
      * @author Thaler Knodel
      */
-    public Move getMove() {
+    public BoardLocation getMove() {
         return null;
     }
 }
