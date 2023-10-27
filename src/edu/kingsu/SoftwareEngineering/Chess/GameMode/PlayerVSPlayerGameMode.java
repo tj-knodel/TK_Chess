@@ -31,7 +31,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
                 ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
                 chessTile.addMouseListener(new MouseAdapter() {
                     @Override
-                    public void mouseClicked(MouseEvent e) {
+                    public void mousePressed(MouseEvent e) {
                         if (moveController.chessTileClick(board, teamTurn, chessTile.row,
                                 chessTile.column)) {
                             moveController.sendMovesToBoard(board);
