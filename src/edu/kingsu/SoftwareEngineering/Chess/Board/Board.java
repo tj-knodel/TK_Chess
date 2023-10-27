@@ -139,6 +139,18 @@ public class Board {
         return possibleMoves;
     }
 
+    public ArrayList<BoardLocation> getBoardLocationsForTeamForPiece(int team, int pieceId) {
+        ArrayList<BoardLocation> locations = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j].getTeam() == team && board[i][j].getPieceID() == pieceId) {
+                    locations.add(new BoardLocation(j, i));
+                }
+            }
+        }
+        return locations;
+    }
+
     /**
      * Gets the algebraic notation string.
      *
