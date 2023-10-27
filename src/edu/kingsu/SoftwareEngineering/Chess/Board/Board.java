@@ -52,7 +52,7 @@ public class Board {
                         new EmptyPiece(), new EmptyPiece(), new EmptyPiece() },
                 { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1),
                         new Pawn(1) },
-                { new Rook(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1),
+                { new Rook(1), new Knight(1), new Bishop(1), new Queen(1), new King(1), new Bishop(1), new Knight(1),
                         new Rook(1) }
         };
 
