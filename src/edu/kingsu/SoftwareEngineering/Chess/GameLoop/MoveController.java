@@ -11,10 +11,10 @@ public class MoveController {
     private BoardLocation firstClick = new BoardLocation(-1, -1);
     private BoardLocation secondClick = new BoardLocation(-1, -1);
     private boolean isFirstClick = true;
-    private ArrayList<BoardLocation> arr;
+    private ArrayList<BoardLocation> possibleMoves;
 
     public MoveController() {
-        this.arr = new ArrayList<>();
+        this.possibleMoves = new ArrayList<>();
     }
 
     /*
@@ -29,25 +29,42 @@ public class MoveController {
     }
 
     /* From the */
-    public ArrayList<BoardLocation> getAllPossibleMoves(BoardLocation location) {
-
-        return arr;
+    public ArrayList<BoardLocation> getAllPossibleMoves() {
+        // Piece pieceLocations = board.getBoard()[firstClick.row][firstClick.column];
+        // possibleMoves = board.getPossibleMoves(pieceLocations, location);
+        return possibleMoves;
     }
 
-    public boolean chessTileClick(char row, char column) {
+    public boolean getIsFirstClick() {
+        return isFirstClick;
+    }
+
+    public boolean chessTileClick(Board board, char row, char column) {
         if (isFirstClick) {
             firstClick = new BoardLocation(column, row);
+            Piece piece = board.getBoard()[firstClick.row][firstClick.column];
+            possibleMoves = board.getPossibleMoves(piece, firstClick);
             isFirstClick = false;
             return false;
         } else if (!isFirstClick) {
             secondClick = new BoardLocation(column, row);
+            if (secondClick.row == firstClick.row && secondClick.column == firstClick.column) {
+                isFirstClick = true;
+                return false;
+            }
+            for (BoardLocation move : possibleMoves) {
+                if (move.row == secondClick.row && move.column == secondClick.column) {
+                    isFirstClick = true;
+                    return true;
+                }
+            }
             isFirstClick = true;
             // board.applyMove(board.getBoard()[firstClick.row][firstClick.column],
             // firstClick, secondClick);
             // gameLoop.sendUpdateBoardState();
             System.out.println("Move from: " + firstClick.column + " " + firstClick.row + " to " + secondClick.column
                     + " " + secondClick.row);
-            return true;
+            return false;
         }
         return false;
     }
