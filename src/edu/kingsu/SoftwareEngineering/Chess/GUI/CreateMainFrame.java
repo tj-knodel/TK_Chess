@@ -130,7 +130,7 @@ public class CreateMainFrame {
 
         ChessTileUI boardTilesUI[][] = new ChessTileUI[8][8];
 
-        boolean displayWhite = false;
+        boolean displayWhite = true;
         for (int row = 0; row < 8; ++row) {
             for (int column = 0; column < 8; ++column) {
 

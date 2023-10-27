@@ -16,7 +16,7 @@ public abstract class UILibrary  {
 
 
     public static final int uiSize_X = 1455; //  JFrame x Size // 1440
-    public static final int uiSize_Y = 1085; //  JFrame y Size // 1024
+    public static final int uiSize_Y = 1050; //  JFrame y Size // 1024
 
     /**
      * The board appearance folder
@@ -24,7 +24,7 @@ public abstract class UILibrary  {
      * change
      * ChessTileUI.getBoardImage() to be absolute file path, not relative.
      */
-    public static String boardAppearanceFolder = "BoardImages_Clash/";
+    public static String boardAppearanceFolder = "BoardImages_Blue/";
 
     //----- UI Elements-------------
     
