@@ -7,6 +7,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 
 /**
  * The class that acts as the middle man between the Board class and the GUI
@@ -46,12 +47,14 @@ public class GameLoop {
                                 guiStarter.chessUIManager.boardTiles[location.row][location.column]
                                         .setPossibleMoveCircleVisibility(true);
                             }
+                            UILibrary.MainFrame.repaint();
                         } else if (moveController.getIsFirstClick()) {
                             for (int r = 0; r < 8; r++) {
                                 for (int c = 0; c < 8; c++) {
                                     guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
                                 }
                             }
+                            UILibrary.MainFrame.repaint();
                         }
                     }
                 });

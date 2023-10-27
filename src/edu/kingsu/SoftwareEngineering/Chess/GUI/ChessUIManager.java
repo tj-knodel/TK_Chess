@@ -85,7 +85,7 @@ public class ChessUIManager {
 
             }
         }
-
+        UILibrary.MainFrame.repaint();
     }
 
     // TEMPORARY, To be implemented
