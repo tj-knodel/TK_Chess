@@ -83,6 +83,7 @@ public class Board {
      */
     public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         board[endMove.row][endMove.column] = pieceMoving;
+        pieceMoving.moved();
         board[startMove.row][startMove.column] = new EmptyPiece();
         return false;
     }

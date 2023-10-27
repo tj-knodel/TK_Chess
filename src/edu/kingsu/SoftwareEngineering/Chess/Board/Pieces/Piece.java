@@ -51,6 +51,8 @@ public abstract class Piece {
      */
     public abstract Piece copy(int team);
 
+    public abstract void moved();
+
     /**
      * Gets the team the piece is on.
      *

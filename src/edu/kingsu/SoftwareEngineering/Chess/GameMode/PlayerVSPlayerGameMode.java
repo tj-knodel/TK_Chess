@@ -12,20 +12,17 @@ import java.awt.event.MouseEvent;
 
 public class PlayerVSPlayerGameMode extends GameMode {
 
-    private MoveController[] moveControllers;
+    private MoveController moveController;
     private int teamTurn;
 
     public PlayerVSPlayerGameMode() {
-        this.moveControllers = new MoveController[2];
-        this.moveControllers[0] = new MoveController();
-        this.moveControllers[1] = new MoveController();
+        this.moveController = new MoveController();
         teamTurn = Team.WHITE_TEAM;
     }
 
     @Override
     public void switchTeam() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'switchTeam'");
+        teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
     }
 
     public void setClickListeners(GUIStarter guiStarter, Board board) {
@@ -35,18 +32,20 @@ public class PlayerVSPlayerGameMode extends GameMode {
                 chessTile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if (moveControllers[teamTurn].chessTileClick(board, chessTile.row, chessTile.column)) {
-                            moveControllers[teamTurn].sendMovesToBoard(board);
+                        if (moveController.chessTileClick(board, teamTurn, chessTile.row,
+                                chessTile.column)) {
+                            moveController.sendMovesToBoard(board);
+                            switchTeam();
                             guiStarter.chessUIManager.drawBoard(board.getBoard());
                         }
-                        if (!moveControllers[teamTurn].getIsFirstClick()) {
-                            var moves = moveControllers[teamTurn].getAllPossibleMoves();
+                        if (!moveController.getIsFirstClick()) {
+                            var moves = moveController.getAllPossibleMoves();
                             for (BoardLocation location : moves) {
                                 guiStarter.chessUIManager.boardTiles[location.row][location.column]
                                         .setPossibleMoveCircleVisibility(true);
                             }
                             UILibrary.MainFrame.repaint();
-                        } else if (moveControllers[teamTurn].getIsFirstClick()) {
+                        } else if (moveController.getIsFirstClick()) {
                             for (int r = 0; r < 8; r++) {
                                 for (int c = 0; c < 8; c++) {
                                     guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);

@@ -47,20 +47,20 @@ public class Bishop extends Piece {
             // Keep adding moves as long as we have empty space, otherwise add
             // the first enemy player move and then break out of the loop.
             MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if(!moveValid.isInBoard)
+            if (!moveValid.isInBoard)
                 break;
-            if(!moveValid.isOtherTeam && !moveValid.isEmptySpace)
+            if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
                 break;
-            if(moveValid.isEmptySpace)
+            if (moveValid.isEmptySpace)
                 moves.add(new BoardLocation(endMove.column, endMove.row));
-            if(moveValid.isOtherTeam) {
+            if (moveValid.isOtherTeam) {
                 moves.add(new BoardLocation(endMove.column, endMove.row));
                 break;
             }
-//            if (IsMoveValid(board, endMove))
-//                moves.add(new Move(endMove.column, endMove.row));
-//            else
-//                break;
+            // if (IsMoveValid(board, endMove))
+            // moves.add(new Move(endMove.column, endMove.row));
+            // else
+            // break;
         }
         // Up Right
         endMove = new BoardLocation(startMove.column, startMove.row);
@@ -70,18 +70,18 @@ public class Bishop extends Piece {
             // Keep adding moves as long as we have empty space, otherwise add
             // the first enemy player move and then break out of the loop.
             MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if(!moveValid.isInBoard)
+            if (!moveValid.isInBoard)
                 break;
-            if(!moveValid.isOtherTeam && !moveValid.isEmptySpace)
+            if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
                 break;
-            if(moveValid.isEmptySpace)
+            if (moveValid.isEmptySpace)
                 moves.add(new BoardLocation(endMove.column, endMove.row));
-            if(moveValid.isOtherTeam) {
+            if (moveValid.isOtherTeam) {
                 moves.add(new BoardLocation(endMove.column, endMove.row));
                 break;
             }
-//            if (IsMoveValid(board, endMove))
-//                moves.add(new Move(endMove.column, endMove.row));
+            // if (IsMoveValid(board, endMove))
+            // moves.add(new Move(endMove.column, endMove.row));
         }
         // Down Left
         endMove = new BoardLocation(startMove.column, startMove.row);
@@ -91,18 +91,18 @@ public class Bishop extends Piece {
             // Keep adding moves as long as we have empty space, otherwise add
             // the first enemy player move and then break out of the loop.
             MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if(!moveValid.isInBoard)
+            if (!moveValid.isInBoard)
                 break;
-            if(!moveValid.isOtherTeam && !moveValid.isEmptySpace)
+            if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
                 break;
-            if(moveValid.isEmptySpace)
+            if (moveValid.isEmptySpace)
                 moves.add(new BoardLocation(endMove.column, endMove.row));
-            if(moveValid.isOtherTeam) {
+            if (moveValid.isOtherTeam) {
                 moves.add(new BoardLocation(endMove.column, endMove.row));
                 break;
             }
-//            if (IsMoveValid(board, endMove))
-//                moves.add(new Move(endMove.column, endMove.row));
+            // if (IsMoveValid(board, endMove))
+            // moves.add(new Move(endMove.column, endMove.row));
         }
         // Down Right
         endMove = new BoardLocation(startMove.column, startMove.row);
@@ -112,20 +112,24 @@ public class Bishop extends Piece {
             // Keep adding moves as long as we have empty space, otherwise add
             // the first enemy player move and then break out of the loop.
             MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if(!moveValid.isInBoard)
+            if (!moveValid.isInBoard)
                 break;
-            if(!moveValid.isOtherTeam && !moveValid.isEmptySpace)
+            if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
                 break;
-            if(moveValid.isEmptySpace)
+            if (moveValid.isEmptySpace)
                 moves.add(new BoardLocation(endMove.column, endMove.row));
-            if(moveValid.isOtherTeam) {
+            if (moveValid.isOtherTeam) {
                 moves.add(new BoardLocation(endMove.column, endMove.row));
                 break;
             }
-//            if (IsMoveValid(board, endMove))
-//                moves.add(new Move(endMove.column, endMove.row));
+            // if (IsMoveValid(board, endMove))
+            // moves.add(new Move(endMove.column, endMove.row));
         }
         return moves;
+    }
+
+    @Override
+    public void moved() {
     }
 
 }

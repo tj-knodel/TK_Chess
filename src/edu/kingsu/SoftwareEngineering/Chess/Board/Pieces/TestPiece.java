@@ -32,4 +32,10 @@ public class TestPiece extends Piece {
         throw new UnsupportedOperationException("Unimplemented method 'getPossibleMoves'");
     }
 
+    @Override
+    public void moved() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'moved'");
+    }
+
 }

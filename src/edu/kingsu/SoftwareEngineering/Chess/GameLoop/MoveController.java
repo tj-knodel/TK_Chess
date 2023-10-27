@@ -31,10 +31,12 @@ public class MoveController {
         return isFirstClick;
     }
 
-    public boolean chessTileClick(Board board, char row, char column) {
+    public boolean chessTileClick(Board board, int team, char row, char column) {
         if (isFirstClick) {
             firstClick = new BoardLocation(column, row);
             Piece piece = board.getBoard()[firstClick.row][firstClick.column];
+            if (piece.getTeam() != team)
+                return false;
             possibleMoves = board.getPossibleMoves(piece, firstClick);
             isFirstClick = false;
             return false;

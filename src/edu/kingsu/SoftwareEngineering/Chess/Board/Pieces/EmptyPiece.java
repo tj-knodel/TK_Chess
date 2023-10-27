@@ -34,4 +34,8 @@ public class EmptyPiece extends Piece {
         throw new UnsupportedOperationException("Empty Piece has no possible moves!");
     }
 
+    @Override
+    public void moved() {
+    }
+
 }
