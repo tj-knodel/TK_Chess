@@ -24,7 +24,6 @@ public class GameLoop {
 
     private GUIStarter guiStarter;
     private Board board;
-    private MoveController moveController;
     private GameMode gameMode;
 
     /**

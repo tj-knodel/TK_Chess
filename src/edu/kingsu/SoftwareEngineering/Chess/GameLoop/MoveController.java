@@ -19,7 +19,6 @@ public class MoveController {
     public boolean sendMovesToBoard(Board board) {
         Piece pieceMoving = board.getBoard()[firstClick.row][firstClick.column];
         board.applyMove(pieceMoving, firstClick, secondClick);
-        System.out.println("SENT");
         return false;
     }
 

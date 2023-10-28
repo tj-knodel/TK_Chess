@@ -12,6 +12,7 @@ import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
  */
 public class Main {
 
+
 	/**
 	 * Replace me with something useful
 	 *
