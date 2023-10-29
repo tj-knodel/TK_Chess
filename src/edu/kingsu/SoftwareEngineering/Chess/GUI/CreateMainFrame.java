@@ -18,7 +18,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 
-
 /**
  * Creates the Main Chess Frame
  * 
@@ -122,13 +121,15 @@ public class CreateMainFrame {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-    
+    private static JLayeredPane boardUI;
+    private static ChessTileUI boardTilesUI[][];
+
     public static ChessTileUI[][] createChessBoard() {
-        JLayeredPane boardUI = new JLayeredPane();
+        boardUI = new JLayeredPane();
         boardUI.setBounds(52, 91, 848, 850);
         boardUI.setLayout(new GridLayout(8, 8));
 
-        ChessTileUI boardTilesUI[][] = new ChessTileUI[8][8];
+        boardTilesUI = new ChessTileUI[8][8];
 
         boolean displayWhite = true;
         for (int row = 0; row < 8; ++row) {
@@ -252,12 +253,12 @@ public class CreateMainFrame {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
+    private static JLabel boardLabels[] = new JLabel[16]; // 1-8 then a - h
 
     private void createBoardMarkers() {
-        JLabel boardLabels[] = new JLabel[16];  // 1-8 then a - h
-        boardLabels[0] = new JLabel("114815298465123", SwingConstants.CENTER);
+
+        boardLabels[0] = new JLabel("1", SwingConstants.CENTER);
         boardLabels[0].setBounds(22, 865, 28, 40); // Numbers from Figma Design
-        
         boardLabels[1] = new JLabel("2", SwingConstants.CENTER);
         boardLabels[1].setBounds(22, 758, 28, 40); // Numbers from Figma Design
         boardLabels[2] = new JLabel("3", SwingConstants.CENTER);
@@ -272,7 +273,7 @@ public class CreateMainFrame {
         boardLabels[6].setBounds(22, 227, 28, 40); // Numbers from Figma Design
         boardLabels[7] = new JLabel("8", SwingConstants.CENTER);
         boardLabels[7].setBounds(22, 124, 28, 40); // Numbers from Figma Design
-        
+
         boardLabels[8] = new JLabel("a", SwingConstants.CENTER);
         boardLabels[8].setBounds(92, 939, 28, 40); // Numbers from Figma Design
         boardLabels[9] = new JLabel("b", SwingConstants.CENTER);
@@ -282,7 +283,7 @@ public class CreateMainFrame {
         boardLabels[11] = new JLabel("d", SwingConstants.CENTER);
         boardLabels[11].setBounds(411, 939, 28, 40); // Numbers from Figma Design
         boardLabels[12] = new JLabel("e", SwingConstants.CENTER);
-        boardLabels[12].setBounds(522, 939, 28, 40); // Numbers from Figma Design      
+        boardLabels[12].setBounds(522, 939, 28, 40); // Numbers from Figma Design
         boardLabels[13] = new JLabel("f", SwingConstants.CENTER);
         boardLabels[13].setBounds(621, 939, 28, 40); // Numbers from Figma Design
         boardLabels[14] = new JLabel("g", SwingConstants.CENTER);
@@ -290,30 +291,118 @@ public class CreateMainFrame {
         boardLabels[15] = new JLabel("h", SwingConstants.CENTER);
         boardLabels[15].setBounds(836, 939, 28, 40); // Numbers from Figma Design
 
-        for (JLabel label: boardLabels) {
-            System.out.println(label.getText());
+        for (JLabel label : boardLabels) {
             label.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
-           
-            UILibrary.MainFrame.add(label); 
-            label.setVisible(true); 
+            label.setBackground(UILibrary.ForegroundColor);
+            label.setForeground(UILibrary.TextColor_White);
+            UILibrary.MainFrame.add(label);
+            label.setVisible(true);
         }
-
 
     }
 
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    private static boolean whiteOnBottom = true; // true = white on bottom, false = black on bottom
+
+    private static void setBoardOrientation() {
+        whiteOnBottom = !whiteOnBottom; // toggle it
+
+        if (whiteOnBottom) {
+            // 1-8
+            boardLabels[0].setBounds(22, 865, 28, 40); // Numbers from Figma Design
+            boardLabels[1].setBounds(22, 758, 28, 40); // Numbers from Figma Design
+            boardLabels[2].setBounds(22, 650, 28, 40); // Numbers from Figma Design
+            boardLabels[3].setBounds(22, 542, 28, 40); // Numbers from Figma Design
+            boardLabels[4].setBounds(22, 439, 28, 40); // Numbers from Figma Design
+            boardLabels[5].setBounds(22, 330, 28, 40); // Numbers from Figma Design
+            boardLabels[6].setBounds(22, 227, 28, 40); // Numbers from Figma Design
+            boardLabels[7].setBounds(22, 124, 28, 40); // Numbers from Figma Design
+
+            // a - h
+            boardLabels[8].setBounds(92, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[9].setBounds(195, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[10].setBounds(304, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[11].setBounds(411, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[12].setBounds(522, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[13].setBounds(621, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[14].setBounds(724, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[15].setBounds(836, 939, 28, 40); // Numbers from Figma Design
+
+            // Chess Tiles, remove all the tiles and add them in reverse order
+            boardUI.removeAll();
+            for (int row = 0; row  < 8; ++row) {
+                for (int column = 0; column < 8; ++column) {
+                    boardUI.add(boardTilesUI[row][column]);
+                }
+            }
+
+        } else {
+            // 1-8
+            boardLabels[0].setBounds(22, 124, 28, 40); // Numbers from Figma Design
+            boardLabels[1].setBounds(22, 227, 28, 40); // Numbers from Figma Design
+            boardLabels[2].setBounds(22, 330, 28, 40); // Numbers from Figma Design
+            boardLabels[3].setBounds(22, 439, 28, 40); // Numbers from Figma Design
+            boardLabels[4].setBounds(22, 542, 28, 40); // Numbers from Figma Design
+            boardLabels[5].setBounds(22, 650, 28, 40); // Numbers from Figma Design
+            boardLabels[6].setBounds(22, 758, 28, 40); // Numbers from Figma Design
+            boardLabels[7].setBounds(22, 865, 28, 40); // Numbers from Figma Design
+
+            // a - h
+            boardLabels[8].setBounds(836, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[9].setBounds(724, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[10].setBounds(621, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[11].setBounds(522, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[12].setBounds(411, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[13].setBounds(304, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[14].setBounds(195, 939, 28, 40); // Numbers from Figma Design
+            boardLabels[15].setBounds(92, 939, 28, 40); // Numbers from Figma Design
+
+            boardUI.removeAll();
+            for (int row = 7; row >= 0; --row) {
+                for (int column = 7; column >= 0; --column) {
+                    boardUI.add(boardTilesUI[row][column]);
+                }
+            }
+        }
+
+        boardUI.repaint();
+        UILibrary.MainFrame.repaint();
+        UILibrary.ChessJFrame.repaint();
+    }
+
+    public static void setBoardOrientation(boolean isWhiteOnBottom) {
+        whiteOnBottom = !isWhiteOnBottom;
+        setBoardOrientation();
+    }
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+
+    private void toggleCoordinatesVisibility() {
+            for (JLabel label : boardLabels) {
+                label.setVisible(!label.isVisible());
+        }
+    }
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
 
     public CreateMainFrame() {
         createJFrame();
-        CreateMainContentPane(); 
+        CreateMainContentPane();
         createUIElements();
         createJMenus();
         createBoardMarkers();
 
-        UILibrary.MainFrame.repaint();
-        UILibrary.ChessJFrame.repaint();
+        // JMenu UI Events
+        UILibrary.FlipBoard_JMenuItem.addActionListener(e -> {
+            setBoardOrientation();
+        });
+        UILibrary.ToggleCoordinates_JMenuItem.addActionListener(e -> {
+            toggleCoordinatesVisibility();
+        });
     }
 
 }
