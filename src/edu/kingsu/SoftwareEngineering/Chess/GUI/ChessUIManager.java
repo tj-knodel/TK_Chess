@@ -60,28 +60,6 @@ public class ChessUIManager {
                     boardTiles[row][column].setPieceImage(PIECES_ENUM.King, pieceObject.getTeam() == Team.WHITE_TEAM);
                 else if (pieceObject.getPieceID() == Piece.QUEEN)
                     boardTiles[row][column].setPieceImage(PIECES_ENUM.Queen, pieceObject.getTeam() == Team.WHITE_TEAM);
-                /**
-                 * 
-                 * TEMPLATE IF-ELSE Chain to display board, if conditions can change, the
-                 * function calls should stay the same
-                 * Many `if` statements to display the correct image
-                 * if (piece == PIECES_ENUM.Pawn) {
-                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Pawn, isWhite);
-                 * } else if (piece == PIECES_ENUM.Rook) {
-                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Rook, isWhite);
-                 * } else if (piece == PIECES_ENUM.Knight) {
-                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Knight, isWhite);
-                 * } else if (piece == PIECES_ENUM.Bishop) {
-                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Bishop, isWhite);
-                 * } else if (piece == PIECES_ENUM.Queen) {
-                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.Queen, isWhite);
-                 * } else if (piece == PIECES_ENUM.King) {
-                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.King, isWhite);
-                 * } else {
-                 * boardTiles[row][column].setPieceImage(PIECES_ENUM.None, true);
-                 * }
-                 * }
-                 */
 
             }
         }

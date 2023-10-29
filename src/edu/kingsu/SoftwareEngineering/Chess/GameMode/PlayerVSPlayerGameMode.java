@@ -62,13 +62,13 @@ public class PlayerVSPlayerGameMode extends GameMode {
     @Override
     public void startGame() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'startGame'");
+        //throw new UnsupportedOperationException("Unimplemented method 'startGame'");
     }
 
     @Override
     public void endGame() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'endGame'");
+        //throw new UnsupportedOperationException("Unimplemented method 'endGame'");
     }
 
 }

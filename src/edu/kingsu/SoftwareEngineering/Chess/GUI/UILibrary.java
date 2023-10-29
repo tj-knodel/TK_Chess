@@ -15,7 +15,7 @@ import javax.swing.*;
 public abstract class UILibrary {
 
   public static final int uiSize_X = 1455; // JFrame x Size // 1440
-  public static final int uiSize_Y = 1020; // JFrame y Size // 1024
+  public static final int uiSize_Y = 1080; // JFrame y Size // 1024
 
   /**
    * The board appearance folder

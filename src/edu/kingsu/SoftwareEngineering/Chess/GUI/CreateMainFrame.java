@@ -253,11 +253,67 @@ public class CreateMainFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    private void createBoardMarkers() {
+        JLabel boardLabels[] = new JLabel[16];  // 1-8 then a - h
+        boardLabels[0] = new JLabel("114815298465123", SwingConstants.CENTER);
+        boardLabels[0].setBounds(22, 865, 28, 40); // Numbers from Figma Design
+        
+        boardLabels[1] = new JLabel("2", SwingConstants.CENTER);
+        boardLabels[1].setBounds(22, 758, 28, 40); // Numbers from Figma Design
+        boardLabels[2] = new JLabel("3", SwingConstants.CENTER);
+        boardLabels[2].setBounds(22, 650, 28, 40); // Numbers from Figma Design
+        boardLabels[3] = new JLabel("4", SwingConstants.CENTER);
+        boardLabels[3].setBounds(22, 542, 28, 40); // Numbers from Figma Design
+        boardLabels[4] = new JLabel("5", SwingConstants.CENTER);
+        boardLabels[4].setBounds(22, 439, 28, 40); // Numbers from Figma Design
+        boardLabels[5] = new JLabel("6", SwingConstants.CENTER);
+        boardLabels[5].setBounds(22, 330, 28, 40); // Numbers from Figma Design
+        boardLabels[6] = new JLabel("7", SwingConstants.CENTER);
+        boardLabels[6].setBounds(22, 227, 28, 40); // Numbers from Figma Design
+        boardLabels[7] = new JLabel("8", SwingConstants.CENTER);
+        boardLabels[7].setBounds(22, 124, 28, 40); // Numbers from Figma Design
+        
+        boardLabels[8] = new JLabel("a", SwingConstants.CENTER);
+        boardLabels[8].setBounds(92, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[9] = new JLabel("b", SwingConstants.CENTER);
+        boardLabels[9].setBounds(195, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[10] = new JLabel("c", SwingConstants.CENTER);
+        boardLabels[10].setBounds(304, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[11] = new JLabel("d", SwingConstants.CENTER);
+        boardLabels[11].setBounds(411, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[12] = new JLabel("e", SwingConstants.CENTER);
+        boardLabels[12].setBounds(522, 939, 28, 40); // Numbers from Figma Design      
+        boardLabels[13] = new JLabel("f", SwingConstants.CENTER);
+        boardLabels[13].setBounds(621, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[14] = new JLabel("g", SwingConstants.CENTER);
+        boardLabels[14].setBounds(724, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[15] = new JLabel("h", SwingConstants.CENTER);
+        boardLabels[15].setBounds(836, 939, 28, 40); // Numbers from Figma Design
+
+        for (JLabel label: boardLabels) {
+            System.out.println(label.getText());
+            label.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
+           
+            UILibrary.MainFrame.add(label); 
+            label.setVisible(true); 
+        }
+
+
+    }
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+
+
     public CreateMainFrame() {
         createJFrame();
-        CreateMainContentPane();
+        CreateMainContentPane(); 
         createUIElements();
         createJMenus();
+        createBoardMarkers();
+
+        UILibrary.MainFrame.repaint();
+        UILibrary.ChessJFrame.repaint();
     }
 
 }
