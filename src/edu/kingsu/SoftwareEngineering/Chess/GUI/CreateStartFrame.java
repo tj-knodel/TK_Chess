@@ -9,7 +9,8 @@ import java.awt.Image;
 
 
 /**
- * Creates the Start Frame
+ * Creates the Start Frame;
+ * Start Frames is where the user selects a game-mode
  * 
  * @author Noah Bulas
  * @version V1
@@ -30,6 +31,9 @@ public class CreateStartFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Creates the Start Frame JLabel which holds the buttons to select a specified game mode
+     */
     private void CreateNewGameContentPanel() {
         UILibrary.NewGameFrame = new JLabel();
         UILibrary.NewGameFrame.setLayout(null);
@@ -41,7 +45,7 @@ public class CreateStartFrame {
     // -----------------------------------------------------
 
     /**
-     * Creates watermark, moves frame, forward/back buttons and text input
+     * Creates watermark, and game-mode buttons
      */
     private void createUIElements() {
 
@@ -131,6 +135,9 @@ public class CreateStartFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Constructor which calls the functions to create the UI
+     */
     public CreateStartFrame() {
         CreateNewGameContentPanel();
         createUIElements();

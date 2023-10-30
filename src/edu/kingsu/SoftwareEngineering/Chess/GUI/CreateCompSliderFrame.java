@@ -31,6 +31,9 @@ public class CreateCompSliderFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Creates the JLabel Change AI Strength Slider Frame
+     */
     private void CreateSliderContentPanel() {
         UILibrary.SetAIStrengthSliderFrame = new JLabel();
         UILibrary.SetAIStrengthSliderFrame.setLayout(null);
@@ -42,7 +45,7 @@ public class CreateCompSliderFrame {
     // -----------------------------------------------------
 
     /**
-     * Creates watermark, moves frame, forward/back buttons and text input
+     * Creates watermark, Needed JLabel titles, slider itself, and confirm / cancel buttons
      */
     private void createUIElements() {
 
@@ -131,6 +134,9 @@ public class CreateCompSliderFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Creates the AI Strength Slider Frame by calling its associated functions
+     */
     public CreateCompSliderFrame() {
         CreateSliderContentPanel();
         createUIElements();

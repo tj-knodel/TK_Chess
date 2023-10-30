@@ -50,7 +50,7 @@ public class ChessTileUI extends JLayeredPane {
     private JLabel PieceImage;
 
     /**
-     * Gets the image from the local jar File
+     * Gets the image from the source chess appearance folder.
      * 
      * @param imageToGet Name of the image + type
      * @return The image

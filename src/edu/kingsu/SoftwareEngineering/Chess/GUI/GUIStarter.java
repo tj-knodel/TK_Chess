@@ -8,6 +8,9 @@ package edu.kingsu.SoftwareEngineering.Chess.GUI;
  */
 public class GUIStarter {
 
+    /**
+     * Holds the ChessUIManager class (basically static but non static because of how it gets images)
+     */
     public ChessUIManager chessUIManager;
 
     /**

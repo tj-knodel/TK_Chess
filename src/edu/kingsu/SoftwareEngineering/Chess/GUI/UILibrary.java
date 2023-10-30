@@ -6,7 +6,7 @@ import javax.swing.*;
 
 /**
  * This file does not contain any real "functional" code, its more of a
- * library for all common variables and allows certain variable to be
+ * library for all common variables and allows certain variables to be
  * passed around and used with ease.
  * 
  * @author Noah Bulas
@@ -61,105 +61,105 @@ public abstract class UILibrary {
 
   // ----- Main Frame-------------
   /**
-   * Located in the MainFrame
+   * Located in the MainFrame;
    * JButton to step backwards in the game
    */
   public static JButton StepBackwards_Button;
 
   /**
-   * Located in the MainFrame
+   * Located in the MainFrame;
    * JButton to step forwards in the game
    */
   public static JButton StepForwards_Button;
 
   /**
-   * Located in the MainFrame
+   * Located in the MainFrame;
    * JTextField to take text input (moves) from the user
    */
   public static JTextField EnterMove_TextField;
 
   /**
-   * Located in the MainFrame
+   * Located in the MainFrame;
    * JLabel which holds all the previous moves in chess notation.
    */
   public static JLabel MovesLabel;
 
   // ----- New Game Frame-------------
   /**
-   * Located in the New Game Frame
+   * Located in the New Game Frame;
    * Selects the White Player vs Black Player Game mode.
    */
   public static JButton WhitePlayer_VS_BlackPlayer_Button;
 
   /**
-   * Located in the New Game Frame
+   * Located in the New Game Frame;
    * Selects the White Player vs Black Computer AI Game mode.
    */
   public static JButton WhitePlayer_VS_BlackComp_Button;
 
   /**
-   * Located in the New Game Frame
+   * Located in the New Game Frame;
    * Selects the White Computer AI vs Black Computer AI Game mode.
    */
   public static JButton WhiteComp_VS_BlackComp_Button;
 
   /**
-   * Located in the New Game Frame
+   * Located in the New Game Frame;
    * Selects the White Computer AI vs Black Player Game mode.
    */
   public static JButton WhiteComp_VS_BlackPlayer_Button;
 
   /**
-   * Located in the New Game Frame
+   * Located in the New Game Frame;
    * Selects the Random Player Color vs Random Computer AI Color Game mode.
    */
   public static JButton RDMPlayer_VS_RDMComp_Button;
 
   /**
-   * Located in the New Game Frame
+   * Located in the New Game Frame;
    * Selects the learn chess 'Game mode'.
    */
   public static JButton LearnChessButton;
 
   // ----- Set Ai Strength Slider Frame -----------------
   /**
-   * Located in the Set AI Strength Frame
+   * Located in the Set AI Strength Frame;
    * JButton which confirms the user slider selection
    */
   public static JButton ConfirmSliderButton;
 
   /**
-   * Located in the Set AI Strength Frame
+   * Located in the Set AI Strength Frame;
    * JButton which cancels the user slider selection
    */
   public static JButton CancelSliderButton;
 
   /**
-   * Located in the Set AI Strength Frame
+   * Located in the Set AI Strength Frame;
    * JButton which confirms the user slider selection
    */
   public static JSlider SetAiStrengthSlider;
 
   /**
-   * Located in the Set AI Strength Frame
+   * Located in the Set AI Strength Frame;
    * JLabel (image) which informs the user which color AI they are changing
    */
   public static JLabel CurrentSelectedComputer_ImageLabel;
 
   /**
-   * Located in the Set AI Strength Frame
+   * Located in the Set AI Strength Frame;
    * JLabel (text) which informs the user which color AI they are changing
    */
   public static JLabel CurrentSelectedComputer_TextLabel;
 
   /**
-   * Popup shown in MainFrame
+   * Popup shown in MainFrame;
    * JLabel which shows when the user upgrades a piece
    */
   public static JLabel UpgradePieceFrame;
 
   /**
-   * Popup shown in MainFrame
+   * Popup shown in MainFrame;
    * JLabel which is shown to the user when the game ends
    */
   public static JLabel EndGameFrame;
@@ -268,10 +268,10 @@ public abstract class UILibrary {
   /**
    * Color of the tiles which indicates the previous move happened on that tile.
    */
-  public static final Color ForegroundTileColor = new Color(255, 227, 115, 70); // Text Color
+  public static final Color ForegroundTileColor = new Color(255, 227, 115, 70);
 
   /**
-   * Constructor not Used
+   * Constructor not used
    */
   UILibrary() {
   }
