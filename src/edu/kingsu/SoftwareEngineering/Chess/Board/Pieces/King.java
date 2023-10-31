@@ -17,6 +17,8 @@ public class King extends Piece {
     public King(int team) {
         super(team);
         hasMoved = false;
+        // picking an arbitrarily high value.
+        value = 200;
     }
 
     /**

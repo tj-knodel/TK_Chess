@@ -13,6 +13,7 @@ public class Knight extends Piece {
 
     public Knight(int team) {
         super(team);
+        value = 3;
     }
 
     /**

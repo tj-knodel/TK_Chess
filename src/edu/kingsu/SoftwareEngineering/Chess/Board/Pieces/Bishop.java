@@ -13,6 +13,7 @@ public class Bishop extends Piece {
 
     public Bishop(int team) {
         super(team);
+        value = 3;
     }
 
     /**
