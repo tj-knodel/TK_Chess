@@ -1,13 +1,19 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 /**
  * @author Thaler Knodel
  * @version 0.1.0
  */
-public class AIPlayer extends Player {
+public class AIPlayer extends Player implements Runnable {
 
+    // just a note
+    /*
+     * We can make this multithreaded without changing this class by making a special AIThread object
+     * that contains an AIPlayer 
+     */
     private int difficulty;
 
     /**
@@ -51,9 +57,9 @@ public class AIPlayer extends Player {
         // the score of the board is declared here
         Piece[][] pieces = board.getBoard();
         int score = 0;
-        if (player == 1) {
+        if (player == Team.WHITE_TEAM) {
             // set score to some negative number more than is possible
-            score = -128;
+            score = -200;
             // iterate over all the pieces of the max player to see what is the best move
             for (int i = 0; i < pieces.length; i++) {
                 for (int j = 0; j < pieces[i].length; j++) {
@@ -65,7 +71,7 @@ public class AIPlayer extends Player {
         }
         else {
             // set score to some positive number that is more than is possible in the game
-            score = 128;
+            score = 200;
             // iterate over all the pieces of the min player to find the best move
             for (int i = 0; i < pieces.length; i++) {
                 for (int j = 0; j < pieces[i].length; j++) {

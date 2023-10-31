@@ -29,6 +29,13 @@ public class Board {
     private Piece[][] board;
 
     /**
+     * The current score of the board. Black's pieces points are
+     * counted as negative and white's pieces points are positive
+     * ~ T
+     */
+    private int score;
+
+    /**
      * The representation of the game in chess
      * algebraic notation. The board uses this
      * for the game, as well as for reading files.
@@ -39,6 +46,22 @@ public class Board {
         // board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
         initializeGameTwoPlayersWhiteOnly();
+    }
+
+    /**
+     * Helper function that gets the current score of the board
+     */
+    private int calcScore() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                int pieceScore = board[i][j].getValue();
+                if (board[i][j].getTeam() == 1) {
+                    score += pieceScore;
+                } else if(board[i][j].getTeam() == 0) {
+                    score -= pieceScore;
+                }
+            }
+        }
     }
 
     /**
@@ -66,7 +89,15 @@ public class Board {
                 { new Rook(1), new Knight(1), new Bishop(1), new Queen(1), new King(1), new Bishop(1), new Knight(1),
                         new Rook(1) }
         };
+        score = getScore();
+    }
 
+    /**
+     * Gets the score of the board
+     * @return the score of the board
+     */
+    public int getScore() {
+        return score;
     }
 
     /**
@@ -148,6 +179,7 @@ public class Board {
         int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         checkKingInCheck(pieceMoving, otherTeam);
         checkKingInCheck(pieceMoving, pieceMoving.getTeam());
+        score = getScore();
         return false;
     }
 

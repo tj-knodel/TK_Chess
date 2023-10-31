@@ -12,6 +12,7 @@ public class EmptyPiece extends Piece {
 
     public EmptyPiece() {
         super(-1);
+        value = 0;
     }
 
     @Override
