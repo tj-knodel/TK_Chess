@@ -52,7 +52,8 @@ public class CreateMainFrame {
     }
 
     /**
-     * Creates the MainFrame JLabel, which holds the chess board and its associated frames
+     * Creates the MainFrame JLabel, which holds the chess board and its associated
+     * frames
      */
     private void CreateMainContentPane() {
         UILibrary.MainFrame = new JLabel();
@@ -94,7 +95,7 @@ public class CreateMainFrame {
         UILibrary.MainFrame.add(StepForwards_Button);
         UILibrary.StepForwards_Button = StepForwards_Button;
 
-        JTextArea MovesLabel = new JTextArea("1.");
+        JTextArea MovesLabel = new JTextArea("");
         MovesLabel.setBounds(984, 219, 372, 531); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
         MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
@@ -102,6 +103,7 @@ public class CreateMainFrame {
         MovesLabel.setEditable(false);
         MovesLabel.setHighlighter(null);
         UILibrary.MainFrame.add(MovesLabel);
+        UILibrary.MovesLabel = MovesLabel;
 
         JLabel MovesFrame = new JLabel();
         MovesFrame.setBounds(935, 91, 470, 778); // Numbers from Figma Design
@@ -123,7 +125,7 @@ public class CreateMainFrame {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-    
+
     /**
      * Board UI Square, contains a 8x8 grid of chess tiles
      */
@@ -136,6 +138,7 @@ public class CreateMainFrame {
 
     /**
      * Create and set up the ChessTiles, add them to the grid
+     * 
      * @return Array of chess tile ui elements
      */
     public static ChessTileUI[][] createChessBoard() {
@@ -336,8 +339,10 @@ public class CreateMainFrame {
     private static boolean whiteOnBottom = true;
 
     /**
-     * Sets the board orientation 
-     * @param isWhiteOnBottom true = white will be on bottom, false = black will be on bottom
+     * Sets the board orientation
+     * 
+     * @param isWhiteOnBottom true = white will be on bottom, false = black will be
+     *                        on bottom
      */
     private static void setBoardOrientation(boolean isWhiteOnBottom) {
         whiteOnBottom = isWhiteOnBottom;
@@ -364,7 +369,7 @@ public class CreateMainFrame {
 
             // Chess Tiles, remove all the tiles and add them in reverse order
             boardUI.removeAll();
-            for (int row = 0; row  < 8; ++row) {
+            for (int row = 0; row < 8; ++row) {
                 for (int column = 0; column < 8; ++column) {
                     boardUI.add(boardTilesUI[row][column]);
                 }
@@ -404,7 +409,6 @@ public class CreateMainFrame {
         UILibrary.ChessJFrame.repaint();
     }
 
-
     // -----------------------------------------------------
     // -----------------------------------------------------
 
@@ -412,15 +416,15 @@ public class CreateMainFrame {
      * Toggles the coordinates visibility
      */
     private void toggleCoordinatesVisibility() {
-            for (JLabel label : boardLabels) {
-                label.setVisible(!label.isVisible());
+        for (JLabel label : boardLabels) {
+            label.setVisible(!label.isVisible());
         }
     }
 
     // -----------------------------------------------------
     // -----------------------------------------------------
 
-    /** 
+    /**
      * Creates the UI by calling all the create functions;
      * Add the JMenuItem event listeners for FlipBoard and ToggleCoordinates
      */

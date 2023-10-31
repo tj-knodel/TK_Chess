@@ -3,6 +3,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board;
 import java.util.ArrayList;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 
 /**
  * @author Daniell Buchner
@@ -28,6 +29,9 @@ public class Board {
      */
     private Piece[][] board;
 
+    private boolean firstMove;
+    private int moveCount;
+
     /**
      * The representation of the game in chess
      * algebraic notation. The board uses this
@@ -38,6 +42,8 @@ public class Board {
     public Board() {
         // board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
+        firstMove = true;
+        moveCount = 1;
         initializeGameTwoPlayersWhiteOnly();
     }
 
@@ -141,13 +147,25 @@ public class Board {
             }
             moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
         }
-        System.out.println(moveString.toString());
+        // System.out.println(moveString.toString());
         board[endMove.row][endMove.column] = pieceMoving;
         pieceMoving.moved();
         board[startMove.row][startMove.column] = new EmptyPiece();
         int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-        checkKingInCheck(pieceMoving, otherTeam);
+        if (checkKingInCheck(pieceMoving, otherTeam)) {
+            moveString.append("+");
+        }
         checkKingInCheck(pieceMoving, pieceMoving.getTeam());
+        if (firstMove) {
+            firstMove = false;
+            algebraicRepresentation.append(moveCount + ". " + moveString.toString());
+            ChessUIManager.appendMovesLabel(moveCount + ". " + moveString.toString());
+        } else {
+            moveCount++;
+            firstMove = true;
+            algebraicRepresentation.append(" " + moveString.toString() + "\n");
+            ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
+        }
         return false;
     }
 
@@ -160,7 +178,7 @@ public class Board {
         checkKingInCheck(board, pieceMoving, pieceMoving.getTeam());
     }
 
-    private void checkKingInCheck(Piece pieceMoving, int team) {
+    private boolean checkKingInCheck(Piece pieceMoving, int team) {
         BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
         King kingPieceOtherTeam = (King) board[kingLocation.row][kingLocation.column];
         kingPieceOtherTeam.inCheck = false;
@@ -168,11 +186,13 @@ public class Board {
         for (BoardLocation teamPossibleMoves : getPossibleMovesForTeam(otherTeam)) {
             if (teamPossibleMoves.row == kingLocation.row && teamPossibleMoves.column == kingLocation.column) {
                 kingPieceOtherTeam.inCheck = true;
+                return true;
             }
         }
+        return false;
     }
 
-    private void checkKingInCheck(Piece[][] board, Piece pieceMoving, int team) {
+    private boolean checkKingInCheck(Piece[][] board, Piece pieceMoving, int team) {
         BoardLocation kingLocation = getBoardLocationsForTeamForPiece(board, team, Piece.KING).get(0);
         King kingPieceOtherTeam = (King) board[kingLocation.row][kingLocation.column];
         kingPieceOtherTeam.inCheck = false;
@@ -180,8 +200,10 @@ public class Board {
         for (BoardLocation teamPossibleMoves : getPossibleMovesForTeam(board, otherTeam)) {
             if (teamPossibleMoves.row == kingLocation.row && teamPossibleMoves.column == kingLocation.column) {
                 kingPieceOtherTeam.inCheck = true;
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -208,6 +230,7 @@ public class Board {
                 kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
                 kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
                 if (kingPiece.inCheck) {
+                    System.out.println("CHECKMATE");
                 } else {
                     returnVal.add(move);
                 }
@@ -222,6 +245,7 @@ public class Board {
                 kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
                 kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
                 if (kingPiece.inCheck) {
+                    System.out.println("STALEMATE");
                 } else {
                     returnVal.add(move);
                 }
