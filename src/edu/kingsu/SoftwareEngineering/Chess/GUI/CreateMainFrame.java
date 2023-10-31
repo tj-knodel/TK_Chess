@@ -9,8 +9,10 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import java.awt.Dimension;
@@ -95,15 +97,20 @@ public class CreateMainFrame {
         UILibrary.MainFrame.add(StepForwards_Button);
         UILibrary.StepForwards_Button = StepForwards_Button;
 
-        JTextArea MovesLabel = new JTextArea("");
+        JTextArea MovesLabel = new JTextArea(""); // 150 lines
         MovesLabel.setBounds(984, 219, 372, 531); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
         MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
         MovesLabel.setForeground(UILibrary.TextColor_White);
         MovesLabel.setEditable(false);
         MovesLabel.setHighlighter(null);
-        UILibrary.MainFrame.add(MovesLabel);
         UILibrary.MovesLabel = MovesLabel;
+        JScrollPane MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        MovesLabel_ScrollPane.setBounds(984, 219, 372, 531);
+        UILibrary.MainFrame.add(MovesLabel_ScrollPane);
+        MovesLabel_ScrollPane.setVisible(true);
+        MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         JLabel MovesFrame = new JLabel();
         MovesFrame.setBounds(935, 91, 470, 778); // Numbers from Figma Design
