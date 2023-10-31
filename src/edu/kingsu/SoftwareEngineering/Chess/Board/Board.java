@@ -10,6 +10,17 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
  */
 public class Board {
 
+    private static String[][] BOARD_LOCATIONS = {
+            { "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8" },
+            { "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7" },
+            { "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6" },
+            { "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5" },
+            { "a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4" },
+            { "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3" },
+            { "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2" },
+            { "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1" },
+    };
+
     /**
      * The representation of the board as a 2D-array
      * of pieces. This is build from the PGN format or
@@ -82,6 +93,55 @@ public class Board {
      * @return True if the move was successful.
      */
     public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+        int team = pieceMoving.getTeam();
+        int piecesMoveToSameLocation = 0;
+        ArrayList<BoardLocation> piecesLocationSameMove = new ArrayList<>();
+        // Get all pieces of type that can move to the "endMove" location
+        for (BoardLocation location : getPossibleMovesForTeamFromPiece(team, pieceMoving.getPieceID())) {
+            if (location.row == endMove.row && location.column == endMove.column) {
+                if (!(location.row == startMove.row && location.column == endMove.column))
+                    piecesLocationSameMove.add(location);
+                piecesMoveToSameLocation++;
+            }
+        }
+        StringBuilder moveString = new StringBuilder();
+        // If only found one, just do basic chess notation
+        if (piecesMoveToSameLocation == 1) {
+            if (!(pieceMoving instanceof Pawn)) {
+                moveString.append(Piece.chessNotationValue.get(pieceMoving.getPieceID()));
+            }
+            if (!(board[endMove.row][endMove.column] instanceof EmptyPiece)) {
+                if (pieceMoving instanceof Pawn)
+                    moveString.append(BOARD_LOCATIONS[startMove.row][startMove.column].substring(0, 1));
+                moveString.append("x");
+            }
+            moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
+        } else if (piecesMoveToSameLocation >= 2) {
+            // Check if it should put row, or column
+            boolean putRow = false;
+            for (int i = 0; i < piecesLocationSameMove.size(); i++) {
+                if (piecesLocationSameMove.get(i).column == startMove.column)
+                    putRow = true;
+            }
+            // Add the row or column after the piece id
+            String locationIfNeeded = "";
+            if (putRow) {
+                locationIfNeeded = BOARD_LOCATIONS[startMove.row][startMove.column].substring(1, 2);
+            } else {
+                locationIfNeeded = BOARD_LOCATIONS[startMove.row][startMove.column].substring(0, 1);
+            }
+            if (!(pieceMoving instanceof Pawn)) {
+                moveString.append(Piece.chessNotationValue.get(pieceMoving.getPieceID()));
+                moveString.append(locationIfNeeded);
+            }
+            if (!(board[endMove.row][endMove.column] instanceof EmptyPiece)) {
+                if (pieceMoving instanceof Pawn)
+                    moveString.append(BOARD_LOCATIONS[startMove.row][startMove.column].substring(0, 1));
+                moveString.append("x");
+            }
+            moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
+        }
+        System.out.println(moveString.toString());
         board[endMove.row][endMove.column] = pieceMoving;
         pieceMoving.moved();
         board[startMove.row][startMove.column] = new EmptyPiece();
@@ -96,6 +156,10 @@ public class Board {
      * @return
      */
     public ArrayList<BoardLocation> getPossibleMoves(Piece piece, BoardLocation location) {
+        // TODO: Check if you can make a move if in check currently.
+        // Get the current piece's team, and then check if their king is in check
+        // If in check, only return possible moves that will make them not in check
+        // anymore.
         return piece.getPossibleMoves(board, location);
     }
 

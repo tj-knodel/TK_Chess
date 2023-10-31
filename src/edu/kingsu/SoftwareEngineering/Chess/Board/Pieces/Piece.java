@@ -1,6 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
@@ -133,5 +134,17 @@ public abstract class Piece {
     public final static int BISHOP = 3;
     public final static int QUEEN = 4;
     public final static int KING = 5;
+
+    public final static HashMap<Integer, String> chessNotationValue;
+
+    static {
+        chessNotationValue = new HashMap<>();
+        chessNotationValue.put(PAWN, "P");
+        chessNotationValue.put(ROOK, "R");
+        chessNotationValue.put(KNIGHT, "N");
+        chessNotationValue.put(BISHOP, "B");
+        chessNotationValue.put(QUEEN, "Q");
+        chessNotationValue.put(KING, "K");
+    }
 
 }
