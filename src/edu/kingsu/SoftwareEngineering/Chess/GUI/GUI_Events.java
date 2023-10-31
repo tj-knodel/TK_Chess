@@ -35,16 +35,18 @@ public class GUI_Events {
     /**
      * Event is received from ChessTileUI;
      * Triggered when a chess tile is clicked
-     */ 
+     */
     public static void chessTileWasClicked(char row, char column) { // A square on the board was clicked
-        System.out.println("Tile " + (int) row + " " + (int) column + " was clicked.");
+        // System.out.println("Tile " + (int) row + " " + (int) column + " was
+        // clicked.");
         // MoveController.chessTileClick(row, column);
     }
 
-    /** 
+    /**
      * Event is received from CreateAccessoryUIs;
-     * When the upgrade piece frame is shown, this function is triggered when the user selects which piece to upgrade.
-    */
+     * When the upgrade piece frame is shown, this function is triggered when the
+     * user selects which piece to upgrade.
+     */
     public static void upgradeChessPieceWasClicked(String piece) { // When a chess piece is clicked in the upgrade piece
                                                                    // ui
         // will be either "queen", "rook", "bishop", "knight"

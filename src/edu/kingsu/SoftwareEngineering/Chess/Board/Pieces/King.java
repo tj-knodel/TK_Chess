@@ -11,8 +11,12 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
  */
 public class King extends Piece {
 
+    boolean hasMoved;
+    public boolean inCheck = false;
+
     public King(int team) {
         super(team);
+        hasMoved = false;
     }
 
     /**
@@ -33,7 +37,9 @@ public class King extends Piece {
 
     @Override
     public Piece copy(int team) {
-        return new King(team);
+        King k = new King(team);
+        k.inCheck = inCheck;
+        return k;
     }
 
     @Override
@@ -180,6 +186,7 @@ public class King extends Piece {
 
     @Override
     public void moved() {
+        hasMoved = true;
     }
 
 }
