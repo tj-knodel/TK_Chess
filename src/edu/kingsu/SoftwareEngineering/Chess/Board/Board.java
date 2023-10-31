@@ -95,12 +95,9 @@ public class Board {
     public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
-        ArrayList<BoardLocation> piecesLocationSameMove = new ArrayList<>();
         // Get all pieces of type that can move to the "endMove" location
         for (BoardLocation location : getPossibleMovesForTeamFromPiece(team, pieceMoving.getPieceID())) {
             if (location.row == endMove.row && location.column == endMove.column) {
-                if (!(location.row == startMove.row && location.column == endMove.column))
-                    piecesLocationSameMove.add(location);
                 piecesMoveToSameLocation++;
             }
         }
@@ -119,8 +116,11 @@ public class Board {
         } else if (piecesMoveToSameLocation >= 2) {
             // Check if it should put row, or column
             boolean putRow = false;
-            for (int i = 0; i < piecesLocationSameMove.size(); i++) {
-                if (piecesLocationSameMove.get(i).column == startMove.column)
+            ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPiece(team, pieceMoving.getPieceID());
+            for (BoardLocation location : pieceLocations) {
+                if (location.column == startMove.column && location.row == startMove.row)
+                    continue;
+                if (location.column == startMove.column)
                     putRow = true;
             }
             // Add the row or column after the piece id
