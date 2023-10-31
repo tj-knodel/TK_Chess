@@ -40,11 +40,10 @@ public class CreateMainFrame {
     // -----------------------------------------------------
 
     /**
-     * Creates the JFrame
+     * Creates the JFrame used by the application
      */
     private void createJFrame() {
         UILibrary.ChessJFrame = new JFrame("Chess");
-        // MainFrame.setBounds(50,50,UILibrary.uiSize_X, UILibrary.uiSize_Y);
         UILibrary.ChessJFrame.setSize(new Dimension(UILibrary.uiSize_X, UILibrary.uiSize_Y));
         UILibrary.ChessJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         UILibrary.ChessJFrame.setResizable(false);
@@ -52,6 +51,9 @@ public class CreateMainFrame {
         UILibrary.ChessJFrame.getContentPane().setBackground(UILibrary.BackgroundColor);
     }
 
+    /**
+     * Creates the MainFrame JLabel, which holds the chess board and its associated frames
+     */
     private void CreateMainContentPane() {
         UILibrary.MainFrame = new JLabel();
         UILibrary.MainFrame.setLayout(null);
@@ -121,9 +123,21 @@ public class CreateMainFrame {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
+    
+    /**
+     * Board UI Square, contains a 8x8 grid of chess tiles
+     */
     private static JLayeredPane boardUI;
+
+    /**
+     * Double 8x8 array which holds each individual chess tile object
+     */
     private static ChessTileUI boardTilesUI[][];
 
+    /**
+     * Create and set up the ChessTiles, add them to the grid
+     * @return Array of chess tile ui elements
+     */
     public static ChessTileUI[][] createChessBoard() {
         boardUI = new JLayeredPane();
         boardUI.setBounds(52, 91, 848, 850);
@@ -150,6 +164,9 @@ public class CreateMainFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Creates all the JMenus & JMenuItems which appear in the JFrame
+     */
     private void createJMenus() {
         JMenuBar bar = new JMenuBar();
         bar.setBackground(UILibrary.ForegroundColor);
@@ -253,8 +270,16 @@ public class CreateMainFrame {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-    private static JLabel boardLabels[] = new JLabel[16]; // 1-8 then a - h
+    /**
+     * Array of board coordinates\n
+     * boardLabels[0]-> boardLabels[7] hold the coordinates 1-8
+     * boardLabels[8]-> boardLabels[15] hold the coordinates a-h
+     */
+    private static JLabel boardLabels[] = new JLabel[16];
 
+    /**
+     * Creates the board tile coordinates
+     */
     private void createBoardMarkers() {
 
         boardLabels[0] = new JLabel("1", SwingConstants.CENTER);
@@ -304,11 +329,18 @@ public class CreateMainFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
-    private static boolean whiteOnBottom = true; // true = white on bottom, false = black on bottom
+    /**
+     * Holds how the board is oriented.
+     * true = white on bottom, false = black on bottom
+     */
+    private static boolean whiteOnBottom = true;
 
-    private static void setBoardOrientation() {
-        whiteOnBottom = !whiteOnBottom; // toggle it
-
+    /**
+     * Sets the board orientation 
+     * @param isWhiteOnBottom true = white will be on bottom, false = black will be on bottom
+     */
+    private static void setBoardOrientation(boolean isWhiteOnBottom) {
+        whiteOnBottom = isWhiteOnBottom;
         if (whiteOnBottom) {
             // 1-8
             boardLabels[0].setBounds(22, 865, 28, 40); // Numbers from Figma Design
@@ -372,14 +404,13 @@ public class CreateMainFrame {
         UILibrary.ChessJFrame.repaint();
     }
 
-    public static void setBoardOrientation(boolean isWhiteOnBottom) {
-        whiteOnBottom = !isWhiteOnBottom;
-        setBoardOrientation();
-    }
 
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Toggles the coordinates visibility
+     */
     private void toggleCoordinatesVisibility() {
             for (JLabel label : boardLabels) {
                 label.setVisible(!label.isVisible());
@@ -389,6 +420,10 @@ public class CreateMainFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /** 
+     * Creates the UI by calling all the create functions;
+     * Add the JMenuItem event listeners for FlipBoard and ToggleCoordinates
+     */
     public CreateMainFrame() {
         createJFrame();
         CreateMainContentPane();
@@ -398,7 +433,7 @@ public class CreateMainFrame {
 
         // JMenu UI Events
         UILibrary.FlipBoard_JMenuItem.addActionListener(e -> {
-            setBoardOrientation();
+            setBoardOrientation(!whiteOnBottom);
         });
         UILibrary.ToggleCoordinates_JMenuItem.addActionListener(e -> {
             toggleCoordinatesVisibility();
