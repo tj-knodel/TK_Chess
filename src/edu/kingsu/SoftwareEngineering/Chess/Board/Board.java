@@ -214,8 +214,23 @@ public class Board {
                 boardCopy = getBoard();
             }
             return returnVal;
+        } else if (!kingPiece.inCheck) {
+            ArrayList<BoardLocation> returnVal = new ArrayList<>();
+            ArrayList<BoardLocation> pieceMoves = piece.getPossibleMoves(board, location);
+            for (BoardLocation move : pieceMoves) {
+                simulateApplyMove(boardCopy, boardCopy[location.row][location.column], location, move);
+                kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
+                kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
+                if (kingPiece.inCheck) {
+                } else {
+                    returnVal.add(move);
+                }
+                boardCopy = getBoard();
+            }
+            return returnVal;
         }
-        return piece.getPossibleMoves(board, location);
+        return null;
+        // return piece.getPossibleMoves(board, location);
     }
 
     /**
