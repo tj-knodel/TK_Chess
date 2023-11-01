@@ -20,6 +20,9 @@ import javax.swing.JScrollPane;
  */
 public class AboutMenu {
 
+    /**
+     * JFrame which holds the about page
+     */
     private static JFrame AboutFrame;
 
 

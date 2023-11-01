@@ -264,6 +264,9 @@ public class ChessTileUI extends JLayeredPane {
     // -----------------------------------------------------
     // -----------------------------------------------------
     
+    /**
+     * Redraws the tile with new images
+     */
     public void redrawTile() {
       if (isTileWhite)
             boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(TILE_SIZE,
