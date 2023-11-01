@@ -21,7 +21,8 @@ public abstract class UILibrary {
   /**
    * Size of the JFrame Y in pixels
    */
-  public static final int uiSize_Y = 1080; // JFrame y Size // 1024
+  public static final int uiSize_Y = 1040; // JFrame y Size 
+  // Note to self, use figma y pos numbers - 10
 
   /**
    * The board appearance folder to be used, either make it point to a different

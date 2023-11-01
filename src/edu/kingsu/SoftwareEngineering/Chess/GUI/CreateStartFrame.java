@@ -45,34 +45,28 @@ public class CreateStartFrame {
     // -----------------------------------------------------
 
     /**
-     * Creates watermark, and game-mode buttons
+     * Creates , and game-mode buttons
      */
     private void createUIElements() {
-
-        JLabel KingsU_Watermark = new JLabel("", SwingConstants.CENTER);
-        KingsU_Watermark.setBounds(1372, 970, 54, 42); // Numbers from Figma Design
-        KingsU_Watermark.setIcon(
-            new ImageIcon(getImage("KingsUCrown.png").getImage().getScaledInstance(54, 42, Image.SCALE_DEFAULT)));
-        UILibrary.NewGameFrame.add(KingsU_Watermark);
 
         // Text Labels
         JLabel TitleLabel = new JLabel("New Chess Game", SwingConstants.CENTER);
         TitleLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 65));
         TitleLabel.setForeground(UILibrary.TextColor_White);
-        TitleLabel.setBounds(437, 74, 566, 86); // Numbers from Figma Design
+        TitleLabel.setBounds(437, 50, 566, 86); // Numbers from Figma Design
         TitleLabel.setOpaque(false);
         UILibrary.NewGameFrame.add(TitleLabel);
 
         JLabel TextLabel = new JLabel("Select a Game Mode:", SwingConstants.CENTER);
         TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 55));
         TextLabel.setForeground(UILibrary.TextColor_White);
-        TextLabel.setBounds(426, 260, 588, 63); // Numbers from Figma Design
+        TextLabel.setBounds(426, 230, 588, 63); // Numbers from Figma Design
         TextLabel.setOpaque(false);
         UILibrary.NewGameFrame.add(TextLabel);
 
         // Buttons
         UILibrary.WhitePlayer_VS_BlackPlayer_Button = new JButton();
-        UILibrary.WhitePlayer_VS_BlackPlayer_Button.setBounds(221, 365, 472, 190); // Numbers from Figma Design
+        UILibrary.WhitePlayer_VS_BlackPlayer_Button.setBounds(221, 320, 472, 190); // Numbers from Figma Design
         UILibrary.WhitePlayer_VS_BlackPlayer_Button.setIcon(
             new ImageIcon(getImage("White_Player_VS_Black_Player.png").getImage().getScaledInstance(472, 190, Image.SCALE_DEFAULT)));
         UILibrary.NewGameFrame.add(UILibrary.WhitePlayer_VS_BlackPlayer_Button);
@@ -81,7 +75,7 @@ public class CreateStartFrame {
         UILibrary.WhitePlayer_VS_BlackPlayer_Button.setBorderPainted(false);
 
         UILibrary.WhitePlayer_VS_BlackComp_Button = new JButton();
-        UILibrary.WhitePlayer_VS_BlackComp_Button.setBounds(221, 575, 472, 190); // Numbers from Figma Design
+        UILibrary.WhitePlayer_VS_BlackComp_Button.setBounds(221, 530, 472, 190); // Numbers from Figma Design
         UILibrary.WhitePlayer_VS_BlackComp_Button.setIcon(
             new ImageIcon(getImage("White_Player_VS_Black_Comp.png").getImage().getScaledInstance(472, 190, Image.SCALE_DEFAULT)));
         UILibrary.NewGameFrame.add(UILibrary.WhitePlayer_VS_BlackComp_Button);
@@ -91,7 +85,7 @@ public class CreateStartFrame {
         
 
         UILibrary.WhiteComp_VS_BlackComp_Button = new JButton();
-        UILibrary.WhiteComp_VS_BlackComp_Button.setBounds(221, 795, 472, 190); // Numbers from Figma Design
+        UILibrary.WhiteComp_VS_BlackComp_Button.setBounds(221, 750, 472, 190); // Numbers from Figma Design
         UILibrary.WhiteComp_VS_BlackComp_Button.setIcon(
             new ImageIcon(getImage("White_Comp_VS_Black_Comp.png").getImage().getScaledInstance(472, 190, Image.SCALE_DEFAULT)));
         UILibrary.NewGameFrame.add(UILibrary.WhiteComp_VS_BlackComp_Button);
@@ -101,7 +95,7 @@ public class CreateStartFrame {
 
 
         UILibrary.WhiteComp_VS_BlackPlayer_Button = new JButton();
-        UILibrary.WhiteComp_VS_BlackPlayer_Button.setBounds(748, 365, 472, 190); // Numbers from Figma Design
+        UILibrary.WhiteComp_VS_BlackPlayer_Button.setBounds(748, 320, 472, 190); // Numbers from Figma Design
         UILibrary.WhiteComp_VS_BlackPlayer_Button.setIcon(
             new ImageIcon(getImage("White_Comp_VS_Black_Player.png").getImage().getScaledInstance(472, 190, Image.SCALE_DEFAULT)));
         UILibrary.NewGameFrame.add(UILibrary.WhiteComp_VS_BlackPlayer_Button);
@@ -111,7 +105,7 @@ public class CreateStartFrame {
 
 
         UILibrary.RDMPlayer_VS_RDMComp_Button = new JButton();
-        UILibrary.RDMPlayer_VS_RDMComp_Button.setBounds(748, 575, 472, 190); // Numbers from Figma Design
+        UILibrary.RDMPlayer_VS_RDMComp_Button.setBounds(748, 530, 472, 190); // Numbers from Figma Design
         UILibrary.RDMPlayer_VS_RDMComp_Button.setIcon(
             new ImageIcon(getImage("RDM_Comp_VS_RDM_Player.png").getImage().getScaledInstance(472, 190, Image.SCALE_DEFAULT)));
         UILibrary.NewGameFrame.add(UILibrary.RDMPlayer_VS_RDMComp_Button);
@@ -121,7 +115,7 @@ public class CreateStartFrame {
 
 
         UILibrary.LearnChessButton = new JButton();
-        UILibrary.LearnChessButton.setBounds(748, 795, 472, 190); // Numbers from Figma Design
+        UILibrary.LearnChessButton.setBounds(748, 750, 472, 190); // Numbers from Figma Design
         UILibrary.LearnChessButton.setIcon(
             new ImageIcon(getImage("LearnChessButton.png").getImage().getScaledInstance(472, 190, Image.SCALE_DEFAULT)));
         UILibrary.NewGameFrame.add(UILibrary.LearnChessButton);
