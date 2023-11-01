@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- * Displays the Help Menu Window
+ * Displays the About Menu Window
  *
  * @author Noah Bulas
  * @version V1 Nov,23
@@ -27,7 +27,7 @@ public class AboutMenu {
     // -----------------------------------------------------
 
     /**
-     * Add the action listener to open the HelpMenu when the About JMenu is selected
+     * Add the action listener to open the About Menu when the About JMenu is selected
      */
     private static void detectAboutFrameToggle() {
         UILibrary.About_JMenuItem.addActionListener(e -> {
@@ -76,7 +76,7 @@ public class AboutMenu {
     // -----------------------------------------------------
 
 /**
- * Calls the Create UI function than adds the actionListener for the Help JMenu
+ * Calls the Create UI function than adds the actionListener for the About JMenu
  */
     public AboutMenu() {
         createUI();
