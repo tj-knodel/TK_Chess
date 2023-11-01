@@ -270,7 +270,7 @@ public class CreateMainFrame {
         JMenuItem About_Item = new JMenuItem("About");
         About_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
         Help_JMenu.add(About_Item);
-        UILibrary.SetAIStrengthEasy_JMenuItem = About_Item;
+        UILibrary.About_JMenuItem = About_Item;
     }
 
     // -----------------------------------------------------
