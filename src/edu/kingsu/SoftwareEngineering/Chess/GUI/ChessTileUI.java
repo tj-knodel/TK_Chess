@@ -20,6 +20,19 @@ public class ChessTileUI extends JLayeredPane {
     }
 
     /**
+     * Set by the JMenuEvent in the static constructor.
+     * Toggles whether possible move circles are shown on the board or not.
+     */
+    private boolean showPossibleMoves = true;
+
+    /**
+     * Set by the JMenuEvent in the static constructor.
+     * Toggles whether the last move yellow square will be shown on the board or
+     * not.
+     */
+    private boolean showPreviousMoves = true;
+
+    /**
      * Row of the Tile
      */
     public char row;
@@ -162,7 +175,8 @@ public class ChessTileUI extends JLayeredPane {
      * @param visibility true = show tile, false = hide tile
      */
     public void setPossibleMoveCircleVisibility(boolean visibility) {
-        PossibleMoveCircle.setVisible(visibility);
+        if (showPossibleMoves)
+            PossibleMoveCircle.setVisible(visibility);
     }
 
     /**
@@ -171,7 +185,8 @@ public class ChessTileUI extends JLayeredPane {
      * @param visibility true = show tile, false = hide tile
      */
     public void setPreviousMoveSquareVisibility(boolean visibility) {
-        PreviousMoveSquare.setVisible(visibility);
+        if (showPreviousMoves)
+            PreviousMoveSquare.setVisible(visibility);
     }
 
     // -----------------------------------------------------
@@ -254,5 +269,16 @@ public class ChessTileUI extends JLayeredPane {
         this.column = column;
         createTile(displayWhite);
         detectTileClicks();
+
+        // JMenu events
+        UILibrary.TogglePossibleMoves_JMenuItem.addActionListener(e -> {
+            showPossibleMoves = !showPossibleMoves;
+            PossibleMoveCircle.setVisible(false);
+        });
+        UILibrary.TogglePreviousMoves_JMenuItem.addActionListener(e -> {
+            showPreviousMoves = !showPreviousMoves;
+            PreviousMoveSquare.setVisible(false);
+        });
     }
+
 }
