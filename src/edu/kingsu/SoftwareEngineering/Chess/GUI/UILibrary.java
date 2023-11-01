@@ -31,6 +31,12 @@ public abstract class UILibrary {
    */
   public static String boardAppearanceFolder = "BoardImages_Blue/";
 
+  /**
+   * Used with UILibrary.boardAppearanceFolder
+   * true if UILibrary.boardAppearanceFolder is an absolute file path. 
+   */
+  public static boolean isAbsoluteFilePath = false;
+
   // ----- UI Elements-------------
 
   /**

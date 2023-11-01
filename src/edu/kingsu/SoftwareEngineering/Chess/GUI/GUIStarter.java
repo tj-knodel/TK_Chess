@@ -25,6 +25,7 @@ public class GUIStarter {
         new CreateCompSliderFrame();
         chessUIManager = new ChessUIManager(new CreateAccessoryUIs());
         new AboutMenu();
+        new ChangeBoardAppearance();
 
         // Frame Configuration
         UILibrary.ChessJFrame.add(UILibrary.NewGameFrame);

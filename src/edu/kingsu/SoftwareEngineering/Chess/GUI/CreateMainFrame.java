@@ -166,6 +166,19 @@ public class CreateMainFrame {
         return boardTilesUI;
     }
 
+    /**
+     * Redraws the tile, re-gets images
+     */
+    public static void redrawTiles() {
+        for (ChessTileUI[] row: boardTilesUI) {
+             for (ChessTileUI tile: row) {
+                tile.redrawTile();
+            }
+        }
+        UILibrary.MainFrame.repaint();
+        UILibrary.ChessJFrame.repaint();
+    }
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
@@ -406,9 +419,7 @@ public class CreateMainFrame {
             }
         }
 
-        boardUI.repaint();
-        UILibrary.MainFrame.repaint();
-        UILibrary.ChessJFrame.repaint();
+       redrawTiles();
     }
 
     // -----------------------------------------------------
