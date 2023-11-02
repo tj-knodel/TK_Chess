@@ -52,6 +52,10 @@ public abstract class Piece {
      */
     public abstract Piece copy(int team);
 
+    /**
+     * Called whenever a piece is moved. This is called
+     * for all pieces as some pieces need this functionality.
+     */
     public abstract void moved();
 
     /**
@@ -63,23 +67,24 @@ public abstract class Piece {
         return team;
     }
 
-    // TODO: Split up IsMoveValid to two functions to handle if the move is within
-    // the board, and if there is a piece at the location.
+    /**
+     * Checks if a move is within the bounds of the board.
+     * @param board The board to check in.
+     * @param move The location that is desired to be checked.
+     * @return True if within the bounds, false otherwise.
+     */
     protected boolean IsMoveValid(Piece[][] board, BoardLocation move) {
-        // if(move.column >= 0 && move.column < board.length && move.row >= 0 &&
-        // move.row < board.length)
-        // {
-        // return board[move.row][move.column].getTeam() != team;
-        // }
         return move.column >= 0 && move.column < board.length && move.row >= 0 && move.row < board.length;
     }
 
     /**
-     * Check if there is a piece from the other team at that location
+     * Check if there is a piece from the other team at that location,
+     * or if you cannot move there. It just validates that the move can
+     * be done theoretically.
      * 
      * @param board The board the game is currently on
      * @param move  The location to move to
-     * @return
+     * @return MoveValidity class representing the desired move.
      */
     protected MoveValidity IsMoveValidWithoutPiece(Piece[][] board, BoardLocation move) {
         MoveValidity moveValidity = new MoveValidity();
@@ -108,33 +113,49 @@ public abstract class Piece {
             moveValidity.isEmptySpace = false;
             return moveValidity;
         }
-        // if(pieceAtMove.getTeam() == team) {
-        // moveValidity.isInBoard = true;
-        // moveValidity.isOtherTeam = false;
-        // moveValidity.isEmptySpace = false;
-        // }
-        // else if(pieceAtMove.getTeam() != team) {
-        // moveValidity.isInBoard = true;
-        // moveValidity.isOtherTeam = true;
-        // moveValidity.isEmptySpace = false;
-        // } else {
-        // moveValidity.isInBoard = true;
-        // moveValidity.isOtherTeam = false;
-        // moveValidity.isEmptySpace = true;
-        // }
         return moveValidity;
     }
 
+    /**
+     * Gets all possible moves for a piece at any given location.
+     * @param board The board to get possible moves for.
+     * @param startMove The starting location of the piece.
+     * @return ArrayList of BoardLocations of possible moves.
+     */
     public abstract ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove);
 
+    /**
+     * The EMPTY piece ID.
+     */
     public final static int EMPTY_PIECE = -1;
+    /**
+     * The Pawn piece ID.
+     */
     public final static int PAWN = 0;
+    /**
+     * The Rook piece ID.
+     */
     public final static int ROOK = 1;
+    /**
+     * The Knight piece ID.
+     */
     public final static int KNIGHT = 2;
+    /**
+     * The Bishop piece ID.
+     */
     public final static int BISHOP = 3;
+    /**
+     * The Queen piece ID.
+     */
     public final static int QUEEN = 4;
+    /**
+     * The King piece ID.
+     */
     public final static int KING = 5;
 
+    /**
+     * Gets the chess notation value of a piece to a string.
+     */
     public final static HashMap<Integer, String> chessNotationValue;
 
     static {

@@ -38,11 +38,17 @@ public class Pawn extends Piece {
         return Piece.PAWN;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Piece copy(int team) {
         return new Pawn(team, hasMoved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
@@ -149,6 +155,9 @@ public class Pawn extends Piece {
         return moves;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void moved() {
         hasMoved = true;

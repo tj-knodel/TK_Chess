@@ -6,11 +6,19 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 
 /**
+ * The Board class handles all of the logic in chess. It handles
+ * generation of algebraic notation (PGN format), loading algebraic notation (PGN format),
+ * and handles game states if the game is won or not.
  * @author Daniell Buchner
  * @version 0.2.0
  */
 public class Board {
 
+    /**
+     * The Board locations in the indexing that the Piece[][] board uses.
+     * This way we can get the string representation of the location
+     * by using the BoardLocation in the applyMove function.
+     */
     private static String[][] BOARD_LOCATIONS = {
             { "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8" },
             { "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7" },
@@ -29,9 +37,6 @@ public class Board {
      */
     private Piece[][] board;
 
-    private boolean firstMove;
-    private int moveCount;
-
     /**
      * The representation of the game in chess
      * algebraic notation. The board uses this
@@ -39,6 +44,21 @@ public class Board {
      */
     private final StringBuilder algebraicRepresentation;
 
+    /**
+     * The boolean flipping for PGN format string.
+     */
+    private boolean firstMove;
+
+    /**
+     * The move counter for the PGN format.
+     */
+    private int moveCount;
+
+    /**
+     * The Board constructor.
+     * For now just creates the board and initializes with two player game.
+     */
+    // TODO: Add a "settings" or "gamemode" instance here to check how to initialize the board.
     public Board() {
         // board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
@@ -51,8 +71,7 @@ public class Board {
      * Initializes the board to play a game and not to
      * read the PGN game.
      */
-    // TODO: Change this function to take in a "settings" variable to initialize the
-    // side based on that
+    // TODO: Change this function to take in a "settings" variable to initialize the side based on that
     public void initializeGameTwoPlayersWhiteOnly() {
         board = new Piece[][] {
                 { new Rook(0), new Knight(0), new Bishop(0), new Queen(0), new King(0), new Bishop(0), new Knight(0),
@@ -78,7 +97,7 @@ public class Board {
     /**
      * Gets a deep copy of the board
      *
-     * @return A deep copy of the board
+     * @return A Piece[][] deep copy.
      */
     public Piece[][] getBoard() {
         Piece[][] copiedBoard = new Piece[8][8];
@@ -92,6 +111,8 @@ public class Board {
 
     /**
      * Check if a move can be applied, then do it.
+     * Will also generate algebraic notation for the move in here
+     * and apply it to the algebraicNotation StringBuilder.
      *
      * @param pieceMoving The chess piece being moved.
      * @param startMove   The starting move of the piece.
@@ -159,16 +180,26 @@ public class Board {
         if (firstMove) {
             firstMove = false;
             algebraicRepresentation.append(moveCount + ". " + moveString.toString());
+            // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
             ChessUIManager.appendMovesLabel(moveCount + ". " + moveString.toString());
         } else {
             moveCount++;
             firstMove = true;
             algebraicRepresentation.append(" " + moveString.toString() + "\n");
+            // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
             ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
         }
         return false;
     }
 
+    /**
+     * Will "simulate" a move. Essentially it applys the same logic as applyMove
+     * but it does it with a board passed in.
+     * @param board The board to apply the move to.
+     * @param pieceMoving The piece moving.
+     * @param startMove Starting location of the piece.
+     * @param endMove Desired end location of the piece.
+     */
     private void simulateApplyMove(Piece[][] board, Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         board[endMove.row][endMove.column] = pieceMoving;
         pieceMoving.moved();
@@ -178,6 +209,15 @@ public class Board {
         checkKingInCheck(board, pieceMoving, pieceMoving.getTeam());
     }
 
+    /**
+     * This checks if the king is in check for a board that is passed in as a parameter.
+     * It takes the piece that is "moving" and checking any piece from the other team
+     * results in a team being in check.
+     * 
+     * @param pieceMoving The piece that is "moving".
+     * @param team The team to check for their king being in check.
+     * @return True if the king is in check, false otherwise.
+     */
     private boolean checkKingInCheck(Piece pieceMoving, int team) {
         BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
         King kingPieceOtherTeam = (King) board[kingLocation.row][kingLocation.column];
@@ -192,6 +232,16 @@ public class Board {
         return false;
     }
 
+    /**
+     * This checks if the king is in check for a board that is passed in as a parameter.
+     * It takes the piece that is "moving" and checking any piece from the other team
+     * results in a team being in check.
+     * 
+     * @param board       The board to check if the king is in check.
+     * @param pieceThe piece that is "moving".
+     * @param team        The team to check for their king being in check.
+     * @return True if the king is in check, false otherwise.
+     */
     private boolean checkKingInCheck(Piece[][] board, Piece pieceMoving, int team) {
         BoardLocation kingLocation = getBoardLocationsForTeamForPiece(board, team, Piece.KING).get(0);
         King kingPieceOtherTeam = (King) board[kingLocation.row][kingLocation.column];
@@ -209,8 +259,8 @@ public class Board {
     /**
      * Returns all possible moves for the current piece.
      *
-     * @param piece
-     * @param location
+     * @param piece    The piece to get the possible moves for.
+     * @param location The location that the piece is on the board.
      * @return
      */
     public ArrayList<BoardLocation> getPossibleMoves(Piece piece, BoardLocation location) {
@@ -230,7 +280,6 @@ public class Board {
                 kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
                 kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
                 if (kingPiece.inCheck) {
-                    System.out.println("CHECKMATE");
                 } else {
                     returnVal.add(move);
                 }
@@ -245,7 +294,6 @@ public class Board {
                 kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
                 kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
                 if (kingPiece.inCheck) {
-                    System.out.println("STALEMATE");
                 } else {
                     returnVal.add(move);
                 }
@@ -260,8 +308,9 @@ public class Board {
     /**
      * Returns all possible moves for the current piece.
      *
-     * @param piece
-     * @param location
+     * @param board The board to check for the locations on.
+     * @param piece The piece to get the possible moves for.
+     * @param location The location that the piece is at.
      * @return
      */
     public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, Piece piece, BoardLocation location) {
@@ -294,8 +343,8 @@ public class Board {
     /**
      * Gets all the possible moves for a specific team
      * 
-     * @param team
-     * @return
+     * @param team The team to get all possible moves for.
+     * @return ArrayList of BoardLocations for the possible moves a team can make.
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeam(int team) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
@@ -314,8 +363,9 @@ public class Board {
     /**
      * Gets all the possible moves for a specific team
      * 
-     * @param team
-     * @return
+     * @param board The board to check possible moves for the team.
+     * @param team The team to get all possible moves for.
+     * @return Arraylist of BoardLocations for the possible moves a team can make.
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeam(Piece[][] board, int team) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
@@ -334,9 +384,9 @@ public class Board {
     /**
      * Gets all possible moves for a specific piece on the board
      * 
-     * @param team
-     * @param pieceId
-     * @return
+     * @param team The team to get the moves for.
+     * @param pieceId The specific piece to get the moves for.
+     * @return ArrayList of BoardLocations of all possible moves of all pieces of certain type for team.
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeamFromPiece(int team, int pieceId) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
@@ -352,6 +402,13 @@ public class Board {
         return possibleMoves;
     }
 
+    /**
+     * Gets the locations of pieces for a team on the board.
+     * 
+     * @param team The team to get the moves for.
+     * @param pieceId The piece to get locations for.
+     * @return ArrayList of BoardLocations of all locations of the pieces for the team.
+     */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPiece(int team, int pieceId) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
@@ -364,6 +421,14 @@ public class Board {
         return locations;
     }
 
+    /**
+     * Gets the locations of pieces for a team on the board.
+     * 
+     * @param board The board to get the pieces locations for.
+     * @param team The team to get the moves for.
+     * @param pieceId The piece to get locations for.
+     * @return ArrayList of BoardLocations of all locations of the pieces for the team.
+     */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPiece(Piece[][] board, int team, int pieceId) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
@@ -385,6 +450,9 @@ public class Board {
         return algebraicRepresentation.toString();
     }
 
+    /**
+     * Gets a textual representation of the board.
+     */
     @Override
     public String toString() {
         StringBuilder boardString = new StringBuilder();

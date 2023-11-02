@@ -6,6 +6,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
+ * The Bishop chess piece.
  * @author Daniell Buchner
  * @version 1.1.0
  */
@@ -31,11 +32,17 @@ public class Bishop extends Piece {
         return Piece.BISHOP;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Piece copy(int team) {
         return new Bishop(team);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
@@ -128,6 +135,9 @@ public class Bishop extends Piece {
         return moves;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void moved() {
     }
