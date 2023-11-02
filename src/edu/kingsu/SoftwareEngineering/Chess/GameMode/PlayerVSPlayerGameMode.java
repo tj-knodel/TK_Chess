@@ -10,6 +10,9 @@ import edu.kingsu.SoftwareEngineering.Chess.GameLoop.MoveController;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * {@inheritDoc}
+ */
 public class PlayerVSPlayerGameMode extends GameMode {
 
     private MoveController moveController;
@@ -20,11 +23,19 @@ public class PlayerVSPlayerGameMode extends GameMode {
         teamTurn = Team.WHITE_TEAM;
     }
 
+    /**
+     * {inheritDoc}
+     */
     @Override
     public void switchTeam() {
         teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
     }
 
+    /**
+     * Sets the click listeners to a GUI so that moves can be registered.
+     * @param guiStarter The GUIStarted to listen for clicks to.
+     * @param board The board to play on.
+     */
     public void setClickListeners(GUIStarter guiStarter, Board board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -59,12 +70,18 @@ public class PlayerVSPlayerGameMode extends GameMode {
         }
     }
 
+    /**
+     * {inheritDoc}
+     */
     @Override
     public void startGame() {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'startGame'");
     }
 
+    /**
+     * {inheritDoc}
+     */
     @Override
     public void endGame() {
         // TODO Auto-generated method stub
