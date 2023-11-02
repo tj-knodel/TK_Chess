@@ -238,7 +238,7 @@ public class Board {
      * results in a team being in check.
      * 
      * @param board       The board to check if the king is in check.
-     * @param pieceThe piece that is "moving".
+     * @param pieceMoving The piece that is "moving".
      * @param team        The team to check for their king being in check.
      * @return True if the king is in check, false otherwise.
      */

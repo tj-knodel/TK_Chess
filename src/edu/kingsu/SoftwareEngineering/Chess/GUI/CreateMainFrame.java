@@ -170,8 +170,8 @@ public class CreateMainFrame {
      * Redraws the tile, re-gets images
      */
     public static void redrawTiles() {
-        for (ChessTileUI[] row: boardTilesUI) {
-             for (ChessTileUI tile: row) {
+        for (ChessTileUI[] row : boardTilesUI) {
+            for (ChessTileUI tile : row) {
                 tile.redrawTile();
             }
         }
@@ -183,7 +183,7 @@ public class CreateMainFrame {
     // -----------------------------------------------------
 
     /**
-     * Creates all the JMenus & JMenuItems which appear in the JFrame
+     * Creates all the JMenus and JMenuItems which appear in the JFrame
      */
     private void createJMenus() {
         JMenuBar bar = new JMenuBar();
@@ -419,7 +419,7 @@ public class CreateMainFrame {
             }
         }
 
-       redrawTiles();
+        redrawTiles();
     }
 
     // -----------------------------------------------------
