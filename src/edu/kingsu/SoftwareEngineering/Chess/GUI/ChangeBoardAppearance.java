@@ -41,6 +41,8 @@ public class ChangeBoardAppearance {
 
     /**
         Makes Sure all the needed files are within the directory
+        @param gottenFolder The folder to search through and ensure all necessary are there
+        @return true means the folder can be used for icons, false means the folder cant be used.
      */
     private static boolean checkFolderForNecessaryFiles(File gottenFolder) {
         String neededFiles[] = {"bishop_black.png", "bishop_white.png", "king_black.png", "king_white.png", "knight_black.png", 
