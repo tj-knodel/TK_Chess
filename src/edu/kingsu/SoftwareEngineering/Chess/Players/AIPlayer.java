@@ -2,11 +2,13 @@ package edu.kingsu.SoftwareEngineering.Chess.Players;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
+import java.util.ArrayList;
 /**
  * @author Thaler Knodel
  * @version 0.1.0
  */
-public class AIPlayer extends Player implements Runnable {
+public class AIPlayer extends Player {
 
     // just a note
     /*
@@ -64,7 +66,7 @@ public class AIPlayer extends Player implements Runnable {
 
     private int randomMove(Board board) {
         Piece[][] pieces = board.getBoard();
-
+        return 0;
     }
 
     /**

@@ -105,7 +105,7 @@
       windowTitle="${ant.project.name}"
       private="true"
       linksource="yes">
-      <bottom><![CDATA[<i>Copyright &#169; REPLACE ME (YOU WILL LOSE MARKS IF YOU DON'T). All Rights Reserved.</i>]]></bottom>
+      <bottom><![CDATA[<i>Copyright &#169; Daniell, Noah, Sean, and Thaler. All Rights Reserved.</i>]]></bottom>
     </javadoc>
   </target>
 
