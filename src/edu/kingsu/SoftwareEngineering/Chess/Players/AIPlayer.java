@@ -42,6 +42,24 @@ public class AIPlayer extends Player {
         return null;
     }
 
+    /**
+     * Helper function that gets the current score of the board
+     */
+    private int calcScore(Piece[][] board) {
+        int score = 0;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                int pieceScore = board[i][j].getValue();
+                if (board[i][j].getTeam() == 1) {
+                    score += pieceScore;
+                } else if(board[i][j].getTeam() == 0) {
+                    score -= pieceScore;
+                }
+            }
+        }
+        return score;
+    }
+
     private int randomMove(Board board) {
         Piece[][] pieces = board.getBoard();
 
