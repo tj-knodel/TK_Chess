@@ -301,7 +301,7 @@ public abstract class UILibrary {
     double scale = requestedSize / originalSize; // scale is 0 to 1, similar to Roblox UI Scale system
     int currentSizeX = ChessJFrame.getSize().width;
 
-    System.out.println(requestedSize + " " + scale + " " + currentSizeX);
+    //System.out.println(requestedSize + " " + scale + " " + currentSizeX);
     return (int) (currentSizeX * scale);
   }
 
@@ -317,7 +317,7 @@ public abstract class UILibrary {
     double originalSize = (double)uiSize_Y;
     double scale = requestedSize / originalSize; // scale is 0 to 1, similar to Roblox UI Scale system
     int currentSizeY = ChessJFrame.getSize().height;
-        System.out.println(requestedSize + " " + scale + " " + currentSizeY);
+    //System.out.println(requestedSize + " " + scale + " " + currentSizeY);
     return (int) (currentSizeY * scale);
   }
 

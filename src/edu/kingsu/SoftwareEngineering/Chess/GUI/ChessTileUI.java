@@ -45,7 +45,7 @@ public class ChessTileUI extends JLayeredPane {
     /**
      * How big the tile is in pixels
      */
-    private static final int TILE_SIZE = 106;
+    private static int tileSize = 106;
 
     /**
      * The UI element which displays the tile as a possible move
@@ -112,8 +112,8 @@ public class ChessTileUI extends JLayeredPane {
 
         ImageIcon imageToDisplay = getBoardImage(imageString);
 
-        int maxSize_X = (int) (TILE_SIZE * 0.8); // Square size (106) * 80%
-        int maxSize_Y = (int) (TILE_SIZE * 0.8); // Square size (106) * 80%
+        int maxSize_X = (int) (UILibrary.scale_X(106) * 0.8); // Square size (106) * 80%
+        int maxSize_Y = (int) (UILibrary.scale_Y(106) * 0.8); // Square size (106) * 80%
 
         // Following Sizing is copy-paste from ImageViewer
         int original_X_size = imageToDisplay.getIconWidth();
@@ -132,8 +132,8 @@ public class ChessTileUI extends JLayeredPane {
             newWidth = (newHeight * original_X_size) / original_Y_size;
         }
 
-        int xPosition = (TILE_SIZE / 2) - (newWidth / 2);
-        int yPosition = TILE_SIZE - 8 - newHeight;
+        int xPosition = (UILibrary.scale_X(106) / 2) - (newWidth / 2);
+        int yPosition = UILibrary.scale_Y(106) - 8 - newHeight;
 
         PieceImage.setVisible(true);
         PieceImage.setIcon(new ImageIcon(
@@ -229,13 +229,13 @@ public class ChessTileUI extends JLayeredPane {
 
         // Background
         boardSquare = new JLabel();
-        boardSquare.setSize(TILE_SIZE, TILE_SIZE); // Numbers from Figma Design
+        boardSquare.setSize(tileSize, tileSize); // Numbers from Figma Design
         if (displayWhite)
-            boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(TILE_SIZE,
-                    TILE_SIZE, Image.SCALE_DEFAULT)));
+            boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(tileSize,
+                    tileSize, Image.SCALE_DEFAULT)));
         else
-            boardSquare.setIcon(new ImageIcon(getBoardImage("square_black.png").getImage().getScaledInstance(TILE_SIZE,
-                    TILE_SIZE, Image.SCALE_DEFAULT)));
+            boardSquare.setIcon(new ImageIcon(getBoardImage("square_black.png").getImage().getScaledInstance(tileSize,
+                    tileSize, Image.SCALE_DEFAULT)));
         this.add(boardSquare, Integer.valueOf(1));
 
         // Yellow circle which indicates a possible move when selecting a piece.
@@ -249,7 +249,7 @@ public class ChessTileUI extends JLayeredPane {
 
         // Yellow Square which indicated previous move
         PreviousMoveSquare = new JPanel();
-        PreviousMoveSquare.setBounds(0, 0, 105, 105); // This cant be 106x106 or else java doesn't render whats
+        PreviousMoveSquare.setBounds(0, 0, tileSize - 1, tileSize - 1); // This cant be 106x106 or else java doesn't render whats
                                                       // underneath
         PreviousMoveSquare.setOpaque(true);
         PreviousMoveSquare.setBackground(UILibrary.ForegroundTileColor);
@@ -269,12 +269,12 @@ public class ChessTileUI extends JLayeredPane {
      */
     public void redrawTile() {
       if (isTileWhite)
-            boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(TILE_SIZE,
-                    TILE_SIZE, Image.SCALE_DEFAULT)));
+            boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(UILibrary.scale_X(106),
+                    UILibrary.scale_Y(106), Image.SCALE_DEFAULT)));
         else
-            boardSquare.setIcon(new ImageIcon(getBoardImage("square_black.png").getImage().getScaledInstance(TILE_SIZE,
-                    TILE_SIZE, Image.SCALE_DEFAULT)));
-        PossibleMoveCircle.setIcon(new ImageIcon(getBoardImage("PossibleMoveCircle.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
+            boardSquare.setIcon(new ImageIcon(getBoardImage("square_black.png").getImage().getScaledInstance(UILibrary.scale_X(106),
+                    UILibrary.scale_Y(106), Image.SCALE_DEFAULT)));
+        PossibleMoveCircle.setIcon(new ImageIcon(getBoardImage("PossibleMoveCircle.png").getImage().getScaledInstance(UILibrary.scale_X(40), UILibrary.scale_Y(40), Image.SCALE_DEFAULT)));
         setPieceImage(currentPiece, isPieceWhite);
     }
 
