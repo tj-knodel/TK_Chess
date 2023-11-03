@@ -22,13 +22,20 @@ public class PlayerTest {
     }
 
     /**
-     * Tests if the AIPlayer returns a valid move.
+     * Tests if the AIPlayer returns a move.
      */
     @Test
     public void testMove() {
         // Test to determine if the AIPlayer returns a move
-        Assert.assertNotNull(testAI.getMove());
+        Assert.assertNotNull(testAI.getMove(testBoard));
     }
 
-
+    /**
+     * Test if the AIPlayer will return a legal move
+     */
+    @Test
+    public void testValidMove() {
+        Move test_move = testAI.getMove(testBoard);
+        Assert.assertTrue(testBoard.applyMove(test_move.piece, test_move.start, test_move.end));
+    }
 }

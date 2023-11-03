@@ -1,9 +1,9 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
-import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
+import edu.kingsu.SoftwareEngineering.Chess.Board.*;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import java.util.ArrayList;
+import java.util.Random;
 /**
  * @author Thaler Knodel
  * @version 0.1.0
@@ -42,8 +42,10 @@ public class AIPlayer extends Player {
      * Gets a move from the AI
      * @return a move
      */
-    public BoardLocation getMove() {
-        return null;
+    public Move getMove(Board board) {
+        //minimax(board, difficulty, colour);
+        Move move = randomMove(board);
+        return move;
     }
 
     /**
@@ -64,50 +66,86 @@ public class AIPlayer extends Player {
         return score;
     }
 
-    private int randomMove(Board board) {
+    private Move randomMove(Board board) {
         Piece[][] pieces = board.getBoard();
-        return 0;
+        ArrayList<BoardLocation> team_pieces = new ArrayList<BoardLocation>();
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                if (pieces[i][j].getTeam() == colour) {
+                    team_pieces.add(new BoardLocation(i, j));
+                }
+            }
+        }
+        // make a random move
+        Random random = new Random();
+        Piece piece = null; 
+        BoardLocation start_move = null, end_move = null;
+        boolean valid_move = false;
+        while (valid_move == false) {
+            // pick a random piece
+            int idx = random.nextInt(team_pieces.size());
+            start_move = team_pieces.get(idx);
+            piece = pieces[start_move.row][start_move.column];
+
+            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(piece, start_move);
+            System.out.println(possible_moves.size());
+            if (possible_moves.isEmpty()) {
+                // remove the invalid move
+                team_pieces.remove(idx);
+                continue;
+            }
+            // pick a random move
+            end_move = possible_moves.get(random.nextInt(possible_moves.size()));
+        }
+        if (end_move == null || start_move == null) {
+            // there were no valid moves
+            return null;
+        }
+        return new Move(piece, start_move, end_move, 0);
     }
 
     /**
      * The minimax algorithm for the AI player
-     * @return
+     * @return the score for the current iteration of the minimax.
      */
     private int minimax(Board board, int depth, int player) {
-        Piece[][] pieces = board.getBoard();
+        Board copy = board.copy();
+        Piece[][] pieces = copy.getBoard();
         if (depth == 0) {
             return calcScore(pieces);
         }
 
         // the board is properly copied here
-        Board copy = board.copyBoard();
+        //Board copy = board.copyBoard();
 
         // the score of the board is declared here
         int score = 0;
         if (player == Team.WHITE_TEAM) {
             // set score to some negative number more than is possible
             score = -200;
-            // iterate over all the pieces of the max player to see what is the best move
-            for (int i = 0; i < pieces.length; i++) {
-                for (int j = 0; j < pieces[i].length; j++) {
-                    if (pieces[i][j].getTeam() == player) {
-                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces[i][j], new BoardLocation(i, j));
-                        //score = Math.max(score, minimax(copy,))
-                    }
-                }
-            }
+            // get the white team pieces
+            //ArrayList<BoardLocation> white_pieces = board.
+            
+            // for (int i = 0; i < pieces.length; i++) {
+            //     for (int j = 0; j < pieces[i].length; j++) {
+            //         if (pieces[i][j].getTeam() == player) {
+            //             ArrayList<BoardLocation> moves = board.getPossiblepieces[i][j], new BoardLocation(i, j));
+            //             //score = Math.max(score, minimax(copy,))
+            //         }
+            //     }
+            // }
         }
         else {
             // set score to some positive number that is more than is possible in the game
             score = 200;
             // iterate over all the pieces of the min player to find the best move
-            for (int i = 0; i < pieces.length; i++) {
-                for (int j = 0; j < pieces[i].length; j++) {
-                    if (pieces[i][j].getTeam() == player) {
-                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces[i][j], new BoardLocation(i, j));
-                    }
-                }
-            }
+            // for (int i = 0; i < pieces.length; i++) {
+            //     for (int j = 0; j < pieces[i].length; j++) {
+            //         if (pieces[i][j].getTeam() == player) {
+            //             ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces[i][j], new BoardLocation(i, j));
+            //         }
+            //     }
+            // }
         }
         return score;
     }

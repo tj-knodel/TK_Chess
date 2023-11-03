@@ -80,7 +80,11 @@ public class Board {
         board = pieces;
     }
 
-    public Board copyBoard() {
+    /**
+     * Returns a copy of the board as a Board object
+     * @return a deep copy of the board
+     */
+    public Board copy() {
         return new Board(board, moveCount, algebraicRepresentation);
     }
 
