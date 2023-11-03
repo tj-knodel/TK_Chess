@@ -1,9 +1,5 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
-
-import java.util.ArrayList;
-
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 /**
@@ -78,11 +74,13 @@ public class AIPlayer extends Player implements Runnable {
     private int minimax(Board board, int depth, int player) {
         Piece[][] pieces = board.getBoard();
         if (depth == 0) {
-            return 0;
+            return calcScore(pieces);
         }
 
+        // the board is properly copied here
+        Board copy = board.copyBoard();
+
         // the score of the board is declared here
-        
         int score = 0;
         if (player == Team.WHITE_TEAM) {
             // set score to some negative number more than is possible
@@ -92,6 +90,7 @@ public class AIPlayer extends Player implements Runnable {
                 for (int j = 0; j < pieces[i].length; j++) {
                     if (pieces[i][j].getTeam() == player) {
                         ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces[i][j], new BoardLocation(i, j));
+                        //score = Math.max(score, minimax(copy,))
                     }
                 }
             }

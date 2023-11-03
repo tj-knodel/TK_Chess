@@ -1,7 +1,5 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
-
 import java.util.ArrayList;
-
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 
@@ -65,6 +63,25 @@ public class Board {
         firstMove = true;
         moveCount = 1;
         initializeGameTwoPlayersWhiteOnly();
+    }
+
+    /**
+     * Creates a new board from the data taken from a different board
+     * @param pieces the array of pieces and their position
+     * @param moveCount the amount of moves made
+     * @param algebraicRep the current sequence of moves in a StringBuilder
+     */
+    public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep) {
+        algebraicRepresentation = algebraicRep;
+        if (moveCount >= 1) {
+            firstMove = false;
+        }
+        this.moveCount = moveCount;
+        board = pieces;
+    }
+
+    public Board copyBoard() {
+        return new Board(board, moveCount, algebraicRepresentation);
     }
 
     /**
