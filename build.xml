@@ -12,7 +12,7 @@
   <property name="assets.dir" location="${src.dir}/assets"/>
   <property name="doc.dir" location="doc" />
   <property name="test.classes.dir" location="build/tests" />
-  <property name="test.dir" location="test" />
+  <property name="test.dir" location="tests" />
   <property name="report.dir" location="report" />
 
 
@@ -69,6 +69,7 @@
 
   <target name="compile" depends="init,clean" description="Compile the code into classes">
     <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${test.classes.dir}"/>
     <javac  debug="true"
             debuglevel="lines,vars,source"
             srcdir="${src.dir}"
@@ -105,7 +106,7 @@
       windowTitle="${ant.project.name}"
       private="true"
       linksource="yes">
-      <bottom><![CDATA[<i>Copyright &#169; Daniell, Noah, Sean, and Thaler. All Rights Reserved.</i>]]></bottom>
+      <bottom><![CDATA[<i>Copyright &#169; Daniell Buchner, Noah Bulas, Shaun Robinson, and Thaler Knodel. All Rights Reserved.</i>]]></bottom>
     </javadoc>
   </target>
 
