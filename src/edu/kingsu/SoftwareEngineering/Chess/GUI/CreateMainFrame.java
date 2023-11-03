@@ -28,6 +28,14 @@ import java.awt.Image;
  */
 public class CreateMainFrame {
 
+
+    private JLabel MovesFrame;
+    private JScrollPane MovesLabel_ScrollPane;
+
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+
     /**
      * Gets the image from the local jar File
      * 
@@ -48,7 +56,7 @@ public class CreateMainFrame {
         UILibrary.ChessJFrame = new JFrame("Chess");
         UILibrary.ChessJFrame.setSize(new Dimension(UILibrary.uiSize_X, UILibrary.uiSize_Y));
         UILibrary.ChessJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        UILibrary.ChessJFrame.setResizable(false);
+        // UILibrary.ChessJFrame.setResizable(false);
         UILibrary.ChessJFrame.setIconImage(getImage("ChessPiecesIcon_black.png").getImage());
         UILibrary.ChessJFrame.getContentPane().setBackground(UILibrary.BackgroundColor);
     }
@@ -61,7 +69,7 @@ public class CreateMainFrame {
         UILibrary.MainFrame = new JLabel();
         UILibrary.MainFrame.setLayout(null);
         UILibrary.MainFrame.setBackground(UILibrary.BackgroundColor);
-        UILibrary.MainFrame.setBounds(0, 0, UILibrary.uiSize_X, UILibrary.uiSize_Y);
+        UILibrary.MainFrame.setBounds(0, 0, UILibrary.scale_X(UILibrary.uiSize_X), UILibrary.scale_Y(UILibrary.uiSize_Y));
     }
 
     // -----------------------------------------------------
@@ -73,9 +81,9 @@ public class CreateMainFrame {
     private void createUIElements() {
 
         JButton StepBackwards_Button = new JButton();
-        StepBackwards_Button.setBounds(960, 762, 200, 79); // Numbers from Figma Design
+        StepBackwards_Button.setBounds(UILibrary.scale_X(960), UILibrary.scale_Y(762), UILibrary.scale_X(200), UILibrary.scale_Y(79)); // Numbers from Figma Design
         StepBackwards_Button.setIcon(
-                new ImageIcon(getImage("StepBack.png").getImage().getScaledInstance(200, 79, Image.SCALE_DEFAULT)));
+                new ImageIcon(getImage("StepBack.png").getImage().getScaledInstance(UILibrary.scale_X(200), UILibrary.scale_Y(79), Image.SCALE_DEFAULT)));
         StepBackwards_Button.setOpaque(false);
         StepBackwards_Button.setContentAreaFilled(false);
         StepBackwards_Button.setBorderPainted(false);
@@ -83,9 +91,9 @@ public class CreateMainFrame {
         UILibrary.StepBackwards_Button = StepBackwards_Button;
 
         JButton StepForwards_Button = new JButton();
-        StepForwards_Button.setBounds(1180, 762, 200, 79); // Numbers from Figma Design
+        StepForwards_Button.setBounds(UILibrary.scale_X(1180), UILibrary.scale_Y(762), UILibrary.scale_X(200), UILibrary.scale_Y(79)); // Numbers from Figma Design
         StepForwards_Button.setIcon(
-                new ImageIcon(getImage("StepForward.png").getImage().getScaledInstance(200, 79, Image.SCALE_DEFAULT)));
+                new ImageIcon(getImage("StepForward.png").getImage().getScaledInstance(UILibrary.scale_X(200), UILibrary.scale_Y(79), Image.SCALE_DEFAULT)));
         StepForwards_Button.setOpaque(false);
         StepForwards_Button.setContentAreaFilled(false);
         StepForwards_Button.setBorderPainted(false);
@@ -93,29 +101,29 @@ public class CreateMainFrame {
         UILibrary.StepForwards_Button = StepForwards_Button;
 
         JTextArea MovesLabel = new JTextArea(""); // 150 lines
-        MovesLabel.setBounds(984, 209, 372, 531); // Numbers from Figma Design
+        MovesLabel.setBounds(UILibrary.scale_X(984), UILibrary.scale_Y(209), UILibrary.scale_X(372), UILibrary.scale_Y(531)); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
         MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
         MovesLabel.setForeground(UILibrary.TextColor_White);
         MovesLabel.setEditable(false);
         MovesLabel.setHighlighter(null);
         UILibrary.MovesLabel = MovesLabel;
-        JScrollPane MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        MovesLabel_ScrollPane.setBounds(984, 209, 372, 531);
+        MovesLabel_ScrollPane.setBounds(UILibrary.scale_X(984), UILibrary.scale_Y(209), UILibrary.scale_X(372), UILibrary.scale_Y(531));
         UILibrary.MainFrame.add(MovesLabel_ScrollPane);
         MovesLabel_ScrollPane.setVisible(true);
         MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        JLabel MovesFrame = new JLabel();
-        MovesFrame.setBounds(935, 81, 470, 778); // Numbers from Figma Design
+        MovesFrame = new JLabel();
+        MovesFrame.setBounds(UILibrary.scale_X(935), UILibrary.scale_Y(81), UILibrary.scale_X(470), UILibrary.scale_Y(778)); // Numbers from Figma Design
         MovesFrame.setIcon(
-                new ImageIcon(getImage("MovesFrame.png").getImage().getScaledInstance(470, 778, Image.SCALE_DEFAULT)));
+                new ImageIcon(getImage("MovesFrame.png").getImage().getScaledInstance(UILibrary.scale_X(470), UILibrary.scale_Y(778), Image.SCALE_DEFAULT)));
         MovesFrame.setOpaque(false);
         UILibrary.MainFrame.add(MovesFrame);
 
         JTextField EnterMove_TextField = new JTextField("To enter a move click here");
-        EnterMove_TextField.setBounds(935, 880, 470, 49); // Numbers from Figma Design
+        EnterMove_TextField.setBounds(UILibrary.scale_X(935), UILibrary.scale_Y(880), UILibrary.scale_X(470), UILibrary.scale_Y(49)); // Numbers from Figma Design
         EnterMove_TextField.setBackground(UILibrary.ForegroundColor);
         EnterMove_TextField.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
         EnterMove_TextField.setForeground(UILibrary.TextColor_Gray);
@@ -145,7 +153,7 @@ public class CreateMainFrame {
      */
     public static ChessTileUI[][] createChessBoard() {
         boardUI = new JLayeredPane();
-        boardUI.setBounds(52, 81, 848, 850);
+        boardUI.setBounds(UILibrary.scale_X(52), UILibrary.scale_Y(81), UILibrary.scale_X(848), UILibrary.scale_Y(850));
         boardUI.setLayout(new GridLayout(8, 8));
 
         boardTilesUI = new ChessTileUI[8][8];
@@ -434,6 +442,34 @@ public class CreateMainFrame {
         }
     }
 
+
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+
+    public void resizeEverything() {
+        UILibrary.MainFrame.setBounds(0, 0, UILibrary.scale_X(UILibrary.uiSize_X), UILibrary.scale_Y(UILibrary.uiSize_Y));
+        System.out.println(UILibrary.MainFrame.getSize());
+        UILibrary.StepBackwards_Button.setBounds(UILibrary.scale_X(960), UILibrary.scale_Y(762), UILibrary.scale_X(200), UILibrary.scale_Y(79)); // Numbers from Figma Design
+        UILibrary.StepBackwards_Button.setIcon(
+                new ImageIcon(getImage("StepBack.png").getImage().getScaledInstance(UILibrary.scale_X(200), UILibrary.scale_Y(79), Image.SCALE_DEFAULT)));
+
+
+        UILibrary.StepForwards_Button.setBounds(UILibrary.scale_X(1180), UILibrary.scale_Y(762), UILibrary.scale_X(200), UILibrary.scale_Y(79)); // Numbers from Figma Design
+        UILibrary.StepForwards_Button.setIcon(
+                new ImageIcon(getImage("StepForward.png").getImage().getScaledInstance(UILibrary.scale_X(200), UILibrary.scale_Y(79), Image.SCALE_DEFAULT)));
+
+        UILibrary.MovesLabel.setBounds(UILibrary.scale_X(984), UILibrary.scale_Y(209), UILibrary.scale_X(372), UILibrary.scale_Y(531)); // Numbers from Figma Design
+        MovesLabel_ScrollPane.setBounds(UILibrary.scale_X(984), UILibrary.scale_Y(209), UILibrary.scale_X(372), UILibrary.scale_Y(531));
+
+        MovesFrame.setBounds(UILibrary.scale_X(935), UILibrary.scale_Y(81), UILibrary.scale_X(470), UILibrary.scale_Y(778)); // Numbers from Figma Design
+        MovesFrame.setIcon(
+                new ImageIcon(getImage("MovesFrame.png").getImage().getScaledInstance(UILibrary.scale_X(470), UILibrary.scale_Y(778), Image.SCALE_DEFAULT)));
+
+        UILibrary.EnterMove_TextField.setBounds(UILibrary.scale_X(935), UILibrary.scale_Y(880), UILibrary.scale_X(470), UILibrary.scale_Y(49)); // Numbers from Figma Design
+ 
+    }
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
@@ -450,7 +486,8 @@ public class CreateMainFrame {
 
         // JMenu UI Events
         UILibrary.FlipBoard_JMenuItem.addActionListener(e -> {
-            setBoardOrientation(!whiteOnBottom);
+            resizeEverything();
+            //setBoardOrientation(!whiteOnBottom);
         });
         UILibrary.ToggleCoordinates_JMenuItem.addActionListener(e -> {
             toggleCoordinatesVisibility();

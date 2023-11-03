@@ -1,8 +1,8 @@
 package edu.kingsu.SoftwareEngineering.Chess;
 
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
-import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
+//import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
+//import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 
 /**
  * Tell me about this class
@@ -22,8 +22,8 @@ public class Main {
 
 		// Board b = new Board();
 
-		// new GUIStarter();
-		new GameLoop();
+		 new GUIStarter();
+		//new GameLoop();
 	}
 
 	/**
