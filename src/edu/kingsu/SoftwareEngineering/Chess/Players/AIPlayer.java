@@ -1,5 +1,8 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
+
+import java.util.ArrayList;
+
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 /**
@@ -39,17 +42,23 @@ public class AIPlayer extends Player {
         return null;
     }
 
+    private int randomMove(Board board) {
+        Piece[][] pieces = board.getBoard();
+
+    }
+
     /**
      * The minimax algorithm for the AI player
      * @return
      */
     private int minimax(Board board, int depth, int player) {
+        Piece[][] pieces = board.getBoard();
         if (depth == 0) {
             return 0;
         }
 
         // the score of the board is declared here
-        Piece[][] pieces = board.getBoard();
+        
         int score = 0;
         if (player == 1) {
             // set score to some negative number more than is possible
@@ -58,7 +67,7 @@ public class AIPlayer extends Player {
             for (int i = 0; i < pieces.length; i++) {
                 for (int j = 0; j < pieces[i].length; j++) {
                     if (pieces[i][j].getTeam() == player) {
-                        // make a move here
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces[i][j], new BoardLocation(i, j));
                     }
                 }
             }
@@ -70,7 +79,7 @@ public class AIPlayer extends Player {
             for (int i = 0; i < pieces.length; i++) {
                 for (int j = 0; j < pieces[i].length; j++) {
                     if (pieces[i][j].getTeam() == player) {
-                        // make a move here
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces[i][j], new BoardLocation(i, j));
                     }
                 }
             }
