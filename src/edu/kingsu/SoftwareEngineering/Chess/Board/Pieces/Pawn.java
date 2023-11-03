@@ -15,6 +15,7 @@ public class Pawn extends Piece {
 
     public Pawn(int team) {
         super(team);
+        value = 1;
     }
 
     public Pawn(int team, boolean hasMoved) {

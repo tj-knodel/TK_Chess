@@ -16,6 +16,11 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 public abstract class Piece {
 
     /**
+     * The point value of the piece
+     */
+    protected int value;
+
+    /**
      * The team the piece is on. 1 or 0 for white/black
      */
     protected int team;
@@ -27,6 +32,14 @@ public abstract class Piece {
      */
     protected Piece(int team) {
         this.team = team;
+    }
+
+    /**
+     * Returns the point value of the piece
+     * @return a point value
+     */
+    public int getValue() {
+        return value;
     }
 
     /**
