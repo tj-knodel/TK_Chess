@@ -31,7 +31,10 @@ public class CreateAccessoryUIs {
 	 * @return The image
 	 */
 	private ImageIcon getBoardImage(String imageToGet) {
-		return new ImageIcon(getClass().getClassLoader().getResource(UILibrary.boardAppearanceFolder + imageToGet));
+		if (!UILibrary.isAbsoluteFilePath)
+			return new ImageIcon(getClass().getClassLoader().getResource(UILibrary.boardAppearanceFolder + imageToGet));
+		else
+			return new ImageIcon(UILibrary.boardAppearanceFolder + imageToGet);
 	}
 
 	// -----------------------------------------------------

@@ -21,7 +21,8 @@ public abstract class UILibrary {
   /**
    * Size of the JFrame Y in pixels
    */
-  public static final int uiSize_Y = 1080; // JFrame y Size // 1024
+  public static final int uiSize_Y = 1040; // JFrame y Size 
+  // Note to self, use figma y pos numbers - 10
 
   /**
    * The board appearance folder to be used, either make it point to a different
@@ -29,6 +30,12 @@ public abstract class UILibrary {
    * change ChessTileUI.getBoardImage() to be absolute file path, not relative.
    */
   public static String boardAppearanceFolder = "BoardImages_Blue/";
+
+  /**
+   * Used with UILibrary.boardAppearanceFolder
+   * true if UILibrary.boardAppearanceFolder is an absolute file path. 
+   */
+  public static boolean isAbsoluteFilePath = false;
 
   // ----- UI Elements-------------
 
@@ -82,7 +89,8 @@ public abstract class UILibrary {
    * Located in the MainFrame;
    * JLabel which holds all the previous moves in chess notation.
    */
-  public static JLabel MovesLabel;
+  // public static JLabel MovesLabel;
+  public static JTextArea MovesLabel;
 
   // ----- New Game Frame-------------
   /**
@@ -169,15 +177,15 @@ public abstract class UILibrary {
    * JMenuItem which selects a new game
    */
   public static JMenuItem NewGame_JMenuItem;
-  
+
   /**
    * JMenuItem which selects load game, create game from pgn
    */
   public static JMenuItem LoadGame_JMenuItem;
-  
+
   /**
-  * JMenuItem which saves the current game to a Pgn file
-  */
+   * JMenuItem which saves the current game to a Pgn file
+   */
   public static JMenuItem SaveGame_JMenuItem;
 
   /**
@@ -186,7 +194,8 @@ public abstract class UILibrary {
   public static JMenuItem RestartGame_JMenuItem;
 
   /**
-   * JMenuItem which toggles whether the possible move circles on the board are shown or not.
+   * JMenuItem which toggles whether the possible move circles on the board are
+   * shown or not.
    */
   public static JMenuItem TogglePossibleMoves_JMenuItem;
 
@@ -196,8 +205,10 @@ public abstract class UILibrary {
   public static JMenuItem TogglePreviousMoves_JMenuItem;
 
   /**
-   * Allows the user to open a folder and change the appearance of the board using the images in the folder
-   * Images in the folder must be names: "pawn_black", "king_white", "queen_white", etc for all 12 pieces and
+   * Allows the user to open a folder and change the appearance of the board using
+   * the images in the folder
+   * Images in the folder must be names: "pawn_black", "king_white",
+   * "queen_white", etc for all 12 pieces and
    * "square_black", "square_white","PossibleMoveCircle", 15 Images total
    */
   public static JMenuItem SetBoardAppearance_JMenuItem;
@@ -208,7 +219,8 @@ public abstract class UILibrary {
   public static JMenuItem ToggleCoordinates_JMenuItem;
 
   /**
-   * JMenuItem which flips the board so black appears on the bottom and white on top or vise versa.
+   * JMenuItem which flips the board so black appears on the bottom and white on
+   * top or vise versa.
    */
   public static JMenuItem FlipBoard_JMenuItem;
 
@@ -246,10 +258,10 @@ public abstract class UILibrary {
 
   // ----- Colors -----------------
   /**
-    Main JFrame Background Color
-  */
+   * Main JFrame Background Color
+   */
   public static final Color BackgroundColor = new Color(54, 53, 48);
-  
+
   /**
    * Main JFrame Foreground Color
    */
@@ -257,7 +269,7 @@ public abstract class UILibrary {
 
   /**
    * White Text Color for some text
-  */
+   */
   public static final Color TextColor_White = new Color(255, 255, 255);
 
   /**

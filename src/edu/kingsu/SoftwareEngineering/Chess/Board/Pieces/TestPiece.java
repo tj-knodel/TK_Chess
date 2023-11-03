@@ -10,28 +10,43 @@ public class TestPiece extends Piece {
         super(-2);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getPieceName() {
         return "T";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getPieceID() {
         return -2;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Piece copy(int team) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'copy'");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPossibleMoves'");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void moved() {
         // TODO Auto-generated method stub

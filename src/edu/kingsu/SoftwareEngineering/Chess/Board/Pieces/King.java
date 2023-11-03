@@ -37,6 +37,9 @@ public class King extends Piece {
         return Piece.KING;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Piece copy(int team) {
         King k = new King(team);
@@ -44,6 +47,9 @@ public class King extends Piece {
         return k;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
@@ -186,6 +192,9 @@ public class King extends Piece {
         return moves;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void moved() {
         hasMoved = true;

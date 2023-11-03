@@ -1,11 +1,19 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 /**
+ * The location on the "board" that something can have.
  * @author Daniell Buchner
  * @version 0.1.1
  */
 public class BoardLocation {
+    /**
+     * The column position.
+     */
     public int column;
+
+    /**
+     * The row position.
+     */
     public int row;
 
     public BoardLocation(int column, int row) {

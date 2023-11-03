@@ -9,8 +9,10 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import java.awt.Dimension;
@@ -52,7 +54,8 @@ public class CreateMainFrame {
     }
 
     /**
-     * Creates the MainFrame JLabel, which holds the chess board and its associated frames
+     * Creates the MainFrame JLabel, which holds the chess board and its associated
+     * frames
      */
     private void CreateMainContentPane() {
         UILibrary.MainFrame = new JLabel();
@@ -65,17 +68,12 @@ public class CreateMainFrame {
     // -----------------------------------------------------
 
     /**
-     * Creates watermark, moves frame, forward/back buttons and text input
+     * Creates moves frame, forward/back buttons and text input
      */
     private void createUIElements() {
-        JLabel KingsU_Watermark = new JLabel("", SwingConstants.CENTER);
-        KingsU_Watermark.setBounds(1372, 970, 54, 42); // Numbers from Figma Design
-        KingsU_Watermark.setIcon(
-                new ImageIcon(getImage("KingsUCrown.png").getImage().getScaledInstance(54, 42, Image.SCALE_DEFAULT)));
-        UILibrary.MainFrame.add(KingsU_Watermark);
 
         JButton StepBackwards_Button = new JButton();
-        StepBackwards_Button.setBounds(960, 772, 200, 79); // Numbers from Figma Design
+        StepBackwards_Button.setBounds(960, 762, 200, 79); // Numbers from Figma Design
         StepBackwards_Button.setIcon(
                 new ImageIcon(getImage("StepBack.png").getImage().getScaledInstance(200, 79, Image.SCALE_DEFAULT)));
         StepBackwards_Button.setOpaque(false);
@@ -85,7 +83,7 @@ public class CreateMainFrame {
         UILibrary.StepBackwards_Button = StepBackwards_Button;
 
         JButton StepForwards_Button = new JButton();
-        StepForwards_Button.setBounds(1180, 772, 200, 79); // Numbers from Figma Design
+        StepForwards_Button.setBounds(1180, 762, 200, 79); // Numbers from Figma Design
         StepForwards_Button.setIcon(
                 new ImageIcon(getImage("StepForward.png").getImage().getScaledInstance(200, 79, Image.SCALE_DEFAULT)));
         StepForwards_Button.setOpaque(false);
@@ -94,24 +92,30 @@ public class CreateMainFrame {
         UILibrary.MainFrame.add(StepForwards_Button);
         UILibrary.StepForwards_Button = StepForwards_Button;
 
-        JTextArea MovesLabel = new JTextArea("1.");
-        MovesLabel.setBounds(984, 219, 372, 531); // Numbers from Figma Design
+        JTextArea MovesLabel = new JTextArea(""); // 150 lines
+        MovesLabel.setBounds(984, 209, 372, 531); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
         MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
         MovesLabel.setForeground(UILibrary.TextColor_White);
         MovesLabel.setEditable(false);
         MovesLabel.setHighlighter(null);
-        UILibrary.MainFrame.add(MovesLabel);
+        UILibrary.MovesLabel = MovesLabel;
+        JScrollPane MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        MovesLabel_ScrollPane.setBounds(984, 209, 372, 531);
+        UILibrary.MainFrame.add(MovesLabel_ScrollPane);
+        MovesLabel_ScrollPane.setVisible(true);
+        MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         JLabel MovesFrame = new JLabel();
-        MovesFrame.setBounds(935, 91, 470, 778); // Numbers from Figma Design
+        MovesFrame.setBounds(935, 81, 470, 778); // Numbers from Figma Design
         MovesFrame.setIcon(
                 new ImageIcon(getImage("MovesFrame.png").getImage().getScaledInstance(470, 778, Image.SCALE_DEFAULT)));
         MovesFrame.setOpaque(false);
         UILibrary.MainFrame.add(MovesFrame);
 
         JTextField EnterMove_TextField = new JTextField("To enter a move click here");
-        EnterMove_TextField.setBounds(935, 890, 470, 49); // Numbers from Figma Design
+        EnterMove_TextField.setBounds(935, 880, 470, 49); // Numbers from Figma Design
         EnterMove_TextField.setBackground(UILibrary.ForegroundColor);
         EnterMove_TextField.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
         EnterMove_TextField.setForeground(UILibrary.TextColor_Gray);
@@ -123,7 +127,7 @@ public class CreateMainFrame {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-    
+
     /**
      * Board UI Square, contains a 8x8 grid of chess tiles
      */
@@ -136,11 +140,12 @@ public class CreateMainFrame {
 
     /**
      * Create and set up the ChessTiles, add them to the grid
+     * 
      * @return Array of chess tile ui elements
      */
     public static ChessTileUI[][] createChessBoard() {
         boardUI = new JLayeredPane();
-        boardUI.setBounds(52, 91, 848, 850);
+        boardUI.setBounds(52, 81, 848, 850);
         boardUI.setLayout(new GridLayout(8, 8));
 
         boardTilesUI = new ChessTileUI[8][8];
@@ -161,11 +166,24 @@ public class CreateMainFrame {
         return boardTilesUI;
     }
 
+    /**
+     * Redraws the tile, re-gets images
+     */
+    public static void redrawTiles() {
+        for (ChessTileUI[] row : boardTilesUI) {
+            for (ChessTileUI tile : row) {
+                tile.redrawTile();
+            }
+        }
+        UILibrary.MainFrame.repaint();
+        UILibrary.ChessJFrame.repaint();
+    }
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
     /**
-     * Creates all the JMenus & JMenuItems which appear in the JFrame
+     * Creates all the JMenus and JMenuItems which appear in the JFrame
      */
     private void createJMenus() {
         JMenuBar bar = new JMenuBar();
@@ -265,7 +283,7 @@ public class CreateMainFrame {
         JMenuItem About_Item = new JMenuItem("About");
         About_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
         Help_JMenu.add(About_Item);
-        UILibrary.SetAIStrengthEasy_JMenuItem = About_Item;
+        UILibrary.About_JMenuItem = About_Item;
     }
 
     // -----------------------------------------------------
@@ -283,38 +301,38 @@ public class CreateMainFrame {
     private void createBoardMarkers() {
 
         boardLabels[0] = new JLabel("1", SwingConstants.CENTER);
-        boardLabels[0].setBounds(22, 865, 28, 40); // Numbers from Figma Design
+        boardLabels[0].setBounds(22, 855, 28, 40); // Numbers from Figma Design
         boardLabels[1] = new JLabel("2", SwingConstants.CENTER);
-        boardLabels[1].setBounds(22, 758, 28, 40); // Numbers from Figma Design
+        boardLabels[1].setBounds(22, 748, 28, 40); // Numbers from Figma Design
         boardLabels[2] = new JLabel("3", SwingConstants.CENTER);
-        boardLabels[2].setBounds(22, 650, 28, 40); // Numbers from Figma Design
+        boardLabels[2].setBounds(22, 640, 28, 40); // Numbers from Figma Design
         boardLabels[3] = new JLabel("4", SwingConstants.CENTER);
-        boardLabels[3].setBounds(22, 542, 28, 40); // Numbers from Figma Design
+        boardLabels[3].setBounds(22, 532, 28, 40); // Numbers from Figma Design
         boardLabels[4] = new JLabel("5", SwingConstants.CENTER);
-        boardLabels[4].setBounds(22, 439, 28, 40); // Numbers from Figma Design
+        boardLabels[4].setBounds(22, 429, 28, 40); // Numbers from Figma Design
         boardLabels[5] = new JLabel("6", SwingConstants.CENTER);
-        boardLabels[5].setBounds(22, 330, 28, 40); // Numbers from Figma Design
+        boardLabels[5].setBounds(22, 320, 28, 40); // Numbers from Figma Design
         boardLabels[6] = new JLabel("7", SwingConstants.CENTER);
-        boardLabels[6].setBounds(22, 227, 28, 40); // Numbers from Figma Design
+        boardLabels[6].setBounds(22, 217, 28, 40); // Numbers from Figma Design
         boardLabels[7] = new JLabel("8", SwingConstants.CENTER);
-        boardLabels[7].setBounds(22, 124, 28, 40); // Numbers from Figma Design
+        boardLabels[7].setBounds(22, 114, 28, 40); // Numbers from Figma Design
 
         boardLabels[8] = new JLabel("a", SwingConstants.CENTER);
-        boardLabels[8].setBounds(92, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[8].setBounds(92, 929, 28, 40); // Numbers from Figma Design
         boardLabels[9] = new JLabel("b", SwingConstants.CENTER);
-        boardLabels[9].setBounds(195, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[9].setBounds(195, 929, 28, 40); // Numbers from Figma Design
         boardLabels[10] = new JLabel("c", SwingConstants.CENTER);
-        boardLabels[10].setBounds(304, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[10].setBounds(304, 929, 28, 40); // Numbers from Figma Design
         boardLabels[11] = new JLabel("d", SwingConstants.CENTER);
-        boardLabels[11].setBounds(411, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[11].setBounds(411, 929, 28, 40); // Numbers from Figma Design
         boardLabels[12] = new JLabel("e", SwingConstants.CENTER);
-        boardLabels[12].setBounds(522, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[12].setBounds(522, 929, 28, 40); // Numbers from Figma Design
         boardLabels[13] = new JLabel("f", SwingConstants.CENTER);
-        boardLabels[13].setBounds(621, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[13].setBounds(621, 929, 28, 40); // Numbers from Figma Design
         boardLabels[14] = new JLabel("g", SwingConstants.CENTER);
-        boardLabels[14].setBounds(724, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[14].setBounds(724, 929, 28, 40); // Numbers from Figma Design
         boardLabels[15] = new JLabel("h", SwingConstants.CENTER);
-        boardLabels[15].setBounds(836, 939, 28, 40); // Numbers from Figma Design
+        boardLabels[15].setBounds(836, 929, 28, 40); // Numbers from Figma Design
 
         for (JLabel label : boardLabels) {
             label.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
@@ -336,8 +354,10 @@ public class CreateMainFrame {
     private static boolean whiteOnBottom = true;
 
     /**
-     * Sets the board orientation 
-     * @param isWhiteOnBottom true = white will be on bottom, false = black will be on bottom
+     * Sets the board orientation
+     * 
+     * @param isWhiteOnBottom true = white will be on bottom, false = black will be
+     *                        on bottom
      */
     private static void setBoardOrientation(boolean isWhiteOnBottom) {
         whiteOnBottom = isWhiteOnBottom;
@@ -364,7 +384,7 @@ public class CreateMainFrame {
 
             // Chess Tiles, remove all the tiles and add them in reverse order
             boardUI.removeAll();
-            for (int row = 0; row  < 8; ++row) {
+            for (int row = 0; row < 8; ++row) {
                 for (int column = 0; column < 8; ++column) {
                     boardUI.add(boardTilesUI[row][column]);
                 }
@@ -399,11 +419,8 @@ public class CreateMainFrame {
             }
         }
 
-        boardUI.repaint();
-        UILibrary.MainFrame.repaint();
-        UILibrary.ChessJFrame.repaint();
+        redrawTiles();
     }
-
 
     // -----------------------------------------------------
     // -----------------------------------------------------
@@ -412,15 +429,15 @@ public class CreateMainFrame {
      * Toggles the coordinates visibility
      */
     private void toggleCoordinatesVisibility() {
-            for (JLabel label : boardLabels) {
-                label.setVisible(!label.isVisible());
+        for (JLabel label : boardLabels) {
+            label.setVisible(!label.isVisible());
         }
     }
 
     // -----------------------------------------------------
     // -----------------------------------------------------
 
-    /** 
+    /**
      * Creates the UI by calling all the create functions;
      * Add the JMenuItem event listeners for FlipBoard and ToggleCoordinates
      */

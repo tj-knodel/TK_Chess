@@ -32,11 +32,17 @@ public class Queen extends Piece {
         return Piece.QUEEN;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Piece copy(int team) {
         return new Queen(team);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
@@ -224,6 +230,9 @@ public class Queen extends Piece {
         return moves;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void moved() {
     }

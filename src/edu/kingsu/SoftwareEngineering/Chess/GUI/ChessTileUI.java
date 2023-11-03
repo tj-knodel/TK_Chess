@@ -20,6 +20,19 @@ public class ChessTileUI extends JLayeredPane {
     }
 
     /**
+     * Set by the JMenuEvent in the static constructor.
+     * Toggles whether possible move circles are shown on the board or not.
+     */
+    private boolean showPossibleMoves = true;
+
+    /**
+     * Set by the JMenuEvent in the static constructor.
+     * Toggles whether the last move yellow square will be shown on the board or
+     * not.
+     */
+    private boolean showPreviousMoves = true;
+
+    /**
      * Row of the Tile
      */
     public char row;
@@ -50,13 +63,36 @@ public class ChessTileUI extends JLayeredPane {
     private JLabel PieceImage;
 
     /**
+     * true if the tile is white
+     */
+    private boolean isTileWhite;
+    
+    /**
+     * true if the current piece on the tile is white
+     */
+    private boolean isPieceWhite = true;
+
+    /**
+     *  Whatever the current piece is
+     */
+    private PIECES_ENUM currentPiece = PIECES_ENUM.None;
+    
+    /**
+     * Background tile image
+     */
+    JLabel boardSquare ;
+    
+    /**
      * Gets the image from the source chess appearance folder.
      * 
      * @param imageToGet Name of the image + type
      * @return The image
      */
     private ImageIcon getBoardImage(String imageToGet) {
-        return new ImageIcon(getClass().getClassLoader().getResource(UILibrary.boardAppearanceFolder + imageToGet));
+        if (!UILibrary.isAbsoluteFilePath)
+            return new ImageIcon(getClass().getClassLoader().getResource(UILibrary.boardAppearanceFolder + imageToGet));
+         else 
+            return new ImageIcon(UILibrary.boardAppearanceFolder + imageToGet);
     }
 
     // -----------------------------------------------------
@@ -117,6 +153,9 @@ public class ChessTileUI extends JLayeredPane {
      */
     public void setPieceImage(PIECES_ENUM piece, boolean isWhite) {
 
+        currentPiece = piece;
+        isPieceWhite = isWhite;
+
         // Many `if` statements to display the correct image
         if (piece == PIECES_ENUM.Pawn) {
             if (isWhite)
@@ -162,7 +201,8 @@ public class ChessTileUI extends JLayeredPane {
      * @param visibility true = show tile, false = hide tile
      */
     public void setPossibleMoveCircleVisibility(boolean visibility) {
-        PossibleMoveCircle.setVisible(visibility);
+        if (showPossibleMoves)
+            PossibleMoveCircle.setVisible(visibility);
     }
 
     /**
@@ -171,7 +211,8 @@ public class ChessTileUI extends JLayeredPane {
      * @param visibility true = show tile, false = hide tile
      */
     public void setPreviousMoveSquareVisibility(boolean visibility) {
-        PreviousMoveSquare.setVisible(visibility);
+        if (showPreviousMoves)
+            PreviousMoveSquare.setVisible(visibility);
     }
 
     // -----------------------------------------------------
@@ -187,7 +228,7 @@ public class ChessTileUI extends JLayeredPane {
         this.setBackground(new Color(0, 0, 0, 0));
 
         // Background
-        JLabel boardSquare = new JLabel();
+        boardSquare = new JLabel();
         boardSquare.setSize(TILE_SIZE, TILE_SIZE); // Numbers from Figma Design
         if (displayWhite)
             boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(TILE_SIZE,
@@ -222,6 +263,23 @@ public class ChessTileUI extends JLayeredPane {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
+    
+    /**
+     * Redraws the tile with new images
+     */
+    public void redrawTile() {
+      if (isTileWhite)
+            boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(TILE_SIZE,
+                    TILE_SIZE, Image.SCALE_DEFAULT)));
+        else
+            boardSquare.setIcon(new ImageIcon(getBoardImage("square_black.png").getImage().getScaledInstance(TILE_SIZE,
+                    TILE_SIZE, Image.SCALE_DEFAULT)));
+        PossibleMoveCircle.setIcon(new ImageIcon(getBoardImage("PossibleMoveCircle.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
+        setPieceImage(currentPiece, isPieceWhite);
+    }
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
 
     /**
      * Detects when the tile is clicked, sends event to GUI_Events
@@ -252,7 +310,21 @@ public class ChessTileUI extends JLayeredPane {
     public ChessTileUI(char row, char column, boolean displayWhite) {
         this.row = row;
         this.column = column;
+        this.isTileWhite = displayWhite;
         createTile(displayWhite);
         detectTileClicks();
+
+        // JMenu events
+        UILibrary.TogglePossibleMoves_JMenuItem.addActionListener(e -> {
+            showPossibleMoves = !showPossibleMoves;
+            PossibleMoveCircle.setVisible(false);
+        });
+        UILibrary.TogglePreviousMoves_JMenuItem.addActionListener(e -> {
+            showPreviousMoves = !showPreviousMoves;
+            PreviousMoveSquare.setVisible(false);
+        });
     }
+
+
+
 }
