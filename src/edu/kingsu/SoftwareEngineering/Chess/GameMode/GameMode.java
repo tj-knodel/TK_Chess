@@ -1,5 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.GameMode;
 
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
+
 /**
  * Abstract class to handle different game modes
  * without rewriting the GameLoop.
@@ -7,6 +9,13 @@ package edu.kingsu.SoftwareEngineering.Chess.GameMode;
  * @version 0.1.0
  */
 public abstract class GameMode {
+
+    protected GameLoop gameLoop;
+
+    public void setGameLoop(GameLoop gameLoop) {
+        this.gameLoop = gameLoop;
+    }
+
     /**
      * Switch teams. Really only needed for AI.
      */

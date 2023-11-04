@@ -29,6 +29,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
     @Override
     public void switchTeam() {
         teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        System.out.println("Team is now: " + teamTurn);
     }
 
     /**
@@ -47,7 +48,8 @@ public class PlayerVSPlayerGameMode extends GameMode {
                                 chessTile.column)) {
                             moveController.sendMovesToBoard(board);
                             switchTeam();
-                            guiStarter.chessUIManager.drawBoard(board.getBoard());
+                            gameLoop.sendUpdateBoardState();
+                            // guiStarter.chessUIManager.drawBoard(board.getBoard());
                         }
                         if (!moveController.getIsFirstClick()) {
                             var moves = moveController.getAllPossibleMoves();
@@ -55,14 +57,16 @@ public class PlayerVSPlayerGameMode extends GameMode {
                                 guiStarter.chessUIManager.boardTiles[location.row][location.column]
                                         .setPossibleMoveCircleVisibility(true);
                             }
-                            UILibrary.MainFrame.repaint();
+                            gameLoop.sendUpdateBoardState();
+                            // UILibrary.MainFrame.repaint();
                         } else if (moveController.getIsFirstClick()) {
                             for (int r = 0; r < 8; r++) {
                                 for (int c = 0; c < 8; c++) {
                                     guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
                                 }
                             }
-                            UILibrary.MainFrame.repaint();
+                            gameLoop.sendUpdateBoardState();
+                            // UILibrary.MainFrame.repaint();
                         }
                     }
                 });

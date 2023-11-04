@@ -35,11 +35,22 @@ public class GameLoop {
         board = new Board();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         gameMode = new PlayerVSPlayerGameMode();
+        gameMode.setGameLoop(this);
         ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
+        UILibrary.EnterMove_TextField.addActionListener(e -> {
+            String input = UILibrary.EnterMove_TextField.getText();
+            if (board.applyMoveAlgebraicNotation(input)) {
+                gameMode.switchTeam();
+                sendUpdateBoardState();
+            }
+            // guiStarter.chessUIManager.drawBoard(board.getBoard());
+            // System.out.println("The text box detected input: " + input);
+        });
     }
 
     public void sendUpdateBoardState() {
+        UILibrary.MainFrame.repaint();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
     }
 }
