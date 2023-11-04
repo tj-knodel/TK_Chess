@@ -37,8 +37,6 @@ public class GameLoop {
         gameMode = new PlayerVSPlayerGameMode();
         ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
-        // moveController = new MoveController();
-
     }
 
     public void sendUpdateBoardState() {
