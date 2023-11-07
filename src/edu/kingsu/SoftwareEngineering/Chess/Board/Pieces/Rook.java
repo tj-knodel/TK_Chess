@@ -2,6 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
 import java.util.ArrayList;
 
+import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
@@ -11,8 +12,11 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
  */
 public class Rook extends Piece {
 
+    private boolean hasMoved;
+
     public Rook(int team) {
         super(team);
+        hasMoved = false;
         value = 5;
     }
 
@@ -37,14 +41,20 @@ public class Rook extends Piece {
      */
     @Override
     public Piece copy(int team) {
-        return new Rook(team);
+        Rook rook = new Rook(team);
+        rook.hasMoved = hasMoved;
+        return rook;
+    }
+
+    public boolean hasMoved() {
+        return hasMoved;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
         // Up
@@ -142,6 +152,7 @@ public class Rook extends Piece {
      */
     @Override
     public void moved() {
+        hasMoved = false;
     }
 
 }

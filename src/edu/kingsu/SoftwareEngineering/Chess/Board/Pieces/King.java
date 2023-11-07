@@ -2,6 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
 import java.util.ArrayList;
 
+import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
@@ -11,12 +12,11 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
  */
 public class King extends Piece {
 
-    boolean hasMoved;
+    boolean hasMoved = false;
     public boolean inCheck = false;
 
     public King(int team) {
         super(team);
-        hasMoved = false;
         // picking an arbitrarily high value.
         value = 200;
     }
@@ -44,16 +44,86 @@ public class King extends Piece {
     public Piece copy(int team) {
         King k = new King(team);
         k.inCheck = inCheck;
+        k.hasMoved = hasMoved;
         return k;
+    }
+
+    private boolean canCastleShortSide(Board board) {
+        if (hasMoved)
+            return false;
+        Piece[][] boardCopy = board.getBoard();
+        // Only ever one king per team.
+        BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+        Piece pieceOne = boardCopy[kingLocation.row][kingLocation.column + 1];
+        Piece pieceTwo = boardCopy[kingLocation.row][kingLocation.column + 2];
+        if (!(pieceOne instanceof EmptyPiece && pieceTwo instanceof EmptyPiece))
+            return false;
+        Rook rook = (Rook) (boardCopy[kingLocation.row][kingLocation.column + 3]);
+        if (rook.hasMoved())
+            return false;
+        // Simulate the moves now.
+        board.simulateApplyMove(boardCopy, boardCopy[kingLocation.row][kingLocation.column], kingLocation,
+                new BoardLocation(kingLocation.column + 1, kingLocation.row));
+        King king = (King) (boardCopy[kingLocation.row][kingLocation.column + 1]);
+        if (king.inCheck)
+            return false;
+        kingLocation = new BoardLocation(kingLocation.column + 1, kingLocation.row);
+        board.simulateApplyMove(boardCopy, boardCopy[kingLocation.row][kingLocation.column], kingLocation,
+                new BoardLocation(kingLocation.column + 1, kingLocation.row));
+        king = (King) (boardCopy[kingLocation.row][kingLocation.column + 1]);
+        if (king.inCheck)
+            return false;
+        return true;
+    }
+
+    private boolean canCastleLongSide(Board board) {
+        if (hasMoved)
+            return false;
+        Piece[][] boardCopy = board.getBoard();
+        // Only ever one king per team.
+        BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+        Piece pieceOne = boardCopy[kingLocation.row][kingLocation.column - 1];
+        Piece pieceTwo = boardCopy[kingLocation.row][kingLocation.column - 2];
+        Piece pieceThree = boardCopy[kingLocation.row][kingLocation.column - 3];
+        if (!(pieceOne instanceof EmptyPiece && pieceTwo instanceof EmptyPiece && pieceThree instanceof EmptyPiece))
+            return false;
+        Rook rook = (Rook) (boardCopy[kingLocation.row][kingLocation.column - 4]);
+        if (rook.hasMoved())
+            return false;
+        // Simulate the moves now.
+        board.simulateApplyMove(boardCopy, boardCopy[kingLocation.row][kingLocation.column], kingLocation,
+                new BoardLocation(kingLocation.column - 1, kingLocation.row));
+        King king = (King) (boardCopy[kingLocation.row][kingLocation.column - 1]);
+        if (king.inCheck)
+            return false;
+        kingLocation = new BoardLocation(kingLocation.column - 1, kingLocation.row);
+        board.simulateApplyMove(boardCopy, boardCopy[kingLocation.row][kingLocation.column], kingLocation,
+                new BoardLocation(kingLocation.column - 1, kingLocation.row));
+        king = (King) (boardCopy[kingLocation.row][kingLocation.column - 1]);
+        if (king.inCheck)
+            return false;
+        kingLocation = new BoardLocation(kingLocation.column - 1, kingLocation.row);
+        board.simulateApplyMove(boardCopy, boardCopy[kingLocation.row][kingLocation.column], kingLocation,
+                new BoardLocation(kingLocation.column - 1, kingLocation.row));
+        king = (King) (boardCopy[kingLocation.row][kingLocation.column - 1]);
+        if (king.inCheck)
+            return false;
+        return true;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
+        if(canCastleLongSide(boardClass)) {
+            moves.add(new BoardLocation(startMove.column - 4, startMove.row));
+        }
+        if(canCastleShortSide(boardClass)) {
+            moves.add(new BoardLocation(startMove.column + 3, startMove.row));
+        }
 
         // Top Left
         endMove.column--;
