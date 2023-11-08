@@ -22,14 +22,14 @@ public class Board {
      * by using the BoardLocation in the applyMove function.
      */
     private static String[][] BOARD_LOCATIONS = {
-            {"a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8"},
-            {"a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7"},
-            {"a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6"},
-            {"a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5"},
-            {"a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4"},
-            {"a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3"},
-            {"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2"},
-            {"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"},
+            { "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8" },
+            { "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7" },
+            { "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6" },
+            { "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5" },
+            { "a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4" },
+            { "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3" },
+            { "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2" },
+            { "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1" },
     };
 
     private static final HashMap<String, BoardLocation> BOARD_LOCATIONS_FROM_STRING;
@@ -130,23 +130,23 @@ public class Board {
      */
     // TODO: Change this function to take in a "settings" variable to initialize the side based on that
     public void initializeGameTwoPlayersWhiteOnly() {
-        board = new Piece[][]{
-                {new Rook(0), new Knight(0), new Bishop(0), new Queen(0), new King(0), new Bishop(0), new Knight(0),
-                        new Rook(0)},
-                {new Pawn(0), new Pawn(0), new Pawn(0), new Pawn(0), new Pawn(0), new Pawn(0), new Pawn(0),
-                        new Pawn(0)},
-                {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(),
-                        new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
-                {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(),
-                        new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
-                {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(),
-                        new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
-                {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(),
-                        new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
-                {new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1),
-                        new Pawn(1)},
-                {new Rook(1), new Knight(1), new Bishop(1), new Queen(1), new King(1), new Bishop(1), new Knight(1),
-                        new Rook(1)}
+        board = new Piece[][] {
+                { new Rook(0), new Knight(0), new Bishop(0), new Queen(0), new King(0), new Bishop(0), new Knight(0),
+                        new Rook(0) },
+                { new Pawn(0), new Pawn(0), new Pawn(0), new Pawn(0), new Pawn(0), new Pawn(0), new Pawn(0),
+                        new Pawn(0) },
+                { new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(),
+                        new EmptyPiece(), new EmptyPiece(), new EmptyPiece() },
+                { new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(),
+                        new EmptyPiece(), new EmptyPiece(), new EmptyPiece() },
+                { new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(),
+                        new EmptyPiece(), new EmptyPiece(), new EmptyPiece() },
+                { new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(),
+                        new EmptyPiece(), new EmptyPiece(), new EmptyPiece() },
+                { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1),
+                        new Pawn(1) },
+                { new Rook(1), new Knight(1), new Bishop(1), new Queen(1), new King(1), new Bishop(1), new Knight(1),
+                        new Rook(1) }
         };
     }
 
@@ -254,7 +254,7 @@ public class Board {
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
         // Get all pieces of type that can move to the "endMove" location
-        for (BoardLocation location : getPossibleMovesForTeamFromPiece(team, pieceMoving.getPieceID())) {
+        for (BoardLocation location : getPossibleMovesForTeamFromPiece(team, pieceMoving.getPieceID(), true)) {
             if (location.row == endMove.row && location.column == endMove.column) {
                 piecesMoveToSameLocation++;
             }
@@ -302,25 +302,29 @@ public class Board {
             moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
         }
         // System.out.println(moveString.toString());
-        if ((board[startMove.row][startMove.column] instanceof King && board[endMove.row][endMove.column] instanceof Rook)
+        if ((board[startMove.row][startMove.column] instanceof King
+                && board[endMove.row][endMove.column] instanceof Rook)
                 && board[startMove.row][startMove.column].getTeam() == board[endMove.row][endMove.column].getTeam()) {
             moveString = new StringBuilder();
-            if(Math.abs(startMove.column - endMove.column) == 4) {
-                Rook rookCopy = (Rook) board[endMove.row][endMove.column].copy(board[endMove.row][endMove.column].getTeam());
-                board[startMove.row][startMove.column-2] = pieceMoving;
-                board[startMove.row][startMove.column-2].moved();
-                board[startMove.row][startMove.column-1] = rookCopy;
-                board[startMove.row][startMove.column-1].moved();
+            System.out.println("HERE");
+            if (Math.abs(startMove.column - endMove.column) == 4) {
+                Rook rookCopy = (Rook) board[endMove.row][endMove.column]
+                        .copy(board[endMove.row][endMove.column].getTeam());
+                board[startMove.row][startMove.column - 2] = pieceMoving;
+                board[startMove.row][startMove.column - 2].moved();
+                board[startMove.row][startMove.column - 1] = rookCopy;
+                board[startMove.row][startMove.column - 1].moved();
 
                 board[endMove.row][endMove.column] = new EmptyPiece();
                 board[startMove.row][startMove.column] = new EmptyPiece();
                 moveString.append("O-O-O");
             } else {
-                Rook rookCopy = (Rook) board[endMove.row][endMove.column].copy(board[endMove.row][endMove.column].getTeam());
-                board[startMove.row][startMove.column+2] = pieceMoving;
-                board[startMove.row][startMove.column+2].moved();
-                board[startMove.row][startMove.column+1] = rookCopy;
-                board[startMove.row][startMove.column+1].moved();
+                Rook rookCopy = (Rook) board[endMove.row][endMove.column]
+                        .copy(board[endMove.row][endMove.column].getTeam());
+                board[startMove.row][startMove.column + 2] = pieceMoving;
+                board[startMove.row][startMove.column + 2].moved();
+                board[startMove.row][startMove.column + 1] = rookCopy;
+                board[startMove.row][startMove.column + 1].moved();
 
                 board[endMove.row][endMove.column] = new EmptyPiece();
                 board[startMove.row][startMove.column] = new EmptyPiece();
@@ -423,8 +427,8 @@ public class Board {
      * @param location The location that the piece is on the board.
      * @return
      */
-    public ArrayList<BoardLocation> getPossibleMoves(Piece piece, BoardLocation location) {
-        return getPossibleMoves(board, piece, location);
+    public ArrayList<BoardLocation> getPossibleMoves(Piece piece, BoardLocation location, boolean extraCheck) {
+        return getPossibleMoves(board, piece, location, extraCheck);
         // return piece.getPossibleMoves(board, location);
     }
 
@@ -436,7 +440,8 @@ public class Board {
      * @param location The location that the piece is at.
      * @return
      */
-    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, Piece piece, BoardLocation location) {
+    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, Piece piece, BoardLocation location,
+            boolean extraCheck) {
         // Get the current piece's team, and then check if their king is in check
         // If in check, only return possible moves that will make them not in check
         // anymore.
@@ -446,7 +451,7 @@ public class Board {
         King kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
         if (kingPiece.inCheck) {
             ArrayList<BoardLocation> returnVal = new ArrayList<>();
-            ArrayList<BoardLocation> pieceMoves = piece.getPossibleMoves(this, board, location);
+            ArrayList<BoardLocation> pieceMoves = piece.getPossibleMoves(this, board, location, extraCheck);
             for (BoardLocation move : pieceMoves) {
                 simulateApplyMove(boardCopy, boardCopy[location.row][location.column], location, move);
                 kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
@@ -460,7 +465,7 @@ public class Board {
             return returnVal;
         } else if (!kingPiece.inCheck) {
             ArrayList<BoardLocation> returnVal = new ArrayList<>();
-            ArrayList<BoardLocation> pieceMoves = piece.getPossibleMoves(this, board, location);
+            ArrayList<BoardLocation> pieceMoves = piece.getPossibleMoves(this, board, location, extraCheck);
             for (BoardLocation move : pieceMoves) {
                 simulateApplyMove(boardCopy, boardCopy[location.row][location.column], location, move);
                 kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
@@ -532,7 +537,7 @@ public class Board {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].getTeam() == team) {
-                    for (BoardLocation m : board[i][j].getPossibleMoves(this, board, new BoardLocation(j, i))) {
+                    for (BoardLocation m : board[i][j].getPossibleMoves(this, board, new BoardLocation(j, i), false)) {
                         possibleMoves.add(m);
                     }
                 }
@@ -548,12 +553,13 @@ public class Board {
      * @param pieceId The specific piece to get the moves for.
      * @return ArrayList of BoardLocations of all possible moves of all pieces of certain type for team.
      */
-    public ArrayList<BoardLocation> getPossibleMovesForTeamFromPiece(int team, int pieceId) {
+    public ArrayList<BoardLocation> getPossibleMovesForTeamFromPiece(int team, int pieceId, boolean extraCheck) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].getTeam() == team && board[i][j].getPieceID() == pieceId) {
-                    for (BoardLocation m : board[i][j].getPossibleMoves(this, board, new BoardLocation(j, i))) {
+                    for (BoardLocation m : board[i][j].getPossibleMoves(this, board, new BoardLocation(j, i),
+                            extraCheck)) {
                         possibleMoves.add(m);
                     }
                 }
@@ -611,7 +617,7 @@ public class Board {
      * @return ArrayList of BoardLocations of all locations of the pieces for the team.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocation(int team,
-                                                                                     int pieceId, BoardLocation targetLocation) {
+            int pieceId, BoardLocation targetLocation) {
         return getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId, targetLocation);
     }
 
@@ -624,12 +630,13 @@ public class Board {
      * @return ArrayList of BoardLocations of all locations of the pieces for the team.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocation(Piece[][] board, int team,
-                                                                                     int pieceId, BoardLocation targetLocation) {
+            int pieceId, BoardLocation targetLocation) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].getTeam() == team && board[i][j].getPieceID() == pieceId) {
-                    for (BoardLocation location : getPossibleMoves(board, board[i][j], new BoardLocation(j, i))) {
+                    for (BoardLocation location : getPossibleMoves(board, board[i][j], new BoardLocation(j, i),
+                            false)) {
                         if (location.row == targetLocation.row && location.column == targetLocation.column) {
                             locations.add(new BoardLocation(j, i));
                         }
@@ -651,7 +658,7 @@ public class Board {
      * @return The ArrayList of BoardLocations for the team's piece.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceForColumn(int team, int pieceId,
-                                                                              int column) {
+            int column) {
         return getBoardLocationsForTeamForPieceForColumn(board, team, pieceId, column);
     }
 
@@ -665,7 +672,7 @@ public class Board {
      * @return The ArrayList of BoardLocations for the team's piece.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceForRow(int team, int pieceId,
-                                                                           int row) {
+            int row) {
         return getBoardLocationsForTeamForPieceForRow(board, team, pieceId, row);
     }
 
@@ -680,7 +687,7 @@ public class Board {
      * @return The ArrayList of BoardLocations for the team's piece.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceForColumn(Piece[][] board, int team, int pieceId,
-                                                                              int column) {
+            int column) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -703,7 +710,7 @@ public class Board {
      * @return The ArrayList of BoardLocations for the team's piece.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceForRow(Piece[][] board, int team, int pieceId,
-                                                                           int row) {
+            int row) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
