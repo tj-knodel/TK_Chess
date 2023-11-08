@@ -115,14 +115,16 @@ public class King extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
-        if(canCastleLongSide(boardClass)) {
-            moves.add(new BoardLocation(startMove.column - 4, startMove.row));
-        }
-        if(canCastleShortSide(boardClass)) {
-            moves.add(new BoardLocation(startMove.column + 3, startMove.row));
+        if(extraCheck) {
+            if (canCastleLongSide(boardClass)) {
+                moves.add(new BoardLocation(startMove.column - 4, startMove.row));
+            }
+            if (canCastleShortSide(boardClass)) {
+                moves.add(new BoardLocation(startMove.column + 3, startMove.row));
+            }
         }
 
         // Top Left

@@ -136,9 +136,10 @@ public abstract class Piece {
      * @param boardClass
      * @param board      The board to get possible moves for.
      * @param startMove  The starting location of the piece.
+     * @param extraCheck
      * @return ArrayList of BoardLocations of possible moves.
      */
-    public abstract ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove);
+    public abstract ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck);
 
     /**
      * The EMPTY piece ID.

@@ -45,7 +45,7 @@ public class Knight extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
 
         // Up Left
