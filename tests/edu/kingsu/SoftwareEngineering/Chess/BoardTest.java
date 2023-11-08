@@ -22,7 +22,7 @@ public class BoardTest {
         BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(Team.WHITE_TEAM, Piece.KING).get(0);
         Piece kingPiece = board.getBoard()[kingLocation.row][kingLocation.column];
         Assert.assertEquals("King cannot move at start of game!", 0,
-                board.getPossibleMoves(kingPiece, kingLocation).size());
+                board.getPossibleMoves(kingPiece, kingLocation, false).size());
     }
 
     @Test

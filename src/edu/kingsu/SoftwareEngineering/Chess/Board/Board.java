@@ -306,7 +306,6 @@ public class Board {
                 && board[endMove.row][endMove.column] instanceof Rook)
                 && board[startMove.row][startMove.column].getTeam() == board[endMove.row][endMove.column].getTeam()) {
             moveString = new StringBuilder();
-            System.out.println("HERE");
             if (Math.abs(startMove.column - endMove.column) == 4) {
                 Rook rookCopy = (Rook) board[endMove.row][endMove.column]
                         .copy(board[endMove.row][endMove.column].getTeam());
