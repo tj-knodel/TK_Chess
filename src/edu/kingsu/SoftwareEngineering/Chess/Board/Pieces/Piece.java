@@ -3,6 +3,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
@@ -131,11 +132,13 @@ public abstract class Piece {
 
     /**
      * Gets all possible moves for a piece at any given location.
-     * @param board The board to get possible moves for.
-     * @param startMove The starting location of the piece.
+     *
+     * @param boardClass
+     * @param board      The board to get possible moves for.
+     * @param startMove  The starting location of the piece.
      * @return ArrayList of BoardLocations of possible moves.
      */
-    public abstract ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove);
+    public abstract ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove);
 
     /**
      * The EMPTY piece ID.
