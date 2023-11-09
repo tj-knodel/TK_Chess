@@ -96,6 +96,20 @@ public class BoardTest {
     // }
 
     @Test
+    public void testWhitePieceCount() {
+        Piece[][] pieces = testBoard.getBoard();
+        ArrayList<BoardLocation> team_pieces = new ArrayList<BoardLocation>();
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                if (pieces[i][j].getTeam() == Team.WHITE_TEAM) {
+                    team_pieces.add(new BoardLocation(i, j));
+                }
+            }
+        }
+        Assert.assertEquals(16, team_pieces.size());
+    }
+
+    @Test
     public void testGetPossibleMovesForWhite() {
         ArrayList<BoardLocation> possibleMoves = testBoard.getPossibleMovesForTeam(1);
         Assert.assertTrue(possibleMoves.size() > 0);
