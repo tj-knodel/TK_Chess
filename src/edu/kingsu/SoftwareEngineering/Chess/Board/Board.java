@@ -175,6 +175,19 @@ public class Board {
         // what the notation says as it has it's own rules.
         String noPlus = notation.replace("+", "");
         noPlus = noPlus.replace("x", "");
+        if (noPlus.equalsIgnoreCase("O-O")) {
+            // Only ever one king
+            BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+            BoardLocation endLocation = new BoardLocation(kingLocation.column + 3, kingLocation.row);
+            System.out.println(getBoard()[kingLocation.row][kingLocation.column].getTeam());
+            return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation);
+        } else if (noPlus.equalsIgnoreCase("O-O-O")) {
+            // Only ever one king
+            BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+            BoardLocation endLocation = new BoardLocation(kingLocation.column - 4, kingLocation.row);
+            System.out.println(getBoard()[kingLocation.row][kingLocation.column].getTeam());
+            return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation);
+        }
         // Piece moving without pawn.
         if (noPlus.length() == 2) {
             int pieceId = Piece.PAWN;
@@ -259,6 +272,7 @@ public class Board {
                 piecesMoveToSameLocation++;
             }
         }
+        System.out.println(startMove.row + " " + startMove.column + " " + endMove.row + " " + endMove.column);
         if (piecesMoveToSameLocation == 0)
             return false;
         StringBuilder moveString = new StringBuilder();
