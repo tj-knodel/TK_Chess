@@ -72,7 +72,7 @@ public class AIPlayer extends Player {
         for (int i = 0; i < pieces.length; i++) {
             for (int j = 0; j < pieces[i].length; j++) {
                 if (pieces[i][j].getTeam() == colour) {
-                    team_pieces.add(new BoardLocation(i, j));
+                    team_pieces.add(new BoardLocation(j, i));
                 }
             }
         }
@@ -87,15 +87,18 @@ public class AIPlayer extends Player {
             start_move = team_pieces.get(idx);
             piece = pieces[start_move.row][start_move.column];
 
-            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(piece, start_move);
-            System.out.println(possible_moves.size());
+            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(pieces, piece, start_move);
+            //System.out.println("amount of moves: " + possible_moves.size());
             if (possible_moves.isEmpty()) {
+                System.out.println("removing index");
                 // remove the invalid move
                 team_pieces.remove(idx);
                 continue;
+            } else {
+                end_move = possible_moves.get(random.nextInt(possible_moves.size()));
+                valid_move = true;
             }
             // pick a random move
-            end_move = possible_moves.get(random.nextInt(possible_moves.size()));
         }
         if (end_move == null || start_move == null) {
             // there were no valid moves

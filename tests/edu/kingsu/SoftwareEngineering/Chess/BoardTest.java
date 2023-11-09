@@ -116,6 +116,22 @@ public class BoardTest {
     }
 
     @Test
+    public void testGetPieceLocation() {
+        int team = Team.WHITE_TEAM;
+        //ArrayList<BoardLocation> kingLocationList = testBoard.getBoardLocationsForTeamForPiece(team, Piece.KING);
+        //BoardLocation kingLocation = kingLocationList.getFirst();
+        BoardLocation kingLocation = testBoard.getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+        //Assert.assertTrue(kingLocationList.size() > 0);
+        Assert.assertTrue(kingLocation.column == 4 && kingLocation.row == 7);
+    }
+
+    @Test
+    public void testGetPossibleMovesForPiece() {
+        ArrayList<BoardLocation> possibleMoves = testBoard.getPossibleMoves(startState[6][4], new BoardLocation(4,6));
+        Assert.assertEquals(2, possibleMoves.size());
+    }
+
+    @Test
     public void testBoardKingStart() {
         BoardLocation start_loc = new BoardLocation(4, 6);
         BoardLocation end_loc = new BoardLocation(4, 4);

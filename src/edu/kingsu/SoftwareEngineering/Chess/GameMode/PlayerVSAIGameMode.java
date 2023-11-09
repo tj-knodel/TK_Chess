@@ -27,7 +27,7 @@ public class PlayerVSAIGameMode extends GameMode {
     public PlayerVSAIGameMode(int aiDifficulty) {
         this.moveController = new MoveController();
         teamTurn = Team.WHITE_TEAM;
-        //aithread = new AIThread(new AIPlayer(aiDifficulty, Team.BLACK_TEAM));
+        aithread = new AIThread(new AIPlayer(aiDifficulty, Team.BLACK_TEAM), null);
     }
 
     /**
