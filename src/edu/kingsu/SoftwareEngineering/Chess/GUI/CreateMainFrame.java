@@ -284,6 +284,11 @@ public class CreateMainFrame {
         About_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
         Help_JMenu.add(About_Item);
         UILibrary.About_JMenuItem = About_Item;
+
+        JMenuItem Help_Item = new JMenuItem("Help");
+        Help_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        Help_JMenu.add(Help_Item);
+        UILibrary.Help_JMenuItem = Help_Item;
     }
 
     // -----------------------------------------------------

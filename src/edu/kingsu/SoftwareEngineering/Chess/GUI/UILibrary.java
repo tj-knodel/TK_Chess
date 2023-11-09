@@ -249,6 +249,11 @@ public abstract class UILibrary {
    */
   public static JMenuItem About_JMenuItem;
 
+    /**
+   * JMenuItem which shows the about section
+   */
+  public static JMenuItem Help_JMenuItem;
+
   /*
    * JMenuItems can be connected by doing:
    * UILibrary.myJMenuItem.addActionListener(e -> {
