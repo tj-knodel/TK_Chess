@@ -141,7 +141,7 @@ public class ChessTileUI extends JLayeredPane {
 
         int xPosition = UILibrary.resizeModule.scale_X((106 / 2) - (newWidth / 2));
         int yPosition = UILibrary.resizeModule.scale_Y(106 - 8 - newHeight);
-        newWidth = UILibrary.resizeModule.scale_Y(newWidth);
+        newWidth = UILibrary.resizeModule.scale_X(newWidth);
         newHeight = UILibrary.resizeModule.scale_Y(newHeight);
 
         PieceImage.setVisible(true);
