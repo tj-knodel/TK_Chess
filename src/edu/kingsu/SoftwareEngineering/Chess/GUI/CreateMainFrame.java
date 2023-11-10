@@ -392,6 +392,9 @@ public class CreateMainFrame {
      */
     private static boolean whiteOnBottom = true;
 
+     private boolean areCoordsVisible = true;
+
+
     /**
      * Sets the board orientation
      * @param isWhiteOnBottom true = white will be on bottom, false = black will be on bottom
@@ -404,7 +407,7 @@ public class CreateMainFrame {
         if (whiteOnBottom) {
 
             for (JLabel label : boardLabels) {
-                label.setVisible(true);
+                label.setVisible(true && areCoordsVisible);
             }
             for (JLabel label : boardLabels_Reverse) {
                 label.setVisible(false);
@@ -423,7 +426,7 @@ public class CreateMainFrame {
                 label.setVisible(false);
             }
             for (JLabel label : boardLabels_Reverse) {
-                label.setVisible(true);
+                label.setVisible(true && areCoordsVisible);
             }
 
             for (int row = 7; row >= 0; --row) {
@@ -433,6 +436,12 @@ public class CreateMainFrame {
             }
         }
 
+        for (int row = 0; row < 8; ++row) {
+            for (int column = 0; column < 8; ++column) {
+                CreateMainFrame.boardTilesUI[row][column].redrawTile();
+            }
+        }
+        boardUI.repaint();
         UILibrary.ChessJFrame.repaint();
     }
 
@@ -443,8 +452,14 @@ public class CreateMainFrame {
      * Toggles the coordinates visibility
      */
     private void toggleCoordinatesVisibility() {
+        areCoordsVisible = !areCoordsVisible;
+
         for (JLabel label : boardLabels) {
-            label.setVisible(!label.isVisible());
+            label.setVisible(areCoordsVisible && whiteOnBottom);
+        }
+        for (JLabel label : boardLabels_Reverse) {
+            label.setVisible(areCoordsVisible && !whiteOnBottom);
+            
         }
     }
 
