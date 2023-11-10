@@ -11,6 +11,7 @@ import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.GameMode;
+import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSPlayerGameMode;
 
 /**
@@ -34,19 +35,27 @@ public class GameLoop {
         guiStarter = new GUIStarter();
         board = new Board();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
-        gameMode = new PlayerVSPlayerGameMode();
+        gameMode = new PlayerVSAIGameMode(2);
         gameMode.setGameLoop(this);
-        ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
+        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
-        UILibrary.EnterMove_TextField.addActionListener(e -> {
-            String input = UILibrary.EnterMove_TextField.getText();
-            if (board.applyMoveAlgebraicNotation(input)) {
-                gameMode.switchTeam();
-                sendUpdateBoardState();
-            }
+        
+        // guiStarter = new GUIStarter();
+        // board = new Board();
+        // guiStarter.chessUIManager.drawBoard(board.getBoard());
+        // gameMode = new PlayerVSPlayerGameMode();
+        // gameMode.setGameLoop(this);
+        // ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
+        // gameMode.startGame();
+        // UILibrary.EnterMove_TextField.addActionListener(e -> {
+        //     String input = UILibrary.EnterMove_TextField.getText();
+        //     if (board.applyMoveAlgebraicNotation(input)) {
+        //         gameMode.switchTeam();
+        //         sendUpdateBoardState();
+        //     }
             // guiStarter.chessUIManager.drawBoard(board.getBoard());
             // System.out.println("The text box detected input: " + input);
-        });
+        //});
     }
 
     public void sendUpdateBoardState() {

@@ -17,8 +17,13 @@ import java.awt.event.MouseEvent;
 public class PlayerVSAIGameMode extends GameMode {
 
     private MoveController moveController;
-    private AIThread aithread;
+    private AIThread ai;
+    private Thread runningThread;
+    private int difficulty;
+    private int aiTeam;
+    private int playerTeam;
     private int teamTurn;
+    private Board board;
 
     /**
      * Creates a new player vs ai game mode and sets the AI to black
@@ -27,7 +32,8 @@ public class PlayerVSAIGameMode extends GameMode {
     public PlayerVSAIGameMode(int aiDifficulty) {
         this.moveController = new MoveController();
         teamTurn = Team.WHITE_TEAM;
-        aithread = new AIThread(new AIPlayer(aiDifficulty, Team.BLACK_TEAM), null);
+        playerTeam = Team.WHITE_TEAM;
+        aiTeam = Team.BLACK_TEAM;
     }
 
     /**
@@ -36,6 +42,7 @@ public class PlayerVSAIGameMode extends GameMode {
     @Override
     public void switchTeam() {
         teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        runAI();
         System.out.println("Team is now: " + teamTurn);
     }
 
@@ -45,6 +52,9 @@ public class PlayerVSAIGameMode extends GameMode {
      * @param board The board to play on.
      */
     public void setClickListeners(GUIStarter guiStarter, Board board) {
+        // super hacky but I'm lazy
+        this.board = board;
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
@@ -97,6 +107,23 @@ public class PlayerVSAIGameMode extends GameMode {
     public void endGame() {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'endGame'");
+    }
+
+    private void runAI() {
+        if (teamTurn == aiTeam) {
+            
+            ai = new AIThread(new AIPlayer(difficulty, Team.BLACK_TEAM), board);
+            runningThread = new Thread(ai);
+            runningThread.start();
+            try {
+                runningThread.join();
+                Move aiMove = ai.getMove();
+                board.applyMove(aiMove.piece, aiMove.start, aiMove.end);
+            } catch(Exception e) {
+                System.err.println("oopsies with the AIThread");
+            }
+            switchTeam();
+        }
     }
 
 }
