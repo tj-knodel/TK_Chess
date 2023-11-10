@@ -18,8 +18,6 @@ import javax.swing.SwingConstants;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
-
 /**
  * Creates the Main Chess Frame
  * 
@@ -29,7 +27,6 @@ import java.awt.Image;
 public class CreateMainFrame {
 
     private JLabel MovesFrame;
-    private JScrollPane MovesLabel_ScrollPane;
 
     // -----------------------------------------------------
     // -----------------------------------------------------
@@ -67,8 +64,8 @@ public class CreateMainFrame {
         UILibrary.MainFrame = new JLabel();
         UILibrary.MainFrame.setLayout(null);
         UILibrary.MainFrame.setBackground(UILibrary.BackgroundColor);
-        UILibrary.MainFrame.setBounds(0, 0, UILibrary.scale_X(UILibrary.uiSize_X),
-                UILibrary.scale_Y(UILibrary.uiSize_Y));
+        UILibrary.resizeModule.setVariableBounds(UILibrary.MainFrame, null, 0, 0, UILibrary.uiSize_X,
+                UILibrary.uiSize_Y);
     }
 
     // -----------------------------------------------------
@@ -80,11 +77,9 @@ public class CreateMainFrame {
     private void createUIElements() {
 
         JButton StepBackwards_Button = new JButton();
-        StepBackwards_Button.setBounds(UILibrary.scale_X(960), UILibrary.scale_Y(762), UILibrary.scale_X(200),
-                UILibrary.scale_Y(79)); // Numbers from Figma Design
-        StepBackwards_Button.setIcon(
-                new ImageIcon(getImage("StepBack.png").getImage().getScaledInstance(UILibrary.scale_X(200),
-                        UILibrary.scale_Y(79), Image.SCALE_DEFAULT)));
+        UILibrary.resizeModule.setVariableBounds(StepBackwards_Button, null, 960, 762, 200, 79); // Numbers from Figma
+                                                                                                 // Design
+        UILibrary.resizeModule.setVariableBounds(StepBackwards_Button, getImage("StepBack.png"));
         StepBackwards_Button.setOpaque(false);
         StepBackwards_Button.setContentAreaFilled(false);
         StepBackwards_Button.setBorderPainted(false);
@@ -92,11 +87,9 @@ public class CreateMainFrame {
         UILibrary.StepBackwards_Button = StepBackwards_Button;
 
         JButton StepForwards_Button = new JButton();
-        StepForwards_Button.setBounds(UILibrary.scale_X(1180), UILibrary.scale_Y(762), UILibrary.scale_X(200),
-                UILibrary.scale_Y(79)); // Numbers from Figma Design
-        StepForwards_Button.setIcon(
-                new ImageIcon(getImage("StepForward.png").getImage().getScaledInstance(UILibrary.scale_X(200),
-                        UILibrary.scale_Y(79), Image.SCALE_DEFAULT)));
+        UILibrary.resizeModule.setVariableBounds(StepForwards_Button, null, 1180, 762, 200, 79); // Numbers from Figma
+                                                                                                 // Design
+        UILibrary.resizeModule.setVariableBounds(StepForwards_Button, getImage("StepForward.png"));
         StepForwards_Button.setOpaque(false);
         StepForwards_Button.setContentAreaFilled(false);
         StepForwards_Button.setBorderPainted(false);
@@ -104,34 +97,29 @@ public class CreateMainFrame {
         UILibrary.StepForwards_Button = StepForwards_Button;
 
         JTextArea MovesLabel = new JTextArea(""); // 150 lines
-        MovesLabel.setBounds(UILibrary.scale_X(984), UILibrary.scale_Y(209), UILibrary.scale_X(372),
-                UILibrary.scale_Y(531)); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(MovesLabel, null, 984, 209, 372, 531); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
         MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
         MovesLabel.setForeground(UILibrary.TextColor_White);
         MovesLabel.setEditable(false);
         MovesLabel.setHighlighter(null);
         UILibrary.MovesLabel = MovesLabel;
-        MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        MovesLabel_ScrollPane.setBounds(UILibrary.scale_X(984), UILibrary.scale_Y(209), UILibrary.scale_X(372),
-                UILibrary.scale_Y(531));
-        UILibrary.MainFrame.add(MovesLabel_ScrollPane);
-        MovesLabel_ScrollPane.setVisible(true);
-        MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        //UILibrary.MainFrame.add(MovesLabel);
+        UILibrary.MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        UILibrary.resizeModule.setVariableBounds(UILibrary.MovesLabel_ScrollPane, null, 984, 209, 372, 531);
+        UILibrary.MainFrame.add(UILibrary.MovesLabel_ScrollPane);
+        UILibrary.MovesLabel_ScrollPane.setVisible(true);
+
+      //  UILibrary.MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder()); 
 
         MovesFrame = new JLabel();
-        MovesFrame.setBounds(UILibrary.scale_X(935), UILibrary.scale_Y(81), UILibrary.scale_X(470),
-                UILibrary.scale_Y(778)); // Numbers from Figma Design
-        MovesFrame.setIcon(
-                new ImageIcon(getImage("MovesFrame.png").getImage().getScaledInstance(UILibrary.scale_X(470),
-                        UILibrary.scale_Y(778), Image.SCALE_DEFAULT)));
+        UILibrary.resizeModule.setVariableBounds(MovesFrame, null, 935, 81, 470, 778); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(MovesFrame, getImage("MovesFrame.png"));
         MovesFrame.setOpaque(false);
         UILibrary.MainFrame.add(MovesFrame);
 
         JTextField EnterMove_TextField = new JTextField("To enter a move click here");
-        EnterMove_TextField.setBounds(UILibrary.scale_X(935), UILibrary.scale_Y(880), UILibrary.scale_X(470),
-                UILibrary.scale_Y(49)); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(EnterMove_TextField, null, 935, 880, 470, 49); // Numbers from Figma Design
         EnterMove_TextField.setBackground(UILibrary.ForegroundColor);
         EnterMove_TextField.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
         EnterMove_TextField.setForeground(UILibrary.TextColor_Gray);
@@ -161,8 +149,8 @@ public class CreateMainFrame {
      */
     public static ChessTileUI[][] createChessBoard() {
         boardUI = new JLayeredPane();
-        boardUI.setBounds(UILibrary.scale_X(52), UILibrary.scale_Y(81), UILibrary.scale_X(848), UILibrary.scale_Y(850));
-        boardUI.setLayout(new GridLayout(8, 8,0 , 0));
+        UILibrary.resizeModule.setVariableBounds(boardUI, null, 52, 81, 850, 850);
+        boardUI.setLayout(new GridLayout(8, 8, 0, 0));
 
         boardTilesUI = new ChessTileUI[8][8];
 
@@ -297,45 +285,47 @@ public class CreateMainFrame {
      * boardLabels[8]-> boardLabels[15] hold the coordinates a-h
      */
     private static JLabel boardLabels[] = new JLabel[16];
+    private static JLabel boardLabels_Reverse[] = new JLabel[16];
 
     /**
      * Creates the board tile coordinates
      */
     private void createBoardMarkers() {
 
+        // White Orientation Label
         boardLabels[0] = new JLabel("1", SwingConstants.CENTER);
-        boardLabels[0].setBounds(22, 855, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[0], null, 22, 855, 28, 40); // Numbers from Figma Design
         boardLabels[1] = new JLabel("2", SwingConstants.CENTER);
-        boardLabels[1].setBounds(22, 748, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[1], null, 22, 748, 28, 40); // Numbers from Figma Design
         boardLabels[2] = new JLabel("3", SwingConstants.CENTER);
-        boardLabels[2].setBounds(22, 640, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[2], null, 22, 640, 28, 40); // Numbers from Figma Design
         boardLabels[3] = new JLabel("4", SwingConstants.CENTER);
-        boardLabels[3].setBounds(22, 532, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[3], null, 22, 532, 28, 40); // Numbers from Figma Design
         boardLabels[4] = new JLabel("5", SwingConstants.CENTER);
-        boardLabels[4].setBounds(22, 429, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[4], null, 22, 429, 28, 40); // Numbers from Figma Design
         boardLabels[5] = new JLabel("6", SwingConstants.CENTER);
-        boardLabels[5].setBounds(22, 320, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[5], null, 22, 320, 28, 40); // Numbers from Figma Design
         boardLabels[6] = new JLabel("7", SwingConstants.CENTER);
-        boardLabels[6].setBounds(22, 217, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[6], null, 22, 217, 28, 40); // Numbers from Figma Design
         boardLabels[7] = new JLabel("8", SwingConstants.CENTER);
-        boardLabels[7].setBounds(22, 114, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[7], null, 22, 114, 28, 40); // Numbers from Figma Design
 
         boardLabels[8] = new JLabel("a", SwingConstants.CENTER);
-        boardLabels[8].setBounds(92, 929, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[8], null, 92, 929, 28, 40); // Numbers from Figma Design
         boardLabels[9] = new JLabel("b", SwingConstants.CENTER);
-        boardLabels[9].setBounds(195, 929, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[9], null, 195, 929, 28, 40); // Numbers from Figma Design
         boardLabels[10] = new JLabel("c", SwingConstants.CENTER);
-        boardLabels[10].setBounds(304, 929, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[10], null, 304, 929, 28, 40); // Numbers from Figma Design
         boardLabels[11] = new JLabel("d", SwingConstants.CENTER);
-        boardLabels[11].setBounds(411, 929, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[11], null, 411, 929, 28, 40); // Numbers from Figma Design
         boardLabels[12] = new JLabel("e", SwingConstants.CENTER);
-        boardLabels[12].setBounds(522, 929, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[12], null, 522, 929, 28, 40); // Numbers from Figma Design
         boardLabels[13] = new JLabel("f", SwingConstants.CENTER);
-        boardLabels[13].setBounds(621, 929, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[13], null, 621, 929, 28, 40); // Numbers from Figma Design
         boardLabels[14] = new JLabel("g", SwingConstants.CENTER);
-        boardLabels[14].setBounds(724, 929, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[14], null, 724, 929, 28, 40); // Numbers from Figma Design
         boardLabels[15] = new JLabel("h", SwingConstants.CENTER);
-        boardLabels[15].setBounds(836, 929, 28, 40); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(boardLabels[15], null, 836, 929, 28, 40); // Numbers from Figma Design
 
         for (JLabel label : boardLabels) {
             label.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
@@ -343,6 +333,49 @@ public class CreateMainFrame {
             label.setForeground(UILibrary.TextColor_White);
             UILibrary.MainFrame.add(label);
             label.setVisible(true);
+        }
+
+        // Black Orientation
+        boardLabels_Reverse[0] = new JLabel("1", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[0], null, 22, 124, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[1] = new JLabel("2", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[1], null, 22, 227, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[2] = new JLabel("3", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[2], null, 22, 330, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[3] = new JLabel("4", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[3], null, 22, 439, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[4] = new JLabel("5", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[4], null, 22, 542, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[5] = new JLabel("6", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[5], null, 22, 650, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[6] = new JLabel("7", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[6], null, 22, 758, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[7] = new JLabel("8", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[7], null, 22, 865, 28, 40); // Numbers from Figma Design
+
+        boardLabels_Reverse[8] = new JLabel("a", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[8], null, 836, 929, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[9] = new JLabel("b", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[9], null, 724, 929, 28, 40); // Numbers from FigmaDesign
+        boardLabels_Reverse[10] = new JLabel("c", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[10], null, 621, 929, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[11] = new JLabel("d", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[11], null, 522, 929, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[12] = new JLabel("e", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[12], null, 411, 929, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[13] = new JLabel("f", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[13], null, 304, 929, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[14] = new JLabel("g", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[14], null, 195, 929, 28, 40); // Numbers from Figma Design
+        boardLabels_Reverse[15] = new JLabel("h", SwingConstants.CENTER);
+        UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[15], null, 92, 929, 28, 40); // Numbers from Figma Design
+
+        for (JLabel label : boardLabels_Reverse) {
+            label.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
+            label.setBackground(UILibrary.ForegroundColor);
+            label.setForeground(UILibrary.TextColor_White);
+            UILibrary.MainFrame.add(label);
+            label.setVisible(false);
         }
 
     }
@@ -363,30 +396,20 @@ public class CreateMainFrame {
      *                        on bottom
      */
     private void setBoardOrientation(boolean isWhiteOnBottom) {
-        whiteOnBottom = isWhiteOnBottom;
-        if (whiteOnBottom) {
-            // 1-8
-            boardLabels[0].setBounds(22, 865, 28, 40); // Numbers from Figma Design
-            boardLabels[1].setBounds(22, 758, 28, 40); // Numbers from Figma Design
-            boardLabels[2].setBounds(22, 650, 28, 40); // Numbers from Figma Design
-            boardLabels[3].setBounds(22, 542, 28, 40); // Numbers from Figma Design
-            boardLabels[4].setBounds(22, 439, 28, 40); // Numbers from Figma Design
-            boardLabels[5].setBounds(22, 330, 28, 40); // Numbers from Figma Design
-            boardLabels[6].setBounds(22, 227, 28, 40); // Numbers from Figma Design
-            boardLabels[7].setBounds(22, 124, 28, 40); // Numbers from Figma Design
 
-            // a - h
-            boardLabels[8].setBounds(92, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[9].setBounds(195, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[10].setBounds(304, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[11].setBounds(411, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[12].setBounds(522, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[13].setBounds(621, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[14].setBounds(724, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[15].setBounds(836, 939, 28, 40); // Numbers from Figma Design
+        whiteOnBottom = isWhiteOnBottom;
+        boardUI.removeAll();
+
+        if (whiteOnBottom) {
+
+            for (JLabel label : boardLabels) {
+                label.setVisible(true);
+            }
+            for (JLabel label : boardLabels_Reverse) {
+                label.setVisible(false);
+            }
 
             // Chess Tiles, remove all the tiles and add them in reverse order
-            boardUI.removeAll();
             for (int row = 0; row < 8; ++row) {
                 for (int column = 0; column < 8; ++column) {
                     boardUI.add(boardTilesUI[row][column]);
@@ -394,27 +417,14 @@ public class CreateMainFrame {
             }
 
         } else {
-            // 1-8
-            boardLabels[0].setBounds(22, 124, 28, 40); // Numbers from Figma Design
-            boardLabels[1].setBounds(22, 227, 28, 40); // Numbers from Figma Design
-            boardLabels[2].setBounds(22, 330, 28, 40); // Numbers from Figma Design
-            boardLabels[3].setBounds(22, 439, 28, 40); // Numbers from Figma Design
-            boardLabels[4].setBounds(22, 542, 28, 40); // Numbers from Figma Design
-            boardLabels[5].setBounds(22, 650, 28, 40); // Numbers from Figma Design
-            boardLabels[6].setBounds(22, 758, 28, 40); // Numbers from Figma Design
-            boardLabels[7].setBounds(22, 865, 28, 40); // Numbers from Figma Design
+          
+            for (JLabel label : boardLabels) {
+                label.setVisible(false);
+            }
+            for (JLabel label : boardLabels_Reverse) {
+                label.setVisible(true);
+            }
 
-            // a - h
-            boardLabels[8].setBounds(836, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[9].setBounds(724, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[10].setBounds(621, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[11].setBounds(522, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[12].setBounds(411, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[13].setBounds(304, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[14].setBounds(195, 939, 28, 40); // Numbers from Figma Design
-            boardLabels[15].setBounds(92, 939, 28, 40); // Numbers from Figma Design
-
-            boardUI.removeAll();
             for (int row = 7; row >= 0; --row) {
                 for (int column = 7; column >= 0; --column) {
                     boardUI.add(boardTilesUI[row][column]);
@@ -422,7 +432,7 @@ public class CreateMainFrame {
             }
         }
 
-        resizeEverything();
+        UILibrary.ChessJFrame.repaint();
     }
 
     // -----------------------------------------------------
@@ -435,93 +445,6 @@ public class CreateMainFrame {
         for (JLabel label : boardLabels) {
             label.setVisible(!label.isVisible());
         }
-    }
-
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-
-    public void resizeEverything() {
-        UILibrary.MainFrame.setBounds(0, 0, UILibrary.scale_X(UILibrary.uiSize_X),
-                UILibrary.scale_Y(UILibrary.uiSize_Y));
-        UILibrary.StepBackwards_Button.setBounds(UILibrary.scale_X(960), UILibrary.scale_Y(762), UILibrary.scale_X(200),
-                UILibrary.scale_Y(79)); // Numbers from Figma Design
-        UILibrary.StepBackwards_Button.setIcon(
-                new ImageIcon(getImage("StepBack.png").getImage().getScaledInstance(UILibrary.scale_X(200),
-                        UILibrary.scale_Y(79), Image.SCALE_DEFAULT)));
-
-        UILibrary.StepForwards_Button.setBounds(UILibrary.scale_X(1180), UILibrary.scale_Y(762), UILibrary.scale_X(200),
-                UILibrary.scale_Y(79)); // Numbers from Figma Design
-        UILibrary.StepForwards_Button.setIcon(
-                new ImageIcon(getImage("StepForward.png").getImage().getScaledInstance(UILibrary.scale_X(200),
-                        UILibrary.scale_Y(79), Image.SCALE_DEFAULT)));
-
-        UILibrary.MovesLabel.setBounds(UILibrary.scale_X(984), UILibrary.scale_Y(209), UILibrary.scale_X(372), UILibrary.scale_Y(531)); // Numbers from Figma Design
-        MovesLabel_ScrollPane.setBounds(UILibrary.scale_X(984), UILibrary.scale_Y(209), UILibrary.scale_X(372), UILibrary.scale_Y(531));
-        UILibrary.MovesLabel.setBackground(UILibrary.ForegroundColor);
-        UILibrary.MovesLabel.setForeground(UILibrary.TextColor_White);
-        UILibrary.MovesLabel.setEditable(false);
-        UILibrary.MovesLabel.setHighlighter(null);
-        MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder());
-
-        MovesFrame.setBounds(UILibrary.scale_X(935), UILibrary.scale_Y(81), UILibrary.scale_X(470), UILibrary.scale_Y(778)); // Numbers from Figma Design
-        MovesFrame.setIcon(
-                new ImageIcon(getImage("MovesFrame.png").getImage().getScaledInstance(UILibrary.scale_X(470), UILibrary.scale_Y(778), Image.SCALE_DEFAULT)));
-
-        UILibrary.EnterMove_TextField.setBounds(UILibrary.scale_X(935), UILibrary.scale_Y(880), UILibrary.scale_X(470), UILibrary.scale_Y(49)); // Numbers from Figma Design
-        boardUI.setBounds(UILibrary.scale_X(52), UILibrary.scale_Y(81), UILibrary.scale_X(848), UILibrary.scale_Y(850));
-        boardUI.setLayout(new GridLayout(8, 8, 0, 0));
-
-        if (whiteOnBottom) {
-            // 1-8
-            boardLabels[0].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(865), UILibrary.scale_X(28), UILibrary.scale_Y(40)); // Numbers from Figma Design
-            boardLabels[1].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(758), UILibrary.scale_X(28), UILibrary.scale_Y(40)); // Numbers from Figma Design
-            boardLabels[2].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(650), UILibrary.scale_X(28), UILibrary.scale_Y(40)); // Numbers from Figma Design
-            boardLabels[3].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(542), UILibrary.scale_X(28), UILibrary.scale_Y(40)); // Numbers from Figma Design
-            boardLabels[4].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(439), UILibrary.scale_X(28), UILibrary.scale_Y(40)); // Numbers from Figma Design
-            boardLabels[5].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(330), UILibrary.scale_X(28), UILibrary.scale_Y(40)); // Numbers from Figma Design
-            boardLabels[6].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(227), UILibrary.scale_X(28), UILibrary.scale_Y(40)); // Numbers from Figma Design
-            boardLabels[7].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(124), UILibrary.scale_X(28), UILibrary.scale_Y(40)); // Numbers from Figma Design
-
-            // a - h
-            boardLabels[8].setBounds(UILibrary.scale_X(92), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[9].setBounds(UILibrary.scale_X(195), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[10].setBounds(UILibrary.scale_X(304), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[11].setBounds(UILibrary.scale_X(411), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[12].setBounds(UILibrary.scale_X(522), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[13].setBounds(UILibrary.scale_X(621), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[14].setBounds(UILibrary.scale_X(724), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[15].setBounds(UILibrary.scale_X(836), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-
-        } else {
-            // 1-8
-            boardLabels[0].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(124), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[1].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(227), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[2].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(330), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[3].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(439), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[4].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(542), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[5].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(650), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[6].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(758), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[7].setBounds(UILibrary.scale_X(22), UILibrary.scale_Y(865), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-
-            // a - h
-            boardLabels[8].setBounds(UILibrary.scale_X(836), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[9].setBounds(UILibrary.scale_X(724), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[10].setBounds(UILibrary.scale_X(621), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[11].setBounds(UILibrary.scale_X(522), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[12].setBounds(UILibrary.scale_X(411), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[13].setBounds(UILibrary.scale_X(304), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[14].setBounds(UILibrary.scale_X(195), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-            boardLabels[15].setBounds(UILibrary.scale_X(92), UILibrary.scale_Y(939), UILibrary.scale_X(28), UILibrary.scale_Y(40));
-        }
-
-        for (ChessTileUI[] row : boardTilesUI) {
-            for (ChessTileUI tile : row) {
-                System.out.println("m");
-                tile.redrawTile();
-            }
-        }
-        UILibrary.MainFrame.repaint();
-        UILibrary.ChessJFrame.repaint();
     }
 
     // -----------------------------------------------------
@@ -540,8 +463,7 @@ public class CreateMainFrame {
 
         // JMenu UI Events
         UILibrary.FlipBoard_JMenuItem.addActionListener(e -> {
-            resizeEverything();
-            // setBoardOrientation(!whiteOnBottom);
+            setBoardOrientation(!whiteOnBottom);
         });
         UILibrary.ToggleCoordinates_JMenuItem.addActionListener(e -> {
             toggleCoordinatesVisibility();

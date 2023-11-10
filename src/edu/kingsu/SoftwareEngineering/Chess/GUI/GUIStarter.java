@@ -19,6 +19,7 @@ public class GUIStarter {
     public GUIStarter() {
 
         // Script Configuration
+        UILibrary.resizeModule = new ResizeManager();
         new CreateMainFrame(); // Create the frame
         new GUI_Events();
         new CreateStartFrame();
@@ -26,6 +27,8 @@ public class GUIStarter {
         chessUIManager = new ChessUIManager(new CreateAccessoryUIs());
         new AboutMenu();
         new ChangeBoardAppearance();
+        UILibrary.resizeModule.detectJFramedResized();
+        UILibrary.resizeModule.resizeEverything();
 
         // Frame Configuration
         UILibrary.ChessJFrame.add(UILibrary.NewGameFrame);

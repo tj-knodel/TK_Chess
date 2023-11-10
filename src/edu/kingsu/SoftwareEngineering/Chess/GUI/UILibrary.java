@@ -172,6 +172,8 @@ public abstract class UILibrary {
    */
   public static JLabel EndGameFrame;
 
+  public static JScrollPane MovesLabel_ScrollPane;
+
   // ----- MenuBar / Menu items -----------------
   /**
    * JMenuItem which selects a new game
@@ -282,43 +284,14 @@ public abstract class UILibrary {
    */
   public static final Color ForegroundTileColor = new Color(255, 227, 115, 70);
 
+
+  public static ResizeManager resizeModule;
+
   /**
    * Constructor not used
    */
   UILibrary() {
   }
 
-  /**
-   * scaleUIRelativeToAbsoluteSize_X
-   * Scales the x value to the current size of the JFrame
-   * 
-   * @param requestedSize Size in pixels to scale
-   * @return scaled size
-   */
-  public static int scale_X(int requestedSize) {
-    // Get the original aspect ratio
-    double originalSize = (double)uiSize_X;
-    double scale = requestedSize / originalSize; // scale is 0 to 1, similar to Roblox UI Scale system
-    int currentSizeX = ChessJFrame.getSize().width;
-
-    //System.out.println(requestedSize + " " + scale + " " + currentSizeX);
-    return (int) (currentSizeX * scale);
-  }
-
-  /**
-   * scaleUIRelativeToAbsoluteSize_Y
-   * Scales the y value to the current size of the JFrame
-   * 
-   * @param requestedSize Size in pixels to scale
-   * @return scaled size
-   */
-  public static int scale_Y(int requestedSize) {
-    // Get the original aspect ratio
-    double originalSize = (double)uiSize_Y;
-    double scale = requestedSize / originalSize; // scale is 0 to 1, similar to Roblox UI Scale system
-    int currentSizeY = ChessJFrame.getSize().height;
-    //System.out.println(requestedSize + " " + scale + " " + currentSizeY);
-    return (int) (currentSizeY * scale);
-  }
 
 }
