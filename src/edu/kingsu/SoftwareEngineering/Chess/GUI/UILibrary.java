@@ -4,6 +4,8 @@ import java.awt.Color;
 
 import javax.swing.*;
 
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ResizeManager.UIImage_Label;
+
 /**
  * This file does not contain any real "functional" code, its more of a
  * library for all common variables and allows certain variables to be
@@ -152,7 +154,7 @@ public abstract class UILibrary {
    * Located in the Set AI Strength Frame;
    * JLabel (image) which informs the user which color AI they are changing
    */
-  public static JLabel CurrentSelectedComputer_ImageLabel;
+  public static UIImage_Label CurrentSelectedComputer_ImageLabel;
 
   /**
    * Located in the Set AI Strength Frame;

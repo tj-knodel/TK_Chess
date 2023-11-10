@@ -166,14 +166,13 @@ public class ChessUIManager {
      */
     public void setSliderFrameToColor(boolean isWhite) {
         if (isWhite) {
-            UILibrary.CurrentSelectedComputer_ImageLabel.setIcon(new ImageIcon(
-                    getImage("computer_white.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
+            UILibrary.CurrentSelectedComputer_ImageLabel.image = getImage("computer_white.png");
             UILibrary.CurrentSelectedComputer_TextLabel.setText("White Computer");
         } else {
-            UILibrary.CurrentSelectedComputer_ImageLabel.setIcon(new ImageIcon(
-                    getImage("computer_black.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
+            UILibrary.CurrentSelectedComputer_ImageLabel.image = getImage("computer_black.png");
             UILibrary.CurrentSelectedComputer_TextLabel.setText("Black Computer");
         }
+        UILibrary.resizeModule.resizeEverything();
     }
 
     // -----------------------------------------------------
