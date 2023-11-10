@@ -84,7 +84,7 @@ public class ChangeBoardAppearance {
                 if (isValidFolder) {
                     UILibrary.boardAppearanceFolder = gottenFolder.getAbsolutePath() + "\\";
                     UILibrary.isAbsoluteFilePath = true;
-                    // TODO CreateMainFrame.resizeEverything();
+                    UILibrary.resizeModule.resizeEverything();
                     return;
               }
             }

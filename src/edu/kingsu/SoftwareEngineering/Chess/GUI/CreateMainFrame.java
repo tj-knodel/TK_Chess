@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -77,8 +78,7 @@ public class CreateMainFrame {
     private void createUIElements() {
 
         JButton StepBackwards_Button = new JButton();
-        UILibrary.resizeModule.setVariableBounds(StepBackwards_Button, null, 960, 762, 200, 79); // Numbers from Figma
-                                                                                                 // Design
+        UILibrary.resizeModule.setVariableBounds(StepBackwards_Button, null, 960, 762, 200, 79); // Numbers from Figma Design
         UILibrary.resizeModule.setVariableBounds(StepBackwards_Button, getImage("StepBack.png"));
         StepBackwards_Button.setOpaque(false);
         StepBackwards_Button.setContentAreaFilled(false);
@@ -87,8 +87,7 @@ public class CreateMainFrame {
         UILibrary.StepBackwards_Button = StepBackwards_Button;
 
         JButton StepForwards_Button = new JButton();
-        UILibrary.resizeModule.setVariableBounds(StepForwards_Button, null, 1180, 762, 200, 79); // Numbers from Figma
-                                                                                                 // Design
+        UILibrary.resizeModule.setVariableBounds(StepForwards_Button, null, 1180, 762, 200, 79); // Numbers from Figma Design
         UILibrary.resizeModule.setVariableBounds(StepForwards_Button, getImage("StepForward.png"));
         StepForwards_Button.setOpaque(false);
         StepForwards_Button.setContentAreaFilled(false);
@@ -110,7 +109,6 @@ public class CreateMainFrame {
         UILibrary.MainFrame.add(UILibrary.MovesLabel_ScrollPane);
         UILibrary.MovesLabel_ScrollPane.setVisible(true);
 
-      //  UILibrary.MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder()); 
 
         MovesFrame = new JLabel();
         UILibrary.resizeModule.setVariableBounds(MovesFrame, null, 935, 81, 470, 778); // Numbers from Figma Design
@@ -140,7 +138,7 @@ public class CreateMainFrame {
     /**
      * Double 8x8 array which holds each individual chess tile object
      */
-    private static ChessTileUI boardTilesUI[][];
+    public static ChessTileUI boardTilesUI[][];
 
     /**
      * Create and set up the ChessTiles, add them to the grid
@@ -396,9 +394,7 @@ public class CreateMainFrame {
 
     /**
      * Sets the board orientation
-     * 
-     * @param isWhiteOnBottom true = white will be on bottom, false = black will be
-     *                        on bottom
+     * @param isWhiteOnBottom true = white will be on bottom, false = black will be on bottom
      */
     private void setBoardOrientation(boolean isWhiteOnBottom) {
 

@@ -7,6 +7,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -15,11 +16,9 @@ import edu.kingsu.SoftwareEngineering.Chess.GUI.Table.Table;
 
 public class ResizeManager implements ComponentListener {
 
-
-    
     // -----------------------------------------------------
     // --------------Scale Functions-------------------
-     // -----------------------------------------------------
+    // -----------------------------------------------------
 
     /**
      * scaleUIRelativeToAbsoluteSize_X
@@ -97,7 +96,8 @@ public class ResizeManager implements ComponentListener {
         public int originalSizeX;
         public int originalSizeY;
 
-        UIElement(JComponent self, JComponent Parent, int originalPosX, int originalPosY, int originalSizeX,  int originalSizeY) {
+        UIElement(JComponent self, JComponent Parent, int originalPosX, int originalPosY, int originalSizeX,
+                int originalSizeY) {
             this.selfComponent = self;
             this.ParentComponent = Parent;
             this.originalPosX = originalPosX;
@@ -109,14 +109,16 @@ public class ResizeManager implements ComponentListener {
         public void updateSize() {
             if (ParentComponent != null) {
                 Rectangle parentBounds = ParentComponent.getBounds();
-                this.selfComponent.setBounds(scale_X(originalPosX, parentBounds.x), scale_Y(originalPosY, parentBounds.y), scale_X(originalSizeX, parentBounds.width), scale_Y(originalSizeX, parentBounds.height));
+                this.selfComponent.setBounds(scale_X(originalPosX, parentBounds.x),
+                        scale_Y(originalPosY, parentBounds.y), scale_X(originalSizeX, parentBounds.width),
+                        scale_Y(originalSizeX, parentBounds.height));
             } else
-                this.selfComponent.setBounds(scale_X(originalPosX), scale_Y(originalPosY), scale_X(originalSizeX),  scale_Y(originalSizeY));
+                this.selfComponent.setBounds(scale_X(originalPosX), scale_Y(originalPosY), scale_X(originalSizeX),
+                        scale_Y(originalSizeY));
         }
     }
 
-
-   class UIImage_Button {
+    class UIImage_Button {
         public AbstractButton selfComponent;
         public ImageIcon image;
 
@@ -127,14 +129,14 @@ public class ResizeManager implements ComponentListener {
 
         public void updateSize() {
             Dimension size = selfComponent.getSize();
-        
-            selfComponent.setIcon( new ImageIcon(image.getImage().getScaledInstance(size.width, size.height, Image.SCALE_DEFAULT)));
+
+            selfComponent.setIcon(
+                    new ImageIcon(image.getImage().getScaledInstance(size.width, size.height, Image.SCALE_DEFAULT)));
         }
     }
 
-
-   class UIImage_Label {
-        public JLabel  selfComponent;
+    class UIImage_Label {
+        public JLabel selfComponent;
         public ImageIcon image;
 
         UIImage_Label(JLabel self, ImageIcon image) {
@@ -144,10 +146,10 @@ public class ResizeManager implements ComponentListener {
 
         public void updateSize() {
             Dimension size = selfComponent.getSize();
-            selfComponent.setIcon( new ImageIcon(image.getImage().getScaledInstance(size.width, size.height, Image.SCALE_DEFAULT)));
+            selfComponent.setIcon(
+                    new ImageIcon(image.getImage().getScaledInstance(size.width, size.height, Image.SCALE_DEFAULT)));
         }
     }
-
 
     // -----------------------------------------------------
     // -----------------------------------------------------
@@ -157,22 +159,30 @@ public class ResizeManager implements ComponentListener {
     private Table<UIImage_Label> Gui_Labels;
 
     public void setVariableBounds(JComponent self, JComponent Parent, int originalPosX, int originalPosY, int originalSizeX, int originalSizeY) {
-        GuiComponents.insert(new UIElement(self, Parent, originalPosX, originalPosY, originalSizeX, originalSizeY));
+                GuiComponents.insert(new UIElement(self, Parent, originalPosX, originalPosY, originalSizeX, originalSizeY));
     }
-    
-    public void setVariableBounds(AbstractButton self,  ImageIcon image) {
+
+    public void setVariableBounds(AbstractButton self, ImageIcon image) {
         Gui_Buttons.insert(new UIImage_Button(self, image));
     }
 
-    public void setVariableBounds(JLabel self,  ImageIcon image) {
-        Gui_Labels.insert(new UIImage_Label(self, image));
+    public UIImage_Label setVariableBounds(JLabel self, ImageIcon image) {
+        UIImage_Label label = new UIImage_Label(self, image);
+        Gui_Labels.insert(label);
+        return label;
     }
-    
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
     public void resizeEverything() {
-        
+
+        for (int row = 0; row < 8; ++row) {
+            for (int column = 0; column < 8; ++column) {
+                CreateMainFrame.boardTilesUI[row][column].redrawTile();
+            }
+        }
+
         // GUI COMPONENTS
         for (int i = 0; i < GuiComponents.size(); ++i) {
             UIElement element = GuiComponents.at(i);
@@ -196,32 +206,46 @@ public class ResizeManager implements ComponentListener {
             element.updateSize();
         }
 
-         // IMAGES - Label
+        // IMAGES - Label
         for (int i = 0; i < Gui_Labels.size(); ++i) {
             UIImage_Label element = Gui_Labels.at(i);
             element.updateSize();
         }
 
+        for (int row = 0; row < 8; ++row) {
+            for (int column = 0; column < 8; ++column) {
+                CreateMainFrame.boardTilesUI[row][column].redrawTile();
+            }
+        }
+        
         UILibrary.MainFrame.repaint();
+        UILibrary.ChessJFrame.repaint();
+        UILibrary.MovesLabel_ScrollPane.repaint();
     }
     // -----------------------------------------------------
     // -----------------------------------------------------
-    
-    public void componentHidden(ComponentEvent ce) {};
-    public void componentShown(ComponentEvent ce) {};
-    public void componentMoved(ComponentEvent ce) {};
 
-    private long lastUpdate= 0; // For Resize debounce
+    public void componentHidden(ComponentEvent ce) {
+    };
+
+    public void componentShown(ComponentEvent ce) {
+    };
+
+    public void componentMoved(ComponentEvent ce) {
+    };
+
+    private long lastUpdate = 0; // For Resize debounce
 
     public void componentResized(ComponentEvent ce) {
         long eventTime = System.currentTimeMillis();
         lastUpdate = eventTime;
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+        }
         if (lastUpdate == eventTime) {
             resizeEverything();
-           // UILibrary.MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder());  // One off fix
+            // UILibrary.MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder());  // One off fix
         }
     };
 

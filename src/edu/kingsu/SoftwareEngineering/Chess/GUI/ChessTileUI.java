@@ -8,6 +8,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ResizeManager.UIImage_Label;
+
 import javax.swing.JLayeredPane;
 
 public class ChessTileUI extends JLayeredPane {
@@ -82,6 +85,10 @@ public class ChessTileUI extends JLayeredPane {
      */
     JLabel boardSquare ;
     
+
+    UIImage_Label tileLabel;
+    UIImage_Label PossibleMoveCircle_Label;
+
     /**
      * Gets the image from the source chess appearance folder.
      * 
@@ -233,22 +240,22 @@ public class ChessTileUI extends JLayeredPane {
         boardSquare = new JLabel();
          UILibrary.resizeModule.setVariableBounds(boardSquare, null,  0, 0, tileSize, tileSize); // Numbers from Figma Design
         if (displayWhite)
-            UILibrary.resizeModule.setVariableBounds(boardSquare,getBoardImage("square_white.png"));
+            tileLabel = UILibrary.resizeModule.setVariableBounds(boardSquare,getBoardImage("square_white.png"));
         else
-            UILibrary.resizeModule.setVariableBounds(boardSquare,getBoardImage("square_black.png"));
+            tileLabel = UILibrary.resizeModule.setVariableBounds(boardSquare,getBoardImage("square_black.png"));
         this.add(boardSquare, Integer.valueOf(1));
 
         // Yellow circle which indicates a possible move when selecting a piece.
         // maybe consider switching to a Graphics2D drawing instead of a image
         PossibleMoveCircle = new JLabel();
-        UILibrary.resizeModule.setVariableBounds(PossibleMoveCircle, boardSquare, 33, 33, 40, 40);
-        UILibrary.resizeModule.setVariableBounds(PossibleMoveCircle, getBoardImage("PossibleMoveCircle.png"));
+        UILibrary.resizeModule.setVariableBounds(PossibleMoveCircle, null, 33, 33, 40, 40);
+        PossibleMoveCircle_Label = UILibrary.resizeModule.setVariableBounds(PossibleMoveCircle, getBoardImage("PossibleMoveCircle.png"));
         PossibleMoveCircle.setVisible(false);
         this.add(PossibleMoveCircle, Integer.valueOf(5));
 
         // Yellow Square which indicated previous move
         PreviousMoveSquare = new JPanel();
-         UILibrary.resizeModule.setVariableBounds(PreviousMoveSquare, null, 0, 0, tileSize - 1, tileSize - 1); // This cant be 106x106 or else java doesn't render whats underneath
+        UILibrary.resizeModule.setVariableBounds(PreviousMoveSquare, null, 0, 0, tileSize - 1, tileSize - 1); // This cant be 106x106 or else java doesn't render whats underneath
         PreviousMoveSquare.setOpaque(true);
         PreviousMoveSquare.setBackground(UILibrary.ForegroundTileColor);
         PreviousMoveSquare.setVisible(false);
@@ -266,12 +273,13 @@ public class ChessTileUI extends JLayeredPane {
      * Redraws the tile with new images
      */
     public void redrawTile() {
-    //  if (isTileWhite)
-       //     boardSquare.setIcon(new ImageIcon(getBoardImage("square_white.png").getImage().getScaledInstance(106,106, Image.SCALE_DEFAULT)));
-      //  else
-        //    boardSquare.setIcon(new ImageIcon(getBoardImage("square_black.png").getImage().getScaledInstance(106, 106, Image.SCALE_DEFAULT)));
-      //  PossibleMoveCircle.setIcon(new ImageIcon(getBoardImage("PossibleMoveCircle.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
+         if (isTileWhite)
+            tileLabel.image = getBoardImage("square_white.png");
+        else
+            tileLabel.image = getBoardImage("square_black.png");
+        PossibleMoveCircle_Label.image = getBoardImage("PossibleMoveCircle.png");
         setPieceImage(currentPiece, isPieceWhite);
+        this.repaint();
     }
 
     // -----------------------------------------------------
@@ -297,10 +305,8 @@ public class ChessTileUI extends JLayeredPane {
     /**
      * Constructor for a chess UI Tile
      * 
-     * @param row          Which row the tile is in (only used to send data to mouse
-     *                     click function)
-     * @param column       Which column the tile is in (only used to send data to
-     *                     mouse click function)
+     * @param row          Which row the tile is in (only used to send data to mouse click function)
+     * @param column       Which column the tile is in (only used to send data to mouse click function)
      * @param displayWhite Is it a light color tile or a dark color tile
      */
     public ChessTileUI(char row, char column, boolean displayWhite) {
