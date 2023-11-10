@@ -3,6 +3,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
@@ -131,11 +132,14 @@ public abstract class Piece {
 
     /**
      * Gets all possible moves for a piece at any given location.
-     * @param board The board to get possible moves for.
-     * @param startMove The starting location of the piece.
+     *
+     * @param boardClass
+     * @param board      The board to get possible moves for.
+     * @param startMove  The starting location of the piece.
+     * @param extraCheck
      * @return ArrayList of BoardLocations of possible moves.
      */
-    public abstract ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove);
+    public abstract ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck);
 
     /**
      * The EMPTY piece ID.
@@ -171,6 +175,8 @@ public abstract class Piece {
      */
     public final static HashMap<Integer, String> chessNotationValue;
 
+    public static final HashMap<String, Integer> PIECE_ID_FROM_STRING;
+
     static {
         chessNotationValue = new HashMap<>();
         chessNotationValue.put(PAWN, "P");
@@ -179,6 +185,13 @@ public abstract class Piece {
         chessNotationValue.put(BISHOP, "B");
         chessNotationValue.put(QUEEN, "Q");
         chessNotationValue.put(KING, "K");
+
+        PIECE_ID_FROM_STRING = new HashMap<>();
+        PIECE_ID_FROM_STRING.put("N", Piece.KNIGHT);
+        PIECE_ID_FROM_STRING.put("K", Piece.KING);
+        PIECE_ID_FROM_STRING.put("Q", Piece.QUEEN);
+        PIECE_ID_FROM_STRING.put("B", Piece.BISHOP);
+        PIECE_ID_FROM_STRING.put("R", Piece.ROOK);
     }
 
 }

@@ -2,6 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board.Pieces;
 
 import java.util.ArrayList;
 
+import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
@@ -45,7 +46,7 @@ public class Bishop extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, BoardLocation startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
         // Up Left
