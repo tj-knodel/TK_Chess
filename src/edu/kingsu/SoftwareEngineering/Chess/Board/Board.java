@@ -173,7 +173,6 @@ public class Board {
     }
 
     public boolean redoMove() {
-        System.out.println(algebraicNotationMovesList.size() - undoMoveCount);
         if (undoMoveCount <= 0)
             return false;
         initializeGameTwoPlayersWhiteOnly();
@@ -599,7 +598,15 @@ public class Board {
             // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
             ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
         }
-        algebraicNotationMovesList.add(moveString.toString());
+        ArrayList<String> newList = new ArrayList<>();
+        for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+            newList.add(algebraicNotationMovesList.get(i));
+        }
+        // algebraicNotationMovesList.add(moveString.toString());
+        newList.add(moveString.toString());
+        algebraicNotationMovesList.clear();
+        algebraicNotationMovesList = newList;
+        undoMoveCount = 0;
         return true;
     }
 
