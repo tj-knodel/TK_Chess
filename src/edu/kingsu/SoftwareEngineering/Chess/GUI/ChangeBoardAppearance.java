@@ -68,6 +68,14 @@ public class ChangeBoardAppearance {
          return true;
 }
 
+
+    Object[] possibleValues = { "Blue", "Chaos", "Clash", "Custom Theme" };
+    private Object chooseFromDefaultOptions() {
+       return JOptionPane.showInputDialog(null, "Select a Board Appearance Type", "Select a Board Appearance Type",
+            JOptionPane.INFORMATION_MESSAGE, null, possibleValues, possibleValues[0]);
+    }
+
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
@@ -77,6 +85,23 @@ public class ChangeBoardAppearance {
      */
     public ChangeBoardAppearance() {
         UILibrary.SetBoardAppearance_JMenuItem.addActionListener(e -> {
+
+            Object chosenAppearance = chooseFromDefaultOptions();
+
+            if (chosenAppearance != possibleValues[3] && chosenAppearance != null) {
+                if (chosenAppearance == possibleValues[0]) { // Blue
+                    UILibrary.boardAppearanceFolder = "BoardImages_Blue/";
+                } else if (chosenAppearance == possibleValues[1]) { // Chaos
+                     UILibrary.boardAppearanceFolder = "BoardImages_Chaos/";
+                }  else if (chosenAppearance == possibleValues[2]) { // Clash
+                     UILibrary.boardAppearanceFolder = "BoardImages_Clash/";
+                } 
+                UILibrary.isAbsoluteFilePath = false;
+                UILibrary.resizeModule.resizeEverything();
+                return;
+            }
+
+            if (chosenAppearance != possibleValues[3]) return; // If not custom return
 
             File gottenFolder = getChessIconFolderFromDirectory();
             if (gottenFolder != null) {
