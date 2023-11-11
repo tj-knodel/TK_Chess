@@ -69,7 +69,16 @@ public class ChangeBoardAppearance {
 }
 
 
+    /**
+     * Array of Strings, default options for board appearance
+     */
     Object[] possibleValues = { "Blue", "Chaos", "Clash", "Custom Theme" };
+
+    /**
+     *  Shows a JOption Pane and allows the user to select from a default option or custom appearance
+     * @return Object, selected object from possibleValues, or null
+     * @see possibleValues
+     */
     private Object chooseFromDefaultOptions() {
        return JOptionPane.showInputDialog(null, "Select a Board Appearance Type", "Select a Board Appearance Type",
             JOptionPane.INFORMATION_MESSAGE, null, possibleValues, possibleValues[0]);
@@ -86,9 +95,11 @@ public class ChangeBoardAppearance {
     public ChangeBoardAppearance() {
         UILibrary.SetBoardAppearance_JMenuItem.addActionListener(e -> {
 
+            // Get user selection
             Object chosenAppearance = chooseFromDefaultOptions();
 
-            if (chosenAppearance != possibleValues[3] && chosenAppearance != null) {
+            // Filter through default options
+            if (chosenAppearance   != possibleValues[3] && chosenAppearance != null) {
                 if (chosenAppearance == possibleValues[0]) { // Blue
                     UILibrary.boardAppearanceFolder = "BoardImages_Blue/";
                 } else if (chosenAppearance == possibleValues[1]) { // Chaos
@@ -101,8 +112,10 @@ public class ChangeBoardAppearance {
                 return;
             }
 
+            // make sure selection is "Custom"
             if (chosenAppearance != possibleValues[3]) return; // If not custom return
 
+            // Open Window and allow user to select a folder
             File gottenFolder = getChessIconFolderFromDirectory();
             if (gottenFolder != null) {
                 boolean isValidFolder = checkFolderForNecessaryFiles(gottenFolder);
@@ -114,7 +127,7 @@ public class ChangeBoardAppearance {
               }
             }
 
-            // failed
+            // Incorrect folder selected
             String body = "Please make sure the folder you select contains the following files:\nbishop_black.png\nbishop_white.png\nking_black.png\nking_white.png\nknight_black.png\nknight_white.png\npawn_black.png\npawn_white.png\nqueen_black.png\nqueen_white.png\nrook_black.png\nrook_white.png\nsquare_black.png\nsquare_white.png\nPossibleMoveCircle.png";
             JOptionPane.showMessageDialog(null, body, "Error Selecting Folder", JOptionPane.ERROR_MESSAGE);
         });

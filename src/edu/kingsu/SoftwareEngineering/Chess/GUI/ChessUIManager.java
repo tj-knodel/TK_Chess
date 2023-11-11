@@ -5,7 +5,6 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI.PIECES_ENUM;
 
 import javax.swing.ImageIcon;
-import java.awt.Image;
 /*
  
     ChessTileUI functions:

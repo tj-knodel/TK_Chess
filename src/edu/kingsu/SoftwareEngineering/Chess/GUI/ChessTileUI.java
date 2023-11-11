@@ -8,11 +8,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
 
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ResizeManager.UIImage_Label;
 
-import javax.swing.JLayeredPane;
 
+/**
+ * Individual ChessTileUI square,
+ * Manages elements shown on each square
+ */
 public class ChessTileUI extends JLayeredPane {
 
     /**
@@ -83,11 +87,19 @@ public class ChessTileUI extends JLayeredPane {
     /**
      * Background tile image
      */
-    JLabel boardSquare ;
+    private JLabel boardSquare ;
     
+    /**
+     * Used for dynamic image sizing
+     * @see ResizeManager
+     */
+    private UIImage_Label tileLabel;
 
-    UIImage_Label tileLabel;
-    UIImage_Label PossibleMoveCircle_Label;
+        /**
+     * Used for dynamic image sizing
+     * @see ResizeManager
+     */
+    private UIImage_Label PossibleMoveCircle_Label;
 
     /**
      * Gets the image from the source chess appearance folder.

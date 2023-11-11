@@ -174,6 +174,9 @@ public abstract class UILibrary {
    */
   public static JLabel EndGameFrame;
 
+  /**
+   * Scroll Pane in the Moves Label (label which shows the previous moves in algebraic notation)
+   */
   public static JScrollPane MovesLabel_ScrollPane;
 
   // ----- MenuBar / Menu items -----------------
@@ -291,7 +294,10 @@ public abstract class UILibrary {
    */
   public static final Color ForegroundTileColor = new Color(255, 227, 115, 70);
 
-
+  
+  /**
+   * ResizeModule object, responsible for auto-scaling all the UI Elements
+   */
   public static ResizeManager resizeModule;
 
   /**

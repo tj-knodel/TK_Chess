@@ -57,7 +57,9 @@ public class Table<tableType> extends abs_table {
     // ------------------Variables------------------------
     // ----------------------------------------------------
 
-    // private variables
+    /**
+     * Array List which holds the table data
+     */
     protected ArrayList<tableType> array = new ArrayList<>();
 
     // ----------------------------------------------------

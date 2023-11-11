@@ -20,6 +20,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+
+
 /**
  * Creates the Main Chess Frame
  * 
@@ -27,11 +29,6 @@ import java.awt.event.FocusListener;
  * @version V1
  */
 public class CreateMainFrame {
-
-    private JLabel MovesFrame;
-
-    // -----------------------------------------------------
-    // -----------------------------------------------------
 
     /**
      * Gets the image from the local jar File
@@ -110,8 +107,7 @@ public class CreateMainFrame {
         UILibrary.MainFrame.add(UILibrary.MovesLabel_ScrollPane);
         UILibrary.MovesLabel_ScrollPane.setVisible(true);
 
-
-        MovesFrame = new JLabel();
+        JLabel MovesFrame = new JLabel();
         UILibrary.resizeModule.setVariableBounds(MovesFrame, null, 935, 81, 470, 778); // Numbers from Figma Design
         UILibrary.resizeModule.setVariableBounds(MovesFrame, getImage("MovesFrame.png"));
         MovesFrame.setOpaque(false);
@@ -129,6 +125,10 @@ public class CreateMainFrame {
     }
 
 
+    /**
+     * Adds a focus listener to move text input
+     * Clears Text Box on focus and restores instructions on focus lost
+     */
     private void addTextFieldFocusListener() {
         // Add a focus listener
          UILibrary.EnterMove_TextField.addFocusListener(new FocusListener() {
@@ -299,12 +299,19 @@ public class CreateMainFrame {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
+
     /**
      * Array of board coordinates\n
      * boardLabels[0]-> boardLabels[7] hold the coordinates 1-8
      * boardLabels[8]-> boardLabels[15] hold the coordinates a-h
      */
     private static JLabel boardLabels[] = new JLabel[16];
+
+        /**
+     * Array of board coordinates, for when black is on the bottom\n
+     * boardLabels[0]-> boardLabels[7] hold the coordinates 1-8
+     * boardLabels[8]-> boardLabels[15] hold the coordinates a-h
+     */
     private static JLabel boardLabels_Reverse[] = new JLabel[16];
 
     /**
@@ -409,6 +416,9 @@ public class CreateMainFrame {
      */
     private static boolean whiteOnBottom = true;
 
+    /**
+     * Are the coordinates visible around the board
+     */
      private boolean areCoordsVisible = true;
 
 

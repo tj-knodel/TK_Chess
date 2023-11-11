@@ -7,13 +7,15 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import edu.kingsu.SoftwareEngineering.Chess.GUI.Table.Table;
 
+/**
+ * UI Elements use this class to `setBounds`, this module auto-magically resizes and repositions all frames when the JFrame is resized.
+ */
 public class ResizeManager implements ComponentListener {
 
     // -----------------------------------------------------
@@ -88,16 +90,51 @@ public class ResizeManager implements ComponentListener {
     // -------------UI Element Classes-------------------
     // -----------------------------------------------------
 
+    /**
+     * Holds info about a basic UI Element to resize and reposition when needed
+     */
     class UIElement {
+        /**
+         * If the size/parent of the component is relative to its parent
+         * usually null, not used, maybe remove later
+         */
         public JComponent ParentComponent;
+
+        /**
+         * UI Component itself to be resized
+         */
         public JComponent selfComponent;
+
+        /**
+            Original UI Position X 
+        */
         public int originalPosX;
+        
+        /**
+            Original UI Position Y 
+        */
         public int originalPosY;
+
+        /**
+         * Original UI Size X
+         */
         public int originalSizeX;
+        
+        /**
+         * Original UI Size Y
+         */
         public int originalSizeY;
 
-        UIElement(JComponent self, JComponent Parent, int originalPosX, int originalPosY, int originalSizeX,
-                int originalSizeY) {
+        /**
+         * Constructor, sets UI variables
+         * @param self UI component itself
+         * @param Parent parent component if needed or null
+         * @param originalPosX  Original X Position
+         * @param originalPosY Original Y Position
+         * @param originalSizeX Original X Size
+         * @param originalSizeY Original Y Size
+         */
+        UIElement(JComponent self, JComponent Parent, int originalPosX, int originalPosY, int originalSizeX, int originalSizeY) {
             this.selfComponent = self;
             this.ParentComponent = Parent;
             this.originalPosX = originalPosX;
@@ -106,6 +143,9 @@ public class ResizeManager implements ComponentListener {
             this.originalSizeY = originalSizeY;
         }
 
+        /**
+         * Updates the size of the component with the new JFrame's Size
+         */
         public void updateSize() {
             if (ParentComponent != null) {
                 Rectangle parentBounds = ParentComponent.getBounds();
@@ -117,16 +157,35 @@ public class ResizeManager implements ComponentListener {
                         scale_Y(originalSizeY));
         }
     }
-
+    
+    /**
+     * Holds info UI Image Buttons, resizes images auto-magically
+    */
     class UIImage_Button {
+        
+        /**
+         * UI Component itself
+         */
         public AbstractButton selfComponent;
+        
+        /**
+         * ImageIcon which is displayed in selfComponent
+         */
         public ImageIcon image;
 
+        /**
+         * Sets class variables
+         * @param self UI component itself
+         * @param image Image displayed in self
+         */
         UIImage_Button(AbstractButton self, ImageIcon image) {
             this.selfComponent = self;
             this.image = image;
         }
 
+        /**
+         * Updates the size of the image when JFrame's resized
+         */
         public void updateSize() {
             Dimension size = selfComponent.getSize();
 
@@ -135,15 +194,34 @@ public class ResizeManager implements ComponentListener {
         }
     }
 
+    /**
+     *  Holds info UI Image Labels, resizes images auto-magically
+     */
     class UIImage_Label {
+
+        /**
+         * UI Component itself, holds the image
+         */
         public JLabel selfComponent;
+
+        /**
+         * Image displayed on selfComponent
+         */
         public ImageIcon image;
 
+        /**
+         * Sets class variables
+         * @param self UI Component which holds the image
+         * @param image image to be auto resized
+         */
         UIImage_Label(JLabel self, ImageIcon image) {
             this.selfComponent = self;
             this.image = image;
         }
 
+        /**
+         * Auto scales the size of the image when the JFrame is resized
+         */
         public void updateSize() {
             Dimension size = selfComponent.getSize();
             selfComponent.setIcon(
@@ -154,18 +232,48 @@ public class ResizeManager implements ComponentListener {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Table which holds all the UIElements which need to be resized
+     */
     private Table<UIElement> GuiComponents;
+
+    /**
+     * Table which holds all the UIElements buttons whose images needs to be resized
+     */
     private Table<UIImage_Button> Gui_Buttons;
+
+    /**
+     * Table which holds all the UIElements labels whose images needs to be resized
+     */
     private Table<UIImage_Label> Gui_Labels;
 
+    /**
+     * Think of this method as `setBounds` for UIComponents
+     * @param self UI Elements to be auto resized
+     * @param Parent Parent if position and size is relative, or null
+     * @param originalPosX Original UI Position X
+     * @param originalPosY Original UI Position Y
+     * @param originalSizeX Original UI Size X
+     * @param originalSizeY Original UI Size Y
+     */
     public void setVariableBounds(JComponent self, JComponent Parent, int originalPosX, int originalPosY, int originalSizeX, int originalSizeY) {
                 GuiComponents.insert(new UIElement(self, Parent, originalPosX, originalPosY, originalSizeX, originalSizeY));
     }
 
+    /**
+     * Sets the images inside of UI element buttons to be resized when its container is resized
+     * @param self UI element which holds image
+     * @param image image to be resized
+     */
     public void setVariableBounds(AbstractButton self, ImageIcon image) {
         Gui_Buttons.insert(new UIImage_Button(self, image));
     }
 
+     /**
+     * Sets the images inside of UI element labels  to be resized when its container is resized
+     * @param self UI element which holds image
+     * @param image image to be resized
+     */   
     public UIImage_Label setVariableBounds(JLabel self, ImageIcon image) {
         UIImage_Label label = new UIImage_Label(self, image);
         Gui_Labels.insert(label);
@@ -175,11 +283,16 @@ public class ResizeManager implements ComponentListener {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Resizes every element, Repaints JFrame
+     * COMPUTATIONALLY EXPENSIVE
+     */
     public void resizeEverything() {
 
+        // Repaints each chess tile
         for (int row = 0; row < 8; ++row) {
             for (int column = 0; column < 8; ++column) {
-                CreateMainFrame.boardTilesUI[row][column].redrawTile();
+                CreateMainFrame.boardTilesUI[row][column].redrawTile(); 
             }
         }
 
@@ -212,43 +325,65 @@ public class ResizeManager implements ComponentListener {
             element.updateSize();
         }
 
+        // Repaints each chess tile, this is done twice because some functions need to be called before and after the UIBoard itself is resized
         for (int row = 0; row < 8; ++row) {
             for (int column = 0; column < 8; ++column) {
                 CreateMainFrame.boardTilesUI[row][column].redrawTile();
             }
         }
         
+        // Repaint JFrame and Main JLabels
         UILibrary.MainFrame.repaint();
         UILibrary.ChessJFrame.repaint();
         UILibrary.MovesLabel_ScrollPane.repaint();
     }
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
-    public void componentHidden(ComponentEvent ce) {
-    };
+    /**
+     * Not used
+     */
+    public void componentHidden(ComponentEvent ce) {};
 
-    public void componentShown(ComponentEvent ce) {
-    };
+    /**
+     * Not used
+     */
+    public void componentShown(ComponentEvent ce) {};
 
-    public void componentMoved(ComponentEvent ce) {
-    };
+    /**
+     * Not used
+     */
+    public void componentMoved(ComponentEvent ce) {};
 
-    private long lastUpdate = 0; // For Resize debounce
+    /**
+     * Resize Debounce, avoid calling resizeEverything too many times in close succession
+     *  For Resize debounce
+     */
+    private long lastUpdate = 0; //
 
+    /**
+        Fires when the JFrame is resized, contains a debounce to avoid spam calls
+    */
     public void componentResized(ComponentEvent ce) {
         long eventTime = System.currentTimeMillis();
-        lastUpdate = eventTime;
+        lastUpdate = eventTime; // Mark the current update as the current time
+
+        // Wait `n`ms
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e) {
-        }
+        } catch (InterruptedException e) {}
+
+        // If the this function was not called during Thread.sleep, then resizeEverything
         if (lastUpdate == eventTime) {
             resizeEverything();
-            // UILibrary.MovesLabel_ScrollPane.setBorder(BorderFactory.createEmptyBorder());  // One off fix
         }
+
     };
 
+    /**
+     * Adds action listener to detect when the JFrame is being resized
+     */
     public void detectJFramedResized() {
         UILibrary.ChessJFrame.getContentPane().addComponentListener(this);
     }
@@ -256,6 +391,9 @@ public class ResizeManager implements ComponentListener {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Constructor initializes tables
+     */
     public ResizeManager() {
         GuiComponents = new Table<UIElement>();
         Gui_Buttons = new Table<UIImage_Button>();

@@ -1,3 +1,4 @@
+package edu.kingsu.SoftwareEngineering.Chess.GUI.Table;
 /**
  * table Class; An array with extra functionality
  * Influenced by lua:
@@ -6,11 +7,16 @@
  * @author Noah Bulas
  * @version V 2.0 - Al.28,23
  */
-package edu.kingsu.SoftwareEngineering.Chess.GUI.Table;
 public abstract class abs_table {
 
+    /*
+     * Determines if a table is frozen (read-only)
+     */
     boolean frozen = false;
 
+    /**
+     * Constructor does nothing
+     */
     abs_table() {}
 
     //public int size()
