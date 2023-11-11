@@ -167,7 +167,7 @@ public class Board {
         moveCount = 1;
         undoMoveCount++;
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-            applyMoveAlgebraicNotationDontModifyNotation(algebraicNotationMovesList.get(i));
+            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
         }
         return true;
     }
@@ -181,7 +181,7 @@ public class Board {
         moveCount = 1;
         undoMoveCount--;
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-            applyMoveAlgebraicNotationDontModifyNotation(algebraicNotationMovesList.get(i));
+            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
         }
         return true;
     }
@@ -201,7 +201,7 @@ public class Board {
         return copiedBoard;
     }
 
-    public boolean applyMoveAlgebraicNotation(String notation) {
+    public boolean applyMoveAlgebraicNotation(String notation, boolean extraCheck) {
         int team = (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
         // Replace the + sign in the PGN notation as the board doesn't care
         // what the notation says as it has it's own rules.
@@ -212,13 +212,13 @@ public class Board {
             BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
             BoardLocation endLocation = new BoardLocation(kingLocation.column + 3, kingLocation.row);
             System.out.println(getBoard()[kingLocation.row][kingLocation.column].getTeam());
-            return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation);
+            return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation, extraCheck);
         } else if (noPlus.equalsIgnoreCase("O-O-O")) {
             // Only ever one king
             BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
             BoardLocation endLocation = new BoardLocation(kingLocation.column - 4, kingLocation.row);
             System.out.println(getBoard()[kingLocation.row][kingLocation.column].getTeam());
-            return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation);
+            return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation, extraCheck);
         }
         // Piece moving without pawn.
         if (noPlus.length() == 2) {
@@ -230,7 +230,7 @@ public class Board {
             if (pieceLocation.size() != 1)
                 return false;
             Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-            return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+            return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
         } else if (noPlus.length() == 3) {
             if (Character.isUpperCase(noPlus.charAt(0))) {
                 int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
@@ -241,7 +241,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return false;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             } else {
                 int pieceId = Piece.PAWN;
                 String locationString = noPlus.substring(1, noPlus.length());
@@ -253,7 +253,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return false;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             }
         } else if (noPlus.length() == 4) {
             if (Character.isUpperCase(noPlus.charAt(0))) {
@@ -267,7 +267,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return false;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             } else {
                 int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
                 String locationString = noPlus.substring(2, noPlus.length());
@@ -279,96 +279,14 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return false;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             }
         }
         return false;
     }
 
-    public boolean applyMoveAlgebraicNotationDontModifyNotation(String notation) {
-        int team = (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
-        // Replace the + sign in the PGN notation as the board doesn't care
-        // what the notation says as it has it's own rules.
-        String noPlus = notation.replace("+", "");
-        noPlus = noPlus.replace("x", "");
-        if (noPlus.equalsIgnoreCase("O-O")) {
-            // Only ever one king
-            BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
-            BoardLocation endLocation = new BoardLocation(kingLocation.column + 3, kingLocation.row);
-            System.out.println(getBoard()[kingLocation.row][kingLocation.column].getTeam());
-            return applyMoveDontModifyNotation(getBoard()[kingLocation.row][kingLocation.column], kingLocation,
-                    endLocation);
-        } else if (noPlus.equalsIgnoreCase("O-O-O")) {
-            // Only ever one king
-            BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
-            BoardLocation endLocation = new BoardLocation(kingLocation.column - 4, kingLocation.row);
-            System.out.println(getBoard()[kingLocation.row][kingLocation.column].getTeam());
-            return applyMoveDontModifyNotation(getBoard()[kingLocation.row][kingLocation.column], kingLocation,
-                    endLocation);
-        }
-        // Piece moving without pawn.
-        if (noPlus.length() == 2) {
-            int pieceId = Piece.PAWN;
-            String locationString = noPlus;
-            BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-            ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
-                    boardLocation);
-            if (pieceLocation.size() != 1)
-                return false;
-            Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-            return applyMoveDontModifyNotation(pieceToMove, pieceLocation.get(0), boardLocation);
-        } else if (noPlus.length() == 3) {
-            if (Character.isUpperCase(noPlus.charAt(0))) {
-                int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
-                String locationString = noPlus.substring(1, noPlus.length());
-                BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-                ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
-                        boardLocation);
-                if (pieceLocation.size() != 1)
-                    return false;
-                Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMoveDontModifyNotation(pieceToMove, pieceLocation.get(0), boardLocation);
-            } else {
-                int pieceId = Piece.PAWN;
-                String locationString = noPlus.substring(1, noPlus.length());
-                BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-                // ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
-                //         boardLocation);
-                ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForColumn(team, pieceId,
-                        noPlus.charAt(0) - 'a');
-                if (pieceLocation.size() != 1)
-                    return false;
-                Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMoveDontModifyNotation(pieceToMove, pieceLocation.get(0), boardLocation);
-            }
-        } else if (noPlus.length() == 4) {
-            if (Character.isUpperCase(noPlus.charAt(0))) {
-                int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
-                String locationString = noPlus.substring(2, noPlus.length());
-                BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-                // ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
-                //         boardLocation);
-                ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForColumn(board, team, pieceId,
-                        noPlus.charAt(1) - 'a');
-                if (pieceLocation.size() != 1)
-                    return false;
-                Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMoveDontModifyNotation(pieceToMove, pieceLocation.get(0), boardLocation);
-            } else {
-                int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
-                String locationString = noPlus.substring(2, noPlus.length());
-                BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-                // ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
-                //         boardLocation);
-                ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForRow(board, team, pieceId,
-                        (int) noPlus.charAt(1));
-                if (pieceLocation.size() != 1)
-                    return false;
-                Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMoveDontModifyNotation(pieceToMove, pieceLocation.get(0), boardLocation);
-            }
-        }
-        return false;
+    public boolean applyMoveAlgebraicNotation(String notation) {
+        return applyMoveAlgebraicNotation(notation, true);
     }
 
     /**
@@ -382,121 +300,10 @@ public class Board {
      * @return True if the move was successful.
      */
     public boolean applyMoveDontModifyNotation(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
-        int team = pieceMoving.getTeam();
-        int piecesMoveToSameLocation = 0;
-        // Get all pieces of type that can move to the "endMove" location
-        for (BoardLocation location : getPossibleMovesForTeamFromPiece(team, pieceMoving.getPieceID(), true)) {
-            if (location.row == endMove.row && location.column == endMove.column) {
-                piecesMoveToSameLocation++;
-            }
-        }
-        System.out.println(startMove.row + " " + startMove.column + " " + endMove.row + " " + endMove.column);
-        if (piecesMoveToSameLocation == 0)
-            return false;
-        StringBuilder moveString = new StringBuilder();
-        // If only found one, just do basic chess notation
-        if (piecesMoveToSameLocation == 1) {
-            if (!(pieceMoving instanceof Pawn)) {
-                moveString.append(Piece.chessNotationValue.get(pieceMoving.getPieceID()));
-            }
-            if (!(board[endMove.row][endMove.column] instanceof EmptyPiece)) {
-                if (pieceMoving instanceof Pawn)
-                    moveString.append(BOARD_LOCATIONS[startMove.row][startMove.column].substring(0, 1));
-                moveString.append("x");
-            }
-            moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
-        } else if (piecesMoveToSameLocation >= 2) {
-            // Check if it should put row, or column
-            boolean putRow = false;
-            ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPiece(team, pieceMoving.getPieceID());
-            for (BoardLocation location : pieceLocations) {
-                if (location.column == startMove.column && location.row == startMove.row)
-                    continue;
-                if (location.column == startMove.column)
-                    putRow = true;
-            }
-            // Add the row or column after the piece id
-            String locationIfNeeded = "";
-            if (putRow) {
-                locationIfNeeded = BOARD_LOCATIONS[startMove.row][startMove.column].substring(1, 2);
-            } else {
-                locationIfNeeded = BOARD_LOCATIONS[startMove.row][startMove.column].substring(0, 1);
-            }
-            if (!(pieceMoving instanceof Pawn)) {
-                moveString.append(Piece.chessNotationValue.get(pieceMoving.getPieceID()));
-                moveString.append(locationIfNeeded);
-            }
-            if (!(board[endMove.row][endMove.column] instanceof EmptyPiece)) {
-                if (pieceMoving instanceof Pawn)
-                    moveString.append(BOARD_LOCATIONS[startMove.row][startMove.column].substring(0, 1));
-                moveString.append("x");
-            }
-            moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
-        }
-        // System.out.println(moveString.toString());
-        if ((board[startMove.row][startMove.column] instanceof King
-                && board[endMove.row][endMove.column] instanceof Rook)
-                && board[startMove.row][startMove.column].getTeam() == board[endMove.row][endMove.column].getTeam()) {
-            moveString = new StringBuilder();
-            if (Math.abs(startMove.column - endMove.column) == 4) {
-                Rook rookCopy = (Rook) board[endMove.row][endMove.column]
-                        .copy(board[endMove.row][endMove.column].getTeam());
-                board[startMove.row][startMove.column - 2] = pieceMoving;
-                board[startMove.row][startMove.column - 2].moved();
-                board[startMove.row][startMove.column - 1] = rookCopy;
-                board[startMove.row][startMove.column - 1].moved();
-
-                board[endMove.row][endMove.column] = new EmptyPiece();
-                board[startMove.row][startMove.column] = new EmptyPiece();
-                moveString.append("O-O-O");
-            } else {
-                Rook rookCopy = (Rook) board[endMove.row][endMove.column]
-                        .copy(board[endMove.row][endMove.column].getTeam());
-                board[startMove.row][startMove.column + 2] = pieceMoving;
-                board[startMove.row][startMove.column + 2].moved();
-                board[startMove.row][startMove.column + 1] = rookCopy;
-                board[startMove.row][startMove.column + 1].moved();
-
-                board[endMove.row][endMove.column] = new EmptyPiece();
-                board[startMove.row][startMove.column] = new EmptyPiece();
-                moveString.append("O-O");
-            }
-        } else {
-            board[endMove.row][endMove.column] = pieceMoving;
-            board[endMove.row][endMove.column].moved();
-            board[startMove.row][startMove.column] = new EmptyPiece();
-            int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-            if (checkKingInCheck(pieceMoving, otherTeam)) {
-                moveString.append("+");
-            }
-        }
-        checkKingInCheck(pieceMoving, pieceMoving.getTeam());
-        if (firstMove) {
-            firstMove = false;
-            algebraicRepresentation.append(moveCount + ". " + moveString.toString());
-            // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
-            ChessUIManager.appendMovesLabel(moveCount + ". " + moveString.toString());
-        } else {
-            moveCount++;
-            firstMove = true;
-            algebraicRepresentation.append(" " + moveString.toString() + "\n");
-            // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
-            ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
-        }
-        return true;
+        return applyMove(pieceMoving, startMove, endMove, false);
     }
 
-    /**
-     * Check if a move can be applied, then do it.
-     * Will also generate algebraic notation for the move in here
-     * and apply it to the algebraicNotation StringBuilder.
-     *
-     * @param pieceMoving The chess piece being moved.
-     * @param startMove   The starting move of the piece.
-     * @param endMove     The target location of the piece.
-     * @return True if the move was successful.
-     */
-    public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+    private boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck) {
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
         // Get all pieces of type that can move to the "endMove" location
@@ -602,16 +409,32 @@ public class Board {
         // because if the player undos a move, and then makes a different move
         // we need to delete the future redos as they lose those moves
         // as they are not valid anymore.
-        ArrayList<String> newList = new ArrayList<>();
-        for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-            newList.add(algebraicNotationMovesList.get(i));
+        if (extraCheck) {
+            ArrayList<String> newList = new ArrayList<>();
+            for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+                newList.add(algebraicNotationMovesList.get(i));
+            }
+            // algebraicNotationMovesList.add(moveString.toString());
+            newList.add(moveString.toString());
+            algebraicNotationMovesList.clear();
+            algebraicNotationMovesList = newList;
+            undoMoveCount = 0;
         }
-        // algebraicNotationMovesList.add(moveString.toString());
-        newList.add(moveString.toString());
-        algebraicNotationMovesList.clear();
-        algebraicNotationMovesList = newList;
-        undoMoveCount = 0;
         return true;
+    }
+
+    /**
+     * Check if a move can be applied, then do it.
+     * Will also generate algebraic notation for the move in here
+     * and apply it to the algebraicNotation StringBuilder.
+     *
+     * @param pieceMoving The chess piece being moved.
+     * @param startMove   The starting move of the piece.
+     * @param endMove     The target location of the piece.
+     * @return True if the move was successful.
+     */
+    public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+        return applyMove(pieceMoving, startMove, endMove, true);
     }
 
     /**
