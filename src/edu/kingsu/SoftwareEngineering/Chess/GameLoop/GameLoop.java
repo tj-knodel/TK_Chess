@@ -47,6 +47,22 @@ public class GameLoop {
             // guiStarter.chessUIManager.drawBoard(board.getBoard());
             // System.out.println("The text box detected input: " + input);
         });
+
+        // Step back a move
+        UILibrary.StepBackwards_Button.addActionListener(e -> {
+            if (board.undoMove()) {
+                gameMode.switchTeam();
+            }
+            sendUpdateBoardState();
+        });
+
+        // Set Forward a move
+        UILibrary.StepForwards_Button.addActionListener(e -> {
+            if (board.redoMove()) {
+                gameMode.switchTeam();
+            }
+            sendUpdateBoardState();
+        });
     }
 
     public void sendUpdateBoardState() {
