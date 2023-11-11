@@ -102,7 +102,7 @@ public class Board {
         undoMoveCount = 0;
         firstMove = true;
         moveCount = 1;
-        initializeGameTwoPlayersWhiteOnly();
+        initializeBoard();
     }
 
     /**
@@ -134,8 +134,7 @@ public class Board {
      * Initializes the board to play a game and not to
      * read the PGN game.
      */
-    // TODO: Change this function to take in a "settings" variable to initialize the side based on that
-    public void initializeGameTwoPlayersWhiteOnly() {
+    public void initializeBoard() {
         board = new Piece[][] {
                 { new Rook(0), new Knight(0), new Bishop(0), new Queen(0), new King(0), new Bishop(0), new Knight(0),
                         new Rook(0) },
@@ -156,12 +155,19 @@ public class Board {
         };
     }
 
+    /**
+     * Undos a move on the board.
+     * @return True if successful, false if otherwise.
+     */
     public boolean undoMove() {
-        System.out.println(algebraicNotationMovesList.size());
-        System.out.println(undoMoveCount);
+        // This function basically rebuilds the board from scratch,
+        // and it will take the current moves that are made, up to
+        // a certain index. The undoMoveCount is that index, and when
+        // it is incremented, we go to X amount moves less than the moves that
+        // were made.
         if (algebraicNotationMovesList.size() - undoMoveCount <= 0)
             return false;
-        initializeGameTwoPlayersWhiteOnly();
+        initializeBoard();
         ChessUIManager.clearMovesLabel();
         firstMove = true;
         moveCount = 1;
@@ -172,10 +178,17 @@ public class Board {
         return true;
     }
 
+    /**
+     * Redos a move on the board.
+     * @return True if successful, false if otherwise.
+     */
     public boolean redoMove() {
+        // Decrements the undoMoveCount, which makes the array go one further
+        // in redoing, which allows us to redo more moves until we reach the limit
+        // which is back to the most recent version of the game.
         if (undoMoveCount <= 0)
             return false;
-        initializeGameTwoPlayersWhiteOnly();
+        initializeBoard();
         ChessUIManager.clearMovesLabel();
         firstMove = true;
         moveCount = 1;
@@ -201,6 +214,12 @@ public class Board {
         return copiedBoard;
     }
 
+    /**
+     * Applys a move based on the algebraic notation.
+     * @param notation The notation to apply a move to. Example, Nf3 moves Knight to f3 if possible.
+     * @param extraCheck If algebraic notation should be overriden. Make it true if not known how it works.
+     * @return True if move was successful.
+     */
     public boolean applyMoveAlgebraicNotation(String notation, boolean extraCheck) {
         int team = (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
         // Replace the + sign in the PGN notation as the board doesn't care
@@ -285,6 +304,12 @@ public class Board {
         return false;
     }
 
+    /**
+     * Applys a move based on the algebraic notation.
+     * Will override notation.
+     * @param notation The notation to apply a move to. Example, Nf3 moves Knight to f3 if possible.
+     * @return True if move was successful.
+     */
     public boolean applyMoveAlgebraicNotation(String notation) {
         return applyMoveAlgebraicNotation(notation, true);
     }
@@ -303,6 +328,17 @@ public class Board {
         return applyMove(pieceMoving, startMove, endMove, false);
     }
 
+    /**
+     * Check if a move can be applied, then do it.
+     * Will also generate algebraic notation for the move in here
+     * and apply it to the algebraicNotation StringBuilder.
+     *
+     * @param pieceMoving The chess piece being moved.
+     * @param startMove   The starting move of the piece.
+     * @param endMove     The target location of the piece.
+     * @param extraCheck  If algebraicNotation should be overriden
+     * @return True if the move was successful.
+     */
     private boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck) {
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
@@ -561,29 +597,6 @@ public class Board {
             return returnVal;
         }
         return null;
-        // // Get the current piece's team, and then check if their king is in check
-        // // If in check, only return possible moves that will make them not in check
-        // // anymore.
-        // ArrayList<BoardLocation> returnVal = new ArrayList<>();
-        // int team = piece.getTeam();
-        // Piece[][] boardCopy = getBoard();
-        // BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
-        // King kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
-        // if (kingPiece.inCheck) {
-        //     ArrayList<BoardLocation> pieceMoves = piece.getPossibleMoves(board, location);
-        //     for (BoardLocation move : pieceMoves) {
-        //         simulateApplyMove(boardCopy, boardCopy[location.row][location.column], location, move);
-        //         kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
-        //         kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
-        //         if (kingPiece.inCheck) {
-        //         } else {
-        //             returnVal.add(move);
-        //         }
-        //         boardCopy = getBoard();
-        //     }
-        //     return returnVal;
-        // }
-        // return piece.getPossibleMoves(board, location);
     }
 
     /**
@@ -593,17 +606,6 @@ public class Board {
      * @return ArrayList of BoardLocations for the possible moves a team can make.
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeam(int team) {
-        // ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
-        // for (int i = 0; i < board.length; i++) {
-        //     for (int j = 0; j < board[i].length; j++) {
-        //         if (board[i][j].getTeam() == team) {
-        //             for (BoardLocation m : board[i][j].getPossibleMoves(board, new BoardLocation(j, i))) {
-        //                 possibleMoves.add(m);
-        //             }
-        //         }
-        //     }
-        // }
-        // return possibleMoves;
         return getPossibleMovesForTeam(board, team);
     }
 
