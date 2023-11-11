@@ -14,11 +14,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 /**
  * Creates the Main Chess Frame
  * 
@@ -127,6 +128,22 @@ public class CreateMainFrame {
         UILibrary.EnterMove_TextField = EnterMove_TextField;
     }
 
+
+    private void addTextFieldFocusListener() {
+        // Add a focus listener
+         UILibrary.EnterMove_TextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                     UILibrary.EnterMove_TextField.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                     UILibrary.EnterMove_TextField.setText("To enter a move click here");
+            }
+        });
+    }
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
@@ -191,7 +208,7 @@ public class CreateMainFrame {
         Game_JMenu.add(NewGame_Item);
         UILibrary.NewGame_JMenuItem = NewGame_Item;
 
-        JMenuItem LoadGame_Item = new JMenuItem("Load Game");
+        JMenuItem LoadGame_Item = new JMenuItem("Open Game");
         LoadGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
         Game_JMenu.add(LoadGame_Item);
         UILibrary.LoadGame_JMenuItem = LoadGame_Item;
@@ -476,6 +493,7 @@ public class CreateMainFrame {
         createUIElements();
         createJMenus();
         createBoardMarkers();
+        addTextFieldFocusListener();
 
         // JMenu UI Events
         UILibrary.FlipBoard_JMenuItem.addActionListener(e -> {
