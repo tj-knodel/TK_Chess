@@ -77,8 +77,10 @@ public class CreateAccessoryUIs {
 			newWidth = (newHeight * original_X_size) / original_Y_size;
 		}
 
-		int xPosition = xPos - (newWidth / 2);
-		int yPosition = 154 - newHeight;
+		int xPosition = UILibrary.resizeModule.scale_X(xPos - (newWidth / 2));
+		int yPosition = UILibrary.resizeModule.scale_Y(154 - newHeight);
+		newWidth = UILibrary.resizeModule.scale_X(newWidth);
+		newHeight = UILibrary.resizeModule.scale_Y(newHeight);
 
 		upgradeButton.setVisible(true);
 		upgradeButton.setIcon(new ImageIcon(
@@ -114,10 +116,8 @@ public class CreateAccessoryUIs {
 	 */
 	private void createUpgradePieceFrame() {
 		UILibrary.UpgradePieceFrame = new JLabel();
-		UILibrary.UpgradePieceFrame.setBounds(177, 433, 624, 173); // Numbers from Figma Design
-		UILibrary.UpgradePieceFrame.setIcon(
-				new ImageIcon(getImage("UpgradeFrameBackground.png").getImage().getScaledInstance(624, 173,
-						Image.SCALE_DEFAULT)));
+		UILibrary.resizeModule.setVariableBounds( UILibrary.UpgradePieceFrame, null, 177, 433, 624, 173); // Numbers from Figma Design
+		UILibrary.resizeModule.setVariableBounds(UILibrary.UpgradePieceFrame, getImage("UpgradeFrameBackground.png"));
 
 		upgradeQueenButton = new JButton();
 		upgradeRookButton = new JButton();
@@ -135,8 +135,7 @@ public class CreateAccessoryUIs {
 	/**
 	 * Shows the upgrade piece frame
 	 * 
-	 * @param isWhite true = upgrading a white piece, false = upgrading a black
-	 *                piece
+	 * @param isWhite true = upgrading a white piece, false = upgrading a black piece
 	 */
 	public void showUpgradeFrame(boolean isWhite) {
 		String text = (isWhite) ? "white" : "black";

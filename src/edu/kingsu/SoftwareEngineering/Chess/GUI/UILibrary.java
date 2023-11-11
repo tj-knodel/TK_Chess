@@ -4,6 +4,8 @@ import java.awt.Color;
 
 import javax.swing.*;
 
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ResizeManager.UIImage_Label;
+
 /**
  * This file does not contain any real "functional" code, its more of a
  * library for all common variables and allows certain variables to be
@@ -152,7 +154,7 @@ public abstract class UILibrary {
    * Located in the Set AI Strength Frame;
    * JLabel (image) which informs the user which color AI they are changing
    */
-  public static JLabel CurrentSelectedComputer_ImageLabel;
+  public static UIImage_Label CurrentSelectedComputer_ImageLabel;
 
   /**
    * Located in the Set AI Strength Frame;
@@ -171,6 +173,8 @@ public abstract class UILibrary {
    * JLabel which is shown to the user when the game ends
    */
   public static JLabel EndGameFrame;
+
+  public static JScrollPane MovesLabel_ScrollPane;
 
   // ----- MenuBar / Menu items -----------------
   /**
@@ -287,9 +291,14 @@ public abstract class UILibrary {
    */
   public static final Color ForegroundTileColor = new Color(255, 227, 115, 70);
 
+
+  public static ResizeManager resizeModule;
+
   /**
    * Constructor not used
    */
   UILibrary() {
   }
+
+
 }
