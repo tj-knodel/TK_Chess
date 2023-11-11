@@ -598,6 +598,10 @@ public class Board {
             // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
             ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
         }
+        // Reset the array of algebraic notations as we need to do this
+        // because if the player undos a move, and then makes a different move
+        // we need to delete the future redos as they lose those moves
+        // as they are not valid anymore.
         ArrayList<String> newList = new ArrayList<>();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
             newList.add(algebraicNotationMovesList.get(i));
