@@ -5,13 +5,13 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import edu.kingsu.SoftwareEngineering.Chess.GUI.Table.Table;
 
 /**
  * UI Elements use this class to `setBounds`, this module auto-magically resizes and repositions all frames when the JFrame is resized.
@@ -235,17 +235,17 @@ public class ResizeManager implements ComponentListener {
     /**
      * Table which holds all the UIElements which need to be resized
      */
-    private Table<UIElement> GuiComponents;
+    private ArrayList<UIElement> GuiComponents;
 
     /**
      * Table which holds all the UIElements buttons whose images needs to be resized
      */
-    private Table<UIImage_Button> Gui_Buttons;
+    private ArrayList<UIImage_Button> Gui_Buttons;
 
     /**
      * Table which holds all the UIElements labels whose images needs to be resized
      */
-    private Table<UIImage_Label> Gui_Labels;
+    private ArrayList<UIImage_Label> Gui_Labels;
 
     /**
      * Think of this method as `setBounds` for UIComponents
@@ -257,7 +257,7 @@ public class ResizeManager implements ComponentListener {
      * @param originalSizeY Original UI Size Y
      */
     public void setVariableBounds(JComponent self, JComponent Parent, int originalPosX, int originalPosY, int originalSizeX, int originalSizeY) {
-                GuiComponents.insert(new UIElement(self, Parent, originalPosX, originalPosY, originalSizeX, originalSizeY));
+                GuiComponents.add(new UIElement(self, Parent, originalPosX, originalPosY, originalSizeX, originalSizeY));
     }
 
     /**
@@ -266,7 +266,7 @@ public class ResizeManager implements ComponentListener {
      * @param image image to be resized
      */
     public void setVariableBounds(AbstractButton self, ImageIcon image) {
-        Gui_Buttons.insert(new UIImage_Button(self, image));
+        Gui_Buttons.add(new UIImage_Button(self, image));
     }
 
      /**
@@ -276,7 +276,7 @@ public class ResizeManager implements ComponentListener {
      */   
     public UIImage_Label setVariableBounds(JLabel self, ImageIcon image) {
         UIImage_Label label = new UIImage_Label(self, image);
-        Gui_Labels.insert(label);
+        Gui_Labels.add(label);
         return label;
     }
 
@@ -298,7 +298,7 @@ public class ResizeManager implements ComponentListener {
 
         // GUI COMPONENTS
         for (int i = 0; i < GuiComponents.size(); ++i) {
-            UIElement element = GuiComponents.at(i);
+            UIElement element = GuiComponents.get(i);
 
             // Update the parent first
             if (element.ParentComponent == null)
@@ -306,7 +306,7 @@ public class ResizeManager implements ComponentListener {
         }
 
         for (int i = 0; i < GuiComponents.size(); ++i) {
-            UIElement element = GuiComponents.at(i);
+            UIElement element = GuiComponents.get(i);
 
             // Update the child components last
             if (element.ParentComponent != null)
@@ -315,13 +315,13 @@ public class ResizeManager implements ComponentListener {
 
         // IMAGES - BUTTONS
         for (int i = 0; i < Gui_Buttons.size(); ++i) {
-            UIImage_Button element = Gui_Buttons.at(i);
+            UIImage_Button element = Gui_Buttons.get(i);
             element.updateSize();
         }
 
         // IMAGES - Label
         for (int i = 0; i < Gui_Labels.size(); ++i) {
-            UIImage_Label element = Gui_Labels.at(i);
+            UIImage_Label element = Gui_Labels.get(i);
             element.updateSize();
         }
 
@@ -395,8 +395,8 @@ public class ResizeManager implements ComponentListener {
      * Constructor initializes tables
      */
     public ResizeManager() {
-        GuiComponents = new Table<UIElement>();
-        Gui_Buttons = new Table<UIImage_Button>();
-        Gui_Labels = new Table<UIImage_Label>();
+        GuiComponents = new ArrayList<UIElement>();
+        Gui_Buttons = new ArrayList<UIImage_Button>();
+        Gui_Labels = new ArrayList<UIImage_Label>();
     }
 }
