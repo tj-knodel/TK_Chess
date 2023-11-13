@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
+import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNMove;
+import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
 
 /**
  * The Board class handles all of the logic in chess. It handles
