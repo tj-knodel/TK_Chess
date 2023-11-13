@@ -174,6 +174,24 @@ public class ChessUIManager {
         UILibrary.resizeModule.resizeEverything();
     }
 
+
+    /**
+    * Show the end game frame with the desired message
+    * @param endMessage message to show
+    */
+    public static void ShowEndGameFrame(String endMessage) {
+        CreateAccessoryUIs.endTitle.setText(endMessage);
+        CreateAccessoryUIs.endLabel.setVisible(true);
+    }
+
+    /**
+     * Hide the end game frame
+     */
+    public static void HideEndGameFrame() {
+        CreateAccessoryUIs.endLabel.setVisible(false);
+    }
+
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 

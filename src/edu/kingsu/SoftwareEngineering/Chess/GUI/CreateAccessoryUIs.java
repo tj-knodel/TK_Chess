@@ -3,6 +3,9 @@ package edu.kingsu.SoftwareEngineering.Chess.GUI;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
+import java.awt.Font;
 import java.awt.Image;
 
 /**
@@ -176,32 +179,65 @@ public class CreateAccessoryUIs {
 	// -----------------------------------------------------
 	// -----------------------------------------------------
 
-	/**
-	 * TODO
-	 */
-	private static JLabel endLabel;
-	/**
-	 * TODO
-	 */
-	private static JLabel endTitle;
-	/**
-	 * TODO
-	 */
-	private static JButton endRematchButton;
-	/**
-	 * TODO
-	 */
-	private static JButton endViewBoardButton;
-	/**
-	 * TODO
-	 */
-	private static JButton endNewGameButton;
 
 	/**
-	 * TODO
+	 * Background for the EndGameFrame
+	 */
+	public static JLabel endLabel;
+	/**
+	 * Title show to the user in the end game frame, suggested test "Checkmate, You Win!", "You Lose", "Draw", etc
+	 */
+	public static JLabel endTitle;
+
+	/**
+	 * Create the EndGameFrame and its contents
 	 */
 	private void createEndGameUI() {
+		endLabel = new JLabel();
+		UILibrary.resizeModule.setVariableBounds( endLabel, null, 135, 387, 681, 259); // Numbers from Figma Design
+		UILibrary.resizeModule.setVariableBounds(endLabel, getImage("EndGameFrame.png"));
 
+		JLabel TextLabel = new JLabel("Game Over", SwingConstants.CENTER);
+        TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+        TextLabel.setForeground(UILibrary.TextColor_White);
+        UILibrary.resizeModule.setVariableBounds(TextLabel, null, 62, 24, 566, 34); // Numbers from Figma Design
+        TextLabel.setOpaque(false);
+        endLabel.add(TextLabel);
+
+		endTitle = new JLabel("YOU WIN!", SwingConstants.CENTER);
+        endTitle.setFont(new Font("Source Sans Pro", Font.BOLD, 50));
+        endTitle.setForeground(UILibrary.TextColor_White);
+        UILibrary.resizeModule.setVariableBounds(endTitle, null, 62, 64, 566, 71); // Numbers from Figma Design
+        endTitle.setOpaque(false);
+        endLabel.add(endTitle);
+
+		UILibrary.endRematchButton = new JButton();
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endRematchButton, null, 37, 155, 183, 79);
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endRematchButton, getImage("RematchButton.png"));
+		UILibrary.endRematchButton.setOpaque(false);
+		UILibrary.endRematchButton.setContentAreaFilled(false);
+		UILibrary.endRematchButton.setBorderPainted(false);
+
+		UILibrary.endViewBoardButton = new JButton();
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endViewBoardButton, null, 249, 155, 183, 79);
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endViewBoardButton, getImage("ViewboardButton.png"));
+		UILibrary.endViewBoardButton.setOpaque(false);
+		UILibrary.endViewBoardButton.setContentAreaFilled(false);
+		UILibrary.endViewBoardButton.setBorderPainted(false);
+
+		UILibrary.endNewGameButton = new JButton();
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endNewGameButton, null, 461, 155, 183, 79);
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endNewGameButton, getImage("NewGameButton.png"));
+		UILibrary.endNewGameButton.setOpaque(false);
+		UILibrary.endNewGameButton.setContentAreaFilled(false);
+		UILibrary.endNewGameButton.setBorderPainted(false);
+
+		 endLabel.add(UILibrary.endRematchButton);
+		 endLabel.add(UILibrary.endViewBoardButton);
+		endLabel.add(UILibrary.endNewGameButton);
+
+		endLabel.setVisible(false);
+		UILibrary.MainFrame.add(endLabel);
 	}
 
 	// -----------------------------------------------------
@@ -211,9 +247,12 @@ public class CreateAccessoryUIs {
 	 * Calls the functions to create the accessory Frames, upgrade a piece, end game frame.
 	 */
 	public CreateAccessoryUIs() {
+		// Upgrade Piece
 		createUpgradePieceFrame();
 		addUpgradeButtonsActionListeners();
 
+		// End Game
+		createEndGameUI();
 	}
 
 }

@@ -179,6 +179,29 @@ public abstract class UILibrary {
    */
   public static JScrollPane MovesLabel_ScrollPane;
 
+  /**
+   * Shows on end game popup, Rematch game
+   */
+  public  static JButton endRematchButton;
+  /**
+   * Shows on end game popup, View the current board
+   */
+  public static JButton endViewBoardButton;
+  /**
+   * Shows on end game popup, Start a new game
+   */
+  public static JButton endNewGameButton;
+
+
+
+
+
+
+
+
+
+
+
   // ----- MenuBar / Menu items -----------------
   /**
    * JMenuItem which selects a new game
