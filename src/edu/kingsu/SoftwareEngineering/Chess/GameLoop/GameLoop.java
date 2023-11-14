@@ -10,6 +10,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
+import edu.kingsu.SoftwareEngineering.Chess.GameMode.AIVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.GameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSPlayerGameMode;
@@ -35,11 +36,11 @@ public class GameLoop {
         guiStarter = new GUIStarter();
         board = new Board();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
-        gameMode = new PlayerVSAIGameMode(2);
+        gameMode = new AIVSAIGameMode(2);
         gameMode.setGameLoop(this);
-        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
-        
+
         // guiStarter = new GUIStarter();
         // board = new Board();
         // guiStarter.chessUIManager.drawBoard(board.getBoard());
@@ -53,8 +54,8 @@ public class GameLoop {
         //         gameMode.switchTeam();
         //         sendUpdateBoardState();
         //     }
-            // guiStarter.chessUIManager.drawBoard(board.getBoard());
-            // System.out.println("The text box detected input: " + input);
+        // guiStarter.chessUIManager.drawBoard(board.getBoard());
+        // System.out.println("The text box detected input: " + input);
         //});
     }
 
