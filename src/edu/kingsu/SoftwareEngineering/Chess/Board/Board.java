@@ -105,6 +105,15 @@ public class Board {
         firstMove = true;
         moveCount = 1;
         initializeBoard();
+
+        // TODO: Example of loading a PGN game.
+        /*
+         * This can be used for many things, loading a game, recreating a game with a different game mode, etc.
+         */
+        // PGNReader reader = new PGNReader();
+        // for (PGNMove move : reader.getMovesFromFile("my-test/testgame.pgn")) {
+        //     applyMoveAlgebraicNotation(move.getMoveString(), true);
+        // }
     }
 
     /**
@@ -232,13 +241,11 @@ public class Board {
             // Only ever one king
             BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
             BoardLocation endLocation = new BoardLocation(kingLocation.column + 3, kingLocation.row);
-            System.out.println(getBoard()[kingLocation.row][kingLocation.column].getTeam());
             return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation, extraCheck);
         } else if (noPlus.equalsIgnoreCase("O-O-O")) {
             // Only ever one king
             BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
             BoardLocation endLocation = new BoardLocation(kingLocation.column - 4, kingLocation.row);
-            System.out.println(getBoard()[kingLocation.row][kingLocation.column].getTeam());
             return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation, extraCheck);
         }
         // Piece moving without pawn.
@@ -350,7 +357,6 @@ public class Board {
                 piecesMoveToSameLocation++;
             }
         }
-        System.out.println(startMove.row + " " + startMove.column + " " + endMove.row + " " + endMove.column);
         if (piecesMoveToSameLocation == 0)
             return false;
         StringBuilder moveString = new StringBuilder();
@@ -393,7 +399,6 @@ public class Board {
             }
             moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
         }
-        // System.out.println(moveString.toString());
         if ((board[startMove.row][startMove.column] instanceof King
                 && board[endMove.row][endMove.column] instanceof Rook)
                 && board[startMove.row][startMove.column].getTeam() == board[endMove.row][endMove.column].getTeam()) {
