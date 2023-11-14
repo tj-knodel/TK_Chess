@@ -112,7 +112,8 @@ public class Board {
          */
         // PGNReader reader = new PGNReader();
         // for (PGNMove move : reader.getMovesFromFile("my-test/testgame.pgn")) {
-        //     applyMoveAlgebraicNotation(move.getMoveString(), true);
+        //     applyPGNMove(move, true);
+        //     // applyMoveAlgebraicNotation(move.getMoveString(), true);
         // }
     }
 
@@ -223,6 +224,19 @@ public class Board {
             }
         }
         return copiedBoard;
+    }
+
+    /**
+     * Applies a move based on the PGNMove class.
+     * @param move The move to do.
+     * @param extraCheck Should the algebraicNotation be overriden. Keep false unless you know why to make true.
+     * @return True if move as applied, false otherwise.
+     */
+    public boolean applyPGNMove(PGNMove move, boolean extraCheck) {
+        // if (move.hasComment()) {
+        //     System.out.println("Comment: " + move.getComment() + ", for move: " + move.getMoveString());
+        // }
+        return applyMoveAlgebraicNotation(move.getMoveString(), extraCheck);
     }
 
     /**
