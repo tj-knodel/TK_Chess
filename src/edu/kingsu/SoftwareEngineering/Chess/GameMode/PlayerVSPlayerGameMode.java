@@ -2,8 +2,10 @@ package edu.kingsu.SoftwareEngineering.Chess.GameMode;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
+import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.MoveController;
@@ -18,7 +20,6 @@ public class PlayerVSPlayerGameMode extends GameMode {
 
     private MoveController moveController;
     private int teamTurn;
-    private MouseAdapter mouseAdapter;
 
     public PlayerVSPlayerGameMode() {
         this.moveController = new MoveController();
@@ -26,12 +27,11 @@ public class PlayerVSPlayerGameMode extends GameMode {
     }
 
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     public void switchTeam() {
         teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-        System.out.println("Team is now: " + teamTurn);
     }
 
     /**
@@ -56,9 +56,18 @@ public class PlayerVSPlayerGameMode extends GameMode {
                     public void mousePressed(MouseEvent e) {
                         if (moveController.chessTileClick(board, teamTurn, chessTile.row,
                                 chessTile.column)) {
-                            moveController.sendMovesToBoard(board);
-                            switchTeam();
-                            gameLoop.sendUpdateBoardState();
+                            MoveResult result = moveController.sendMovesToBoard(board);
+                            gameLoop.checkGameFinished(result);
+                            // gameLoop.sendUpdateBoardState();
+                            // if (result.wasSuccessful) {
+                            //     gameLoop.sendUpdateBoardState();
+                            //     if (result.isCheckmate) {
+                            //         ChessUIManager.ShowEndGameFrame(
+                            //                 ((result.checkmateTeam == Team.WHITE_TEAM) ? "Black" : "White")
+                            //                         + " team wins!");
+                            //     }
+                            // }
+                            // switchTeam();
                             // guiStarter.chessUIManager.drawBoard(board.getBoard());
                         }
                         if (!moveController.getIsFirstClick()) {

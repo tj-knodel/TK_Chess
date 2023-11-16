@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
+import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
@@ -28,6 +29,7 @@ public class GameLoop implements ActionListener {
     private GUIStarter guiStarter;
     private Board board;
     private GameMode gameMode;
+    private int currentGameMode;
 
     /**
      * Some temporary code to test the .drawBoard function correctly calling UI to
@@ -35,23 +37,53 @@ public class GameLoop implements ActionListener {
      */
     public GameLoop() {
         guiStarter = new GUIStarter();
+        resetGUIAndListeners();
         ChessUIManager.showNewGameFrame();
-        UILibrary.EnterMove_TextField.addActionListener(this);
-        UILibrary.StepBackwards_Button.addActionListener(this);
-        UILibrary.StepForwards_Button.addActionListener(this);
         UILibrary.WhitePlayer_VS_BlackPlayer_Button.addActionListener(e -> {
+            currentGameMode = GameMode.PLAYER_VS_PLAYER_GAME_MODE;
             startPlayerVSPlayerGame();
         });
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
             startMainMenuScreen();
         });
         UILibrary.RestartGame_JMenuItem.addActionListener(e -> {
-            startPlayerVSPlayerGame();
+            restartGame();
+        });
+        UILibrary.endNewGameButton.addActionListener(e -> {
+            startMainMenuScreen();
+        });
+        UILibrary.endRematchButton.addActionListener(e -> {
+            restartGame();
+        });
+        UILibrary.endViewBoardButton.addActionListener(e -> {
+            resetGUIAndListeners();
         });
     }
 
     private void startMainMenuScreen() {
+        UILibrary.StepBackwards_Button.addActionListener(this);
+        UILibrary.StepForwards_Button.addActionListener(this);
+        ChessUIManager.HideEndGameFrame();
         ChessUIManager.showNewGameFrame();
+    }
+
+    private void restartGame() {
+        switch (currentGameMode) {
+            case GameMode.PLAYER_VS_PLAYER_GAME_MODE:
+                resetGUIAndListeners();
+                startPlayerVSPlayerGame();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void resetGUIAndListeners() {
+        ChessUIManager.HideEndGameFrame();
+        UILibrary.StepBackwards_Button.removeActionListener(this);
+        UILibrary.StepForwards_Button.removeActionListener(this);
+        UILibrary.StepBackwards_Button.addActionListener(this);
+        UILibrary.StepForwards_Button.addActionListener(this);
     }
 
     private void startPlayerVSPlayerGame() {
@@ -67,6 +99,28 @@ public class GameLoop implements ActionListener {
 
     }
 
+    /**
+     * Checks if the game is in a non-playable state.
+     * Checkmate or stalemate is checked.
+     * @param result The MoveResult to check.
+     */
+    public void checkGameFinished(MoveResult result) {
+        if (result.wasSuccessful) {
+            sendUpdateBoardState();
+            if (result.isCheckmate) {
+                ChessUIManager.ShowEndGameFrame(
+                        ((result.checkmateTeam == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
+                UILibrary.StepBackwards_Button.removeActionListener(this);
+                UILibrary.StepForwards_Button.removeActionListener(this);
+            } else if (result.isStalemate) {
+                ChessUIManager.ShowEndGameFrame("Stalemate!");
+                UILibrary.StepBackwards_Button.removeActionListener(this);
+                UILibrary.StepForwards_Button.removeActionListener(this);
+            }
+            gameMode.switchTeam();
+        }
+    }
+
     public void sendUpdateBoardState() {
         UILibrary.MainFrame.repaint();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
@@ -76,13 +130,8 @@ public class GameLoop implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == UILibrary.EnterMove_TextField) {
             String input = UILibrary.EnterMove_TextField.getText();
-            if (board.applyMoveAlgebraicNotation(input).wasSuccessful) {
-                gameMode.switchTeam();
-                sendUpdateBoardState();
-            }
-
-            // guiStarter.chessUIManager.drawBoard(board.getBoard());
-            // System.out.println("The text box detected input: " + input);
+            MoveResult result = board.applyMoveAlgebraicNotation(input);
+            checkGameFinished(result);
         }
 
         // Step back a move

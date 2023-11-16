@@ -112,7 +112,7 @@ public class Board {
          * This can be used for many things, loading a game, recreating a game with a different game mode, etc.
          */
         // PGNReader reader = new PGNReader();
-        // for (PGNMove move : reader.getMovesFromFile("my-test/testgame.pgn")) {
+        // for (PGNMove move : reader.getMovesFromFile("my-test/stalemate.pgn")) {
         //     applyPGNMove(move, true);
         //     // applyMoveAlgebraicNotation(move.getMoveString(), true);
         // }
@@ -448,9 +448,19 @@ public class Board {
             board[endMove.row][endMove.column] = pieceMoving;
             board[endMove.row][endMove.column].moved();
             board[startMove.row][startMove.column] = new EmptyPiece();
-            int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-            if (checkKingInCheck(pieceMoving, otherTeam)) {
+        }
+        int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        if (checkKingInCheck(pieceMoving, otherTeam)) {
+            moveString.append("+");
+            if (getPossibleMovesForTeamWithChecking(otherTeam).size() == 0) {
                 moveString.append("+");
+                result.isCheckmate = true;
+                result.checkmateTeam = otherTeam;
+            }
+        } else {
+            if (getPossibleMovesForTeamWithChecking(otherTeam).size() == 0) {
+                result.isStalemate = true;
+                result.checkmateTeam = otherTeam;
             }
         }
         checkKingInCheck(pieceMoving, pieceMoving.getTeam());
@@ -483,7 +493,7 @@ public class Board {
                 algebraicNotationMovesList.add(newList.get(i));
             }
             undoMoveCount = 0;
-            moveCount = algebraicNotationMovesList.size();
+            // moveCount = algebraicNotationMovesList.size();
         }
         result.wasSuccessful = true;
         return result;
@@ -640,7 +650,8 @@ public class Board {
     }
 
     /**
-     * Gets all the possible moves for a specific team
+     * Gets all the possible moves for a specific team, ignoring
+     * if the king is in check afterwards.
      *
      * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
@@ -652,6 +663,27 @@ public class Board {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].getTeam() == team) {
                     for (BoardLocation m : board[i][j].getPossibleMoves(this, board, new BoardLocation(j, i), false)) {
+                        possibleMoves.add(m);
+                    }
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
+    /**
+     * Gets all the possible moves for a specific team that are valid.
+     *
+     * @param board The board to check possible moves for the team.
+     * @param team  The team to get all possible moves for.
+     * @return Arraylist of BoardLocations for the possible moves a team can make.
+     */
+    public ArrayList<BoardLocation> getPossibleMovesForTeamWithChecking(int team) {
+        ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j].getTeam() == team) {
+                    for (BoardLocation m : getPossibleMoves(board[i][j], new BoardLocation(j, i), false)) {
                         possibleMoves.add(m);
                     }
                 }

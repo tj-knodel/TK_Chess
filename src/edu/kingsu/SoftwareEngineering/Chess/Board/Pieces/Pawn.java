@@ -52,7 +52,8 @@ public class Pawn extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove,
+            boolean extraCheck) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
 
@@ -71,6 +72,24 @@ public class Pawn extends Piece {
                 }
                 if (moveValid.isOtherTeam) {
                     moves.add(new BoardLocation(endMove.column, endMove.row));
+                }
+
+                if (team == 0) {
+                    endMove.row++;
+                } else if (team == 1) {
+                    endMove.row--;
+                }
+
+                moveValid = IsMoveValidWithoutPiece(board, endMove);
+                if (moveValid.isInBoard) {
+                    if (!moveValid.isOtherTeam && moveValid.isEmptySpace) {
+                        if (moveValid.isEmptySpace) {
+                            moves.add(new BoardLocation(endMove.column, endMove.row));
+                        }
+                        if (moveValid.isOtherTeam) {
+                            moves.add(new BoardLocation(endMove.column, endMove.row));
+                        }
+                    }
                 }
             }
         }
@@ -119,25 +138,25 @@ public class Pawn extends Piece {
             }
         }
 
-        if (!hasMoved) {
-            endMove = new BoardLocation(startMove.column, startMove.row);
-            if (team == 0)
-                endMove.row += 2;
-            else if (team == 1)
-                endMove.row -= 2;
+        // if (!hasMoved) {
+        //     endMove = new BoardLocation(startMove.column, startMove.row);
+        //     if (team == 0)
+        //         endMove.row += 2;
+        //     else if (team == 1)
+        //         endMove.row -= 2;
 
-            moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                }
-            }
-        }
+        //     moveValid = IsMoveValidWithoutPiece(board, endMove);
+        //     if (moveValid.isInBoard) {
+        //         if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
+        //             if (moveValid.isEmptySpace) {
+        //                 moves.add(new BoardLocation(endMove.column, endMove.row));
+        //             }
+        //             if (moveValid.isOtherTeam) {
+        //                 moves.add(new BoardLocation(endMove.column, endMove.row));
+        //             }
+        //         }
+        //     }
+        // }
         //
         // if (endMove.row < board.length && endMove.row >= 0) {
         // moves.add(endMove);
