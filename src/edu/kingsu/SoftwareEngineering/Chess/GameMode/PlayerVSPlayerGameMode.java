@@ -9,6 +9,7 @@ import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.MoveController;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * {@inheritDoc}
@@ -17,6 +18,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
 
     private MoveController moveController;
     private int teamTurn;
+    private MouseAdapter mouseAdapter;
 
     public PlayerVSPlayerGameMode() {
         this.moveController = new MoveController();
@@ -38,6 +40,14 @@ public class PlayerVSPlayerGameMode extends GameMode {
      * @param board The board to play on.
      */
     public void setClickListeners(GUIStarter guiStarter, Board board) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
+                for (MouseListener adapter : chessTile.getMouseListeners()) {
+                    chessTile.removeMouseListener(adapter);
+                }
+            }
+        }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];

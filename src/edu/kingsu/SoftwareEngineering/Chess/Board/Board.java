@@ -106,6 +106,7 @@ public class Board {
         moveCount = 1;
         initializeBoard();
 
+        // System.out.println(algebraicRepresentation);
         // TODO: Example of loading a PGN game.
         /*
          * This can be used for many things, loading a game, recreating a game with a different game mode, etc.
@@ -474,8 +475,12 @@ public class Board {
             // algebraicNotationMovesList.add(moveString.toString());
             newList.add(moveString.toString());
             algebraicNotationMovesList.clear();
-            algebraicNotationMovesList = newList;
+            // algebraicNotationMovesList = newList;
+            for (int i = 0; i < newList.size(); i++) {
+                algebraicNotationMovesList.add(newList.get(i));
+            }
             undoMoveCount = 0;
+            moveCount = algebraicNotationMovesList.size();
         }
         return true;
     }

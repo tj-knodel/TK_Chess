@@ -1,5 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.GameLoop;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,7 +23,7 @@ import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSPlayerGameMode;
  * @author Daniell Buchner
  * @version 0.1
  */
-public class GameLoop {
+public class GameLoop implements ActionListener {
 
     private GUIStarter guiStarter;
     private Board board;
@@ -34,6 +36,9 @@ public class GameLoop {
     public GameLoop() {
         guiStarter = new GUIStarter();
         ChessUIManager.showNewGameFrame();
+        UILibrary.EnterMove_TextField.addActionListener(this);
+        UILibrary.StepBackwards_Button.addActionListener(this);
+        UILibrary.StepForwards_Button.addActionListener(this);
         UILibrary.WhitePlayer_VS_BlackPlayer_Button.addActionListener(e -> {
             startPlayerVSPlayerGame();
         });
@@ -59,35 +64,41 @@ public class GameLoop {
         gameMode.setGameLoop(this);
         ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
-        UILibrary.EnterMove_TextField.addActionListener(e -> {
-            String input = UILibrary.EnterMove_TextField.getText();
-            if (board.applyMoveAlgebraicNotation(input)) {
-                gameMode.switchTeam();
-                sendUpdateBoardState();
-            }
-            // guiStarter.chessUIManager.drawBoard(board.getBoard());
-            // System.out.println("The text box detected input: " + input);
-        });
 
-        // Step back a move
-        UILibrary.StepBackwards_Button.addActionListener(e -> {
-            if (board.undoMove()) {
-                gameMode.switchTeam();
-            }
-            sendUpdateBoardState();
-        });
-
-        // Set Forward a move
-        UILibrary.StepForwards_Button.addActionListener(e -> {
-            if (board.redoMove()) {
-                gameMode.switchTeam();
-            }
-            sendUpdateBoardState();
-        });
     }
 
     public void sendUpdateBoardState() {
         UILibrary.MainFrame.repaint();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == UILibrary.EnterMove_TextField) {
+            String input = UILibrary.EnterMove_TextField.getText();
+            if (board.applyMoveAlgebraicNotation(input)) {
+                gameMode.switchTeam();
+                sendUpdateBoardState();
+            }
+
+            // guiStarter.chessUIManager.drawBoard(board.getBoard());
+            // System.out.println("The text box detected input: " + input);
+        }
+
+        // Step back a move
+        if (e.getSource() == UILibrary.StepBackwards_Button) {
+            if (board.undoMove()) {
+                gameMode.switchTeam();
+            }
+            sendUpdateBoardState();
+        }
+
+        // Set Forward a move
+        if (e.getSource() == UILibrary.StepForwards_Button) {
+            if (board.redoMove()) {
+                gameMode.switchTeam();
+            }
+            sendUpdateBoardState();
+        }
     }
 }
