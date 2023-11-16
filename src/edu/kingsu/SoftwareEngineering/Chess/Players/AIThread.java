@@ -21,6 +21,7 @@ public class AIThread implements Runnable {
     public void run() {
         // simple loop to just keep checking if we need a move and update the listener.
         curMove = aiPlayer.getMove(board);
+        //Thread.sleep(1000);
     }
 
     public Move getMove() {

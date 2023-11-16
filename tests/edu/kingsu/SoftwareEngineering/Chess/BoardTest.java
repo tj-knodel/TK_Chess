@@ -76,6 +76,23 @@ public class BoardTest {
         Assert.assertTrue(true);
     }
 
+    @Test
+    public void testBoardDeepCopy() {
+        Board copy = testBoard.copy();
+        Piece[][] boardPieces = copy.getBoard();
+        for (int i = 0; i < boardPieces.length; i++) {
+            for (int j = 0; j < boardPieces[i].length; j++) {
+                if (!((boardPieces[i][j].getPieceID() == startState[i][j].getPieceID()) &&
+                     boardPieces[i][j].getTeam() == startState[i][j].getTeam())) {
+                        // return early since the pieces are not equal
+                        Assert.assertTrue(false);
+                     }
+            }
+        }
+        // if we've made it this far, then the two states are equal
+        Assert.assertTrue(true);
+    }
+
     /**
      * Tests if the white start move of e4 will correctly be applied
      */
@@ -127,7 +144,7 @@ public class BoardTest {
 
     @Test
     public void testGetPossibleMovesForPiece() {
-        ArrayList<BoardLocation> possibleMoves = testBoard.getPossibleMoves(startState[6][4], new BoardLocation(4,6));
+        ArrayList<BoardLocation> possibleMoves = testBoard.getPossibleMoves(startState[6][4], new BoardLocation(4,6), false);
         Assert.assertEquals(2, possibleMoves.size());
     }
 

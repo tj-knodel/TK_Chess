@@ -1,7 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
 import edu.kingsu.SoftwareEngineering.Chess.Board.*;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
+
 import java.util.ArrayList;
 import java.util.Random;
 /**
@@ -44,8 +44,50 @@ public class AIPlayer extends Player {
      */
     public Move getMove(Board board) {
         //minimax(board, difficulty, colour);
-        Move move = randomMove(board);
-        return move;
+        //Move move = randomMove(board);
+        // get the pieces from the board
+        Piece[][] pieces = board.getBoard();
+        // get all the pieces for the team
+        ArrayList<BoardLocation> team_pieces = new ArrayList<BoardLocation>();
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                if (pieces[i][j].getTeam() == colour) {
+                    team_pieces.add(new BoardLocation(j, i));
+                }
+            }
+        }
+        
+        ArrayList<Move> allMoves = new ArrayList<Move>();
+        // check each move for this team
+        for (BoardLocation l : team_pieces) {
+            Piece piece = pieces[l.row][l.column];
+            ArrayList<BoardLocation> moves = board.getPossibleMoves(piece, l, false);
+            for (BoardLocation lprime : moves) {
+                // add new moves with a placeholder score which we will update later
+                allMoves.add(new Move(piece, l, lprime, 0));
+            }
+        }
+
+        int bestScore = (colour == Team.WHITE_TEAM) ? -200 : 200;
+        Move bestMove = null;
+        for (Move m : allMoves) {
+            Board copy = board.copy();
+            copy.applyMove(m.piece, m.start, m.end);
+            int curScore = minimax(copy, difficulty, colour);
+            m.score = curScore;
+            if (colour == Team.WHITE_TEAM) {
+                if (m.score >= bestScore) {
+                    bestMove = m;
+                    bestScore = m.score;
+                }
+            } else if (colour == Team.BLACK_TEAM) {
+                if (m.score <= bestScore) {
+                    bestMove = m;
+                    bestScore = m.score;
+                }
+            }
+        }
+        return bestMove;
     }
 
     /**
@@ -112,8 +154,7 @@ public class AIPlayer extends Player {
      * @return the score for the current iteration of the minimax.
      */
     private int minimax(Board board, int depth, int player) {
-        Board copy = board.copy();
-        Piece[][] pieces = copy.getBoard();
+        Piece[][] pieces = board.getBoard();
         if (depth == 0) {
             return calcScore(pieces);
         }
@@ -129,27 +170,81 @@ public class AIPlayer extends Player {
             // get the white team pieces
             //ArrayList<BoardLocation> white_pieces = board.
             
-            // for (int i = 0; i < pieces.length; i++) {
-            //     for (int j = 0; j < pieces[i].length; j++) {
-            //         if (pieces[i][j].getTeam() == player) {
-            //             ArrayList<BoardLocation> moves = board.getPossiblepieces[i][j], new BoardLocation(i, j));
-            //             //score = Math.max(score, minimax(copy,))
-            //         }
-            //     }
-            // }
+            for (int i = 0; i < pieces.length; i++) {
+                for (int j = 0; j < pieces[i].length; j++) {
+                    if (pieces[i][j].getTeam() == player) {
+                        // Get all the moves for this piece
+                        BoardLocation pieceLocation = new BoardLocation(j,i);
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation, false);
+                        // Find the maximum move and store the piece and the location in a move
+                        //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
+                        for (BoardLocation l : moves) {
+                            Board copy = board.copy();
+                            copy.applyMove(pieces[i][j], pieceLocation, l);
+                            score = Math.max(score, minimax(copy, depth - 1, Team.BLACK_TEAM));
+                        }
+                    }
+                }
+            }
         }
         else {
             // set score to some positive number that is more than is possible in the game
             score = 200;
-            // iterate over all the pieces of the min player to find the best move
-            // for (int i = 0; i < pieces.length; i++) {
-            //     for (int j = 0; j < pieces[i].length; j++) {
-            //         if (pieces[i][j].getTeam() == player) {
-            //             ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces[i][j], new BoardLocation(i, j));
-            //         }
-            //     }
-            // }
+            for (int i = 0; i < pieces.length; i++) {
+                for (int j = 0; j < pieces[i].length; j++) {
+                    if (pieces[i][j].getTeam() == player) {
+                        // Get all the moves for this piece
+                        BoardLocation pieceLocation = new BoardLocation(j,i);
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation, false);
+                        // Find the maximum move and store the piece and the location in a move
+                        //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
+                        for (BoardLocation l : moves) {
+                            Board copy = board.copy();
+                            copy.applyMove(pieces[i][j], pieceLocation, l);
+                            score = Math.min(score, minimax(copy, depth - 1, Team.WHITE_TEAM));
+                        }
+                    }
+                }
+            }
         }
         return score;
+    }
+
+    /**
+     * Finds the maximum move out of a list of moves
+     * @param moves
+     * @param board
+     * @return
+     */
+    private Move getMaxMove(Board board, Piece piece, BoardLocation pieceLocation, ArrayList<BoardLocation> moves) {
+        int curMaxScore = -200;
+        Move curMaxMove = null;
+        for (BoardLocation l : moves) {
+            board.applyMove(piece, pieceLocation, l);
+            int moveScore = calcScore(board.getBoard());
+            if (moveScore > curMaxScore) {
+                curMaxMove = new Move(piece, pieceLocation, pieceLocation, moveScore);
+            }
+        }
+        return curMaxMove;
+    }
+
+    /**
+     * Finds the minimum move out of a list of moves
+     * @param moves
+     * @param board
+     * @return
+     */
+    private Move getMinMove(Board board, Piece piece, BoardLocation pieceLocation, ArrayList<BoardLocation> moves) {
+        int curMinScore = 200;
+        Move curMinMove = null;
+        for (BoardLocation l : moves) {
+            board.applyMove(piece, pieceLocation, l);
+            int moveScore = calcScore(board.getBoard());
+            if (moveScore > curMinScore) {
+                curMinMove = new Move(piece, pieceLocation, pieceLocation, moveScore);
+            }
+        }
+        return curMinMove;
     }
 }
