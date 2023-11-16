@@ -233,7 +233,7 @@ public class Board {
      * @param extraCheck Should the algebraicNotation be overriden. Keep false unless you know why to make true.
      * @return True if move as applied, false otherwise.
      */
-    public boolean applyPGNMove(PGNMove move, boolean extraCheck) {
+    public MoveResult applyPGNMove(PGNMove move, boolean extraCheck) {
         // if (move.hasComment()) {
         //     System.out.println("Comment: " + move.getComment() + ", for move: " + move.getMoveString());
         // }
@@ -246,7 +246,8 @@ public class Board {
      * @param extraCheck If algebraic notation should be overriden. Make it true if not known how it works.
      * @return True if move was successful.
      */
-    public boolean applyMoveAlgebraicNotation(String notation, boolean extraCheck) {
+    public MoveResult applyMoveAlgebraicNotation(String notation, boolean extraCheck) {
+        MoveResult result = new MoveResult();
         int team = (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
         // Replace the + sign in the PGN notation as the board doesn't care
         // what the notation says as it has it's own rules.
@@ -271,7 +272,7 @@ public class Board {
             ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
                     boardLocation);
             if (pieceLocation.size() != 1)
-                return false;
+                return result;
             Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
             return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
         } else if (noPlus.length() == 3) {
@@ -282,7 +283,7 @@ public class Board {
                 ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
                         boardLocation);
                 if (pieceLocation.size() != 1)
-                    return false;
+                    return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
                 return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             } else {
@@ -294,7 +295,7 @@ public class Board {
                 ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForColumn(team, pieceId,
                         noPlus.charAt(0) - 'a');
                 if (pieceLocation.size() != 1)
-                    return false;
+                    return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
                 return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             }
@@ -308,7 +309,7 @@ public class Board {
                 ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForColumn(board, team, pieceId,
                         noPlus.charAt(1) - 'a');
                 if (pieceLocation.size() != 1)
-                    return false;
+                    return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
                 return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             } else {
@@ -320,12 +321,12 @@ public class Board {
                 ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForRow(board, team, pieceId,
                         (int) noPlus.charAt(1));
                 if (pieceLocation.size() != 1)
-                    return false;
+                    return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
                 return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             }
         }
-        return false;
+        return result;
     }
 
     /**
@@ -334,7 +335,7 @@ public class Board {
      * @param notation The notation to apply a move to. Example, Nf3 moves Knight to f3 if possible.
      * @return True if move was successful.
      */
-    public boolean applyMoveAlgebraicNotation(String notation) {
+    public MoveResult applyMoveAlgebraicNotation(String notation) {
         return applyMoveAlgebraicNotation(notation, true);
     }
 
@@ -348,7 +349,7 @@ public class Board {
      * @param endMove     The target location of the piece.
      * @return True if the move was successful.
      */
-    public boolean applyMoveDontModifyNotation(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+    public MoveResult applyMoveDontModifyNotation(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         return applyMove(pieceMoving, startMove, endMove, false);
     }
 
@@ -363,7 +364,9 @@ public class Board {
      * @param extraCheck  If algebraicNotation should be overriden
      * @return True if the move was successful.
      */
-    private boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck) {
+    private MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
+            boolean extraCheck) {
+        MoveResult result = new MoveResult();
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
         // Get all pieces of type that can move to the "endMove" location
@@ -373,7 +376,7 @@ public class Board {
             }
         }
         if (piecesMoveToSameLocation == 0)
-            return false;
+            return result;
         StringBuilder moveString = new StringBuilder();
         // If only found one, just do basic chess notation
         if (piecesMoveToSameLocation == 1) {
@@ -482,7 +485,8 @@ public class Board {
             undoMoveCount = 0;
             moveCount = algebraicNotationMovesList.size();
         }
-        return true;
+        result.wasSuccessful = true;
+        return result;
     }
 
     /**
@@ -495,7 +499,7 @@ public class Board {
      * @param endMove     The target location of the piece.
      * @return True if the move was successful.
      */
-    public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+    public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         return applyMove(pieceMoving, startMove, endMove, true);
     }
 

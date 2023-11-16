@@ -76,7 +76,7 @@ public class GameLoop implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == UILibrary.EnterMove_TextField) {
             String input = UILibrary.EnterMove_TextField.getText();
-            if (board.applyMoveAlgebraicNotation(input)) {
+            if (board.applyMoveAlgebraicNotation(input).wasSuccessful) {
                 gameMode.switchTeam();
                 sendUpdateBoardState();
             }
