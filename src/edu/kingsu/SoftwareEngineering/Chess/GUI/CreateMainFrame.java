@@ -12,14 +12,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -205,21 +208,25 @@ public class CreateMainFrame {
 
         JMenuItem NewGame_Item = new JMenuItem("New Game");
         NewGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        NewGame_Item.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         Game_JMenu.add(NewGame_Item);
         UILibrary.NewGame_JMenuItem = NewGame_Item;
 
         JMenuItem LoadGame_Item = new JMenuItem("Open Game");
         LoadGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        LoadGame_Item.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         Game_JMenu.add(LoadGame_Item);
         UILibrary.LoadGame_JMenuItem = LoadGame_Item;
 
         JMenuItem SaveGame_Item = new JMenuItem("Save Game");
         SaveGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        SaveGame_Item.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         Game_JMenu.add(SaveGame_Item);
         UILibrary.SaveGame_JMenuItem = SaveGame_Item;
 
         JMenuItem RestartGame_Item = new JMenuItem("Restart Game");
         RestartGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        RestartGame_Item.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         Game_JMenu.add(RestartGame_Item);
         UILibrary.RestartGame_JMenuItem = RestartGame_Item;
 
