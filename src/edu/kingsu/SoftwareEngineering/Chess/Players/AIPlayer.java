@@ -67,6 +67,10 @@ public class AIPlayer extends Player {
                 allMoves.add(new Move(piece, l, lprime, 0));
             }
         }
+        if (allMoves.isEmpty()) {
+            // There are no possible moves
+            return null;
+        }
 
         int bestScore = (colour == Team.WHITE_TEAM) ? -200 : 200;
         Move bestMove = null;
@@ -129,7 +133,7 @@ public class AIPlayer extends Player {
             start_move = team_pieces.get(idx);
             piece = pieces[start_move.row][start_move.column];
 
-            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(piece, start_move, false);
+            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(piece, start_move, true);
             System.out.println(possible_moves.size());
             if (possible_moves.isEmpty()) {
                 System.out.println("removing index");
@@ -155,7 +159,7 @@ public class AIPlayer extends Player {
      */
     private int minimax(Board board, int depth, int player) {
         Piece[][] pieces = board.getBoard();
-        if (depth == 0) {
+        if (depth <= 0) {
             return calcScore(pieces);
         }
 
@@ -186,6 +190,7 @@ public class AIPlayer extends Player {
                     }
                 }
             }
+            return score;
         }
         else {
             // set score to some positive number that is more than is possible in the game
@@ -206,8 +211,9 @@ public class AIPlayer extends Player {
                     }
                 }
             }
+            return score;
         }
-        return score;
+        
     }
 
     /**

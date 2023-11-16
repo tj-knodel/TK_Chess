@@ -20,6 +20,8 @@ public class AIVSAIGameMode extends GameMode {
     private int teamTurn;
     private Board board;
 
+    private boolean gameOver = false;
+
     /**
      * Creates a new player vs ai game mode and sets the AI to black
      * @param aiDifficulty
@@ -84,6 +86,11 @@ public class AIVSAIGameMode extends GameMode {
         try {
             runningThread.join();
             Move aiMove = ai.getMove();
+            if (aiMove == null) {
+                gameOver = true;
+                // System.out.println("We are done the game");
+                // System.exit(0);
+            }
             board.applyMove(aiMove.piece, aiMove.start, aiMove.end);
         } catch (Exception e) {
             System.err.println("oopsies with the AIThread");
