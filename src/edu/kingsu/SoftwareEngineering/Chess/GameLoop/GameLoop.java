@@ -8,6 +8,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.GameMode;
@@ -32,7 +33,27 @@ public class GameLoop {
      */
     public GameLoop() {
         guiStarter = new GUIStarter();
+        ChessUIManager.showNewGameFrame();
+        UILibrary.WhitePlayer_VS_BlackPlayer_Button.addActionListener(e -> {
+            startPlayerVSPlayerGame();
+        });
+        UILibrary.NewGame_JMenuItem.addActionListener(e -> {
+            startMainMenuScree();
+        });
+        UILibrary.RestartGame_JMenuItem.addActionListener(e -> {
+            startPlayerVSPlayerGame();
+        });
+    }
+
+    private void startMainMenuScree() {
+        ChessUIManager.showNewGameFrame();
+    }
+
+    private void startPlayerVSPlayerGame() {
+        ChessUIManager.clearMovesLabel();
         board = new Board();
+        ChessUIManager.showMainFrame();
+
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         gameMode = new PlayerVSPlayerGameMode();
         gameMode.setGameLoop(this);
