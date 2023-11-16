@@ -32,7 +32,7 @@ public class EmptyPiece extends Piece {
     }
 
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
         throw new UnsupportedOperationException("Empty Piece has no possible moves!");
     }
 

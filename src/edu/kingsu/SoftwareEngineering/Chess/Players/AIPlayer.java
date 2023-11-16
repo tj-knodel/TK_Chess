@@ -87,8 +87,8 @@ public class AIPlayer extends Player {
             start_move = team_pieces.get(idx);
             piece = pieces[start_move.row][start_move.column];
 
-            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(pieces, piece, start_move);
-            //System.out.println("amount of moves: " + possible_moves.size());
+            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(piece, start_move, false);
+            System.out.println(possible_moves.size());
             if (possible_moves.isEmpty()) {
                 System.out.println("removing index");
                 // remove the invalid move

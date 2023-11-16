@@ -52,7 +52,7 @@ public class Pawn extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
 

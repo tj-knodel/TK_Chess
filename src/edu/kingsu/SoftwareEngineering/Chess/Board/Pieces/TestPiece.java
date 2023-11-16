@@ -40,7 +40,7 @@ public class TestPiece extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPossibleMoves'");
     }

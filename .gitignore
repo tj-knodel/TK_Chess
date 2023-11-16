@@ -3,3 +3,7 @@ dist
 doc
 lib
 report
+out
+.idea
+.vscode
+Chess.iml
