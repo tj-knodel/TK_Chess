@@ -28,6 +28,7 @@ public class AIVSAIGameMode extends GameMode {
      */
     public AIVSAIGameMode(int aiDifficulty) {
         this.moveController = new MoveController();
+        difficulty = aiDifficulty;
         teamTurn = Team.BLACK_TEAM;
     }
 

@@ -36,11 +36,11 @@ public class GameLoop {
         guiStarter = new GUIStarter();
         board = new Board();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
-        //gameMode = new PlayerVSAIGameMode(2);
-        gameMode = new AIVSAIGameMode(2);
+        gameMode = new PlayerVSAIGameMode(2);
+        //gameMode = new AIVSAIGameMode(4);
         gameMode.setGameLoop(this);
-        //((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
-        ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        // ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
 
         // guiStarter = new GUIStarter();
