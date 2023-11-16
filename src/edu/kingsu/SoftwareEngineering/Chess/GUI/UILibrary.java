@@ -224,6 +224,11 @@ public abstract class UILibrary {
   public static JMenuItem RestartGame_JMenuItem;
 
   /**
+   * 
+   */
+  public static JMenuItem ResumeGame_JMenuItem;
+
+  /**
    * JMenuItem which toggles whether the possible move circles on the board are
    * shown or not.
    */

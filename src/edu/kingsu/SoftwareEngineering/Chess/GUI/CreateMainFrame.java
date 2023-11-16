@@ -223,6 +223,11 @@ public class CreateMainFrame {
         Game_JMenu.add(RestartGame_Item);
         UILibrary.RestartGame_JMenuItem = RestartGame_Item;
 
+        JMenuItem ResumeGame_Item = new JMenuItem("Resume Game");
+        ResumeGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        Game_JMenu.add(ResumeGame_Item);
+        UILibrary.ResumeGame_JMenuItem = ResumeGame_Item;
+
         // ---- BoardAppearance -------
         JMenu Appearance_JMenu = new JMenu("Board Appearance"); // button on the bar
         bar.add(Appearance_JMenu);
