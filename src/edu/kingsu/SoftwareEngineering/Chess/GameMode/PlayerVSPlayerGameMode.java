@@ -57,7 +57,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
                         if (moveController.chessTileClick(board, teamTurn, chessTile.row,
                                 chessTile.column)) {
                             MoveResult result = moveController.sendMovesToBoard(board);
-                            gameLoop.checkGameFinished(result);
+                            gameLoop.checkGameState(result);
                             // gameLoop.sendUpdateBoardState();
                             // if (result.wasSuccessful) {
                             //     gameLoop.sendUpdateBoardState();

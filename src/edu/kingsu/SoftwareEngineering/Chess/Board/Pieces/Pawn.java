@@ -81,7 +81,7 @@ public class Pawn extends Piece {
                 }
 
                 moveValid = IsMoveValidWithoutPiece(board, endMove);
-                if (moveValid.isInBoard) {
+                if (moveValid.isInBoard && !hasMoved) {
                     if (!moveValid.isOtherTeam && moveValid.isEmptySpace) {
                         if (moveValid.isEmptySpace) {
                             moves.add(new BoardLocation(endMove.column, endMove.row));

@@ -9,10 +9,15 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Bishop;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Knight;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Queen;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Rook;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.GUI_Events;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.GameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSPlayerGameMode;
@@ -30,6 +35,7 @@ public class GameLoop implements ActionListener {
     private Board board;
     private GameMode gameMode;
     private int currentGameMode;
+    private MoveResult lastMoveResult;
 
     /**
      * Some temporary code to test the .drawBoard function correctly calling UI to
@@ -57,6 +63,31 @@ public class GameLoop implements ActionListener {
         });
         UILibrary.endViewBoardButton.addActionListener(e -> {
             resetGUIAndListeners();
+        });
+
+        UILibrary.UpgradeQueenButton.addActionListener(e -> {
+            UILibrary.UpgradePieceFrame.setVisible(false);
+            Queen queen = new Queen(lastMoveResult.promoteTeam);
+            board.promotePawn(lastMoveResult.promotionLocation, queen);
+            sendUpdateBoardState();
+        });
+        UILibrary.UpgradeBishopButton.addActionListener(e -> {
+            UILibrary.UpgradePieceFrame.setVisible(false);
+            Bishop bishop = new Bishop(lastMoveResult.promoteTeam);
+            board.promotePawn(lastMoveResult.promotionLocation, bishop);
+            sendUpdateBoardState();
+        });
+        UILibrary.UpgradeRookButton.addActionListener(e -> {
+            UILibrary.UpgradePieceFrame.setVisible(false);
+            Rook rook = new Rook(lastMoveResult.promoteTeam);
+            board.promotePawn(lastMoveResult.promotionLocation, rook);
+            sendUpdateBoardState();
+        });
+        UILibrary.UpgradeKnightButton.addActionListener(e -> {
+            UILibrary.UpgradePieceFrame.setVisible(false);
+            Knight knight = new Knight(lastMoveResult.promoteTeam);
+            board.promotePawn(lastMoveResult.promotionLocation, knight);
+            sendUpdateBoardState();
         });
     }
 
@@ -104,7 +135,8 @@ public class GameLoop implements ActionListener {
      * Checkmate or stalemate is checked.
      * @param result The MoveResult to check.
      */
-    public void checkGameFinished(MoveResult result) {
+    public void checkGameState(MoveResult result) {
+        lastMoveResult = result;
         if (result.wasSuccessful) {
             sendUpdateBoardState();
             if (result.isCheckmate) {
@@ -116,6 +148,8 @@ public class GameLoop implements ActionListener {
                 ChessUIManager.ShowEndGameFrame("Stalemate!");
                 UILibrary.StepBackwards_Button.removeActionListener(this);
                 UILibrary.StepForwards_Button.removeActionListener(this);
+            } else if (result.isPromotion) {
+                guiStarter.chessUIManager.showUpgradeFrame(result.promoteTeam == Team.WHITE_TEAM);
             }
             gameMode.switchTeam();
         }
@@ -131,7 +165,7 @@ public class GameLoop implements ActionListener {
         if (e.getSource() == UILibrary.EnterMove_TextField) {
             String input = UILibrary.EnterMove_TextField.getText();
             MoveResult result = board.applyMoveAlgebraicNotation(input);
-            checkGameFinished(result);
+            checkGameState(result);
         }
 
         // Step back a move

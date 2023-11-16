@@ -495,6 +495,11 @@ public class Board {
             undoMoveCount = 0;
             // moveCount = algebraicNotationMovesList.size();
         }
+        if (pieceMoving instanceof Pawn && (endMove.row == 0 || endMove.row == 7)) {
+            result.promotionLocation = new BoardLocation(endMove.column, endMove.row);
+            result.isPromotion = true;
+            result.promoteTeam = team;
+        }
         result.wasSuccessful = true;
         return result;
     }
@@ -511,6 +516,31 @@ public class Board {
      */
     public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         return applyMove(pieceMoving, startMove, endMove, true);
+    }
+
+    /**
+     * Promotes a pawn. Does not check validity of it.
+     * @param location The location to promote.
+     * @param piece The piece to promote too.
+     */
+    public void promotePawn(BoardLocation location, Piece piece) {
+        String newNotation = algebraicNotationMovesList.get(algebraicNotationMovesList.size() - 1);
+        newNotation += "=" + Piece.chessNotationValue.get(piece.getPieceID());
+        algebraicNotationMovesList.set(algebraicNotationMovesList.size() - 1, newNotation);
+        ChessUIManager.clearMovesLabel();
+        boolean first = true;
+        int moveC = 1;
+        for (int i = 0; i < algebraicNotationMovesList.size(); i++) {
+            if (first) {
+                first = false;
+                ChessUIManager.appendMovesLabel(moveC + ". " + algebraicNotationMovesList.get(i));
+            } else {
+                ChessUIManager.appendMovesLabel(" " + algebraicNotationMovesList.get(i) + "\n");
+                first = true;
+                moveC++;
+            }
+        }
+        board[location.row][location.column] = piece;
     }
 
     /**

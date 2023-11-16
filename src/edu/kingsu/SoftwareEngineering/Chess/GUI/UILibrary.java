@@ -182,7 +182,7 @@ public abstract class UILibrary {
   /**
    * Shows on end game popup, Rematch game
    */
-  public  static JButton endRematchButton;
+  public static JButton endRematchButton;
   /**
    * Shows on end game popup, View the current board
    */
@@ -191,16 +191,6 @@ public abstract class UILibrary {
    * Shows on end game popup, Start a new game
    */
   public static JButton endNewGameButton;
-
-
-
-
-
-
-
-
-
-
 
   // ----- MenuBar / Menu items -----------------
   /**
@@ -284,9 +274,9 @@ public abstract class UILibrary {
    */
   public static JMenuItem About_JMenuItem;
 
-    /**
-   * JMenuItem which shows the about section
-   */
+  /**
+  * JMenuItem which shows the about section
+  */
   public static JMenuItem Help_JMenuItem;
 
   /*
@@ -322,7 +312,6 @@ public abstract class UILibrary {
    */
   public static final Color ForegroundTileColor = new Color(255, 227, 115, 70);
 
-  
   /**
    * ResizeModule object, responsible for auto-scaling all the UI Elements
    */
@@ -334,5 +323,9 @@ public abstract class UILibrary {
   UILibrary() {
   }
 
+  public static JButton UpgradeQueenButton;
+  public static JButton UpgradeBishopButton;
+  public static JButton UpgradeRookButton;
+  public static JButton UpgradeKnightButton;
 
 }

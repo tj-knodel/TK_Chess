@@ -119,7 +119,7 @@ public class CreateAccessoryUIs {
 	 */
 	private void createUpgradePieceFrame() {
 		UILibrary.UpgradePieceFrame = new JLabel();
-		UILibrary.resizeModule.setVariableBounds( UILibrary.UpgradePieceFrame, null, 177, 433, 624, 173); // Numbers from Figma Design
+		UILibrary.resizeModule.setVariableBounds(UILibrary.UpgradePieceFrame, null, 177, 433, 624, 173); // Numbers from Figma Design
 		UILibrary.resizeModule.setVariableBounds(UILibrary.UpgradePieceFrame, getImage("UpgradeFrameBackground.png"));
 
 		upgradeQueenButton = new JButton();
@@ -130,6 +130,10 @@ public class CreateAccessoryUIs {
 		UILibrary.UpgradePieceFrame.add(upgradeRookButton);
 		UILibrary.UpgradePieceFrame.add(upgradeKnightButton);
 		UILibrary.UpgradePieceFrame.add(upgradeBishopButton);
+		UILibrary.UpgradeQueenButton = upgradeQueenButton;
+		UILibrary.UpgradeRookButton = upgradeRookButton;
+		UILibrary.UpgradeKnightButton = upgradeKnightButton;
+		UILibrary.UpgradeBishopButton = upgradeBishopButton;
 
 		UILibrary.MainFrame.add(UILibrary.UpgradePieceFrame);
 		UILibrary.UpgradePieceFrame.setVisible(false);
@@ -179,7 +183,6 @@ public class CreateAccessoryUIs {
 	// -----------------------------------------------------
 	// -----------------------------------------------------
 
-
 	/**
 	 * Background for the EndGameFrame
 	 */
@@ -194,22 +197,22 @@ public class CreateAccessoryUIs {
 	 */
 	private void createEndGameUI() {
 		endLabel = new JLabel();
-		UILibrary.resizeModule.setVariableBounds( endLabel, null, 135, 387, 681, 259); // Numbers from Figma Design
+		UILibrary.resizeModule.setVariableBounds(endLabel, null, 135, 387, 681, 259); // Numbers from Figma Design
 		UILibrary.resizeModule.setVariableBounds(endLabel, getImage("EndGameFrame.png"));
 
 		JLabel TextLabel = new JLabel("Game Over", SwingConstants.CENTER);
-        TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
-        TextLabel.setForeground(UILibrary.TextColor_White);
-        UILibrary.resizeModule.setVariableBounds(TextLabel, null, 62, 24, 566, 34); // Numbers from Figma Design
-        TextLabel.setOpaque(false);
-        endLabel.add(TextLabel);
+		TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+		TextLabel.setForeground(UILibrary.TextColor_White);
+		UILibrary.resizeModule.setVariableBounds(TextLabel, null, 62, 24, 566, 34); // Numbers from Figma Design
+		TextLabel.setOpaque(false);
+		endLabel.add(TextLabel);
 
 		endTitle = new JLabel("YOU WIN!", SwingConstants.CENTER);
-        endTitle.setFont(new Font("Source Sans Pro", Font.BOLD, 50));
-        endTitle.setForeground(UILibrary.TextColor_White);
-        UILibrary.resizeModule.setVariableBounds(endTitle, null, 62, 64, 566, 71); // Numbers from Figma Design
-        endTitle.setOpaque(false);
-        endLabel.add(endTitle);
+		endTitle.setFont(new Font("Source Sans Pro", Font.BOLD, 50));
+		endTitle.setForeground(UILibrary.TextColor_White);
+		UILibrary.resizeModule.setVariableBounds(endTitle, null, 62, 64, 566, 71); // Numbers from Figma Design
+		endTitle.setOpaque(false);
+		endLabel.add(endTitle);
 
 		UILibrary.endRematchButton = new JButton();
 		UILibrary.resizeModule.setVariableBounds(UILibrary.endRematchButton, null, 37, 155, 183, 79);
@@ -232,8 +235,8 @@ public class CreateAccessoryUIs {
 		UILibrary.endNewGameButton.setContentAreaFilled(false);
 		UILibrary.endNewGameButton.setBorderPainted(false);
 
-		 endLabel.add(UILibrary.endRematchButton);
-		 endLabel.add(UILibrary.endViewBoardButton);
+		endLabel.add(UILibrary.endRematchButton);
+		endLabel.add(UILibrary.endViewBoardButton);
 		endLabel.add(UILibrary.endNewGameButton);
 
 		endLabel.setVisible(false);
