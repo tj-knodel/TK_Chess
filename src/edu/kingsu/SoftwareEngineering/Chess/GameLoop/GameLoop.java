@@ -38,14 +38,14 @@ public class GameLoop {
             startPlayerVSPlayerGame();
         });
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
-            startMainMenuScree();
+            startMainMenuScreen();
         });
         UILibrary.RestartGame_JMenuItem.addActionListener(e -> {
             startPlayerVSPlayerGame();
         });
     }
 
-    private void startMainMenuScree() {
+    private void startMainMenuScreen() {
         ChessUIManager.showNewGameFrame();
     }
 
