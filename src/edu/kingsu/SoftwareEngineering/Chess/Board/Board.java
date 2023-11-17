@@ -135,7 +135,12 @@ public class Board {
             firstMove = false;
         }
         this.moveCount = moveCount;
-        board = pieces;
+        board = new Piece[8][8];
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                board[i][j] = pieces[i][j].copy(pieces[i][j].getTeam());
+            }
+        }
     }
 
     /**

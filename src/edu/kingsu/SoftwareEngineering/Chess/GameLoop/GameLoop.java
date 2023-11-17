@@ -17,7 +17,9 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Rook;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
+import edu.kingsu.SoftwareEngineering.Chess.GameMode.AIVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.GameMode;
+import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSPlayerGameMode;
 
 /**
@@ -154,10 +156,13 @@ public class GameLoop implements ActionListener {
         ChessUIManager.showMainFrame();
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
-        gameMode = new PlayerVSPlayerGameMode();
+        gameMode = new PlayerVSAIGameMode(2);
+        //gameMode = new AIVSAIGameMode(4);
         gameMode.setGameLoop(this);
-        ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
+        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        // ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
+        
     }
 
     /**
