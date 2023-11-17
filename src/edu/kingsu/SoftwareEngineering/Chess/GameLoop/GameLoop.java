@@ -54,6 +54,7 @@ public class GameLoop implements ActionListener {
         ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         // ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
+        
     }
 
     /**
