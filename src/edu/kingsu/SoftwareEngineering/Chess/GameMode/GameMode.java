@@ -14,6 +14,7 @@ public abstract class GameMode {
      * The player vs player game mode type.
      */
     public static final int PLAYER_VS_PLAYER_GAME_MODE = 0;
+    public static final int PLAYER_VS_AI_GAME_MODE = 1;
 
     protected GameLoop gameLoop;
 

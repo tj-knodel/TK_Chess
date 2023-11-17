@@ -3,6 +3,8 @@ package edu.kingsu.SoftwareEngineering.Chess.GameLoop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 
@@ -49,6 +51,7 @@ public class GameLoop implements ActionListener {
             currentGameMode = GameMode.PLAYER_VS_PLAYER_GAME_MODE;
             startPlayerVSPlayerGame();
         });
+
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
             startMainMenuScreen();
         });
@@ -100,6 +103,23 @@ public class GameLoop implements ActionListener {
                 File file = fileChooser.getSelectedFile();
                 resetGUIAndListeners();
                 loadGamePlayerVSPlayer(file);
+            }
+        });
+
+        // Used https://stackoverflow.com/questions/14589386/how-to-save-file-using-jfilechooser-in-java
+        UILibrary.SaveGame_JMenuItem.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser(".");
+            int returnValue = fileChooser.showSaveDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                try {
+                    FileWriter fw = new FileWriter(file);
+                    fw.write(board.getAlgebraicNotation());
+                    fw.close();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         });
 
@@ -162,7 +182,7 @@ public class GameLoop implements ActionListener {
         ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         // ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
-        
+
     }
 
     /**
