@@ -110,7 +110,6 @@ public class Board {
         moveCount = 1;
         initializeBoard();
 
-        // System.out.println(algebraicRepresentation);
         // TODO: Example of loading a PGN game.
         /*
          * This can be used for many things, loading a game, recreating a game with a different game mode, etc.
@@ -130,7 +129,8 @@ public class Board {
      * @param algebraicRep the current sequence of moves in a StringBuilder
      */
     public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep) {
-        algebraicRepresentation = algebraicRep;
+        algebraicRepresentation = new StringBuilder();//algebraicRep;
+        algebraicNotationMovesList = new ArrayList<>();
         if (moveCount >= 1) {
             firstMove = false;
         }
@@ -212,6 +212,11 @@ public class Board {
         return undoMoveCount == algebraicNotationMovesList.size();
     }
 
+    public void resetNotation() {
+        this.algebraicNotationMovesList = new ArrayList<>();
+        this.algebraicRepresentation = new StringBuilder();
+    }
+
     /**
      * Undos a move on the board.
      * @return True if successful, false if otherwise.
@@ -231,7 +236,7 @@ public class Board {
         undoMoveCount++;
         algebraicRepresentation = new StringBuilder();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
+            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true);
         }
         return true;
     }
@@ -253,7 +258,7 @@ public class Board {
         undoMoveCount--;
         algebraicRepresentation = new StringBuilder();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
+            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true);
         }
         return true;
     }
@@ -283,7 +288,7 @@ public class Board {
         // if (move.hasComment()) {
         //     System.out.println("Comment: " + move.getComment() + ", for move: " + move.getMoveString());
         // }
-        return applyMoveAlgebraicNotation(move.getMoveString(), extraCheck);
+        return applyMoveAlgebraicNotation(move.getMoveString(), extraCheck, true);
     }
 
     /**
@@ -292,7 +297,7 @@ public class Board {
      * @param extraCheck If algebraic notation should be overriden. Make it true if not known how it works.
      * @return True if move was successful.
      */
-    public MoveResult applyMoveAlgebraicNotation(String notation, boolean extraCheck) {
+    public MoveResult applyMoveAlgebraicNotation(String notation, boolean extraCheck, boolean doNotation) {
         MoveResult result = new MoveResult();
         int team = (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
         // Replace the + sign in the PGN notation as the board doesn't care
@@ -323,7 +328,7 @@ public class Board {
                 return result;
             if (!(pieceToMove instanceof Pawn))
                 return result;
-            return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, false, true, moves[1]);
+            return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, false, true, moves[1], false);
         }
         // Piece moving without pawn.
         if (noPlus.length() == 2) {
@@ -335,7 +340,7 @@ public class Board {
             if (pieceLocation.size() != 1)
                 return result;
             Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-            return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+            return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
         } else if (noPlus.length() == 3) {
             if (Character.isUpperCase(noPlus.charAt(0))) {
                 int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
@@ -346,7 +351,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
             } else {
                 int pieceId = Piece.PAWN;
                 String locationString = noPlus.substring(1, noPlus.length());
@@ -358,7 +363,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
             }
         } else if (noPlus.length() == 4) {
             if (Character.isUpperCase(noPlus.charAt(0))) {
@@ -372,7 +377,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
             } else {
                 int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
                 String locationString = noPlus.substring(2, noPlus.length());
@@ -384,7 +389,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
             }
         }
         return result;
@@ -397,7 +402,7 @@ public class Board {
      * @return True if move was successful.
      */
     public MoveResult applyMoveAlgebraicNotation(String notation) {
-        return applyMoveAlgebraicNotation(notation, true);
+        return applyMoveAlgebraicNotation(notation, true, true);
     }
 
     /**
@@ -411,7 +416,22 @@ public class Board {
      * @return True if the move was successful.
      */
     public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck) {
-        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "");
+        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "", false);
+    }
+
+    /**
+     * Check if a move can be applied, then do it.
+     * Will also generate algebraic notation for the move in here
+     * and apply it to the algebraicNotation StringBuilder.
+     *
+     * @param pieceMoving The chess piece being moved.
+     * @param startMove   The starting move of the piece.
+     * @param endMove     The target location of the piece.
+     * @return True if the move was successful.
+     */
+    public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck,
+            boolean doNotation) {
+        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "", doNotation);
     }
 
     /**
@@ -426,7 +446,7 @@ public class Board {
      * @return True if the move was successful.
      */
     private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-            boolean extraCheck, boolean doPromotion, String promotedPieceValue) {
+            boolean extraCheck, boolean doPromotion, String promotedPieceValue, boolean doNotation) {
         MoveResult result = new MoveResult();
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
@@ -535,17 +555,19 @@ public class Board {
             result.isPromotion = true;
             result.promoteTeam = team;
         }
-        if (firstMove) {
-            firstMove = false;
-            algebraicRepresentation.append(moveCount + ". " + moveString.toString());
-            // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
-            ChessUIManager.appendMovesLabel(moveCount + ". " + moveString.toString());
-        } else {
-            moveCount++;
-            firstMove = true;
-            algebraicRepresentation.append(" " + moveString.toString() + "\n");
-            // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
-            ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
+        if (doNotation) {
+            if (firstMove) {
+                firstMove = false;
+                algebraicRepresentation.append(moveCount + ". " + moveString.toString());
+                // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
+                ChessUIManager.appendMovesLabel(moveCount + ". " + moveString.toString());
+            } else {
+                moveCount++;
+                firstMove = true;
+                algebraicRepresentation.append(" " + moveString.toString() + "\n");
+                // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
+                ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
+            }
         }
         // Reset the array of algebraic notations as we need to do this
         // because if the player undos a move, and then makes a different move

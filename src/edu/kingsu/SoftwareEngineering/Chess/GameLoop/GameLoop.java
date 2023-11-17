@@ -3,6 +3,8 @@ package edu.kingsu.SoftwareEngineering.Chess.GameLoop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 
@@ -35,6 +37,7 @@ public class GameLoop implements ActionListener {
     private Board board;
     private GameMode gameMode;
     private int currentGameMode;
+    private int aiTeam;
     private MoveResult lastMoveResult;
 
     /**
@@ -46,9 +49,25 @@ public class GameLoop implements ActionListener {
         resetGUIAndListeners();
         ChessUIManager.showNewGameFrame();
         UILibrary.WhitePlayer_VS_BlackPlayer_Button.addActionListener(e -> {
+            resetGUIAndListeners();
             currentGameMode = GameMode.PLAYER_VS_PLAYER_GAME_MODE;
             startPlayerVSPlayerGame();
         });
+
+        UILibrary.WhitePlayer_VS_BlackComp_Button.addActionListener(e -> {
+            resetGUIAndListeners();
+            currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
+            aiTeam = Team.BLACK_TEAM;
+            startPlayerVSAIBlackGame();
+        });
+
+        UILibrary.WhiteComp_VS_BlackPlayer_Button.addActionListener(e -> {
+            resetGUIAndListeners();
+            currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
+            aiTeam = Team.WHITE_TEAM;
+            startPlayerVSAIWhiteGame();
+        });
+
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
             startMainMenuScreen();
         });
@@ -103,6 +122,23 @@ public class GameLoop implements ActionListener {
             }
         });
 
+        // Used https://stackoverflow.com/questions/14589386/how-to-save-file-using-jfilechooser-in-java
+        UILibrary.SaveGame_JMenuItem.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser(".");
+            int returnValue = fileChooser.showSaveDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                try {
+                    FileWriter fw = new FileWriter(file);
+                    fw.write(board.getAlgebraicNotation());
+                    fw.close();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+        });
+
         UILibrary.ResumeGame_JMenuItem.addActionListener(e -> {
             ChessUIManager.showMainFrame();
         });
@@ -119,6 +155,10 @@ public class GameLoop implements ActionListener {
                 resetGUIAndListeners();
                 startPlayerVSPlayerGame();
                 break;
+            case GameMode.PLAYER_VS_AI_GAME_MODE:
+                resetGUIAndListeners();
+                startPlayerVSAIBlackGame();
+                break;
             default:
                 break;
         }
@@ -131,10 +171,28 @@ public class GameLoop implements ActionListener {
             }
         }
         ChessUIManager.HideEndGameFrame();
-        UILibrary.StepBackwards_Button.removeActionListener(this);
-        UILibrary.StepForwards_Button.removeActionListener(this);
+        // UILibrary.StepBackwards_Button.removeActionListener(this);
+        for (ActionListener l : UILibrary.StepBackwards_Button.getActionListeners()) {
+            UILibrary.StepBackwards_Button.removeActionListener(l);
+        }
+        for (ActionListener l : UILibrary.StepForwards_Button.getActionListeners()) {
+            UILibrary.StepBackwards_Button.removeActionListener(l);
+        }
+        // UILibrary.StepForwards_Button.removeActionListener(this);
         UILibrary.StepBackwards_Button.addActionListener(this);
         UILibrary.StepForwards_Button.addActionListener(this);
+    }
+
+    private void startPlayerVSAIGame(int aiTeam) {
+        ChessUIManager.clearMovesLabel();
+        board = new Board();
+        ChessUIManager.showMainFrame();
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        gameMode = new PlayerVSAIGameMode(2, aiTeam);
+        gameMode.setGameLoop(this);
+        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.startGame();
     }
 
     private void startPlayerVSPlayerGame() {
@@ -149,6 +207,30 @@ public class GameLoop implements ActionListener {
         gameMode.startGame();
     }
 
+    private void startPlayerVSAIWhiteGame() {
+        ChessUIManager.clearMovesLabel();
+        board = new Board();
+        ChessUIManager.showMainFrame();
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        gameMode = new PlayerVSAIGameMode(2, Team.WHITE_TEAM);
+        gameMode.setGameLoop(this);
+        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.startGame();
+    }
+
+    private void startPlayerVSAIBlackGame() {
+        ChessUIManager.clearMovesLabel();
+        board = new Board();
+        ChessUIManager.showMainFrame();
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        gameMode = new PlayerVSAIGameMode(2, Team.BLACK_TEAM);
+        gameMode.setGameLoop(this);
+        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.startGame();
+    }
+
     private void loadGamePlayerVSPlayer(File file) {
         ChessUIManager.clearMovesLabel();
         board = new Board();
@@ -156,13 +238,13 @@ public class GameLoop implements ActionListener {
         ChessUIManager.showMainFrame();
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
-        gameMode = new PlayerVSAIGameMode(2);
+        gameMode = new PlayerVSPlayerGameMode();
         //gameMode = new AIVSAIGameMode(4);
         gameMode.setGameLoop(this);
-        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
         // ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
-        
+
     }
 
     /**
@@ -191,8 +273,8 @@ public class GameLoop implements ActionListener {
     }
 
     public void sendUpdateBoardState() {
-        UILibrary.MainFrame.repaint();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
+        UILibrary.MainFrame.repaint();
     }
 
     @Override
