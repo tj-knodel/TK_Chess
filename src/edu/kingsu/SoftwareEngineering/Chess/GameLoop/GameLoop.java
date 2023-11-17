@@ -43,6 +43,114 @@ public class GameLoop implements ActionListener {
      */
     public GameLoop() {
         guiStarter = new GUIStarter();
+        resetGUIAndListeners();
+        ChessUIManager.showNewGameFrame();
+        UILibrary.WhitePlayer_VS_BlackPlayer_Button.addActionListener(e -> {
+            currentGameMode = GameMode.PLAYER_VS_PLAYER_GAME_MODE;
+            startPlayerVSPlayerGame();
+        });
+        UILibrary.NewGame_JMenuItem.addActionListener(e -> {
+            startMainMenuScreen();
+        });
+        UILibrary.RestartGame_JMenuItem.addActionListener(e -> {
+            restartGame();
+        });
+        UILibrary.endNewGameButton.addActionListener(e -> {
+            startMainMenuScreen();
+        });
+        UILibrary.endRematchButton.addActionListener(e -> {
+            restartGame();
+        });
+        UILibrary.endViewBoardButton.addActionListener(e -> {
+            resetGUIAndListeners();
+        });
+
+        UILibrary.EnterMove_TextField.addActionListener(this);
+
+        UILibrary.UpgradeQueenButton.addActionListener(e -> {
+            UILibrary.UpgradePieceFrame.setVisible(false);
+            Queen queen = new Queen(lastMoveResult.promoteTeam);
+            board.promotePawn(lastMoveResult.promotionLocation, queen);
+            sendUpdateBoardState();
+        });
+        UILibrary.UpgradeBishopButton.addActionListener(e -> {
+            UILibrary.UpgradePieceFrame.setVisible(false);
+            Bishop bishop = new Bishop(lastMoveResult.promoteTeam);
+            board.promotePawn(lastMoveResult.promotionLocation, bishop);
+            sendUpdateBoardState();
+        });
+        UILibrary.UpgradeRookButton.addActionListener(e -> {
+            UILibrary.UpgradePieceFrame.setVisible(false);
+            Rook rook = new Rook(lastMoveResult.promoteTeam);
+            board.promotePawn(lastMoveResult.promotionLocation, rook);
+            sendUpdateBoardState();
+        });
+
+        UILibrary.UpgradeKnightButton.addActionListener(e -> {
+            UILibrary.UpgradePieceFrame.setVisible(false);
+            Knight knight = new Knight(lastMoveResult.promoteTeam);
+            board.promotePawn(lastMoveResult.promotionLocation, knight);
+            sendUpdateBoardState();
+        });
+
+        UILibrary.LoadGame_JMenuItem.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser(".");
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                resetGUIAndListeners();
+                loadGamePlayerVSPlayer(file);
+            }
+        });
+
+        UILibrary.ResumeGame_JMenuItem.addActionListener(e -> {
+            ChessUIManager.showMainFrame();
+        });
+    }
+
+    private void startMainMenuScreen() {
+        ChessUIManager.HideEndGameFrame();
+        ChessUIManager.showNewGameFrame();
+    }
+
+    private void restartGame() {
+        switch (currentGameMode) {
+            case GameMode.PLAYER_VS_PLAYER_GAME_MODE:
+                resetGUIAndListeners();
+                startPlayerVSPlayerGame();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void resetGUIAndListeners() {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+            }
+        }
+        ChessUIManager.HideEndGameFrame();
+        UILibrary.StepBackwards_Button.removeActionListener(this);
+        UILibrary.StepForwards_Button.removeActionListener(this);
+        UILibrary.StepBackwards_Button.addActionListener(this);
+        UILibrary.StepForwards_Button.addActionListener(this);
+    }
+
+    private void startPlayerVSPlayerGame() {
+        ChessUIManager.clearMovesLabel();
+        board = new Board();
+        ChessUIManager.showMainFrame();
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        gameMode = new PlayerVSPlayerGameMode();
+        gameMode.setGameLoop(this);
+        ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.startGame();
+    }
+
+    private void loadGamePlayerVSPlayer(File file) {
+        ChessUIManager.clearMovesLabel();
         board = new Board();
         board.loadPGNFile(file);
         ChessUIManager.showMainFrame();
