@@ -268,7 +268,7 @@ public class Board {
         } else if (noPlus.contains("=")) {
             String[] moves = noPlus.split("=");
             int pieceId = Piece.PAWN;
-            String locationString = moves[0];
+            String locationString = moves[0].substring(moves[0].length() - 2);
             BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
             ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
                     boardLocation);
