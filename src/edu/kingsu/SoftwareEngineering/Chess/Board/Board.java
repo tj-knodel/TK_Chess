@@ -88,6 +88,9 @@ public class Board {
      */
     private boolean firstMove;
 
+    private BoardLocation lastMoveLocation;
+    private BoardLocation currentMoveLocation;
+
     /**
      * The move counter for the PGN format.
      */
@@ -178,6 +181,30 @@ public class Board {
         for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
             applyPGNMove(move, true);
         }
+    }
+
+    /**
+     * Get the last move location.
+     * @return The last move location.
+     */
+    public BoardLocation getLastMoveLocation() {
+        return lastMoveLocation;
+    }
+
+    /**
+     * Get the current move location.
+     * @return The current move location.
+     */
+    public BoardLocation getCurrentMoveLocation() {
+        return currentMoveLocation;
+    }
+
+    /**
+     * Did the player undo until the start of the game.
+     * @return If the player undo'ed until the start of the game.
+     */
+    public boolean isAtStart() {
+        return undoMoveCount == algebraicNotationMovesList.size();
     }
 
     /**
@@ -535,6 +562,8 @@ public class Board {
             // moveCount = algebraicNotationMovesList.size();
         }
         result.wasSuccessful = true;
+        currentMoveLocation = new BoardLocation(endMove.column, endMove.row);
+        lastMoveLocation = new BoardLocation(startMove.column, startMove.row);
         return result;
     }
 

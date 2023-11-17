@@ -7,6 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
+import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Bishop;
@@ -120,6 +121,11 @@ public class GameLoop implements ActionListener {
     }
 
     private void resetGUIAndListeners() {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+            }
+        }
         ChessUIManager.HideEndGameFrame();
         UILibrary.StepBackwards_Button.removeActionListener(this);
         UILibrary.StepForwards_Button.removeActionListener(this);
@@ -187,6 +193,19 @@ public class GameLoop implements ActionListener {
         if (e.getSource() == UILibrary.EnterMove_TextField) {
             String input = UILibrary.EnterMove_TextField.getText();
             MoveResult result = board.applyMoveAlgebraicNotation(input);
+            BoardLocation lastMove = board.getLastMoveLocation();
+            BoardLocation currentMove = board.getCurrentMoveLocation();
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+                }
+            }
+            if (!board.isAtStart()) {
+                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+            }
             checkGameState(result);
         }
 
@@ -195,6 +214,19 @@ public class GameLoop implements ActionListener {
             if (board.undoMove()) {
                 gameMode.switchTeam();
             }
+            BoardLocation lastMove = board.getLastMoveLocation();
+            BoardLocation currentMove = board.getCurrentMoveLocation();
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+                }
+            }
+            if (!board.isAtStart()) {
+                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+            }
             sendUpdateBoardState();
         }
 
@@ -202,6 +234,19 @@ public class GameLoop implements ActionListener {
         if (e.getSource() == UILibrary.StepForwards_Button) {
             if (board.redoMove()) {
                 gameMode.switchTeam();
+            }
+            BoardLocation lastMove = board.getLastMoveLocation();
+            BoardLocation currentMove = board.getCurrentMoveLocation();
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+                }
+            }
+            if (!board.isAtStart()) {
+                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
+                        .setPreviousMoveSquareVisibility(true);
             }
             sendUpdateBoardState();
         }

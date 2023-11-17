@@ -55,6 +55,17 @@ public class PlayerVSPlayerGameMode extends GameMode {
                         if (moveController.chessTileClick(board, teamTurn, chessTile.row,
                                 chessTile.column)) {
                             MoveResult result = moveController.sendMovesToBoard(board);
+                            BoardLocation lastMove = board.getLastMoveLocation();
+                            BoardLocation currentMove = board.getCurrentMoveLocation();
+                            for (int r = 0; r < 8; r++) {
+                                for (int c = 0; c < 8; c++) {
+                                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+                                }
+                            }
+                            guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
+                                    .setPreviousMoveSquareVisibility(true);
+                            guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
+                                    .setPreviousMoveSquareVisibility(true);
                             gameLoop.checkGameState(result);
                         }
                         if (!moveController.getIsFirstClick()) {
