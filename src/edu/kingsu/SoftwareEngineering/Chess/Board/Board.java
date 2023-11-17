@@ -648,9 +648,38 @@ public class Board {
      * @param endMove     Desired end location of the piece.
      */
     public void simulateApplyMove(Piece[][] board, Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
-        board[endMove.row][endMove.column] = pieceMoving;
-        pieceMoving.moved();
-        board[startMove.row][startMove.column] = new EmptyPiece();
+        if ((board[startMove.row][startMove.column] instanceof King
+                && board[endMove.row][endMove.column] instanceof Rook)
+                && board[startMove.row][startMove.column].getTeam() == board[endMove.row][endMove.column].getTeam()) {
+            if (Math.abs(startMove.column - endMove.column) == 4) {
+                Rook rookCopy = (Rook) board[endMove.row][endMove.column]
+                        .copy(board[endMove.row][endMove.column].getTeam());
+                board[startMove.row][startMove.column - 2] = pieceMoving;
+                board[startMove.row][startMove.column - 2].moved();
+                board[startMove.row][startMove.column - 1] = rookCopy;
+                board[startMove.row][startMove.column - 1].moved();
+
+                board[endMove.row][endMove.column] = new EmptyPiece();
+                board[startMove.row][startMove.column] = new EmptyPiece();
+            } else {
+                Rook rookCopy = (Rook) board[endMove.row][endMove.column]
+                        .copy(board[endMove.row][endMove.column].getTeam());
+                board[startMove.row][startMove.column + 2] = pieceMoving;
+                board[startMove.row][startMove.column + 2].moved();
+                board[startMove.row][startMove.column + 1] = rookCopy;
+                board[startMove.row][startMove.column + 1].moved();
+
+                board[endMove.row][endMove.column] = new EmptyPiece();
+                board[startMove.row][startMove.column] = new EmptyPiece();
+            }
+        } else {
+            board[endMove.row][endMove.column] = pieceMoving;
+            board[endMove.row][endMove.column].moved();
+            board[startMove.row][startMove.column] = new EmptyPiece();
+        }
+        // board[endMove.row][endMove.column] = pieceMoving;
+        // pieceMoving.moved();
+        // board[startMove.row][startMove.column] = new EmptyPiece();
         int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         checkKingInCheck(board, pieceMoving, otherTeam);
         checkKingInCheck(board, pieceMoving, pieceMoving.getTeam());
