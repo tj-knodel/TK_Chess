@@ -36,6 +36,6 @@ public class PlayerTest {
     @Test
     public void testValidMove() {
         Move test_move = testAI.getMove(testBoard);
-        Assert.assertTrue(testBoard.applyMove(test_move.piece, test_move.start, test_move.end));
+        Assert.assertTrue(testBoard.applyMove(test_move.piece, test_move.start, test_move.end).wasSuccessful);
     }
 }
