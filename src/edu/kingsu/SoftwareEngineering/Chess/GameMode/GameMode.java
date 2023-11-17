@@ -1,5 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.GameMode;
 
+import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 
 /**
@@ -21,6 +23,10 @@ public abstract class GameMode {
     public void setGameLoop(GameLoop gameLoop) {
         this.gameLoop = gameLoop;
     }
+
+    public abstract void initialize(Board board, GUIStarter guiStarter);
+
+    protected abstract void setClickListeners(GUIStarter guiStarter, Board board);
 
     /**
      * Switch teams. Really only needed for AI.

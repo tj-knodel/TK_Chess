@@ -37,7 +37,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
      * @param guiStarter The GUIStarted to listen for clicks to.
      * @param board The board to play on.
      */
-    public void setClickListeners(GUIStarter guiStarter, Board board) {
+    protected void setClickListeners(GUIStarter guiStarter, Board board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
@@ -107,6 +107,11 @@ public class PlayerVSPlayerGameMode extends GameMode {
     public void endGame() {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'endGame'");
+    }
+
+    @Override
+    public void initialize(Board board, GUIStarter guiStarter) {
+        setClickListeners(guiStarter, board);
     }
 
 }

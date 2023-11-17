@@ -142,6 +142,46 @@ public class GameLoop implements ActionListener {
         UILibrary.ResumeGame_JMenuItem.addActionListener(e -> {
             ChessUIManager.showMainFrame();
         });
+
+        UILibrary.StepBackwards_Button.addActionListener(e -> {
+            if (board.undoMove()) {
+                gameMode.switchTeam();
+            }
+            BoardLocation lastMove = board.getLastMoveLocation();
+            BoardLocation currentMove = board.getCurrentMoveLocation();
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+                }
+            }
+            if (!board.isAtStart()) {
+                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+            }
+            sendUpdateBoardState();
+        });
+
+        UILibrary.StepForwards_Button.addActionListener(e -> {
+            if (board.redoMove()) {
+                gameMode.switchTeam();
+            }
+            BoardLocation lastMove = board.getLastMoveLocation();
+            BoardLocation currentMove = board.getCurrentMoveLocation();
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+                }
+            }
+            if (!board.isAtStart()) {
+                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
+                        .setPreviousMoveSquareVisibility(true);
+            }
+            sendUpdateBoardState();
+        });
     }
 
     private void startMainMenuScreen() {
@@ -172,15 +212,15 @@ public class GameLoop implements ActionListener {
         }
         ChessUIManager.HideEndGameFrame();
         // UILibrary.StepBackwards_Button.removeActionListener(this);
-        for (ActionListener l : UILibrary.StepBackwards_Button.getActionListeners()) {
-            UILibrary.StepBackwards_Button.removeActionListener(l);
-        }
-        for (ActionListener l : UILibrary.StepForwards_Button.getActionListeners()) {
-            UILibrary.StepBackwards_Button.removeActionListener(l);
-        }
-        // UILibrary.StepForwards_Button.removeActionListener(this);
-        UILibrary.StepBackwards_Button.addActionListener(this);
-        UILibrary.StepForwards_Button.addActionListener(this);
+        // for (ActionListener l : UILibrary.StepBackwards_Button.getActionListeners()) {
+        //     UILibrary.StepBackwards_Button.removeActionListener(l);
+        // }
+        // for (ActionListener l : UILibrary.StepForwards_Button.getActionListeners()) {
+        //     UILibrary.StepBackwards_Button.removeActionListener(l);
+        // }
+        // // UILibrary.StepForwards_Button.removeActionListener(this);
+        // UILibrary.StepBackwards_Button.addActionListener(this);
+        // UILibrary.StepForwards_Button.addActionListener(this);
     }
 
     private void startPlayerVSAIGame(int aiTeam) {
@@ -191,7 +231,7 @@ public class GameLoop implements ActionListener {
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         gameMode = new PlayerVSAIGameMode(2, aiTeam);
         gameMode.setGameLoop(this);
-        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.initialize(board, guiStarter);
         gameMode.startGame();
     }
 
@@ -203,7 +243,7 @@ public class GameLoop implements ActionListener {
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         gameMode = new PlayerVSPlayerGameMode();
         gameMode.setGameLoop(this);
-        ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.initialize(board, guiStarter);
         gameMode.startGame();
     }
 
@@ -215,7 +255,7 @@ public class GameLoop implements ActionListener {
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         gameMode = new PlayerVSAIGameMode(2, Team.WHITE_TEAM);
         gameMode.setGameLoop(this);
-        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.initialize(board, guiStarter);
         gameMode.startGame();
     }
 
@@ -227,7 +267,7 @@ public class GameLoop implements ActionListener {
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         gameMode = new PlayerVSAIGameMode(2, Team.BLACK_TEAM);
         gameMode.setGameLoop(this);
-        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.initialize(board, guiStarter);
         gameMode.startGame();
     }
 
@@ -241,7 +281,7 @@ public class GameLoop implements ActionListener {
         gameMode = new PlayerVSPlayerGameMode();
         //gameMode = new AIVSAIGameMode(4);
         gameMode.setGameLoop(this);
-        ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.initialize(board, guiStarter);
         // ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
 
@@ -296,48 +336,6 @@ public class GameLoop implements ActionListener {
                         .setPreviousMoveSquareVisibility(true);
             }
             checkGameState(result);
-        }
-
-        // Step back a move
-        if (e.getSource() == UILibrary.StepBackwards_Button) {
-            if (board.undoMove()) {
-                gameMode.switchTeam();
-            }
-            BoardLocation lastMove = board.getLastMoveLocation();
-            BoardLocation currentMove = board.getCurrentMoveLocation();
-            for (int r = 0; r < 8; r++) {
-                for (int c = 0; c < 8; c++) {
-                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-                }
-            }
-            if (!board.isAtStart()) {
-                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-                        .setPreviousMoveSquareVisibility(true);
-                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-                        .setPreviousMoveSquareVisibility(true);
-            }
-            sendUpdateBoardState();
-        }
-
-        // Set Forward a move
-        if (e.getSource() == UILibrary.StepForwards_Button) {
-            if (board.redoMove()) {
-                gameMode.switchTeam();
-            }
-            BoardLocation lastMove = board.getLastMoveLocation();
-            BoardLocation currentMove = board.getCurrentMoveLocation();
-            for (int r = 0; r < 8; r++) {
-                for (int c = 0; c < 8; c++) {
-                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-                }
-            }
-            if (!board.isAtStart()) {
-                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-                        .setPreviousMoveSquareVisibility(true);
-                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-                        .setPreviousMoveSquareVisibility(true);
-            }
-            sendUpdateBoardState();
         }
     }
 }

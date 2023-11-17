@@ -47,10 +47,9 @@ public class AIVSAIGameMode extends GameMode {
      * @param guiStarter The GUIStarted to listen for clicks to.
      * @param board The board to play on.
      */
-    public void setClickListeners(GUIStarter guiStarter, Board board) {
+    protected void setClickListeners(GUIStarter guiStarter, Board board) {
         // super hacky but I'm lazy
-        this.board = board;
-        switchTeam();
+
     }
 
     /**
@@ -99,4 +98,10 @@ public class AIVSAIGameMode extends GameMode {
         switchTeam();
     }
     // }
+
+    @Override
+    public void initialize(Board board, GUIStarter guiStarter) {
+        this.board = board;
+        switchTeam();
+    }
 }
