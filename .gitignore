@@ -2,6 +2,7 @@ build
 dist
 doc
 lib
+report
 out
 .idea
 .vscode

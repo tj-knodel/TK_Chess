@@ -18,7 +18,7 @@ public class PlayerTest {
     public void setupPlayer() {
         testBoard = new Board();
         // initialize the AI with a difficulty of 1.
-        testAI = new AIPlayer(1, Team.WHITE_TEAM);
+        testAI = new AIPlayer(1, Team.BLACK_TEAM);
     }
 
     /**
