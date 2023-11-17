@@ -54,7 +54,8 @@ public class Rook extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove,
+            boolean extraCheck) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
         // Up
@@ -152,7 +153,7 @@ public class Rook extends Piece {
      */
     @Override
     public void moved() {
-        hasMoved = false;
+        hasMoved = true;
     }
 
 }

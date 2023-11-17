@@ -5,7 +5,6 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI.PIECES_ENUM;
 
 import javax.swing.ImageIcon;
-import java.awt.Image;
 /*
  
     ChessTileUI functions:
@@ -166,15 +165,32 @@ public class ChessUIManager {
      */
     public void setSliderFrameToColor(boolean isWhite) {
         if (isWhite) {
-            UILibrary.CurrentSelectedComputer_ImageLabel.setIcon(new ImageIcon(
-                    getImage("computer_white.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
+            UILibrary.CurrentSelectedComputer_ImageLabel.image = getImage("computer_white.png");
             UILibrary.CurrentSelectedComputer_TextLabel.setText("White Computer");
         } else {
-            UILibrary.CurrentSelectedComputer_ImageLabel.setIcon(new ImageIcon(
-                    getImage("computer_black.png").getImage().getScaledInstance(112, 105, Image.SCALE_DEFAULT)));
+            UILibrary.CurrentSelectedComputer_ImageLabel.image = getImage("computer_black.png");
             UILibrary.CurrentSelectedComputer_TextLabel.setText("Black Computer");
         }
+        UILibrary.resizeModule.resizeEverything();
     }
+
+
+    /**
+    * Show the end game frame with the desired message
+    * @param endMessage message to show
+    */
+    public static void ShowEndGameFrame(String endMessage) {
+        CreateAccessoryUIs.endTitle.setText(endMessage);
+        CreateAccessoryUIs.endLabel.setVisible(true);
+    }
+
+    /**
+     * Hide the end game frame
+     */
+    public static void HideEndGameFrame() {
+        CreateAccessoryUIs.endLabel.setVisible(false);
+    }
+
 
     // -----------------------------------------------------
     // -----------------------------------------------------

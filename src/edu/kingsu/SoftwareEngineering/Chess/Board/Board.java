@@ -1,10 +1,13 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
+import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNMove;
+import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
 
 /**
  * The Board class handles all of the logic in chess. It handles
@@ -74,12 +77,19 @@ public class Board {
      * algebraic notation. The board uses this
      * for the game, as well as for reading files.
      */
-    private final StringBuilder algebraicRepresentation;
+    private StringBuilder algebraicRepresentation;
+
+    private ArrayList<String> algebraicNotationMovesList;
+
+    private int undoMoveCount;
 
     /**
      * The boolean flipping for PGN format string.
      */
     private boolean firstMove;
+
+    private BoardLocation lastMoveLocation;
+    private BoardLocation currentMoveLocation;
 
     /**
      * The move counter for the PGN format.
@@ -94,9 +104,22 @@ public class Board {
     public Board() {
         // board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
+        algebraicNotationMovesList = new ArrayList<>();
+        undoMoveCount = 0;
         firstMove = true;
         moveCount = 1;
-        initializeGameTwoPlayersWhiteOnly();
+        initializeBoard();
+
+        // System.out.println(algebraicRepresentation);
+        // TODO: Example of loading a PGN game.
+        /*
+         * This can be used for many things, loading a game, recreating a game with a different game mode, etc.
+         */
+        // PGNReader reader = new PGNReader();
+        // for (PGNMove move : reader.getMovesFromFile("my-test/stalemate.pgn")) {
+        //     applyPGNMove(move, true);
+        //     // applyMoveAlgebraicNotation(move.getMoveString(), true);
+        // }
     }
 
     /**
@@ -133,8 +156,7 @@ public class Board {
      * Initializes the board to play a game and not to
      * read the PGN game.
      */
-    // TODO: Change this function to take in a "settings" variable to initialize the side based on that
-    public void initializeGameTwoPlayersWhiteOnly() {
+    public void initializeBoard() {
         board = new Piece[][] {
                 { new Rook(0), new Knight(0), new Bishop(0), new Queen(0), new King(0), new Bishop(0), new Knight(0),
                         new Rook(0) },
@@ -155,9 +177,86 @@ public class Board {
         };
     }
 
-    // public Board copyBoard() {
+    /**
+     * Load a file of the PGN format.
+     * @param file The file to load.
+     */
+    public void loadPGNFile(File file) {
+        PGNReader reader = new PGNReader();
+        for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
+            applyPGNMove(move, true);
+        }
+    }
 
-    // }
+    /**
+     * Get the last move location.
+     * @return The last move location.
+     */
+    public BoardLocation getLastMoveLocation() {
+        return lastMoveLocation;
+    }
+
+    /**
+     * Get the current move location.
+     * @return The current move location.
+     */
+    public BoardLocation getCurrentMoveLocation() {
+        return currentMoveLocation;
+    }
+
+    /**
+     * Did the player undo until the start of the game.
+     * @return If the player undo'ed until the start of the game.
+     */
+    public boolean isAtStart() {
+        return undoMoveCount == algebraicNotationMovesList.size();
+    }
+
+    /**
+     * Undos a move on the board.
+     * @return True if successful, false if otherwise.
+     */
+    public boolean undoMove() {
+        // This function basically rebuilds the board from scratch,
+        // and it will take the current moves that are made, up to
+        // a certain index. The undoMoveCount is that index, and when
+        // it is incremented, we go to X amount moves less than the moves that
+        // were made.
+        if (algebraicNotationMovesList.size() - undoMoveCount <= 0)
+            return false;
+        initializeBoard();
+        ChessUIManager.clearMovesLabel();
+        firstMove = true;
+        moveCount = 1;
+        undoMoveCount++;
+        algebraicRepresentation = new StringBuilder();
+        for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
+        }
+        return true;
+    }
+
+    /**
+     * Redos a move on the board.
+     * @return True if successful, false if otherwise.
+     */
+    public boolean redoMove() {
+        // Decrements the undoMoveCount, which makes the array go one further
+        // in redoing, which allows us to redo more moves until we reach the limit
+        // which is back to the most recent version of the game.
+        if (undoMoveCount <= 0)
+            return false;
+        initializeBoard();
+        ChessUIManager.clearMovesLabel();
+        firstMove = true;
+        moveCount = 1;
+        undoMoveCount--;
+        algebraicRepresentation = new StringBuilder();
+        for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
+        }
+        return true;
+    }
 
     /**
      * Gets a deep copy of the board
@@ -174,12 +273,58 @@ public class Board {
         return copiedBoard;
     }
 
-    public boolean applyMoveAlgebraicNotation(String notation) {
+    /**
+     * Applies a move based on the PGNMove class.
+     * @param move The move to do.
+     * @param extraCheck Should the algebraicNotation be overriden. Keep false unless you know why to make true.
+     * @return True if move as applied, false otherwise.
+     */
+    public MoveResult applyPGNMove(PGNMove move, boolean extraCheck) {
+        // if (move.hasComment()) {
+        //     System.out.println("Comment: " + move.getComment() + ", for move: " + move.getMoveString());
+        // }
+        return applyMoveAlgebraicNotation(move.getMoveString(), extraCheck);
+    }
+
+    /**
+     * Applys a move based on the algebraic notation.
+     * @param notation The notation to apply a move to. Example, Nf3 moves Knight to f3 if possible.
+     * @param extraCheck If algebraic notation should be overriden. Make it true if not known how it works.
+     * @return True if move was successful.
+     */
+    public MoveResult applyMoveAlgebraicNotation(String notation, boolean extraCheck) {
+        MoveResult result = new MoveResult();
         int team = (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
         // Replace the + sign in the PGN notation as the board doesn't care
         // what the notation says as it has it's own rules.
         String noPlus = notation.replace("+", "");
         noPlus = noPlus.replace("x", "");
+        if (noPlus.equalsIgnoreCase("O-O")) {
+            // Only ever one king
+            BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+            BoardLocation endLocation = new BoardLocation(kingLocation.column + 3, kingLocation.row);
+            return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation, extraCheck);
+        } else if (noPlus.equalsIgnoreCase("O-O-O")) {
+            // Only ever one king
+            BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+            BoardLocation endLocation = new BoardLocation(kingLocation.column - 4, kingLocation.row);
+            return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation, extraCheck);
+        } else if (noPlus.contains("=")) {
+            String[] moves = noPlus.split("=");
+            int pieceId = Piece.PAWN;
+            String locationString = moves[0].substring(moves[0].length() - 2);
+            BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
+            ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
+                    boardLocation);
+            if (pieceLocation.size() != 1)
+                return result;
+            Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
+            if (!(boardLocation.row == 0 || boardLocation.row == 7))
+                return result;
+            if (!(pieceToMove instanceof Pawn))
+                return result;
+            return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, false, true, moves[1]);
+        }
         // Piece moving without pawn.
         if (noPlus.length() == 2) {
             int pieceId = Piece.PAWN;
@@ -188,9 +333,9 @@ public class Board {
             ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
                     boardLocation);
             if (pieceLocation.size() != 1)
-                return false;
+                return result;
             Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-            return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+            return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
         } else if (noPlus.length() == 3) {
             if (Character.isUpperCase(noPlus.charAt(0))) {
                 int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
@@ -199,9 +344,9 @@ public class Board {
                 ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
                         boardLocation);
                 if (pieceLocation.size() != 1)
-                    return false;
+                    return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             } else {
                 int pieceId = Piece.PAWN;
                 String locationString = noPlus.substring(1, noPlus.length());
@@ -211,9 +356,9 @@ public class Board {
                 ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForColumn(team, pieceId,
                         noPlus.charAt(0) - 'a');
                 if (pieceLocation.size() != 1)
-                    return false;
+                    return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             }
         } else if (noPlus.length() == 4) {
             if (Character.isUpperCase(noPlus.charAt(0))) {
@@ -225,9 +370,9 @@ public class Board {
                 ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForColumn(board, team, pieceId,
                         noPlus.charAt(1) - 'a');
                 if (pieceLocation.size() != 1)
-                    return false;
+                    return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             } else {
                 int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
                 String locationString = noPlus.substring(2, noPlus.length());
@@ -237,12 +382,22 @@ public class Board {
                 ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForRow(board, team, pieceId,
                         (int) noPlus.charAt(1));
                 if (pieceLocation.size() != 1)
-                    return false;
+                    return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
             }
         }
-        return false;
+        return result;
+    }
+
+    /**
+     * Applys a move based on the algebraic notation.
+     * Will override notation.
+     * @param notation The notation to apply a move to. Example, Nf3 moves Knight to f3 if possible.
+     * @return True if move was successful.
+     */
+    public MoveResult applyMoveAlgebraicNotation(String notation) {
+        return applyMoveAlgebraicNotation(notation, true);
     }
 
     /**
@@ -255,7 +410,24 @@ public class Board {
      * @param endMove     The target location of the piece.
      * @return True if the move was successful.
      */
-    public boolean applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+    public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck) {
+        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "");
+    }
+
+    /**
+     * Check if a move can be applied, then do it.
+     * Will also generate algebraic notation for the move in here
+     * and apply it to the algebraicNotation StringBuilder.
+     *
+     * @param pieceMoving The chess piece being moved.
+     * @param startMove   The starting move of the piece.
+     * @param endMove     The target location of the piece.
+     * @param extraCheck  If algebraicNotation should be overriden
+     * @return True if the move was successful.
+     */
+    private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
+            boolean extraCheck, boolean doPromotion, String promotedPieceValue) {
+        MoveResult result = new MoveResult();
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
         // Get all pieces of type that can move to the "endMove" location
@@ -265,7 +437,7 @@ public class Board {
             }
         }
         if (piecesMoveToSameLocation == 0)
-            return false;
+            return result;
         StringBuilder moveString = new StringBuilder();
         // If only found one, just do basic chess notation
         if (piecesMoveToSameLocation == 1) {
@@ -306,7 +478,6 @@ public class Board {
             }
             moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
         }
-        // System.out.println(moveString.toString());
         if ((board[startMove.row][startMove.column] instanceof King
                 && board[endMove.row][endMove.column] instanceof Rook)
                 && board[startMove.row][startMove.column].getTeam() == board[endMove.row][endMove.column].getTeam()) {
@@ -338,12 +509,32 @@ public class Board {
             board[endMove.row][endMove.column] = pieceMoving;
             board[endMove.row][endMove.column].moved();
             board[startMove.row][startMove.column] = new EmptyPiece();
-            int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-            if (checkKingInCheck(pieceMoving, otherTeam)) {
+        }
+        int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        if (checkKingInCheck(pieceMoving, otherTeam)) {
+            moveString.append("+");
+            if (getPossibleMovesForTeamWithChecking(otherTeam).size() == 0) {
                 moveString.append("+");
+                result.isCheckmate = true;
+                result.checkmateTeam = otherTeam;
+            }
+        } else {
+            if (getPossibleMovesForTeamWithChecking(otherTeam).size() == 0) {
+                result.isStalemate = true;
+                result.checkmateTeam = otherTeam;
             }
         }
         checkKingInCheck(pieceMoving, pieceMoving.getTeam());
+        if (doPromotion) {
+            moveString.append("=" + promotedPieceValue);
+            int pieceIdFromString = Piece.PIECE_ID_FROM_STRING.get(promotedPieceValue);
+            Piece newPiece = Piece.createPieceFromTeam(pieceIdFromString, team);
+            board[endMove.row][endMove.column] = newPiece;
+        } else if (pieceMoving instanceof Pawn && (endMove.row == 0 || endMove.row == 7)) {
+            result.promotionLocation = new BoardLocation(endMove.column, endMove.row);
+            result.isPromotion = true;
+            result.promoteTeam = team;
+        }
         if (firstMove) {
             firstMove = false;
             algebraicRepresentation.append(moveCount + ". " + moveString.toString());
@@ -356,7 +547,73 @@ public class Board {
             // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
             ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
         }
-        return true;
+        // Reset the array of algebraic notations as we need to do this
+        // because if the player undos a move, and then makes a different move
+        // we need to delete the future redos as they lose those moves
+        // as they are not valid anymore.
+        if (extraCheck) {
+            ArrayList<String> newList = new ArrayList<>();
+            for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+                newList.add(algebraicNotationMovesList.get(i));
+            }
+            // algebraicNotationMovesList.add(moveString.toString());
+            newList.add(moveString.toString());
+            algebraicNotationMovesList.clear();
+            // algebraicNotationMovesList = newList;
+            for (int i = 0; i < newList.size(); i++) {
+                algebraicNotationMovesList.add(newList.get(i));
+            }
+            undoMoveCount = 0;
+            // moveCount = algebraicNotationMovesList.size();
+        }
+        result.wasSuccessful = true;
+        currentMoveLocation = new BoardLocation(endMove.column, endMove.row);
+        lastMoveLocation = new BoardLocation(startMove.column, startMove.row);
+        return result;
+    }
+
+    /**
+     * Check if a move can be applied, then do it.
+     * Will also generate algebraic notation for the move in here
+     * and apply it to the algebraicNotation StringBuilder.
+     *
+     * @param pieceMoving The chess piece being moved.
+     * @param startMove   The starting move of the piece.
+     * @param endMove     The target location of the piece.
+     * @return True if the move was successful.
+     */
+    public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+        return applyMove(pieceMoving, startMove, endMove, true);
+    }
+
+    /**
+     * Promotes a pawn.
+     * @param location The location to promote.
+     * @param piece The piece to promote too.
+     */
+    public void promotePawn(BoardLocation location, Piece piece) {
+        if (!algebraicNotationMovesList.get(algebraicNotationMovesList.size() - 1).contains("=")) {
+            String newNotation = algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1);
+            newNotation += "=" + Piece.chessNotationValue.get(piece.getPieceID());
+            algebraicNotationMovesList.set(algebraicNotationMovesList.size() - undoMoveCount - 1, newNotation);
+        }
+        ChessUIManager.clearMovesLabel();
+        boolean first = true;
+        int moveC = 1;
+        algebraicRepresentation = new StringBuilder();
+        for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+            if (first) {
+                first = false;
+                algebraicRepresentation.append(moveC + ". " + algebraicNotationMovesList.get(i));
+                ChessUIManager.appendMovesLabel(moveC + ". " + algebraicNotationMovesList.get(i));
+            } else {
+                algebraicRepresentation.append(" " + algebraicNotationMovesList.get(i) + "\n");
+                ChessUIManager.appendMovesLabel(" " + algebraicNotationMovesList.get(i) + "\n");
+                first = true;
+                moveC++;
+            }
+        }
+        board[location.row][location.column] = piece;
     }
 
     /**
@@ -483,29 +740,6 @@ public class Board {
             return returnVal;
         }
         return null;
-        // // Get the current piece's team, and then check if their king is in check
-        // // If in check, only return possible moves that will make them not in check
-        // // anymore.
-        // ArrayList<BoardLocation> returnVal = new ArrayList<>();
-        // int team = piece.getTeam();
-        // Piece[][] boardCopy = getBoard();
-        // BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
-        // King kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
-        // if (kingPiece.inCheck) {
-        //     ArrayList<BoardLocation> pieceMoves = piece.getPossibleMoves(board, location);
-        //     for (BoardLocation move : pieceMoves) {
-        //         simulateApplyMove(boardCopy, boardCopy[location.row][location.column], location, move);
-        //         kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
-        //         kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
-        //         if (kingPiece.inCheck) {
-        //         } else {
-        //             returnVal.add(move);
-        //         }
-        //         boardCopy = getBoard();
-        //     }
-        //     return returnVal;
-        // }
-        // return piece.getPossibleMoves(board, location);
     }
 
     /**
@@ -515,22 +749,12 @@ public class Board {
      * @return ArrayList of BoardLocations for the possible moves a team can make.
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeam(int team) {
-        // ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
-        // for (int i = 0; i < board.length; i++) {
-        //     for (int j = 0; j < board[i].length; j++) {
-        //         if (board[i][j].getTeam() == team) {
-        //             for (BoardLocation m : board[i][j].getPossibleMoves(board, new BoardLocation(j, i))) {
-        //                 possibleMoves.add(m);
-        //             }
-        //         }
-        //     }
-        // }
-        // return possibleMoves;
         return getPossibleMovesForTeam(board, team);
     }
 
     /**
-     * Gets all the possible moves for a specific team
+     * Gets all the possible moves for a specific team, ignoring
+     * if the king is in check afterwards.
      *
      * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
@@ -542,6 +766,27 @@ public class Board {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].getTeam() == team) {
                     for (BoardLocation m : board[i][j].getPossibleMoves(this, board, new BoardLocation(j, i), false)) {
+                        possibleMoves.add(m);
+                    }
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
+    /**
+     * Gets all the possible moves for a specific team that are valid.
+     *
+     * @param board The board to check possible moves for the team.
+     * @param team  The team to get all possible moves for.
+     * @return Arraylist of BoardLocations for the possible moves a team can make.
+     */
+    public ArrayList<BoardLocation> getPossibleMovesForTeamWithChecking(int team) {
+        ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j].getTeam() == team) {
+                    for (BoardLocation m : getPossibleMoves(board[i][j], new BoardLocation(j, i), false)) {
                         possibleMoves.add(m);
                     }
                 }

@@ -139,7 +139,8 @@ public abstract class Piece {
      * @param extraCheck
      * @return ArrayList of BoardLocations of possible moves.
      */
-    public abstract ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck);
+    public abstract ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board,
+            BoardLocation startMove, boolean extraCheck);
 
     /**
      * The EMPTY piece ID.
@@ -176,6 +177,21 @@ public abstract class Piece {
     public final static HashMap<Integer, String> chessNotationValue;
 
     public static final HashMap<String, Integer> PIECE_ID_FROM_STRING;
+
+    public static Piece createPieceFromTeam(int pieceId, int team) {
+        switch (pieceId) {
+            case Piece.BISHOP:
+                return new Bishop(team);
+            case Piece.ROOK:
+                return new Rook(team);
+            case Piece.KNIGHT:
+                return new Knight(team);
+            case Piece.QUEEN:
+                return new Queen(team);
+            default:
+                return new EmptyPiece();
+        }
+    }
 
     static {
         chessNotationValue = new HashMap<>();
