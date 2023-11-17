@@ -45,6 +45,12 @@ public abstract class GameMode {
      */
     public abstract void endGame();
 
+    public void undoMove() {
+    }
+
+    public void redoMove() {
+    }
+
     public void getNextTurn() {
     }
 }

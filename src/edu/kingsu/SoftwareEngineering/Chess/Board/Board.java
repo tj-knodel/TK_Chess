@@ -195,6 +195,20 @@ public class Board {
         }
     }
 
+    public ArrayList<PGNMove> loadPGNFileFromStart(File file) {
+        PGNReader reader = new PGNReader();
+        ArrayList<PGNMove> moves = new ArrayList<>();
+        for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
+            moves.add(move);
+            applyPGNMove(move, true);
+        }
+        for (int i = 0; i < algebraicNotationMovesList.size(); i++) {
+            undoMove();
+        }
+        undoMove();
+        return moves;
+    }
+
     /**
      * Get the last move location.
      * @return The last move location.
@@ -840,7 +854,6 @@ public class Board {
     /**
      * Gets all the possible moves for a specific team that are valid.
      *
-     * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
      * @return Arraylist of BoardLocations for the possible moves a team can make.
      */

@@ -25,6 +25,7 @@ import edu.kingsu.SoftwareEngineering.Chess.GameMode.GameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.NewPlayerVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSPlayerGameMode;
+import edu.kingsu.SoftwareEngineering.Chess.GameMode.TutorialGameMode;
 
 /**
  * The class that acts as the middle man between the Board class and the GUI
@@ -129,6 +130,10 @@ public class GameLoop implements ActionListener {
                 resetGUIAndListeners();
                 loadGamePlayerVSPlayer(file);
             }
+        });
+
+        UILibrary.LearnChessButton.addActionListener(e -> {
+
         });
 
         // Used https://stackoverflow.com/questions/14589386/how-to-save-file-using-jfilechooser-in-java

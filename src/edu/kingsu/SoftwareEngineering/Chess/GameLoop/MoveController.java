@@ -68,7 +68,7 @@ public class MoveController {
     /**
      * Does all the clicking logic.
      * @param board The board to check against.
-     * @param team The team that has the current turn.
+     * @param teamTurn The team that has the current turn.
      * @param row The row that is clicked.
      * @param column The column that is clicked.
      * @return True if successful, otherwise false.
