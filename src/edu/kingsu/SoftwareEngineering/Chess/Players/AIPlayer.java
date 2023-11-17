@@ -91,6 +91,7 @@ public class AIPlayer extends Player {
                 }
             }
         }
+        //System.out.println("Best move for" + colour + " is " + bestScore);
         return bestMove;
     }
 
@@ -176,7 +177,7 @@ public class AIPlayer extends Player {
             
             for (int i = 0; i < pieces.length; i++) {
                 for (int j = 0; j < pieces[i].length; j++) {
-                    if (pieces[i][j].getTeam() == player) {
+                    if (pieces[i][j].getTeam() == Team.WHITE_TEAM) {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j,i);
                         ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation, false);
@@ -197,7 +198,7 @@ public class AIPlayer extends Player {
             score = 200;
             for (int i = 0; i < pieces.length; i++) {
                 for (int j = 0; j < pieces[i].length; j++) {
-                    if (pieces[i][j].getTeam() == player) {
+                    if (pieces[i][j].getTeam() == Team.BLACK_TEAM) {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j,i);
                         ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation, false);
