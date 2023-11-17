@@ -167,11 +167,11 @@ public class PlayerVSAIGameMode extends GameMode {
             try {
                 runningThread.join();
                 Move aiMove = ai.getMove();
-                board.applyMove(aiMove.piece, aiMove.start, aiMove.end);
+                board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
             } catch (Exception e) {
                 System.err.println("oopsies with the AIThread");
             }
-            // switchTeam();
+            switchTeam();
         }
     }
 

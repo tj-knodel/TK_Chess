@@ -205,7 +205,7 @@ public class GameLoop implements ActionListener {
         ChessUIManager.showMainFrame();
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
-        gameMode = new PlayerVSAIGameMode(2);
+        gameMode = new PlayerVSAIGameMode(2, Team.BLACK_TEAM);
         gameMode.setGameLoop(this);
         ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
