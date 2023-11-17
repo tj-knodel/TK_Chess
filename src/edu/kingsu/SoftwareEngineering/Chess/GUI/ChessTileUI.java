@@ -298,23 +298,6 @@ public class ChessTileUI extends JLayeredPane {
     // -----------------------------------------------------
 
     /**
-     * Detects when the tile is clicked, sends event to GUI_Events
-     */
-    private void detectTileClicks() { // This click thing works but not super reliable,
-        // see Commit Tile Click for Version 2, which has better clicking but visual bug
-        // after click
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                GUI_Events.chessTileWasClicked(row, column);
-            }
-        });
-    }
-
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-
-    /**
      * Constructor for a chess UI Tile
      * 
      * @param row          Which row the tile is in (only used to send data to mouse click function)
@@ -326,7 +309,6 @@ public class ChessTileUI extends JLayeredPane {
         this.column = column;
         this.isTileWhite = displayWhite;
         createTile(displayWhite);
-        detectTileClicks();
 
         // JMenu events
         UILibrary.TogglePossibleMoves_JMenuItem.addActionListener(e -> {

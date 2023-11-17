@@ -169,6 +169,30 @@ public abstract class UILibrary {
   public static JLabel UpgradePieceFrame;
 
   /**
+   * In Upgrade frame Popup shown in MainFrame;
+   * Button to upgrade to upgrade to the queen
+   */
+  public static JButton UpgradeQueenButton;
+
+    /**
+   * In Upgrade frame Popup shown in MainFrame;
+   * Button to upgrade to upgrade to the Bishop
+   */
+  public static JButton UpgradeBishopButton;
+  
+    /**
+   * In Upgrade frame Popup shown in MainFrame;
+   * Button to upgrade to upgrade to the Rook
+   */
+  public static JButton UpgradeRookButton;
+  
+    /**
+   * In Upgrade frame Popup shown in MainFrame;
+   * Button to upgrade to upgrade to the Knight
+   */
+  public static JButton UpgradeKnightButton;
+
+  /**
    * Popup shown in MainFrame;
    * JLabel which is shown to the user when the game ends
    */
@@ -323,9 +347,5 @@ public abstract class UILibrary {
   UILibrary() {
   }
 
-  public static JButton UpgradeQueenButton;
-  public static JButton UpgradeBishopButton;
-  public static JButton UpgradeRookButton;
-  public static JButton UpgradeKnightButton;
 
 }

@@ -154,31 +154,6 @@ public class CreateAccessoryUIs {
 		UILibrary.UpgradePieceFrame.setVisible(true);
 	}
 
-	// -----------------------------------------------------
-	// -----------------------------------------------------
-
-	/**
-	 * Adds the action listeners which fires a event to GUI_Events when a user
-	 * selects which piece to upgrade to.
-	 */
-	private void addUpgradeButtonsActionListeners() {
-		upgradeQueenButton.addActionListener(e -> {
-			UILibrary.UpgradePieceFrame.setVisible(false);
-			GUI_Events.upgradeChessPieceWasClicked("queen");
-		});
-		upgradeBishopButton.addActionListener(e -> {
-			UILibrary.UpgradePieceFrame.setVisible(false);
-			GUI_Events.upgradeChessPieceWasClicked("bishop");
-		});
-		upgradeRookButton.addActionListener(e -> {
-			UILibrary.UpgradePieceFrame.setVisible(false);
-			GUI_Events.upgradeChessPieceWasClicked("rook");
-		});
-		upgradeKnightButton.addActionListener(e -> {
-			UILibrary.UpgradePieceFrame.setVisible(false);
-			GUI_Events.upgradeChessPieceWasClicked("knight");
-		});
-	}
 
 	// -----------------------------------------------------
 	// -----------------------------------------------------
@@ -252,7 +227,6 @@ public class CreateAccessoryUIs {
 	public CreateAccessoryUIs() {
 		// Upgrade Piece
 		createUpgradePieceFrame();
-		addUpgradeButtonsActionListeners();
 
 		// End Game
 		createEndGameUI();
