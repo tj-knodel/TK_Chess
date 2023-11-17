@@ -185,6 +185,7 @@ public class Board {
         firstMove = true;
         moveCount = 1;
         undoMoveCount++;
+        algebraicRepresentation = new StringBuilder();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
             applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
         }
@@ -206,6 +207,7 @@ public class Board {
         firstMove = true;
         moveCount = 1;
         undoMoveCount--;
+        algebraicRepresentation = new StringBuilder();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
             applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
         }
@@ -263,6 +265,23 @@ public class Board {
             BoardLocation kingLocation = getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
             BoardLocation endLocation = new BoardLocation(kingLocation.column - 4, kingLocation.row);
             return applyMove(getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation, extraCheck);
+        } else if (noPlus.contains("=")) {
+            String[] moves = noPlus.split("=");
+            int pieceId = Piece.PAWN;
+            String locationString = moves[0];
+            BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
+            ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
+                    boardLocation);
+            if (pieceLocation.size() != 1)
+                return result;
+            Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
+            // MoveResult r = applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+            // if (r.wasSuccessful) {
+            //     // promotePawnNoNotation(boardLocation,
+            //     //         Piece.createPieceFromTeam(Piece.PIECE_ID_FROM_STRING.get(moves[1]), team));
+            // }
+            // return r;
+            return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, false, true, moves[1]);
         }
         // Piece moving without pawn.
         if (noPlus.length() == 2) {
@@ -349,8 +368,8 @@ public class Board {
      * @param endMove     The target location of the piece.
      * @return True if the move was successful.
      */
-    public MoveResult applyMoveDontModifyNotation(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
-        return applyMove(pieceMoving, startMove, endMove, false);
+    public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck) {
+        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "");
     }
 
     /**
@@ -364,8 +383,8 @@ public class Board {
      * @param extraCheck  If algebraicNotation should be overriden
      * @return True if the move was successful.
      */
-    private MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-            boolean extraCheck) {
+    private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
+            boolean extraCheck, boolean doPromotion, String promotedPieceValue) {
         MoveResult result = new MoveResult();
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
@@ -464,6 +483,16 @@ public class Board {
             }
         }
         checkKingInCheck(pieceMoving, pieceMoving.getTeam());
+        if (doPromotion) {
+            moveString.append("=" + promotedPieceValue);
+            int pieceIdFromString = Piece.PIECE_ID_FROM_STRING.get(promotedPieceValue);
+            Piece newPiece = Piece.createPieceFromTeam(pieceIdFromString, team);
+            board[endMove.row][endMove.column] = newPiece;
+        } else if (pieceMoving instanceof Pawn && (endMove.row == 0 || endMove.row == 7)) {
+            result.promotionLocation = new BoardLocation(endMove.column, endMove.row);
+            result.isPromotion = true;
+            result.promoteTeam = team;
+        }
         if (firstMove) {
             firstMove = false;
             algebraicRepresentation.append(moveCount + ". " + moveString.toString());
@@ -495,11 +524,6 @@ public class Board {
             undoMoveCount = 0;
             // moveCount = algebraicNotationMovesList.size();
         }
-        if (pieceMoving instanceof Pawn && (endMove.row == 0 || endMove.row == 7)) {
-            result.promotionLocation = new BoardLocation(endMove.column, endMove.row);
-            result.isPromotion = true;
-            result.promoteTeam = team;
-        }
         result.wasSuccessful = true;
         return result;
     }
@@ -519,27 +543,60 @@ public class Board {
     }
 
     /**
-     * Promotes a pawn. Does not check validity of it.
+     * Promotes a pawn.
      * @param location The location to promote.
      * @param piece The piece to promote too.
      */
     public void promotePawn(BoardLocation location, Piece piece) {
-        String newNotation = algebraicNotationMovesList.get(algebraicNotationMovesList.size() - 1);
-        newNotation += "=" + Piece.chessNotationValue.get(piece.getPieceID());
-        algebraicNotationMovesList.set(algebraicNotationMovesList.size() - 1, newNotation);
+        if (!algebraicNotationMovesList.get(algebraicNotationMovesList.size() - 1).contains("=")) {
+            String newNotation = algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1);
+            newNotation += "=" + Piece.chessNotationValue.get(piece.getPieceID());
+            algebraicNotationMovesList.set(algebraicNotationMovesList.size() - undoMoveCount - 1, newNotation);
+        }
         ChessUIManager.clearMovesLabel();
         boolean first = true;
         int moveC = 1;
-        for (int i = 0; i < algebraicNotationMovesList.size(); i++) {
+        algebraicRepresentation = new StringBuilder();
+        for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
             if (first) {
                 first = false;
+                algebraicRepresentation.append(moveC + ". " + algebraicNotationMovesList.get(i));
                 ChessUIManager.appendMovesLabel(moveC + ". " + algebraicNotationMovesList.get(i));
             } else {
+                algebraicRepresentation.append(" " + algebraicNotationMovesList.get(i) + "\n");
                 ChessUIManager.appendMovesLabel(" " + algebraicNotationMovesList.get(i) + "\n");
                 first = true;
                 moveC++;
             }
         }
+        board[location.row][location.column] = piece;
+    }
+
+    private void promotePawnNoNotation(BoardLocation location, Piece piece) {
+        // System.out.println("\n\n\n\n\n\n");
+        // for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+        //     System.out.println(algebraicNotationMovesList.get(i));
+        // }
+        // ChessUIManager.clearMovesLabel();
+        // boolean first = true;
+        // algebraicRepresentation = new StringBuilder();
+        // moveCount = 1;
+        // for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+        //     if (first) {
+        //         firstMove = false;
+        //         first = false;
+        //         algebraicRepresentation.append(moveCount + ". " + algebraicNotationMovesList.get(i));
+        //         ChessUIManager.appendMovesLabel(moveCount + ". " + algebraicNotationMovesList.get(i));
+        //         continue;
+        //     } else {
+        //         firstMove = true;
+        //         first = true;
+        //         algebraicRepresentation.append(" " + algebraicNotationMovesList.get(i) + "\n");
+        //         ChessUIManager.appendMovesLabel(" " + algebraicNotationMovesList.get(i) + "\n");
+        //         moveCount++;
+        //         continue;
+        //     }
+        // }
         board[location.row][location.column] = piece;
     }
 
