@@ -175,6 +175,6 @@ public class BoardTest {
         BoardLocation start_loc = new BoardLocation(4, 6);
         BoardLocation end_loc = new BoardLocation(4, 4);
         Piece piece = testBoard.getBoard()[6][4];
-        Assert.assertTrue(testBoard.applyMove(piece, start_loc, end_loc));
+        Assert.assertTrue(testBoard.applyMove(piece, start_loc, end_loc).wasSuccessful);
     }
 }
