@@ -65,6 +65,8 @@ public class GameLoop implements ActionListener {
             resetGUIAndListeners();
         });
 
+        UILibrary.EnterMove_TextField.addActionListener(this);
+
         UILibrary.UpgradeQueenButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
             Queen queen = new Queen(lastMoveResult.promoteTeam);

@@ -275,12 +275,10 @@ public class Board {
             if (pieceLocation.size() != 1)
                 return result;
             Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-            // MoveResult r = applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
-            // if (r.wasSuccessful) {
-            //     // promotePawnNoNotation(boardLocation,
-            //     //         Piece.createPieceFromTeam(Piece.PIECE_ID_FROM_STRING.get(moves[1]), team));
-            // }
-            // return r;
+            if (!(boardLocation.row == 0 || boardLocation.row == 7))
+                return result;
+            if (!(pieceToMove instanceof Pawn))
+                return result;
             return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, false, true, moves[1]);
         }
         // Piece moving without pawn.
