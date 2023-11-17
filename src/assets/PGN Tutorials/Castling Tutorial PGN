@@ -1,0 +1,6 @@
+1. e4 e5 2. d3 Bd6 3. Nf3 Nf6 4. Nc3  O-O { // CASTLING //
+
+when there is a clear row between the king and the rook
+and no check against the king is made, 
+the king will move 2 spaces to the left or right. 
+While the rook either moves 3 spaces to the right or 2 spaces to the left. }
