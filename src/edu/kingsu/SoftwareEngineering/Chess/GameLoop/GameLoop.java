@@ -100,11 +100,13 @@ public class GameLoop implements ActionListener {
                 loadGamePlayerVSPlayer(file);
             }
         });
+
+        UILibrary.ResumeGame_JMenuItem.addActionListener(e -> {
+            ChessUIManager.showMainFrame();
+        });
     }
 
     private void startMainMenuScreen() {
-        UILibrary.StepBackwards_Button.addActionListener(this);
-        UILibrary.StepForwards_Button.addActionListener(this);
         ChessUIManager.HideEndGameFrame();
         ChessUIManager.showNewGameFrame();
     }
