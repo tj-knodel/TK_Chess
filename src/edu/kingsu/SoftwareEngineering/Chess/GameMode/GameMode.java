@@ -10,6 +10,11 @@ import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
  */
 public abstract class GameMode {
 
+    /**
+     * The player vs player game mode type.
+     */
+    public static final int PLAYER_VS_PLAYER_GAME_MODE = 0;
+
     protected GameLoop gameLoop;
 
     public void setGameLoop(GameLoop gameLoop) {

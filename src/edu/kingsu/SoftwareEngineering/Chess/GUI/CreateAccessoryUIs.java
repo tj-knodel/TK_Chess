@@ -3,6 +3,9 @@ package edu.kingsu.SoftwareEngineering.Chess.GUI;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
+import java.awt.Font;
 import java.awt.Image;
 
 /**
@@ -77,8 +80,10 @@ public class CreateAccessoryUIs {
 			newWidth = (newHeight * original_X_size) / original_Y_size;
 		}
 
-		int xPosition = xPos - (newWidth / 2);
-		int yPosition = 154 - newHeight;
+		int xPosition = UILibrary.resizeModule.scale_X(xPos - (newWidth / 2));
+		int yPosition = UILibrary.resizeModule.scale_Y(154 - newHeight);
+		newWidth = UILibrary.resizeModule.scale_X(newWidth);
+		newHeight = UILibrary.resizeModule.scale_Y(newHeight);
 
 		upgradeButton.setVisible(true);
 		upgradeButton.setIcon(new ImageIcon(
@@ -114,10 +119,8 @@ public class CreateAccessoryUIs {
 	 */
 	private void createUpgradePieceFrame() {
 		UILibrary.UpgradePieceFrame = new JLabel();
-		UILibrary.UpgradePieceFrame.setBounds(177, 433, 624, 173); // Numbers from Figma Design
-		UILibrary.UpgradePieceFrame.setIcon(
-				new ImageIcon(getImage("UpgradeFrameBackground.png").getImage().getScaledInstance(624, 173,
-						Image.SCALE_DEFAULT)));
+		UILibrary.resizeModule.setVariableBounds(UILibrary.UpgradePieceFrame, null, 177, 433, 624, 173); // Numbers from Figma Design
+		UILibrary.resizeModule.setVariableBounds(UILibrary.UpgradePieceFrame, getImage("UpgradeFrameBackground.png"));
 
 		upgradeQueenButton = new JButton();
 		upgradeRookButton = new JButton();
@@ -127,6 +130,10 @@ public class CreateAccessoryUIs {
 		UILibrary.UpgradePieceFrame.add(upgradeRookButton);
 		UILibrary.UpgradePieceFrame.add(upgradeKnightButton);
 		UILibrary.UpgradePieceFrame.add(upgradeBishopButton);
+		UILibrary.UpgradeQueenButton = upgradeQueenButton;
+		UILibrary.UpgradeRookButton = upgradeRookButton;
+		UILibrary.UpgradeKnightButton = upgradeKnightButton;
+		UILibrary.UpgradeBishopButton = upgradeBishopButton;
 
 		UILibrary.MainFrame.add(UILibrary.UpgradePieceFrame);
 		UILibrary.UpgradePieceFrame.setVisible(false);
@@ -135,8 +142,7 @@ public class CreateAccessoryUIs {
 	/**
 	 * Shows the upgrade piece frame
 	 * 
-	 * @param isWhite true = upgrading a white piece, false = upgrading a black
-	 *                piece
+	 * @param isWhite true = upgrading a white piece, false = upgrading a black piece
 	 */
 	public void showUpgradeFrame(boolean isWhite) {
 		String text = (isWhite) ? "white" : "black";
@@ -178,31 +184,63 @@ public class CreateAccessoryUIs {
 	// -----------------------------------------------------
 
 	/**
-	 * TODO
+	 * Background for the EndGameFrame
 	 */
-	private static JLabel endLabel;
+	public static JLabel endLabel;
 	/**
-	 * TODO
+	 * Title show to the user in the end game frame, suggested test "Checkmate, You Win!", "You Lose", "Draw", etc
 	 */
-	private static JLabel endTitle;
-	/**
-	 * TODO
-	 */
-	private static JButton endRematchButton;
-	/**
-	 * TODO
-	 */
-	private static JButton endViewBoardButton;
-	/**
-	 * TODO
-	 */
-	private static JButton endNewGameButton;
+	public static JLabel endTitle;
 
 	/**
-	 * TODO
+	 * Create the EndGameFrame and its contents
 	 */
 	private void createEndGameUI() {
+		endLabel = new JLabel();
+		UILibrary.resizeModule.setVariableBounds(endLabel, null, 135, 387, 681, 259); // Numbers from Figma Design
+		UILibrary.resizeModule.setVariableBounds(endLabel, getImage("EndGameFrame.png"));
 
+		JLabel TextLabel = new JLabel("Game Over", SwingConstants.CENTER);
+		TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+		TextLabel.setForeground(UILibrary.TextColor_White);
+		UILibrary.resizeModule.setVariableBounds(TextLabel, null, 62, 24, 566, 34); // Numbers from Figma Design
+		TextLabel.setOpaque(false);
+		endLabel.add(TextLabel);
+
+		endTitle = new JLabel("YOU WIN!", SwingConstants.CENTER);
+		endTitle.setFont(new Font("Source Sans Pro", Font.BOLD, 50));
+		endTitle.setForeground(UILibrary.TextColor_White);
+		UILibrary.resizeModule.setVariableBounds(endTitle, null, 62, 64, 566, 71); // Numbers from Figma Design
+		endTitle.setOpaque(false);
+		endLabel.add(endTitle);
+
+		UILibrary.endRematchButton = new JButton();
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endRematchButton, null, 37, 155, 183, 79);
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endRematchButton, getImage("RematchButton.png"));
+		UILibrary.endRematchButton.setOpaque(false);
+		UILibrary.endRematchButton.setContentAreaFilled(false);
+		UILibrary.endRematchButton.setBorderPainted(false);
+
+		UILibrary.endViewBoardButton = new JButton();
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endViewBoardButton, null, 249, 155, 183, 79);
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endViewBoardButton, getImage("ViewboardButton.png"));
+		UILibrary.endViewBoardButton.setOpaque(false);
+		UILibrary.endViewBoardButton.setContentAreaFilled(false);
+		UILibrary.endViewBoardButton.setBorderPainted(false);
+
+		UILibrary.endNewGameButton = new JButton();
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endNewGameButton, null, 461, 155, 183, 79);
+		UILibrary.resizeModule.setVariableBounds(UILibrary.endNewGameButton, getImage("NewGameButton.png"));
+		UILibrary.endNewGameButton.setOpaque(false);
+		UILibrary.endNewGameButton.setContentAreaFilled(false);
+		UILibrary.endNewGameButton.setBorderPainted(false);
+
+		endLabel.add(UILibrary.endRematchButton);
+		endLabel.add(UILibrary.endViewBoardButton);
+		endLabel.add(UILibrary.endNewGameButton);
+
+		endLabel.setVisible(false);
+		UILibrary.MainFrame.add(endLabel);
 	}
 
 	// -----------------------------------------------------
@@ -212,9 +250,12 @@ public class CreateAccessoryUIs {
 	 * Calls the functions to create the accessory Frames, upgrade a piece, end game frame.
 	 */
 	public CreateAccessoryUIs() {
+		// Upgrade Piece
 		createUpgradePieceFrame();
 		addUpgradeButtonsActionListeners();
 
+		// End Game
+		createEndGameUI();
 	}
 
 }

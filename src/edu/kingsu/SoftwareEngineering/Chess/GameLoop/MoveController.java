@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
+import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 
 /**
@@ -36,10 +37,9 @@ public class MoveController {
      * @param board The board to send the move to.
      * @return False.
      */
-    public boolean sendMovesToBoard(Board board) {
+    public MoveResult sendMovesToBoard(Board board) {
         Piece pieceMoving = board.getBoard()[firstClick.row][firstClick.column];
-        board.applyMove(pieceMoving, firstClick, secondClick);
-        return false;
+        return board.applyMove(pieceMoving, firstClick, secondClick);
     }
 
     /**

@@ -4,6 +4,8 @@ import java.awt.Color;
 
 import javax.swing.*;
 
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ResizeManager.UIImage_Label;
+
 /**
  * This file does not contain any real "functional" code, its more of a
  * library for all common variables and allows certain variables to be
@@ -152,7 +154,7 @@ public abstract class UILibrary {
    * Located in the Set AI Strength Frame;
    * JLabel (image) which informs the user which color AI they are changing
    */
-  public static JLabel CurrentSelectedComputer_ImageLabel;
+  public static UIImage_Label CurrentSelectedComputer_ImageLabel;
 
   /**
    * Located in the Set AI Strength Frame;
@@ -171,6 +173,24 @@ public abstract class UILibrary {
    * JLabel which is shown to the user when the game ends
    */
   public static JLabel EndGameFrame;
+
+  /**
+   * Scroll Pane in the Moves Label (label which shows the previous moves in algebraic notation)
+   */
+  public static JScrollPane MovesLabel_ScrollPane;
+
+  /**
+   * Shows on end game popup, Rematch game
+   */
+  public static JButton endRematchButton;
+  /**
+   * Shows on end game popup, View the current board
+   */
+  public static JButton endViewBoardButton;
+  /**
+   * Shows on end game popup, Start a new game
+   */
+  public static JButton endNewGameButton;
 
   // ----- MenuBar / Menu items -----------------
   /**
@@ -192,6 +212,11 @@ public abstract class UILibrary {
    * JMenuItem which restarts the current game
    */
   public static JMenuItem RestartGame_JMenuItem;
+
+  /**
+   * 
+   */
+  public static JMenuItem ResumeGame_JMenuItem;
 
   /**
    * JMenuItem which toggles whether the possible move circles on the board are
@@ -249,6 +274,11 @@ public abstract class UILibrary {
    */
   public static JMenuItem About_JMenuItem;
 
+  /**
+  * JMenuItem which shows the about section
+  */
+  public static JMenuItem Help_JMenuItem;
+
   /*
    * JMenuItems can be connected by doing:
    * UILibrary.myJMenuItem.addActionListener(e -> {
@@ -283,8 +313,19 @@ public abstract class UILibrary {
   public static final Color ForegroundTileColor = new Color(255, 227, 115, 70);
 
   /**
+   * ResizeModule object, responsible for auto-scaling all the UI Elements
+   */
+  public static ResizeManager resizeModule;
+
+  /**
    * Constructor not used
    */
   UILibrary() {
   }
+
+  public static JButton UpgradeQueenButton;
+  public static JButton UpgradeBishopButton;
+  public static JButton UpgradeRookButton;
+  public static JButton UpgradeKnightButton;
+
 }
