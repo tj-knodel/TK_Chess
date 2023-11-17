@@ -62,12 +62,6 @@ public abstract class UILibrary {
    */
   public static JLabel SetAIStrengthSliderFrame;
 
-  /**
-   * TODO
-   * Frame which will contain the puzzle elements
-   */
-  public static JLabel PuzzleFrame;
-
   // ----- Main Frame-------------
   /**
    * Located in the MainFrame;
@@ -167,6 +161,30 @@ public abstract class UILibrary {
    * JLabel which shows when the user upgrades a piece
    */
   public static JLabel UpgradePieceFrame;
+
+  /**
+   * In Upgrade frame Popup shown in MainFrame;
+   * Button to upgrade to upgrade to the queen
+   */
+  public static JButton UpgradeQueenButton;
+
+    /**
+   * In Upgrade frame Popup shown in MainFrame;
+   * Button to upgrade to upgrade to the Bishop
+   */
+  public static JButton UpgradeBishopButton;
+  
+    /**
+   * In Upgrade frame Popup shown in MainFrame;
+   * Button to upgrade to upgrade to the Rook
+   */
+  public static JButton UpgradeRookButton;
+  
+    /**
+   * In Upgrade frame Popup shown in MainFrame;
+   * Button to upgrade to upgrade to the Knight
+   */
+  public static JButton UpgradeKnightButton;
 
   /**
    * Popup shown in MainFrame;
@@ -323,9 +341,5 @@ public abstract class UILibrary {
   UILibrary() {
   }
 
-  public static JButton UpgradeQueenButton;
-  public static JButton UpgradeBishopButton;
-  public static JButton UpgradeRookButton;
-  public static JButton UpgradeKnightButton;
 
 }

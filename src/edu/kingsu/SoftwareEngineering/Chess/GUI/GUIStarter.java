@@ -21,7 +21,6 @@ public class GUIStarter {
         // Script Configuration
         UILibrary.resizeModule = new ResizeManager();
         new CreateMainFrame(); // Create the frame
-        new GUI_Events();
         new CreateStartFrame();
         new CreateCompSliderFrame();
         chessUIManager = new ChessUIManager(new CreateAccessoryUIs());
