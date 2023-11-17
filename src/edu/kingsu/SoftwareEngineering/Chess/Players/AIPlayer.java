@@ -248,42 +248,4 @@ public class AIPlayer extends Player {
         }
         
     }
-
-    /**
-     * Finds the maximum move out of a list of moves
-     * @param moves
-     * @param board
-     * @return
-     */
-    private Move getMaxMove(Board board, Piece piece, BoardLocation pieceLocation, ArrayList<BoardLocation> moves) {
-        int curMaxScore = -200;
-        Move curMaxMove = null;
-        for (BoardLocation l : moves) {
-            board.applyMove(piece, pieceLocation, l);
-            int moveScore = calcScore(board.getBoard());
-            if (moveScore > curMaxScore) {
-                curMaxMove = new Move(piece, pieceLocation, pieceLocation, moveScore);
-            }
-        }
-        return curMaxMove;
-    }
-
-    /**
-     * Finds the minimum move out of a list of moves
-     * @param moves
-     * @param board
-     * @return
-     */
-    private Move getMinMove(Board board, Piece piece, BoardLocation pieceLocation, ArrayList<BoardLocation> moves) {
-        int curMinScore = 200;
-        Move curMinMove = null;
-        for (BoardLocation l : moves) {
-            board.applyMove(piece, pieceLocation, l);
-            int moveScore = calcScore(board.getBoard());
-            if (moveScore > curMinScore) {
-                curMinMove = new Move(piece, pieceLocation, pieceLocation, moveScore);
-            }
-        }
-        return curMinMove;
-    }
 }
