@@ -130,6 +130,7 @@ public class Board {
      * @param algebraicRep the current sequence of moves in a StringBuilder
      */
     public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep) {
+        algebraicNotationMovesList = new ArrayList<>();
         algebraicRepresentation = algebraicRep;
         if (moveCount >= 1) {
             firstMove = false;
@@ -323,7 +324,7 @@ public class Board {
                 return result;
             if (!(pieceToMove instanceof Pawn))
                 return result;
-            return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, false, true, moves[1]);
+            return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, false, true, moves[1], false);
         }
         // Piece moving without pawn.
         if (noPlus.length() == 2) {
@@ -411,7 +412,22 @@ public class Board {
      * @return True if the move was successful.
      */
     public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck) {
-        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "");
+        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "", false);
+    }
+
+    /**
+     * Check if a move can be applied, then do it.
+     * Will also generate algebraic notation for the move in here
+     * and apply it to the algebraicNotation StringBuilder.
+     *
+     * @param pieceMoving The chess piece being moved.
+     * @param startMove   The starting move of the piece.
+     * @param endMove     The target location of the piece.
+     * @return True if the move was successful.
+     */
+    public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck,
+            boolean doNotation) {
+        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "", doNotation);
     }
 
     /**
@@ -426,7 +442,7 @@ public class Board {
      * @return True if the move was successful.
      */
     private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-            boolean extraCheck, boolean doPromotion, String promotedPieceValue) {
+            boolean extraCheck, boolean doPromotion, String promotedPieceValue, boolean doNotation) {
         MoveResult result = new MoveResult();
         int team = pieceMoving.getTeam();
         int piecesMoveToSameLocation = 0;
@@ -535,17 +551,19 @@ public class Board {
             result.isPromotion = true;
             result.promoteTeam = team;
         }
-        if (firstMove) {
-            firstMove = false;
-            algebraicRepresentation.append(moveCount + ". " + moveString.toString());
-            // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
-            ChessUIManager.appendMovesLabel(moveCount + ". " + moveString.toString());
-        } else {
-            moveCount++;
-            firstMove = true;
-            algebraicRepresentation.append(" " + moveString.toString() + "\n");
-            // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
-            ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
+        if (doNotation) {
+            if (firstMove) {
+                firstMove = false;
+                algebraicRepresentation.append(moveCount + ". " + moveString.toString());
+                // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
+                ChessUIManager.appendMovesLabel(moveCount + ". " + moveString.toString());
+            } else {
+                moveCount++;
+                firstMove = true;
+                algebraicRepresentation.append(" " + moveString.toString() + "\n");
+                // TODO: Maybe move this somewhere else so the board doesn't call UI stuff?
+                ChessUIManager.appendMovesLabel(" " + moveString.toString() + "\n");
+            }
         }
         // Reset the array of algebraic notations as we need to do this
         // because if the player undos a move, and then makes a different move
