@@ -64,8 +64,9 @@ public class PlayerVSAIGameMode extends GameMode {
                         if (moveController.chessTileClick(board, teamTurn, chessTile.row,
                                 chessTile.column)) {
                             moveController.sendMovesToBoard(board);
-                            switchTeam();
                             gameLoop.sendUpdateBoardState();
+                            switchTeam();
+                            // runAI();
                             // guiStarter.chessUIManager.drawBoard(board.getBoard());
                         }
                         if (!moveController.getIsFirstClick()) {
@@ -111,7 +112,7 @@ public class PlayerVSAIGameMode extends GameMode {
 
     private void runAI() {
         if (teamTurn == aiTeam) {
-            
+
             ai = new AIThread(new AIPlayer(difficulty, Team.BLACK_TEAM), board);
             runningThread = new Thread(ai);
             runningThread.start();
@@ -119,7 +120,7 @@ public class PlayerVSAIGameMode extends GameMode {
                 runningThread.join();
                 Move aiMove = ai.getMove();
                 board.applyMove(aiMove.piece, aiMove.start, aiMove.end);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.err.println("oopsies with the AIThread");
             }
             switchTeam();

@@ -146,6 +146,10 @@ public class GameLoop implements ActionListener {
                 resetGUIAndListeners();
                 startPlayerVSPlayerGame();
                 break;
+            case GameMode.PLAYER_VS_AI_GAME_MODE:
+                resetGUIAndListeners();
+                startPlayerVSAIBlackGame();
+                break;
             default:
                 break;
         }
