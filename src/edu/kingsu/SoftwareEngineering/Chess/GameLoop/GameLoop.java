@@ -37,6 +37,7 @@ public class GameLoop implements ActionListener {
     private Board board;
     private GameMode gameMode;
     private int currentGameMode;
+    private int aiTeam;
     private MoveResult lastMoveResult;
 
     /**
@@ -48,8 +49,23 @@ public class GameLoop implements ActionListener {
         resetGUIAndListeners();
         ChessUIManager.showNewGameFrame();
         UILibrary.WhitePlayer_VS_BlackPlayer_Button.addActionListener(e -> {
+            resetGUIAndListeners();
             currentGameMode = GameMode.PLAYER_VS_PLAYER_GAME_MODE;
             startPlayerVSPlayerGame();
+        });
+
+        UILibrary.WhitePlayer_VS_BlackComp_Button.addActionListener(e -> {
+            resetGUIAndListeners();
+            aiTeam = Team.BLACK_TEAM;
+            currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
+            startPlayerVSAIGame(Team.BLACK_TEAM);
+        });
+
+        UILibrary.WhiteComp_VS_BlackPlayer_Button.addActionListener(e -> {
+            resetGUIAndListeners();
+            aiTeam = Team.WHITE_TEAM;
+            currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
+            startPlayerVSAIGame(Team.WHITE_TEAM);
         });
 
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
@@ -139,6 +155,10 @@ public class GameLoop implements ActionListener {
                 resetGUIAndListeners();
                 startPlayerVSPlayerGame();
                 break;
+            case GameMode.PLAYER_VS_AI_GAME_MODE:
+                resetGUIAndListeners();
+                startPlayerVSAIGame(aiTeam);
+                break;
             default:
                 break;
         }
@@ -151,10 +171,28 @@ public class GameLoop implements ActionListener {
             }
         }
         ChessUIManager.HideEndGameFrame();
-        UILibrary.StepBackwards_Button.removeActionListener(this);
-        UILibrary.StepForwards_Button.removeActionListener(this);
+        // UILibrary.StepBackwards_Button.removeActionListener(this);
+        for (ActionListener l : UILibrary.StepBackwards_Button.getActionListeners()) {
+            UILibrary.StepBackwards_Button.removeActionListener(l);
+        }
+        for (ActionListener l : UILibrary.StepForwards_Button.getActionListeners()) {
+            UILibrary.StepBackwards_Button.removeActionListener(l);
+        }
+        // UILibrary.StepForwards_Button.removeActionListener(this);
         UILibrary.StepBackwards_Button.addActionListener(this);
         UILibrary.StepForwards_Button.addActionListener(this);
+    }
+
+    private void startPlayerVSAIGame(int aiTeam) {
+        ChessUIManager.clearMovesLabel();
+        board = new Board();
+        ChessUIManager.showMainFrame();
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        gameMode = new PlayerVSAIGameMode(2, aiTeam);
+        gameMode.setGameLoop(this);
+        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.startGame();
     }
 
     private void startPlayerVSPlayerGame() {
@@ -176,10 +214,10 @@ public class GameLoop implements ActionListener {
         ChessUIManager.showMainFrame();
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
-        gameMode = new PlayerVSAIGameMode(2);
+        gameMode = new PlayerVSPlayerGameMode();
         //gameMode = new AIVSAIGameMode(4);
         gameMode.setGameLoop(this);
-        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
+        ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
         // ((AIVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
 
@@ -211,8 +249,8 @@ public class GameLoop implements ActionListener {
     }
 
     public void sendUpdateBoardState() {
-        UILibrary.MainFrame.repaint();
         guiStarter.chessUIManager.drawBoard(board.getBoard());
+        UILibrary.MainFrame.repaint();
     }
 
     @Override

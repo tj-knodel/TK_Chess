@@ -232,7 +232,7 @@ public class Board {
         undoMoveCount++;
         algebraicRepresentation = new StringBuilder();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
+            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true);
         }
         return true;
     }
@@ -254,7 +254,7 @@ public class Board {
         undoMoveCount--;
         algebraicRepresentation = new StringBuilder();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false);
+            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true);
         }
         return true;
     }
@@ -284,7 +284,7 @@ public class Board {
         // if (move.hasComment()) {
         //     System.out.println("Comment: " + move.getComment() + ", for move: " + move.getMoveString());
         // }
-        return applyMoveAlgebraicNotation(move.getMoveString(), extraCheck);
+        return applyMoveAlgebraicNotation(move.getMoveString(), extraCheck, true);
     }
 
     /**
@@ -293,7 +293,7 @@ public class Board {
      * @param extraCheck If algebraic notation should be overriden. Make it true if not known how it works.
      * @return True if move was successful.
      */
-    public MoveResult applyMoveAlgebraicNotation(String notation, boolean extraCheck) {
+    public MoveResult applyMoveAlgebraicNotation(String notation, boolean extraCheck, boolean doNotation) {
         MoveResult result = new MoveResult();
         int team = (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
         // Replace the + sign in the PGN notation as the board doesn't care
@@ -336,7 +336,7 @@ public class Board {
             if (pieceLocation.size() != 1)
                 return result;
             Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-            return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+            return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
         } else if (noPlus.length() == 3) {
             if (Character.isUpperCase(noPlus.charAt(0))) {
                 int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
@@ -347,7 +347,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
             } else {
                 int pieceId = Piece.PAWN;
                 String locationString = noPlus.substring(1, noPlus.length());
@@ -359,7 +359,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
             }
         } else if (noPlus.length() == 4) {
             if (Character.isUpperCase(noPlus.charAt(0))) {
@@ -373,7 +373,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
             } else {
                 int pieceId = Piece.PIECE_ID_FROM_STRING.get(noPlus.subSequence(0, 1));
                 String locationString = noPlus.substring(2, noPlus.length());
@@ -385,7 +385,7 @@ public class Board {
                 if (pieceLocation.size() != 1)
                     return result;
                 Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck);
+                return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
             }
         }
         return result;
@@ -398,7 +398,7 @@ public class Board {
      * @return True if move was successful.
      */
     public MoveResult applyMoveAlgebraicNotation(String notation) {
-        return applyMoveAlgebraicNotation(notation, true);
+        return applyMoveAlgebraicNotation(notation, true, true);
     }
 
     /**
