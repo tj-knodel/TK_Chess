@@ -155,7 +155,7 @@ public class PlayerVSAIGameMode extends GameMode {
     private void runAI() {
         if (teamTurn == aiTeam) {
 
-            ai = new AIThread(new AIPlayer(difficulty, Team.BLACK_TEAM), board);
+            ai = new AIThread(new AIPlayer(difficulty, aiTeam), board);
             runningThread = new Thread(ai);
             runningThread.start();
             // try {
