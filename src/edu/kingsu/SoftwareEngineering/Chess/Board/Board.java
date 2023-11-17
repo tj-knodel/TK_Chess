@@ -131,6 +131,7 @@ public class Board {
      */
     public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep) {
         algebraicRepresentation = algebraicRep;
+        algebraicNotationMovesList = new ArrayList<>();
         if (moveCount >= 1) {
             firstMove = false;
         }
