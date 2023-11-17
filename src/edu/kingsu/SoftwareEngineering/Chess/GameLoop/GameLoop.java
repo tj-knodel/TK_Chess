@@ -214,6 +214,7 @@ public class GameLoop implements ActionListener {
                         .setPreviousMoveSquareVisibility(true);
             }
             checkGameState(result);
+            UILibrary.EnterMove_TextField.setText("");
         }
 
         // Step back a move
