@@ -62,12 +62,6 @@ public abstract class UILibrary {
    */
   public static JLabel SetAIStrengthSliderFrame;
 
-  /**
-   * TODO
-   * Frame which will contain the puzzle elements
-   */
-  public static JLabel PuzzleFrame;
-
   // ----- Main Frame-------------
   /**
    * Located in the MainFrame;
