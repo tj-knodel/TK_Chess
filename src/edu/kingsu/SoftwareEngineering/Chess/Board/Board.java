@@ -1,5 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -166,6 +167,17 @@ public class Board {
                 { new Rook(1), new Knight(1), new Bishop(1), new Queen(1), new King(1), new Bishop(1), new Knight(1),
                         new Rook(1) }
         };
+    }
+
+    /**
+     * Load a file of the PGN format.
+     * @param file The file to load.
+     */
+    public void loadPGNFile(File file) {
+        PGNReader reader = new PGNReader();
+        for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
+            applyPGNMove(move, true);
+        }
     }
 
     /**
@@ -567,34 +579,6 @@ public class Board {
                 moveC++;
             }
         }
-        board[location.row][location.column] = piece;
-    }
-
-    private void promotePawnNoNotation(BoardLocation location, Piece piece) {
-        // System.out.println("\n\n\n\n\n\n");
-        // for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-        //     System.out.println(algebraicNotationMovesList.get(i));
-        // }
-        // ChessUIManager.clearMovesLabel();
-        // boolean first = true;
-        // algebraicRepresentation = new StringBuilder();
-        // moveCount = 1;
-        // for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-        //     if (first) {
-        //         firstMove = false;
-        //         first = false;
-        //         algebraicRepresentation.append(moveCount + ". " + algebraicNotationMovesList.get(i));
-        //         ChessUIManager.appendMovesLabel(moveCount + ". " + algebraicNotationMovesList.get(i));
-        //         continue;
-        //     } else {
-        //         firstMove = true;
-        //         first = true;
-        //         algebraicRepresentation.append(" " + algebraicNotationMovesList.get(i) + "\n");
-        //         ChessUIManager.appendMovesLabel(" " + algebraicNotationMovesList.get(i) + "\n");
-        //         moveCount++;
-        //         continue;
-        //     }
-        // }
         board[location.row][location.column] = piece;
     }
 

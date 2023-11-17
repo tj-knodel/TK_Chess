@@ -2,22 +2,19 @@ package edu.kingsu.SoftwareEngineering.Chess.GameLoop;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.io.File;
+
+import javax.swing.JFileChooser;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
-import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Bishop;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Knight;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Queen;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Rook;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.GUI_Events;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.GameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSPlayerGameMode;
@@ -85,11 +82,22 @@ public class GameLoop implements ActionListener {
             board.promotePawn(lastMoveResult.promotionLocation, rook);
             sendUpdateBoardState();
         });
+
         UILibrary.UpgradeKnightButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
             Knight knight = new Knight(lastMoveResult.promoteTeam);
             board.promotePawn(lastMoveResult.promotionLocation, knight);
             sendUpdateBoardState();
+        });
+
+        UILibrary.LoadGame_JMenuItem.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser(".");
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                resetGUIAndListeners();
+                loadGamePlayerVSPlayer(file);
+            }
         });
     }
 
@@ -129,7 +137,19 @@ public class GameLoop implements ActionListener {
         gameMode.setGameLoop(this);
         ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
+    }
 
+    private void loadGamePlayerVSPlayer(File file) {
+        ChessUIManager.clearMovesLabel();
+        board = new Board();
+        board.loadPGNFile(file);
+        ChessUIManager.showMainFrame();
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        gameMode = new PlayerVSPlayerGameMode();
+        gameMode.setGameLoop(this);
+        ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.startGame();
     }
 
     /**

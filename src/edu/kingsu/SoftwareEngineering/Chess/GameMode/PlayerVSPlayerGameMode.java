@@ -5,9 +5,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.MoveController;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -58,17 +56,6 @@ public class PlayerVSPlayerGameMode extends GameMode {
                                 chessTile.column)) {
                             MoveResult result = moveController.sendMovesToBoard(board);
                             gameLoop.checkGameState(result);
-                            // gameLoop.sendUpdateBoardState();
-                            // if (result.wasSuccessful) {
-                            //     gameLoop.sendUpdateBoardState();
-                            //     if (result.isCheckmate) {
-                            //         ChessUIManager.ShowEndGameFrame(
-                            //                 ((result.checkmateTeam == Team.WHITE_TEAM) ? "Black" : "White")
-                            //                         + " team wins!");
-                            //     }
-                            // }
-                            // switchTeam();
-                            // guiStarter.chessUIManager.drawBoard(board.getBoard());
                         }
                         if (!moveController.getIsFirstClick()) {
                             var moves = moveController.getAllPossibleMoves();
