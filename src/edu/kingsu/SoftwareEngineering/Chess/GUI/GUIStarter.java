@@ -40,7 +40,6 @@ public class GUIStarter {
         // Show UI
         UILibrary.ChessJFrame.setVisible(true);
 
-
         //ChessUIManager.showNewGameFrame();
         ChessUIManager.showMainFrame();
         //ChessUIManager.showSliderFrame();

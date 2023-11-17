@@ -23,13 +23,16 @@ public class MoveController {
      * If the click was the first click or not.
      */
     private boolean isFirstClick = true;
+
+    private int playerTeam;
     /**
      * Possible moves that can be moved to for a piece clicked on.
      */
     private ArrayList<BoardLocation> possibleMoves;
 
-    public MoveController() {
+    public MoveController(int playerTeam) {
         this.possibleMoves = new ArrayList<>();
+        this.playerTeam = playerTeam;
     }
 
     /**
@@ -58,6 +61,10 @@ public class MoveController {
         return isFirstClick;
     }
 
+    public boolean chessTileClick(Board board, char row, char column) {
+        return chessTileClick(board, playerTeam, row, column);
+    }
+
     /**
      * Does all the clicking logic.
      * @param board The board to check against.
@@ -66,11 +73,11 @@ public class MoveController {
      * @param column The column that is clicked.
      * @return True if successful, otherwise false.
      */
-    public boolean chessTileClick(Board board, int team, char row, char column) {
+    public boolean chessTileClick(Board board, int teamTurn, char row, char column) {
         if (isFirstClick) {
             firstClick = new BoardLocation(column, row);
             Piece piece = board.getBoard()[firstClick.row][firstClick.column];
-            if (piece.getTeam() != team)
+            if (piece.getTeam() != board.getTeamTurn())
                 return false;
             possibleMoves = board.getPossibleMoves(piece, firstClick, true);
             isFirstClick = false;

@@ -6,6 +6,9 @@ import java.util.HashMap;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNMove;
 import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
 
@@ -96,18 +99,21 @@ public class Board {
      */
     private int moveCount;
 
+    private GameLoop gameLoop;
+
     /**
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
      */
     // TODO: Add a "settings" or "gamemode" instance here to check how to initialize the board.
-    public Board() {
+    public Board(GameLoop gameLoop) {
         // board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
         algebraicNotationMovesList = new ArrayList<>();
         undoMoveCount = 0;
         firstMove = true;
         moveCount = 1;
+        this.gameLoop = gameLoop;
         initializeBoard();
 
         // TODO: Example of loading a PGN game.
@@ -128,13 +134,14 @@ public class Board {
      * @param moveCount    the amount of moves made
      * @param algebraicRep the current sequence of moves in a StringBuilder
      */
-    public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep) {
+    public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep, GameLoop gameLoop) {
         algebraicRepresentation = new StringBuilder();//algebraicRep;
         algebraicNotationMovesList = new ArrayList<>();
         if (moveCount >= 1) {
             firstMove = false;
         }
         this.moveCount = moveCount;
+        this.gameLoop = gameLoop;
         board = new Piece[8][8];
         for (int i = 0; i < pieces.length; i++) {
             for (int j = 0; j < pieces[i].length; j++) {
@@ -149,7 +156,7 @@ public class Board {
      * @return a deep copy of the board
      */
     public Board copy() {
-        return new Board(board, moveCount, algebraicRepresentation);
+        return new Board(board, moveCount, algebraicRepresentation, gameLoop);
     }
 
     /**
@@ -434,6 +441,10 @@ public class Board {
         return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, "", doNotation);
     }
 
+    public int getTeamTurn() {
+        return (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
+    }
+
     /**
      * Check if a move can be applied, then do it.
      * Will also generate algebraic notation for the move in here
@@ -591,6 +602,7 @@ public class Board {
         result.wasSuccessful = true;
         currentMoveLocation = new BoardLocation(endMove.column, endMove.row);
         lastMoveLocation = new BoardLocation(startMove.column, startMove.row);
+        gameLoop.sendUpdateBoardState();
         return result;
     }
 

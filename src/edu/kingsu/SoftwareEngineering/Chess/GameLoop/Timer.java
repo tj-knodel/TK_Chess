@@ -10,17 +10,20 @@ public class Timer implements java.lang.Runnable {
     private boolean running = false;
     List<Integer> seconds = Collections.synchronizedList(new ArrayList<>());
 
-    public Timer(){
+    public Timer() {
         this.seconds.add(0);
         thread = new Thread(this);
     }
 
-    public int getSeconds(){
+    public int getSeconds() {
         return seconds.get(0);
     }
 
+    public void resetTimer() {
+        seconds.set(0, 0);
+    }
 
-    public void startTimer(){
+    public void startTimer() {
         thread.start();
     }
 
@@ -29,21 +32,20 @@ public class Timer implements java.lang.Runnable {
     public void run() {
         running = true;
 
-        while (running){
+        while (running) {
             try {
 
                 seconds.set(0, seconds.get(0) + 1);
-                System.out.println( seconds.get(0) + " second has passed");
+                System.out.println(seconds.get(0) + " second has passed");
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        
     }
 
-    public void stopTimer(){
+    public void stopTimer() {
         running = false;
         try {
             thread.join();
@@ -52,5 +54,5 @@ public class Timer implements java.lang.Runnable {
             e.printStackTrace();
         }
     }
-    
+
 }

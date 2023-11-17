@@ -1,5 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.GameMode;
 
+import javax.swing.JOptionPane;
+
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
@@ -42,4 +44,7 @@ public abstract class GameMode {
      * End the game. Not used right now.
      */
     public abstract void endGame();
+
+    public void getNextTurn() {
+    }
 }

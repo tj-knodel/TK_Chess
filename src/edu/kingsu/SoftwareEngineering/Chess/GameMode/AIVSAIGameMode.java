@@ -1,5 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.GameMode;
 
+import javax.swing.JOptionPane;
+
 import org.w3c.dom.events.MouseEvent;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
@@ -19,6 +21,7 @@ public class AIVSAIGameMode extends GameMode {
     private int difficulty;
     private int teamTurn;
     private Board board;
+    private GUIStarter guiStarter;
 
     private boolean gameOver = false;
 
@@ -27,9 +30,9 @@ public class AIVSAIGameMode extends GameMode {
      * @param aiDifficulty
      */
     public AIVSAIGameMode(int aiDifficulty) {
-        this.moveController = new MoveController();
         difficulty = aiDifficulty;
-        teamTurn = Team.BLACK_TEAM;
+        teamTurn = Team.WHITE_TEAM;
+        // this.moveController = new MoveController();
     }
 
     /**
@@ -39,7 +42,7 @@ public class AIVSAIGameMode extends GameMode {
     public void switchTeam() {
         teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         // System.out.println("Team is now: " + teamTurn);
-        runAI();
+        // runAI();
     }
 
     /**
@@ -71,37 +74,22 @@ public class AIVSAIGameMode extends GameMode {
     }
 
     private void runAI() {
-        gameLoop.sendUpdateBoardState();
-        // if (teamTurn == aiTeam) {
-
-        ai = new AIThread(new AIPlayer(difficulty, teamTurn), board);
+        ai = new AIThread(new AIPlayer(difficulty, board.getTeamTurn()), board, guiStarter);
         runningThread = new Thread(ai);
         runningThread.start();
-        try {
-            runningThread.sleep(1000L);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        try {
-            runningThread.join();
-            Move aiMove = ai.getMove();
-            if (aiMove == null) {
-                gameOver = true;
-                // System.out.println("We are done the game");
-                // System.exit(0);
-            }
-            board.applyMove(aiMove.piece, aiMove.start, aiMove.end);
-        } catch (Exception e) {
-            System.err.println("oopsies with the AIThread");
-        }
-        switchTeam();
+    }
+
+    @Override
+    public void getNextTurn() {
+        runAI();
     }
     // }
 
     @Override
     public void initialize(Board board, GUIStarter guiStarter) {
         this.board = board;
-        switchTeam();
+        this.guiStarter = guiStarter;
+        // switchTeam();
+        runAI();
     }
 }

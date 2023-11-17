@@ -6,6 +6,8 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 /**
  * @author Thaler Knodel
  * @version 0.1.0
@@ -46,62 +48,63 @@ public class AIPlayer extends Player {
      * @return a move
      */
     public Move getMove(Board board) {
+        return randomMove(board);
         //minimax(board, difficulty, colour);
         //Move move = randomMove(board);
         // get the pieces from the board
-        Piece[][] pieces = board.getBoard();
-        // get all the pieces for the team
-        ArrayList<BoardLocation> team_pieces = new ArrayList<BoardLocation>();
-        for (int i = 0; i < pieces.length; i++) {
-            for (int j = 0; j < pieces[i].length; j++) {
-                if (pieces[i][j].getTeam() == colour) {
-                    team_pieces.add(new BoardLocation(j, i));
-                }
-            }
-        }
+        // Piece[][] pieces = board.getBoard();
+        // // get all the pieces for the team
+        // ArrayList<BoardLocation> team_pieces = new ArrayList<BoardLocation>();
+        // for (int i = 0; i < pieces.length; i++) {
+        //     for (int j = 0; j < pieces[i].length; j++) {
+        //         if (pieces[i][j].getTeam() == colour) {
+        //             team_pieces.add(new BoardLocation(j, i));
+        //         }
+        //     }
+        // }
 
-        ArrayList<Move> allMoves = new ArrayList<Move>();
-        // check each move for this team
-        for (BoardLocation l : team_pieces) {
-            Piece piece = pieces[l.row][l.column];
-            ArrayList<BoardLocation> moves = board.getPossibleMoves(piece, l, false);
-            for (BoardLocation lprime : moves) {
-                // add new moves with a placeholder score which we will update later
-                allMoves.add(new Move(piece, l, lprime, 0));
-            }
-        }
-        if (allMoves.isEmpty()) {
-            // There are no possible moves
-            return null;
-        }
+        // ArrayList<Move> allMoves = new ArrayList<Move>();
+        // // check each move for this team
+        // for (BoardLocation l : team_pieces) {
+        //     Piece piece = pieces[l.row][l.column];
+        //     ArrayList<BoardLocation> moves = board.getPossibleMoves(piece, l, false);
+        //     for (BoardLocation lprime : moves) {
+        //         // add new moves with a placeholder score which we will update later
+        //         allMoves.add(new Move(piece, l, lprime, 0));
+        //     }
+        // }
+        // if (allMoves.isEmpty()) {
+        //     // There are no possible moves
+        //     return null;
+        // }
 
-        int bestScore;
-        if (colour == Team.WHITE_TEAM) {
-            bestScore = -200;
-        } else {
-            bestScore = 200;
-        }
-        Move bestMove = null;
-        for (Move m : allMoves) {
-            Board copy = board.copy();
-            // copy.applyMove(m.piece, m.start, m.end);
-            copy.simulateApplyMove(pieces, m.piece, m.start, m.end);
-            int curScore = minimax(copy, difficulty, colour);
-            m.score = curScore;
-            if (colour == Team.WHITE_TEAM) {
-                if (m.score >= bestScore) {
-                    bestMove = m;
-                    bestScore = m.score;
-                }
-            } else if (colour == Team.BLACK_TEAM) {
-                if (m.score <= bestScore) {
-                    bestMove = m;
-                    bestScore = m.score;
-                }
-            }
-        }
-        //System.out.println("Best move for" + colour + " is " + bestScore);
-        return bestMove;
+        // int bestScore;
+        // if (colour == Team.WHITE_TEAM) {
+        //     bestScore = -200;
+        // } else {
+        //     bestScore = 200;
+        // }
+        // Move bestMove = null;
+        // for (Move m : allMoves) {
+        //     Board copy = board.copy();
+        //     // copy.applyMove(m.piece, m.start, m.end);
+        //     copy.simulateApplyMove(pieces, m.piece, m.start, m.end);
+        //     int curScore = minimax(copy, difficulty, colour);
+        //     m.score = curScore;
+        //     if (colour == Team.WHITE_TEAM) {
+        //         if (m.score >= bestScore) {
+        //             bestMove = m;
+        //             bestScore = m.score;
+        //         }
+        //     } else if (colour == Team.BLACK_TEAM) {
+        //         if (m.score <= bestScore) {
+        //             bestMove = m;
+        //             bestScore = m.score;
+        //         }
+        //     }
+        // }
+        // //System.out.println("Best move for" + colour + " is " + bestScore);
+        // return bestMove;
     }
 
     /**
@@ -174,6 +177,7 @@ public class AIPlayer extends Player {
             System.out.println(calcScore(pieces));
             return calcScore(pieces);
         }
+        // JOptionPane.showConfirmDialog(null, "Got here with team: " + board.getTeamTurn());
 
         // the board is properly copied here
         //Board copy = board.copyBoard();

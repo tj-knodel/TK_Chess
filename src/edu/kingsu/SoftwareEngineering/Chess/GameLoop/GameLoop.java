@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
@@ -21,6 +22,7 @@ import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.AIVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.GameMode;
+import edu.kingsu.SoftwareEngineering.Chess.GameMode.NewPlayerVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSAIGameMode;
 import edu.kingsu.SoftwareEngineering.Chess.GameMode.PlayerVSPlayerGameMode;
 
@@ -58,7 +60,8 @@ public class GameLoop implements ActionListener {
             resetGUIAndListeners();
             currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
             aiTeam = Team.BLACK_TEAM;
-            startPlayerVSAIBlackGame();
+            // startPlayerVSAIBlackGame();
+            startPlayerVSAIGame();
         });
 
         UILibrary.WhiteComp_VS_BlackPlayer_Button.addActionListener(e -> {
@@ -66,6 +69,12 @@ public class GameLoop implements ActionListener {
             currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
             aiTeam = Team.WHITE_TEAM;
             startPlayerVSAIWhiteGame();
+        });
+
+        UILibrary.WhiteComp_VS_BlackComp_Button.addActionListener(e -> {
+            resetGUIAndListeners();
+            currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
+            startAIVSAIGameMode();
         });
 
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
@@ -223,13 +232,25 @@ public class GameLoop implements ActionListener {
         // UILibrary.StepForwards_Button.addActionListener(this);
     }
 
-    private void startPlayerVSAIGame(int aiTeam) {
+    private void startAIVSAIGameMode() {
         ChessUIManager.clearMovesLabel();
-        board = new Board();
+        board = new Board(this);
         ChessUIManager.showMainFrame();
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
-        gameMode = new PlayerVSAIGameMode(2, aiTeam);
+        gameMode = new AIVSAIGameMode(2);
+        gameMode.setGameLoop(this);
+        gameMode.initialize(board, guiStarter);
+        gameMode.startGame();
+    }
+
+    private void startPlayerVSAIGame() {
+        ChessUIManager.clearMovesLabel();
+        board = new Board(this);
+        ChessUIManager.showMainFrame();
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        gameMode = new NewPlayerVSAIGameMode();
         gameMode.setGameLoop(this);
         gameMode.initialize(board, guiStarter);
         gameMode.startGame();
@@ -237,7 +258,7 @@ public class GameLoop implements ActionListener {
 
     private void startPlayerVSPlayerGame() {
         ChessUIManager.clearMovesLabel();
-        board = new Board();
+        board = new Board(this);
         ChessUIManager.showMainFrame();
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
@@ -249,7 +270,7 @@ public class GameLoop implements ActionListener {
 
     private void startPlayerVSAIWhiteGame() {
         ChessUIManager.clearMovesLabel();
-        board = new Board();
+        board = new Board(this);
         ChessUIManager.showMainFrame();
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
@@ -261,7 +282,7 @@ public class GameLoop implements ActionListener {
 
     private void startPlayerVSAIBlackGame() {
         ChessUIManager.clearMovesLabel();
-        board = new Board();
+        board = new Board(this);
         ChessUIManager.showMainFrame();
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
@@ -273,7 +294,7 @@ public class GameLoop implements ActionListener {
 
     private void loadGamePlayerVSPlayer(File file) {
         ChessUIManager.clearMovesLabel();
-        board = new Board();
+        board = new Board(this);
         board.loadPGNFile(file);
         ChessUIManager.showMainFrame();
 
@@ -308,13 +329,17 @@ public class GameLoop implements ActionListener {
             } else if (result.isPromotion) {
                 guiStarter.chessUIManager.showUpgradeFrame(result.promoteTeam == Team.WHITE_TEAM);
             }
-            gameMode.switchTeam();
+            // gameMode.switchTeam();
         }
     }
 
     public void sendUpdateBoardState() {
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         UILibrary.MainFrame.repaint();
+
+        gameMode.getNextTurn();
+        // JOptionPane.showConfirmDialog(null, "Updated");
+
     }
 
     @Override

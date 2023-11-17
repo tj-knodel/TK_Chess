@@ -33,9 +33,9 @@ public class PlayerVSAIGameMode extends GameMode {
      * @param aiDifficulty
      */
     public PlayerVSAIGameMode(int aiDifficulty, int aiTeam) {
-        this.moveController = new MoveController();
         teamTurn = Team.WHITE_TEAM;
         playerTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        this.moveController = new MoveController(playerTeam);
         this.aiTeam = aiTeam;
     }
 
@@ -44,7 +44,7 @@ public class PlayerVSAIGameMode extends GameMode {
      */
     @Override
     public void switchTeam() {
-        teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        // teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         runAI();
         System.out.println("Team is now: " + teamTurn);
     }
@@ -58,8 +58,8 @@ public class PlayerVSAIGameMode extends GameMode {
         // super hacky but I'm lazy
 
         if (aiTeam == Team.WHITE_TEAM) {
-            runAI();
             gameLoop.sendUpdateBoardState();
+            runAI();
         }
 
         for (int i = 0; i < 8; i++) {
@@ -76,7 +76,7 @@ public class PlayerVSAIGameMode extends GameMode {
                 chessTile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if (moveController.chessTileClick(board, teamTurn, chessTile.row,
+                        if (moveController.chessTileClick(board, chessTile.row,
                                 chessTile.column)) {
                             MoveResult result = moveController.sendMovesToBoard(board);
                             BoardLocation lastMove = board.getLastMoveLocation();
@@ -91,6 +91,7 @@ public class PlayerVSAIGameMode extends GameMode {
                             guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
                                     .setPreviousMoveSquareVisibility(true);
                             gameLoop.checkGameState(result);
+                            runAI();
                         }
                         if (!moveController.getIsFirstClick()) {
                             var moves = moveController.getAllPossibleMoves();
@@ -136,7 +137,7 @@ public class PlayerVSAIGameMode extends GameMode {
     private void runAI() {
         if (teamTurn == aiTeam) {
 
-            ai = new AIThread(new AIPlayer(difficulty, aiTeam), board);
+            ai = new AIThread(new AIPlayer(difficulty, aiTeam), board, guiStarter);
             runningThread = new Thread(ai);
             runningThread.start();
             // try {
@@ -145,14 +146,14 @@ public class PlayerVSAIGameMode extends GameMode {
             //     // TODO Auto-generated catch block
             //     e.printStackTrace();
             // }
-            try {
-                runningThread.join();
-                Move aiMove = ai.getMove();
-                board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
-            } catch (Exception e) {
-                System.err.println("oopsies with the AIThread");
-            }
-            switchTeam();
+            // try {
+            //     runningThread.join();
+            //     Move aiMove = ai.getMove();
+            //     board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
+            // } catch (Exception e) {
+            //     System.err.println("oopsies with the AIThread");
+            // }
+            // switchTeam();
         }
     }
 

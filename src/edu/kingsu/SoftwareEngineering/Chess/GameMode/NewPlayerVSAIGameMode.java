@@ -7,36 +7,41 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.MoveController;
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.Timer;
+import edu.kingsu.SoftwareEngineering.Chess.Players.AIPlayer;
+import edu.kingsu.SoftwareEngineering.Chess.Players.AIThread;
+import edu.kingsu.SoftwareEngineering.Chess.Players.Move;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-/**
- * {@inheritDoc}
- */
-public class PlayerVSPlayerGameMode extends GameMode {
+public class NewPlayerVSAIGameMode extends GameMode {
 
     private MoveController moveController;
+    private AIThread aiThread;
+    private Thread aiThreadRunner;
+    private Timer timer;
+    private Board board;
     private int teamTurn;
+    private GUIStarter guiStarter;
+    private int aiTeam;
 
-    public PlayerVSPlayerGameMode() {
-        this.moveController = new MoveController(-1);
-        teamTurn = Team.WHITE_TEAM;
+    public NewPlayerVSAIGameMode() {
+        this.teamTurn = Team.WHITE_TEAM;
+        this.aiTeam = Team.BLACK_TEAM;
+        this.moveController = new MoveController(Team.WHITE_TEAM);
+        this.timer = new Timer();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void switchTeam() {
-        teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+    public void initialize(Board board, GUIStarter guiStarter) {
+        this.board = board;
+        this.guiStarter = guiStarter;
+        setClickListeners(guiStarter, board);
     }
 
-    /**
-     * Sets the click listeners to a GUI so that moves can be registered.
-     * @param guiStarter The GUIStarted to listen for clicks to.
-     * @param board The board to play on.
-     */
+    @Override
     protected void setClickListeners(GUIStarter guiStarter, Board board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -52,7 +57,9 @@ public class PlayerVSPlayerGameMode extends GameMode {
                 chessTile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if (moveController.chessTileClick(board, teamTurn, chessTile.row,
+                        if (teamTurn == aiTeam)
+                            return;
+                        if (moveController.chessTileClick(board, chessTile.row,
                                 chessTile.column)) {
                             MoveResult result = moveController.sendMovesToBoard(board);
                             BoardLocation lastMove = board.getLastMoveLocation();
@@ -67,6 +74,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
                             guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
                                     .setPreviousMoveSquareVisibility(true);
                             gameLoop.checkGameState(result);
+                            // switchTeam();
                         }
                         if (!moveController.getIsFirstClick()) {
                             var moves = moveController.getAllPossibleMoves();
@@ -91,27 +99,44 @@ public class PlayerVSPlayerGameMode extends GameMode {
         }
     }
 
-    /**
-     * {inheritDoc}
-     */
+    @Override
+    public void switchTeam() {
+        gameLoop.sendUpdateBoardState();
+        teamTurn = (teamTurn == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        runAI();
+    }
+
     @Override
     public void startGame() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'startGame'");
+        if (aiTeam == Team.WHITE_TEAM) {
+            runAI();
+        }
     }
 
-    /**
-     * {inheritDoc}
-     */
     @Override
     public void endGame() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'endGame'");
     }
 
-    @Override
-    public void initialize(Board board, GUIStarter guiStarter) {
-        setClickListeners(guiStarter, board);
+    private void runAI() {
+        // timer.startTimer();
+        // while (timer.getSeconds() < 3) {
+        // }
+        // timer.stopTimer();
+        // timer.resetTimer();
+        if (teamTurn == aiTeam) {
+            this.aiThread = new AIThread(new AIPlayer(2, aiTeam), board, guiStarter);
+            this.aiThreadRunner = new Thread(aiThread);
+            aiThreadRunner.start();
+            try {
+                // aiThreadRunner.sleep(2000);
+                aiThreadRunner.join();
+                Move aiMove = aiThread.getMove();
+                MoveResult result = board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            switchTeam();
+        }
     }
 
 }
