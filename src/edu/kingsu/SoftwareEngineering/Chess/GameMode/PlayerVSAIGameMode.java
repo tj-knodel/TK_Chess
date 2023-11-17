@@ -81,21 +81,11 @@ public class PlayerVSAIGameMode extends GameMode {
                     public void mousePressed(MouseEvent e) {
                         if (moveController.chessTileClick(board, playerTeam, chessTile.row,
                                 chessTile.column)) {
-                            MoveResult result = moveController.sendMovesToBoard(board);
-                            BoardLocation lastMove = board.getLastMoveLocation();
-                            BoardLocation currentMove = board.getCurrentMoveLocation();
-                            for (int r = 0; r < 8; r++) {
-                                for (int c = 0; c < 8; c++) {
-                                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-                                }
-                            }
-                            guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-                                    .setPreviousMoveSquareVisibility(true);
-                            guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-                                    .setPreviousMoveSquareVisibility(true);
-                            // gameLoop.sendUpdateBoardState();
-                            gameLoop.checkGameState(result);
+                            moveController.sendMovesToBoard(board);
+                            gameLoop.sendUpdateBoardState();
                             switchTeam();
+                            // runAI();
+                            // guiStarter.chessUIManager.drawBoard(board.getBoard());
                         }
                         if (!moveController.getIsFirstClick()) {
                             var moves = moveController.getAllPossibleMoves();
@@ -165,7 +155,7 @@ public class PlayerVSAIGameMode extends GameMode {
     private void runAI() {
         if (teamTurn == aiTeam) {
 
-            ai = new AIThread(new AIPlayer(difficulty, aiTeam), board);
+            ai = new AIThread(new AIPlayer(difficulty, Team.BLACK_TEAM), board);
             runningThread = new Thread(ai);
             runningThread.start();
             // try {
@@ -177,19 +167,7 @@ public class PlayerVSAIGameMode extends GameMode {
             try {
                 runningThread.join();
                 Move aiMove = ai.getMove();
-                MoveResult result = board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
-                BoardLocation lastMove = board.getLastMoveLocation();
-                BoardLocation currentMove = board.getCurrentMoveLocation();
-                for (int r = 0; r < 8; r++) {
-                    for (int c = 0; c < 8; c++) {
-                        guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-                    }
-                }
-                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-                        .setPreviousMoveSquareVisibility(true);
-                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-                        .setPreviousMoveSquareVisibility(true);
-                // gameLoop.checkGameState(result);
+                board.applyMove(aiMove.piece, aiMove.start, aiMove.end);
             } catch (Exception e) {
                 System.err.println("oopsies with the AIThread");
             }

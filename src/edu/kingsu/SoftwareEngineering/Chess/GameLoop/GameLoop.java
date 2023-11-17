@@ -56,16 +56,8 @@ public class GameLoop implements ActionListener {
 
         UILibrary.WhitePlayer_VS_BlackComp_Button.addActionListener(e -> {
             resetGUIAndListeners();
-            aiTeam = Team.BLACK_TEAM;
             currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
-            startPlayerVSAIGame(Team.BLACK_TEAM);
-        });
-
-        UILibrary.WhiteComp_VS_BlackPlayer_Button.addActionListener(e -> {
-            resetGUIAndListeners();
-            aiTeam = Team.WHITE_TEAM;
-            currentGameMode = GameMode.PLAYER_VS_AI_GAME_MODE;
-            startPlayerVSAIGame(Team.WHITE_TEAM);
+            startPlayerVSAIBlackGame();
         });
 
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
@@ -157,7 +149,7 @@ public class GameLoop implements ActionListener {
                 break;
             case GameMode.PLAYER_VS_AI_GAME_MODE:
                 resetGUIAndListeners();
-                startPlayerVSAIGame(aiTeam);
+                startPlayerVSAIBlackGame();
                 break;
             default:
                 break;
@@ -204,6 +196,18 @@ public class GameLoop implements ActionListener {
         gameMode = new PlayerVSPlayerGameMode();
         gameMode.setGameLoop(this);
         ((PlayerVSPlayerGameMode) gameMode).setClickListeners(guiStarter, board);
+        gameMode.startGame();
+    }
+
+    private void startPlayerVSAIBlackGame() {
+        ChessUIManager.clearMovesLabel();
+        board = new Board();
+        ChessUIManager.showMainFrame();
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        gameMode = new PlayerVSAIGameMode(2);
+        gameMode.setGameLoop(this);
+        ((PlayerVSAIGameMode) gameMode).setClickListeners(guiStarter, board);
         gameMode.startGame();
     }
 

@@ -84,7 +84,8 @@ public class AIPlayer extends Player {
         Move bestMove = null;
         for (Move m : allMoves) {
             Board copy = board.copy();
-            copy.applyMove(m.piece, m.start, m.end);
+            // copy.applyMove(m.piece, m.start, m.end);
+            copy.simulateApplyMove(pieces, m.piece, m.start, m.end);
             int curScore = minimax(copy, difficulty, colour);
             m.score = curScore;
             if (colour == Team.WHITE_TEAM) {
@@ -197,7 +198,8 @@ public class AIPlayer extends Player {
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
                         for (BoardLocation l : moves) {
                             Board copy = board.copy();
-                            copy.applyMove(pieces[i][j], pieceLocation, l, false, false);
+                            copy.simulateApplyMove(pieces, pieces[i][j], pieceLocation, l);
+                            // copy.applyMove(pieces[i][j], pieceLocation, l);
                             // wack ylittle test here
                             // boolean boardssame = true;
                             // Piece[][] copyBoard = copy.getBoard();
@@ -231,7 +233,8 @@ public class AIPlayer extends Player {
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
                         for (BoardLocation l : moves) {
                             Board copy = board.copy();
-                            copy.applyMove(pieces[i][j], pieceLocation, l, false, false);
+                            // copy.applyMove(pieces[i][j], pieceLocation, l);
+                            copy.simulateApplyMove(pieces, pieces[i][j], pieceLocation, l);
                             // boolean boardssame = true;
                             // Piece[][] copyBoard = copy.getBoard();
                             // for (int ii = 0; ii < pieces.length; ii++) {

@@ -110,7 +110,6 @@ public class Board {
         moveCount = 1;
         initializeBoard();
 
-        // System.out.println(algebraicRepresentation);
         // TODO: Example of loading a PGN game.
         /*
          * This can be used for many things, loading a game, recreating a game with a different game mode, etc.
@@ -130,8 +129,8 @@ public class Board {
      * @param algebraicRep the current sequence of moves in a StringBuilder
      */
     public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep) {
+        algebraicRepresentation = new StringBuilder();//algebraicRep;
         algebraicNotationMovesList = new ArrayList<>();
-        algebraicRepresentation = algebraicRep;
         if (moveCount >= 1) {
             firstMove = false;
         }
@@ -211,6 +210,11 @@ public class Board {
      */
     public boolean isAtStart() {
         return undoMoveCount == algebraicNotationMovesList.size();
+    }
+
+    public void resetNotation() {
+        this.algebraicNotationMovesList = new ArrayList<>();
+        this.algebraicRepresentation = new StringBuilder();
     }
 
     /**
