@@ -89,6 +89,12 @@ public abstract class UILibrary {
   public static JTextArea MovesLabel;
 
   // ----- New Game Frame-------------
+
+  /**
+   * Resume Game from New Game Frame
+   */
+  public static JButton ResumeGame_Button;
+
   /**
    * Located in the New Game Frame;
    * Selects the White Player vs Black Player Game mode.

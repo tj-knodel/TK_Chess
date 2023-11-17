@@ -64,6 +64,14 @@ public class CreateStartFrame {
         UILibrary.NewGameFrame.add(TextLabel);
 
         // Buttons
+        UILibrary.ResumeGame_Button = new JButton();
+        UILibrary.resizeModule.setVariableBounds(UILibrary.ResumeGame_Button, null, 15, 15, 160, 47); // Numbers from Figma Design
+        UILibrary.resizeModule.setVariableBounds(UILibrary.ResumeGame_Button, getImage("ResumeGameButton.png"));
+        UILibrary.NewGameFrame.add(UILibrary.ResumeGame_Button);
+        UILibrary.ResumeGame_Button.setOpaque(false);
+        UILibrary.ResumeGame_Button.setContentAreaFilled(false);
+        UILibrary.ResumeGame_Button.setBorderPainted(false);
+
         UILibrary.WhitePlayer_VS_BlackPlayer_Button = new JButton();
         UILibrary.resizeModule.setVariableBounds(UILibrary.WhitePlayer_VS_BlackPlayer_Button, null, 221, 320, 472, 190); // Numbers from Figma Design
         UILibrary.resizeModule.setVariableBounds(UILibrary.WhitePlayer_VS_BlackPlayer_Button, getImage("White_Player_VS_Black_Player.png"));
