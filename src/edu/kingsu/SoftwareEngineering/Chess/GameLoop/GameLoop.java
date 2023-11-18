@@ -33,6 +33,7 @@ public class GameLoop {
     private MoveController moveController;
     private Board board;
     private int aiTeam;
+    private boolean aiVsAi = false;
 
     public GameLoop() {
         this.aiTeam = -1;
@@ -47,47 +48,7 @@ public class GameLoop {
             this.aiTeam = -1;
             sendUpdateBoardState();
             resetGUIAndListeners();
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
-                    chessTile.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mousePressed(MouseEvent e) {
-                            if (moveController.chessTileClick(board, chessTile.row,
-                                    chessTile.column)) {
-                                MoveResult result = moveController.sendMovesToBoard(board);
-                                BoardLocation lastMove = board.getLastMoveLocation();
-                                BoardLocation currentMove = board.getCurrentMoveLocation();
-                                for (int r = 0; r < 8; r++) {
-                                    for (int c = 0; c < 8; c++) {
-                                        guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-                                    }
-                                }
-                                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-                                        .setPreviousMoveSquareVisibility(true);
-                                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-                                        .setPreviousMoveSquareVisibility(true);
-//                            gameLoop.checkGameState(result);
-                            }
-                            if (!moveController.getIsFirstClick()) {
-                                var moves = moveController.getAllPossibleMoves();
-                                for (BoardLocation location : moves) {
-                                    guiStarter.chessUIManager.boardTiles[location.row][location.column]
-                                            .setPossibleMoveCircleVisibility(true);
-                                }
-                                sendUpdateBoardState();
-                            } else if (moveController.getIsFirstClick()) {
-                                for (int r = 0; r < 8; r++) {
-                                    for (int c = 0; c < 8; c++) {
-                                        guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
-                                    }
-                                }
-                                sendUpdateBoardState();
-                            }
-                        }
-                    });
-                }
-            }
+            setPlayerClickListeners();
         });
 
         UILibrary.WhitePlayer_VS_BlackComp_Button.addActionListener(e -> {
@@ -108,6 +69,15 @@ public class GameLoop {
             setPlayerClickListeners();
         });
 
+        UILibrary.WhiteComp_VS_BlackComp_Button.addActionListener(e -> {
+            ChessUIManager.showMainFrame();
+            this.board = new Board(this);
+            this.aiTeam = Team.WHITE_TEAM;
+            sendUpdateBoardState();
+            resetGUIAndListeners();
+            aiVsAi = true;
+        });
+
         UILibrary.UpgradeQueenButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
         });
@@ -120,6 +90,18 @@ public class GameLoop {
 
         UILibrary.UpgradeKnightButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
+        });
+
+        UILibrary.StepBackwards_Button.addActionListener(e -> {
+            if(aiVsAi) return;
+            this.board.undoMove();
+            redrawUI();
+        });
+
+        UILibrary.StepForwards_Button.addActionListener(e -> {
+            if(aiVsAi) return;
+            this.board.redoMove();
+            redrawUI();
         });
 
         // Used https://stackoverflow.com/questions/14589386/how-to-save-file-using-jfilechooser-in-java
@@ -136,6 +118,13 @@ public class GameLoop {
                     e1.printStackTrace();
                 }
             }
+        });
+
+        UILibrary.EnterMove_TextField.addActionListener(e -> {
+            String input = UILibrary.EnterMove_TextField.getText();
+            if(aiTeam == board.getTeamTurn()) return;
+            MoveResult result = board.applyMoveAlgebraicNotation(input);
+            redrawUI();
         });
     }
 
@@ -157,7 +146,7 @@ public class GameLoop {
                                         .setPossibleMoveCircleVisibility(true);
                             }
                             redrawUI();
-                        } else if (moveController.getIsFirstClick()) {
+                        } else {
                             for (int r = 0; r < 8; r++) {
                                 for (int c = 0; c < 8; c++) {
                                     guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
@@ -190,7 +179,11 @@ public class GameLoop {
     }
 
     public String getPromotionPiece() {
-        return "Q";
+        if(aiTeam == board.getTeamTurn())
+            return "R";
+        else {
+            return "Q";
+        }
     }
 
     public void updateChessNotationLabel(String value) {
@@ -203,6 +196,9 @@ public class GameLoop {
 
     public void sendUpdateBoardState() {
         redrawUI();
+        if(aiVsAi) {
+            aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        }
         runAI();
     }
 
