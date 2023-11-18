@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.JFileChooser;
 
@@ -67,6 +68,26 @@ public class GameLoop {
             aiVsAi = true;
         });
 
+        UILibrary.RDMPlayer_VS_RDMComp_Button.addActionListener(e -> {
+            Random random = new Random(System.currentTimeMillis());
+            int aiTeam = random.nextInt(2);
+            createGame(aiTeam);
+            setPlayerClickListeners();
+        });
+
+        UILibrary.ShowAIStrengthSlider_JMenuItem.addActionListener(e -> {
+            board.setIsPaused(true);
+            ChessUIManager.showSliderFrame();
+        });
+
+        UILibrary.CancelSliderButton.addActionListener(e -> {
+            resumeGame();
+        });
+
+        UILibrary.ConfirmSliderButton.addActionListener(e -> {
+            resumeGame();
+        });
+
         UILibrary.UpgradeQueenButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
         });
@@ -82,13 +103,13 @@ public class GameLoop {
         });
 
         UILibrary.StepBackwards_Button.addActionListener(e -> {
-            if(aiVsAi) return;
+            if (aiVsAi) return;
             this.board.undoMove();
             redrawUI();
         });
 
         UILibrary.StepForwards_Button.addActionListener(e -> {
-            if(aiVsAi) return;
+            if (aiVsAi) return;
             this.board.redoMove();
             redrawUI();
         });
@@ -109,9 +130,20 @@ public class GameLoop {
             }
         });
 
+        UILibrary.LoadGame_JMenuItem.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser(".");
+            int returnValue = fileChooser.showSaveDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                createGame(-1);
+                board.loadPGNFile(file);
+                setPlayerClickListeners();
+            }
+        });
+
         UILibrary.EnterMove_TextField.addActionListener(e -> {
             String input = UILibrary.EnterMove_TextField.getText();
-            if(aiTeam == board.getTeamTurn()) return;
+            if (aiTeam == board.getTeamTurn()) return;
             MoveResult result = board.applyMoveAlgebraicNotation(input);
             redrawUI();
         });
@@ -134,29 +166,57 @@ public class GameLoop {
             board.setIsPaused(false);
             resumeGame();
         });
+
+        UILibrary.endNewGameButton.addActionListener(e -> {
+            board.setIsPaused(true);
+            ChessUIManager.showNewGameFrame();
+        });
+
+        UILibrary.endRematchButton.addActionListener(e -> {
+            restartGame();
+            resetGUIAndListeners();
+            setPlayerClickListeners();
+        });
+
+        UILibrary.endViewBoardButton.addActionListener(e -> {
+            resumeGame();
+            resetGUIAndListeners();
+            setPlayerClickListeners();
+            ChessUIManager.HideEndGameFrame();
+        });
     }
 
     private void restartGame() {
-        if(gameType == GameType.AI_VS_AI) {
+        resetGUIAndListeners();
+        if (gameType == GameType.AI_VS_AI) {
             createGame(Team.WHITE_TEAM);
             aiVsAi = true;
-        } else if(gameType == GameType.PLAYER_VS_PLAYER) {
+        } else if (gameType == GameType.PLAYER_VS_PLAYER) {
             createGame(-1);
-        } else if(gameType == GameType.WHITE_AI_VS_BLACK_PLAYER) {
+            setPlayerClickListeners();
+        } else if (gameType == GameType.WHITE_AI_VS_BLACK_PLAYER) {
             createGame(Team.WHITE_TEAM);
-        } else if(gameType == GameType.WHITE_PLAYER_VS_BLACK_AI) {
+            setPlayerClickListeners();
+        } else if (gameType == GameType.WHITE_PLAYER_VS_BLACK_AI) {
             createGame(Team.BLACK_TEAM);
+            setPlayerClickListeners();
         }
     }
 
     private void resumeGame() {
+        board.setIsPaused(false);
+        if (gameType != GameType.AI_VS_AI) {
+            resetGUIAndListeners();
+            setPlayerClickListeners();
+        }
         ChessUIManager.showMainFrame();
-        if(aiVsAi || aiTeam == board.getTeamTurn()) {
+        if (aiVsAi || aiTeam == board.getTeamTurn()) {
             runAI();
         }
     }
 
     private void createGame(int aiTeam) {
+        ChessUIManager.HideEndGameFrame();
         aiVsAi = false;
         clearChessNotationLabel();
         ChessUIManager.showMainFrame();
@@ -183,6 +243,7 @@ public class GameLoop {
                                 guiStarter.chessUIManager.boardTiles[location.row][location.column]
                                         .setPossibleMoveCircleVisibility(true);
                             }
+                            guiStarter.chessUIManager.boardTiles[moveController.getFirstClickLocation().row][moveController.getFirstClickLocation().column].setPreviousMoveSquareVisibility(true);
                             redrawUI();
                         } else {
                             for (int r = 0; r < 8; r++) {
@@ -190,8 +251,10 @@ public class GameLoop {
                                     guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
                                 }
                             }
+                            guiStarter.chessUIManager.boardTiles[moveController.getFirstClickLocation().row][moveController.getFirstClickLocation().column].setPreviousMoveSquareVisibility(false);
                             redrawUI();
                         }
+                        redrawUI();
                     }
                 });
             }
@@ -213,11 +276,10 @@ public class GameLoop {
                 guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
             }
         }
-        ChessUIManager.HideEndGameFrame();
     }
 
     public String getPromotionPiece() {
-        if(aiTeam == board.getTeamTurn())
+        if (aiTeam == board.getTeamTurn())
             return "R";
         else {
             return "Q";
@@ -234,14 +296,25 @@ public class GameLoop {
 
     public void sendUpdateBoardState() {
         redrawUI();
-        if(aiVsAi) {
+        MoveResult result = board.getLastMoveResult();
+        if (result != null) {
+            if (result.isCheckmate) {
+                ChessUIManager.ShowEndGameFrame(
+                        ((result.checkmateTeam == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
+                board.setIsPaused(true);
+            } else if (result.isStalemate) {
+                ChessUIManager.ShowEndGameFrame("Stalemate!");
+                board.setIsPaused(true);
+            }
+        }
+        if (aiVsAi) {
             aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         }
         runAI();
     }
 
     private void runAI() {
-        if(aiTeam == board.getTeamTurn()) {
+        if (aiTeam == board.getTeamTurn()) {
             AIThread ai = new AIThread(new AIPlayer(2, aiTeam), board, guiStarter);
             Thread runningThread = new Thread(ai);
             runningThread.start();
@@ -249,11 +322,15 @@ public class GameLoop {
     }
 
     private void redrawUI() {
-        if(!board.isAtStart()) {
+        if (!board.isAtStart()) {
             BoardLocation lastMove = board.getLastMoveLocation();
             BoardLocation currentMove = board.getCurrentMoveLocation();
             for (int r = 0; r < 8; r++) {
                 for (int c = 0; c < 8; c++) {
+                    if (!moveController.getIsFirstClick()) {
+                        if (r == moveController.getFirstClickLocation().row && c == moveController.getFirstClickLocation().column)
+                            continue;
+                    }
                     guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
                 }
             }

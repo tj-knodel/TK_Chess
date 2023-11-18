@@ -123,6 +123,8 @@ public class Board {
      */
     private boolean isPaused;
 
+    private MoveResult lastMoveResult;
+
     /**
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
@@ -224,6 +226,14 @@ public class Board {
     }
 
     /**
+     * Gets the last move result.
+     * @return The MoveResult of the last move.
+     */
+    public MoveResult getLastMoveResult() {
+        return lastMoveResult;
+    }
+
+    /**
      * Load a file of the PGN format.
      *
      * @param file The file to load.
@@ -303,6 +313,7 @@ public class Board {
      * @return True if the undo/redo was successful.
      */
     private boolean undoOrRedoMove(boolean isUndo) {
+        if(getIsPaused()) return false;
         initializeBoard();
         ChessUIManager.clearMovesLabel();
         firstMove = true;
@@ -608,6 +619,7 @@ public class Board {
         result.wasSuccessful = true;
         currentMoveLocation = new BoardLocation(endMove.column, endMove.row);
         lastMoveLocation = new BoardLocation(startMove.column, startMove.row);
+        lastMoveResult = result;
         gameLoop.sendUpdateBoardState();
         return result;
     }

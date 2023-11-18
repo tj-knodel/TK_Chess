@@ -44,6 +44,14 @@ public class MoveController {
     }
 
     /**
+     * Gets the location of the first click on the board.
+     * @return The location of the first click.
+     */
+    public BoardLocation getFirstClickLocation() {
+        return firstClick;
+    }
+
+    /**
      * Gets all possible moves for this click.
      * @return Possible moves for the click.
      */
