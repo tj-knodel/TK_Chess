@@ -9,6 +9,7 @@ import java.util.ArrayList;
 /**
  * The class responsible for construction moves
  * in the form of PGNMove from a PGN file.
+ *
  * @author Daniell Buchner
  * @version 0.1.0
  */
@@ -28,6 +29,7 @@ public class PGNReader {
     /**
      * This function reads a PGN file, and outputs an ArrayList of
      * the PGNMove class for the moves of the PGN file.
+     *
      * @param filePath The file to load.
      * @return The ArrayList of PGNMove class of the moves in sequence.
      */
@@ -59,6 +61,7 @@ public class PGNReader {
         boolean inComment = false;
         for (String str : allMoves.split(" ")) {
             // System.out.println(str);
+            if (str.isEmpty()) continue;
             if (str.endsWith(".")) {
                 continue;
             } else if (str.startsWith("{")) {

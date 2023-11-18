@@ -31,13 +31,16 @@ public class AIThread implements Runnable {
         // simple loop to just keep checking if we need a move and update the listener.
         // curMove = aiPlayer.getMove(board);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Move aiMove = aiPlayer.getMove(board);
         MoveResult result = board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
+        if(!result.wasSuccessful) {
+            JOptionPane.showConfirmDialog(null, "NOT SUCCESSFUL");
+        }
     }
 
     public Move getMove() {

@@ -18,6 +18,8 @@ import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
+import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNMove;
+import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
 import edu.kingsu.SoftwareEngineering.Chess.Players.AIPlayer;
 import edu.kingsu.SoftwareEngineering.Chess.Players.AIThread;
 
@@ -282,7 +284,7 @@ public class GameLoop {
         if (aiTeam == board.getTeamTurn())
             return "R";
         else {
-            return "Q";
+            return "R";
         }
     }
 
