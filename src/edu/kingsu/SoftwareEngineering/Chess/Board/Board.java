@@ -806,7 +806,6 @@ public class Board {
     private void handleMoveNotationMultiplePieces(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, StringBuilder moveString) {
         // Check if it should put row, or column
         boolean putRow = handleMoveNotationShouldHaveRow(pieceMoving, startMove, endMove);
-        JOptionPane.showConfirmDialog(null, putRow);
         // Add the row or column after the piece id
         String locationIfNeeded = "";
         if (putRow) {
