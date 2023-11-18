@@ -119,6 +119,11 @@ public class Board {
     private final GameLoop gameLoop;
 
     /**
+     * If the game is paused or not.
+     */
+    private boolean isPaused;
+
+    /**
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
      */
@@ -129,6 +134,7 @@ public class Board {
         undoMoveCount = 0;
         firstMove = true;
         moveCount = 1;
+        isPaused = false;
         this.gameLoop = gameLoop;
         initializeBoard();
 
@@ -199,6 +205,22 @@ public class Board {
                 {new Rook(1), new Knight(1), new Bishop(1), new Queen(1), new King(1), new Bishop(1), new Knight(1),
                         new Rook(1)}
         };
+    }
+
+    /**
+     * Gets the game isPaused value.
+     * @return True if the game is paused.
+     */
+    public boolean getIsPaused() {
+        return isPaused;
+    }
+
+    /**
+     * Sets the game to be paused or not.
+     * @param isPaused The value to set the game to.
+     */
+    public void setIsPaused(boolean isPaused) {
+        this.isPaused = isPaused;
     }
 
     /**
@@ -525,6 +547,7 @@ public class Board {
     private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
                                          boolean overrideNotation, boolean doNotation) {
         MoveResult result = new MoveResult();
+        if(getIsPaused()) return result;
         int team = pieceMoving.getTeam();
         if(team != getTeamTurn()) return result;
 

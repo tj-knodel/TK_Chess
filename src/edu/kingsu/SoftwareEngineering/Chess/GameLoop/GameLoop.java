@@ -34,6 +34,7 @@ public class GameLoop {
     private Board board;
     private int aiTeam;
     private boolean aiVsAi = false;
+    private GameType gameType;
 
     public GameLoop() {
         this.aiTeam = -1;
@@ -43,38 +44,26 @@ public class GameLoop {
         ChessUIManager.showNewGameFrame();
 
         UILibrary.WhitePlayer_VS_BlackPlayer_Button.addActionListener(e -> {
-            ChessUIManager.showMainFrame();
-            this.board = new Board(this);
-            this.aiTeam = -1;
-            sendUpdateBoardState();
-            resetGUIAndListeners();
+            this.gameType = GameType.PLAYER_VS_PLAYER;
+            createGame(-1);
             setPlayerClickListeners();
         });
 
         UILibrary.WhitePlayer_VS_BlackComp_Button.addActionListener(e -> {
-            ChessUIManager.showMainFrame();
-            this.board = new Board(this);
-            this.aiTeam = Team.BLACK_TEAM;
-            sendUpdateBoardState();
-            resetGUIAndListeners();
+            this.gameType = GameType.WHITE_PLAYER_VS_BLACK_AI;
+            createGame(Team.BLACK_TEAM);
             setPlayerClickListeners();
         });
 
         UILibrary.WhiteComp_VS_BlackPlayer_Button.addActionListener(e -> {
-            ChessUIManager.showMainFrame();
-            this.board = new Board(this);
-            this.aiTeam = Team.WHITE_TEAM;
-            sendUpdateBoardState();
-            resetGUIAndListeners();
+            this.gameType = GameType.WHITE_AI_VS_BLACK_PLAYER;
+            createGame(Team.WHITE_TEAM);
             setPlayerClickListeners();
         });
 
         UILibrary.WhiteComp_VS_BlackComp_Button.addActionListener(e -> {
-            ChessUIManager.showMainFrame();
-            this.board = new Board(this);
-            this.aiTeam = Team.WHITE_TEAM;
-            sendUpdateBoardState();
-            resetGUIAndListeners();
+            this.gameType = GameType.AI_VS_AI;
+            createGame(Team.WHITE_TEAM);
             aiVsAi = true;
         });
 
@@ -126,6 +115,55 @@ public class GameLoop {
             MoveResult result = board.applyMoveAlgebraicNotation(input);
             redrawUI();
         });
+
+        UILibrary.NewGame_JMenuItem.addActionListener(e -> {
+            board.setIsPaused(true);
+            ChessUIManager.showNewGameFrame();
+        });
+
+        UILibrary.RestartGame_JMenuItem.addActionListener(e -> {
+            restartGame();
+        });
+
+        UILibrary.ResumeGame_JMenuItem.addActionListener(e -> {
+            board.setIsPaused(false);
+            resumeGame();
+        });
+
+        UILibrary.ResumeGame_Button.addActionListener(e -> {
+            board.setIsPaused(false);
+            resumeGame();
+        });
+    }
+
+    private void restartGame() {
+        if(gameType == GameType.AI_VS_AI) {
+            createGame(Team.WHITE_TEAM);
+            aiVsAi = true;
+        } else if(gameType == GameType.PLAYER_VS_PLAYER) {
+            createGame(-1);
+        } else if(gameType == GameType.WHITE_AI_VS_BLACK_PLAYER) {
+            createGame(Team.WHITE_TEAM);
+        } else if(gameType == GameType.WHITE_PLAYER_VS_BLACK_AI) {
+            createGame(Team.BLACK_TEAM);
+        }
+    }
+
+    private void resumeGame() {
+        ChessUIManager.showMainFrame();
+        if(aiVsAi || aiTeam == board.getTeamTurn()) {
+            runAI();
+        }
+    }
+
+    private void createGame(int aiTeam) {
+        aiVsAi = false;
+        clearChessNotationLabel();
+        ChessUIManager.showMainFrame();
+        this.board = new Board(this);
+        this.aiTeam = aiTeam;
+        sendUpdateBoardState();
+        resetGUIAndListeners();
     }
 
     private void setPlayerClickListeners() {
