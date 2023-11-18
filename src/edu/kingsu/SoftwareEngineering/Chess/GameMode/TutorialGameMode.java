@@ -13,7 +13,7 @@ public class TutorialGameMode extends GameMode {
     private int index = 0;
 
     public TutorialGameMode(File file, Board board) {
-        moves = board.loadPGNFileFromStart(file);
+//        moves = board.loadPGNFileFromStart(file);
     }
 
     public String getComment() {

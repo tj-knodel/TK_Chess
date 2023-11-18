@@ -16,7 +16,7 @@ import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
  * and handles game states if the game is won or not.
  *
  * @author Daniell Buchner
- * @version 0.2.0
+ * @version 1.0.0
  */
 public class Board {
 
@@ -36,6 +36,10 @@ public class Board {
             {"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"},
     };
 
+    /**
+     * The board locations from a string. So "a1" would return a BoardLocation
+     * with row = 7 and column = 0
+     */
     private static final HashMap<String, BoardLocation> BOARD_LOCATIONS_FROM_STRING;
 
     static {
@@ -80,6 +84,10 @@ public class Board {
      */
     private StringBuilder algebraicRepresentation;
 
+    /**
+     * The list of algebraic notation moves that have been applied.
+     * Only has the actual move, not the PGN file format.
+     */
     private ArrayList<String> algebraicNotationMovesList;
 
     private int undoMoveCount;
@@ -89,7 +97,14 @@ public class Board {
      */
     private boolean firstMove;
 
+    /**
+     * The last move location of the last applied move.
+     */
     private BoardLocation lastMoveLocation;
+
+    /**
+     * The location of the currently applied move.
+     */
     private BoardLocation currentMoveLocation;
 
     /**
@@ -97,13 +112,16 @@ public class Board {
      */
     private int moveCount;
 
+    /**
+     * The GameLoop for the board to keep track of.
+     * Used to call methods to follow the MVC pattern.
+     */
     private final GameLoop gameLoop;
 
     /**
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
      */
-    // TODO: Add a "settings" or "gamemode" instance here to check how to initialize the board.
     public Board(GameLoop gameLoop) {
         // board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
@@ -195,20 +213,6 @@ public class Board {
         }
     }
 
-    public ArrayList<PGNMove> loadPGNFileFromStart(File file) {
-        PGNReader reader = new PGNReader();
-        ArrayList<PGNMove> moves = new ArrayList<>();
-        for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
-            moves.add(move);
-            applyPGNMove(move, true);
-        }
-        for (int i = 0; i < algebraicNotationMovesList.size(); i++) {
-            undoMove();
-        }
-        undoMove();
-        return moves;
-    }
-
     /**
      * Get the last move location.
      *
@@ -271,6 +275,11 @@ public class Board {
         return undoOrRedoMove(false);
     }
 
+    /**
+     * Does the undo or redo logic based on the parameter.
+     * @param isUndo Is undoing currently.
+     * @return True if the undo/redo was successful.
+     */
     private boolean undoOrRedoMove(boolean isUndo) {
         initializeBoard();
         ChessUIManager.clearMovesLabel();
@@ -517,6 +526,7 @@ public class Board {
                                          boolean overrideNotation, boolean doNotation) {
         MoveResult result = new MoveResult();
         int team = pieceMoving.getTeam();
+        if(team != getTeamTurn()) return result;
 
         int piecesMoveToSameLocation = getPiecesMoveToSameLocation(pieceMoving, endMove, team);
         if (piecesMoveToSameLocation == 0)

@@ -3,6 +3,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Players;
 import javax.swing.JOptionPane;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
+import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 
@@ -36,10 +37,7 @@ public class AIThread implements Runnable {
             e.printStackTrace();
         }
         Move aiMove = aiPlayer.getMove(board);
-        board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
-        aiMove = aiPlayer.getMove(board);
-
-        //Thread.sleep(1000);
+        MoveResult result = board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
     }
 
     public Move getMove() {

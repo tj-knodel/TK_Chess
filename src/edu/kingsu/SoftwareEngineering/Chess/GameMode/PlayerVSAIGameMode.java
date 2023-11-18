@@ -35,7 +35,7 @@ public class PlayerVSAIGameMode extends GameMode {
     public PlayerVSAIGameMode(int aiDifficulty, int aiTeam) {
         teamTurn = Team.WHITE_TEAM;
         playerTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-        this.moveController = new MoveController(playerTeam);
+//        this.moveController = new MoveController(playerTeam);
         this.aiTeam = aiTeam;
     }
 
@@ -90,7 +90,7 @@ public class PlayerVSAIGameMode extends GameMode {
                                     .setPreviousMoveSquareVisibility(true);
                             guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
                                     .setPreviousMoveSquareVisibility(true);
-                            gameLoop.checkGameState(result);
+//                            gameLoop.checkGameState(result);
                             runAI();
                         }
                         if (!moveController.getIsFirstClick()) {

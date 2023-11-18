@@ -20,7 +20,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
     private int teamTurn;
 
     public PlayerVSPlayerGameMode() {
-        this.moveController = new MoveController(-1);
+//        this.moveController = new MoveController(-1);
         teamTurn = Team.WHITE_TEAM;
     }
 
@@ -52,7 +52,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
                 chessTile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if (moveController.chessTileClick(board, teamTurn, chessTile.row,
+                        if (moveController.chessTileClick(board, chessTile.row,
                                 chessTile.column)) {
                             MoveResult result = moveController.sendMovesToBoard(board);
                             BoardLocation lastMove = board.getLastMoveLocation();
@@ -66,7 +66,7 @@ public class PlayerVSPlayerGameMode extends GameMode {
                                     .setPreviousMoveSquareVisibility(true);
                             guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
                                     .setPreviousMoveSquareVisibility(true);
-                            gameLoop.checkGameState(result);
+//                            gameLoop.checkGameState(result);
                         }
                         if (!moveController.getIsFirstClick()) {
                             var moves = moveController.getAllPossibleMoves();
