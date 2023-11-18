@@ -249,9 +249,9 @@ public class Board {
 //            System.out.println("Applying move: " + move.getMoveString());
 //            JOptionPane.showConfirmDialog(null, move.getMoveString());
             MoveResult result = applyPGNMove(move, true);
-//            if(!result.wasSuccessful) {
-//                JOptionPane.showConfirmDialog(null, "Could not apply move: " + move.getMoveString());
-//            }
+            if(!result.wasSuccessful) {
+                JOptionPane.showConfirmDialog(null, "Could not apply move: " + move.getMoveString());
+            }
         }
     }
 
@@ -382,6 +382,7 @@ public class Board {
         // Replace the + sign in the PGN notation as the board doesn't care
         // what the notation says as it has its own rules.
         String notationString = notation.replace("+", "");
+        boolean capture = notation.contains("x");
         notationString = notationString.replace("x", "");
         if (notationString.equalsIgnoreCase("O-O")) {
             return applyMoveAlgebraicNotationCastlingShortSide(extraCheck, team);
@@ -397,6 +398,9 @@ public class Board {
             if (Character.isUpperCase(notationString.charAt(0))) {
                 return applyMoveAlgebraicNotationPiece(extraCheck, doNotation, notationString, team, result);
             } else {
+                if(capture) {
+                    return applyMoveAlgebraicNotationCaptureWithPawn(extraCheck, doNotation, notationString, team, result);
+                }
                 return applyMoveAlgebraicNotationPawn(extraCheck, doNotation, notationString, team, result);
             }
         } else if (notationString.length() == 4) {
@@ -410,13 +414,15 @@ public class Board {
     }
 
     private MoveResult applyMoveAlgebraicNotationCaptureWithPawn(boolean extraCheck, boolean doNotation, String notationString, int team, MoveResult result) {
-        int pieceId = Piece.PIECE_ID_FROM_STRING.get(notationString.substring(0, 1));
-        String locationString = notationString.substring(2);
+//        JOptionPane.showConfirmDialog(null, notationString);
+        int pieceId = Piece.PAWN;//Piece.PIECE_ID_FROM_STRING.get(notationString.substring(1, 2));
+        String locationString = notationString.substring(1);
         BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
         // ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
         //         boardLocation);
-        ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForRow(board, team, pieceId,
-                (int) notationString.charAt(1));
+
+        ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocationForColumn(team, pieceId, boardLocation,
+                (int) notationString.charAt(0) - 'a');
         if (pieceLocation.size() != 1)
             return result;
         Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
@@ -594,7 +600,9 @@ public class Board {
         handleMoveCreateBasicNotation(pieceMoving, startMove, endMove, piecesMoveToSameLocation, moveString);
 
         // Checks if we can castle, apply the correct one and set the chess notation correctly.
+        boolean castle = false;
         if (handleMoveCheckIsCastling(startMove, endMove)) {
+            castle = true;
             moveString = new StringBuilder();
             if (handleMoveCheckCastlingLongSide(startMove, endMove)) {
                 handleMoveDoCastlingLongSide(pieceMoving, startMove, endMove);
@@ -611,9 +619,11 @@ public class Board {
         // Update the PGN notation if necessary and the return result.
         int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         if (checkKingInCheck(otherTeam)) {
-            moveString.append("+");
-            if (getPossibleMovesForTeamWithChecking(otherTeam).isEmpty()) {
+            if (!castle)
                 moveString.append("+");
+            if (getPossibleMovesForTeamWithChecking(otherTeam).isEmpty()) {
+                if (!castle)
+                    moveString.append("+");
                 result.isCheckmate = true;
                 result.checkmateTeam = otherTeam;
             }
@@ -630,8 +640,8 @@ public class Board {
             Piece newPiece = Piece.createPieceFromTeam(pieceIdFromString, team);
             board[endMove.row][endMove.column] = newPiece;
         }
-        if (doNotation)
-            handleMoveDoNotation(moveString);
+//        if (doNotation)
+        handleMoveDoNotation(moveString);
 
         // Reset the array of algebraic notations as we need to do this
         // because if the player undos a move, and then makes a different move
@@ -843,10 +853,10 @@ public class Board {
 //                putRow = true;
 //        }
         ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPieceToTargetLocation(pieceMoving.getTeam(), pieceMoving.getPieceID(), endMove);
-        for(BoardLocation location : pieceLocations) {
-            if(location.column == startMove.column && location.row == startMove.row)
+        for (BoardLocation location : pieceLocations) {
+            if (location.column == startMove.column && location.row == startMove.row)
                 continue;
-            if(location.column == startMove.column)
+            if (location.column == startMove.column)
                 putRow = true;
         }
         return putRow;
@@ -1178,8 +1188,8 @@ public class Board {
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocationForColumn(int team, int pieceId, BoardLocation targetLocation,
                                                                                               int column) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
-        for(BoardLocation location : getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId, targetLocation)) {
-            if(location.column == column)
+        for (BoardLocation location : getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId, targetLocation)) {
+            if (location.column == column)
                 locations.add(new BoardLocation(location.column, location.row));
         }
         return locations;
