@@ -12,11 +12,8 @@ import javax.swing.JOptionPane;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Bishop;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Knight;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Queen;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Rook;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
@@ -336,6 +333,18 @@ public class GameLoop implements ActionListener {
             }
             // gameMode.switchTeam();
         }
+    }
+
+    public String getPromotionPiece() {
+        return "Q";
+    }
+
+    public void updateChessNotationLabel(String value) {
+        ChessUIManager.appendMovesLabel(value);
+    }
+
+    public void clearChessNotationLabel() {
+        ChessUIManager.clearMovesLabel();
     }
 
     public void sendUpdateBoardState() {
