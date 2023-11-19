@@ -235,6 +235,7 @@ public class GameLoop {
                 chessTile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
+                        if(aiTeam == board.getTeamTurn()) return;
                         if (moveController.chessTileClick(board, chessTile.row,
                                 chessTile.column)) {
                             MoveResult result = moveController.sendMovesToBoard(board);
