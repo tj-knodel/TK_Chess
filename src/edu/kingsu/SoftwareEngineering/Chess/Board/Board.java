@@ -2,6 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
@@ -127,6 +128,8 @@ public class Board {
 
     private MoveResult lastMoveResult;
 
+    ArrayList<PGNMove> moves;
+
     /**
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
@@ -245,11 +248,12 @@ public class Board {
      */
     public void loadPGNFile(File file) {
         PGNReader reader = new PGNReader();
+        moves = reader.getMovesFromFile(file.getAbsolutePath());
         for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
-//            System.out.println("Applying move: " + move.getMoveString());
-//            JOptionPane.showConfirmDialog(null, move.getMoveString());
+            //            System.out.println("Applying move: " + move.getMoveString());
+            //            JOptionPane.showConfirmDialog(null, move.getMoveString());
             MoveResult result = applyPGNMove(move, true);
-            if(!result.wasSuccessful) {
+            if (!result.wasSuccessful) {
                 JOptionPane.showConfirmDialog(null, "Could not apply move: " + move.getMoveString());
             }
         }
@@ -324,7 +328,8 @@ public class Board {
      * @return True if the undo/redo was successful.
      */
     private boolean undoOrRedoMove(boolean isUndo) {
-        if (getIsPaused()) return false;
+        if (getIsPaused())
+            return false;
         initializeBoard();
         ChessUIManager.clearMovesLabel();
         firstMove = true;
@@ -334,8 +339,14 @@ public class Board {
         else
             undoMoveCount--;
         algebraicRepresentation = new StringBuilder();
-        for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-            applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true);
+        if(this.moves != null) {
+            for (int i = 0; i < moves.size() - undoMoveCount; i++) {
+                MoveResult result = applyMoveAlgebraicNotation(moves.get(i).getMoveString(), false, true);
+            }
+        } else {
+            for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+                MoveResult result = applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true);
+            }
         }
         return true;
     }
@@ -398,10 +409,12 @@ public class Board {
             if (Character.isUpperCase(notationString.charAt(0))) {
                 return applyMoveAlgebraicNotationPiece(extraCheck, doNotation, notationString, team, result);
             } else {
-                if(capture) {
-                    return applyMoveAlgebraicNotationCaptureWithPawn(extraCheck, doNotation, notationString, team, result);
+                if (capture) {
                 }
-                return applyMoveAlgebraicNotationPawn(extraCheck, doNotation, notationString, team, result);
+//                System.out.println(notationString);
+                return applyMoveAlgebraicNotationCaptureWithPawn(extraCheck, doNotation, notationString, team,
+                        result);
+//                return applyMoveAlgebraicNotationPawn(extraCheck, doNotation, notationString, team, result);
             }
         } else if (notationString.length() == 4) {
             if (Character.isUpperCase(notationString.charAt(0))) {
@@ -413,23 +426,29 @@ public class Board {
         return result;
     }
 
-    private MoveResult applyMoveAlgebraicNotationCaptureWithPawn(boolean extraCheck, boolean doNotation, String notationString, int team, MoveResult result) {
-//        JOptionPane.showConfirmDialog(null, notationString);
+    private MoveResult applyMoveAlgebraicNotationCaptureWithPawn(boolean extraCheck, boolean doNotation,
+                                                                 String notationString, int team, MoveResult result) {
+        //        JOptionPane.showConfirmDialog(null, notationString);
         int pieceId = Piece.PAWN;//Piece.PIECE_ID_FROM_STRING.get(notationString.substring(1, 2));
         String locationString = notationString.substring(1);
         BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-        // ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
-        //         boardLocation);
-
-        ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocationForColumn(team, pieceId, boardLocation,
-                (int) notationString.charAt(0) - 'a');
+        ArrayList<BoardLocation> pieceLocation;
+        pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
+                boardLocation);
+        if (pieceLocation.size() != 1) {
+            pieceLocation = getBoardLocationsForTeamForPieceToTargetLocationForColumn(team,
+                    pieceId, boardLocation,
+                    (int) notationString.charAt(0) - 'a');
+            System.out.println(notationString + " " + pieceLocation.size());
+        }
         if (pieceLocation.size() != 1)
             return result;
         Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
         return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
     }
 
-    private MoveResult applyMoveAlgebraicNotationCaptureWithPiece(boolean extraCheck, boolean doNotation, String notationString, int team, MoveResult result) {
+    private MoveResult applyMoveAlgebraicNotationCaptureWithPiece(boolean extraCheck, boolean doNotation,
+                                                                  String notationString, int team, MoveResult result) {
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(notationString.substring(0, 1));
         String locationString = notationString.substring(2);
         BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
@@ -437,8 +456,9 @@ public class Board {
         //         boardLocation);
         ArrayList<BoardLocation> pieceLocation = new ArrayList<>();
         if (Character.isDigit(notationString.charAt(1))) {
-//            JOptionPane.showConfirmDialog(null, 8 - (notationString.charAt(1) - '0'));
-            pieceLocation = getBoardLocationsForTeamForPieceForRow(board, team, pieceId, 8 - (notationString.charAt(1) - '0'));
+            //            JOptionPane.showConfirmDialog(null, 8 - (notationString.charAt(1) - '0'));
+            pieceLocation = getBoardLocationsForTeamForPieceForRow(board, team, pieceId,
+                    8 - (notationString.charAt(1) - '0'));
         } else {
             pieceLocation = getBoardLocationsForTeamForPieceToTargetLocationForColumn(team, pieceId,
                     boardLocation, notationString.charAt(1) - 'a');
@@ -452,7 +472,8 @@ public class Board {
         return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
     }
 
-    private MoveResult applyMoveAlgebraicNotationPawn(boolean extraCheck, boolean doNotation, String notationString, int team, MoveResult result) {
+    private MoveResult applyMoveAlgebraicNotationPawn(boolean extraCheck, boolean doNotation, String notationString,
+                                                      int team, MoveResult result) {
         int pieceId = Piece.PAWN;
         String locationString = notationString.substring(1);
         BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
@@ -470,7 +491,8 @@ public class Board {
         return applyMove(pieceToMove, pieceLocationCheck.get(0), boardLocation, extraCheck, doNotation);
     }
 
-    private MoveResult applyMoveAlgebraicNotationPiece(boolean extraCheck, boolean doNotation, String notationString, int team, MoveResult result) {
+    private MoveResult applyMoveAlgebraicNotationPiece(boolean extraCheck, boolean doNotation, String notationString,
+                                                       int team, MoveResult result) {
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(notationString.substring(0, 1));
         String locationString = notationString.substring(1);
         BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
@@ -482,7 +504,8 @@ public class Board {
         return applyMove(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation);
     }
 
-    private MoveResult applyMoveAlgebraicNotationPawnBasic(boolean extraCheck, boolean doNotation, String notationString, int team, MoveResult result) {
+    private MoveResult applyMoveAlgebraicNotationPawnBasic(boolean extraCheck, boolean doNotation,
+                                                           String notationString, int team, MoveResult result) {
         int pieceId = Piece.PAWN;
         BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(notationString);
         ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
@@ -545,7 +568,8 @@ public class Board {
      * @param endMove     The target location of the piece.
      * @return True if the move was successful.
      */
-    private MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck) {
+    private MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
+                                 boolean extraCheck) {
         return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false);
     }
 
@@ -588,9 +612,11 @@ public class Board {
     private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
                                          boolean overrideNotation, boolean doNotation) {
         MoveResult result = new MoveResult();
-        if (getIsPaused()) return result;
+        if (getIsPaused())
+            return result;
         int team = pieceMoving.getTeam();
-        if (team != getTeamTurn()) return result;
+        if (team != getTeamTurn())
+            return result;
 
         int piecesMoveToSameLocation = getPiecesMoveToSameLocation(pieceMoving, endMove, team);
         if (piecesMoveToSameLocation == 0)
@@ -685,7 +711,8 @@ public class Board {
      * @param piecesMoveToSameLocation How many pieces move to the same location.
      * @param moveString               The current move notation to modify.
      */
-    private void handleMoveCreateBasicNotation(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, int piecesMoveToSameLocation, StringBuilder moveString) {
+    private void handleMoveCreateBasicNotation(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
+                                               int piecesMoveToSameLocation, StringBuilder moveString) {
         // If only found one, just do basic chess notation
         if (piecesMoveToSameLocation == 1) {
             handleMoveNotationSinglePiece(pieceMoving, startMove, endMove, moveString);
@@ -813,7 +840,8 @@ public class Board {
      * @param endMove     The end move location.
      * @param moveString  The string to modify the notation.
      */
-    private void handleMoveNotationMultiplePieces(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, StringBuilder moveString) {
+    private void handleMoveNotationMultiplePieces(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
+                                                  StringBuilder moveString) {
         // Check if it should put row, or column
         boolean putRow = handleMoveNotationShouldHaveRow(pieceMoving, startMove, endMove);
         // Add the row or column after the piece id
@@ -845,14 +873,15 @@ public class Board {
      */
     private boolean handleMoveNotationShouldHaveRow(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         boolean putRow = false;
-//        ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPiece(pieceMoving.getTeam(), pieceMoving.getPieceID());
-//        for (BoardLocation location : pieceLocations) {
-//            if (location.column == startMove.column && location.row == startMove.row)
-//                continue;
-//            if (location.column == startMove.column)
-//                putRow = true;
-//        }
-        ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPieceToTargetLocation(pieceMoving.getTeam(), pieceMoving.getPieceID(), endMove);
+        //        ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPiece(pieceMoving.getTeam(), pieceMoving.getPieceID());
+        //        for (BoardLocation location : pieceLocations) {
+        //            if (location.column == startMove.column && location.row == startMove.row)
+        //                continue;
+        //            if (location.column == startMove.column)
+        //                putRow = true;
+        //        }
+        ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPieceToTargetLocation(
+                pieceMoving.getTeam(), pieceMoving.getPieceID(), endMove);
         for (BoardLocation location : pieceLocations) {
             if (location.column == startMove.column && location.row == startMove.row)
                 continue;
@@ -870,7 +899,8 @@ public class Board {
      * @param endMove     The end location.
      * @param moveString  The current move notation to modify.
      */
-    private void handleMoveNotationSinglePiece(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, StringBuilder moveString) {
+    private void handleMoveNotationSinglePiece(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
+                                               StringBuilder moveString) {
         if (!(pieceMoving instanceof Pawn)) {
             moveString.append(Piece.chessNotationValue.get(pieceMoving.getPieceID()));
         }
@@ -1185,10 +1215,12 @@ public class Board {
         return getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId, targetLocation);
     }
 
-    public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocationForColumn(int team, int pieceId, BoardLocation targetLocation,
+    public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocationForColumn(int team, int pieceId,
+                                                                                              BoardLocation targetLocation,
                                                                                               int column) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
-        for (BoardLocation location : getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId, targetLocation)) {
+        for (BoardLocation location : getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
+                targetLocation)) {
             if (location.column == column)
                 locations.add(new BoardLocation(location.column, location.row));
         }
