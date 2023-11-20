@@ -141,6 +141,7 @@ public class GameLoop {
                 File file = fileChooser.getSelectedFile();
                 createGame(-1);
                 board.loadPGNFile(file);
+                redrawUI();
                 setPlayerClickListeners();
             }
         });
@@ -228,7 +229,7 @@ public class GameLoop {
         ChessUIManager.showMainFrame();
         this.board = new Board(this);
         this.aiTeam = aiTeam;
-        sendUpdateBoardState();
+        sendUpdateBoardState(true);
         resetGUIAndListeners();
     }
 
@@ -306,8 +307,9 @@ public class GameLoop {
         ChessUIManager.clearMovesLabel();
     }
 
-    public void sendUpdateBoardState() {
-        redrawUI();
+    public void sendUpdateBoardState(boolean redrawGUI) {
+        if (redrawGUI)
+            redrawUI();
         MoveResult result = board.getLastMoveResult();
         if (result != null) {
             if (result.isCheckmate) {
