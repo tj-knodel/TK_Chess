@@ -125,6 +125,27 @@ public class CreateMainFrame {
         EnterMove_TextField.setBorder(BorderFactory.createEmptyBorder());
         UILibrary.MainFrame.add(EnterMove_TextField);
         UILibrary.EnterMove_TextField = EnterMove_TextField;
+
+        UILibrary.WhiteTimer = new JLabel("WHITE TIME: 6:43", SwingConstants.LEFT);
+        UILibrary.WhiteTimer.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
+        UILibrary.WhiteTimer.setForeground(UILibrary.TextColor_White);
+        UILibrary.resizeModule.setVariableBounds(UILibrary.WhiteTimer, null, 57, 28, 253, 50); // Numbers from Figma Design
+        UILibrary.WhiteTimer.setOpaque(false);
+        UILibrary.MainFrame.add(UILibrary.WhiteTimer);
+
+        UILibrary.BlackTimer = new JLabel("BLACK TIME: 4:56", SwingConstants.RIGHT);
+        UILibrary.BlackTimer.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
+        UILibrary.BlackTimer.setForeground(UILibrary.TextColor_White);
+        UILibrary.resizeModule.setVariableBounds(UILibrary.BlackTimer, null, 644, 28, 253, 50); // Numbers from Figma Design
+        UILibrary.BlackTimer.setOpaque(false);
+        UILibrary.MainFrame.add(UILibrary.BlackTimer);
+
+        UILibrary.PlayerTurn = new JLabel("WHITE'S TURN", SwingConstants.CENTER);
+        UILibrary.PlayerTurn.setFont(new Font("Source Sans Pro", Font.BOLD, 26));
+        UILibrary.PlayerTurn.setForeground(UILibrary.TextColor_White);
+        UILibrary.resizeModule.setVariableBounds(UILibrary.PlayerTurn, null, 1010, 28, 319, 50); // Numbers from Figma Design
+        UILibrary.PlayerTurn.setOpaque(false);
+        UILibrary.MainFrame.add(UILibrary.PlayerTurn);
     }
 
 

@@ -108,7 +108,9 @@ public class ChessUIManager {
      */
     public static void appendMovesLabel(String move) {
         UILibrary.MovesLabel.setText(UILibrary.MovesLabel.getText() + move);
-    }
+   }
+
+   
 
     // -----------------------------------------------------------
     // --------------Managing Which Frames are Visible------------

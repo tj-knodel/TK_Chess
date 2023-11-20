@@ -88,6 +88,21 @@ public abstract class UILibrary {
   // public static JLabel MovesLabel;
   public static JTextArea MovesLabel;
 
+  /**
+   * Shows white's timer
+   */
+  public static JLabel WhiteTimer;
+  
+  /**
+   * Shows black's timer
+   */
+  public static JLabel BlackTimer;
+
+  /**
+   * Shows Whosever turn it is
+   */
+  public static JLabel PlayerTurn;
+
   // ----- New Game Frame-------------
 
   /**
