@@ -50,28 +50,28 @@ public class CreateCompSliderFrame {
 
         // Text Labels
         JLabel TitleLabel = new JLabel("Set Computer Chess AI Strength", SwingConstants.CENTER);
-        TitleLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 55));
+        UILibrary.resizeModule.setTextBounds(TitleLabel, 55);
         TitleLabel.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds( TitleLabel, null, 175, 159, 1089, 63); // Numbers from Figma Design
         TitleLabel.setOpaque(false);
         UILibrary.SetAIStrengthSliderFrame.add(TitleLabel);
 
         JLabel EasyLabel = new JLabel("EASY", SwingConstants.CENTER);
-        EasyLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+        UILibrary.resizeModule.setTextBounds(EasyLabel, 20);
         EasyLabel.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(EasyLabel, null, 199, 616, 102, 30); // Numbers from Figma Design
         EasyLabel.setOpaque(false);
         UILibrary.SetAIStrengthSliderFrame.add(EasyLabel);
 
         JLabel MaxLabel = new JLabel("MAX", SwingConstants.CENTER);
-        MaxLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+        UILibrary.resizeModule.setTextBounds(MaxLabel, 20);
         MaxLabel.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(MaxLabel, null, 1149, 616, 102, 30); // Numbers from Figma Design
         MaxLabel.setOpaque(false);
         UILibrary.SetAIStrengthSliderFrame.add(MaxLabel);
 
         JLabel MediumLabel = new JLabel("MEDIUM", SwingConstants.CENTER);
-        MediumLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+        UILibrary.resizeModule.setTextBounds(MediumLabel, 20);
         MediumLabel.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(MediumLabel, null, 669, 616, 102, 30); // Numbers from Figma Design
         MediumLabel.setOpaque(false);
@@ -104,7 +104,7 @@ public class CreateCompSliderFrame {
         UILibrary.SetAIStrengthSliderFrame.add( CurrentSelectedComputer_ImageLabel);
 
         UILibrary.CurrentSelectedComputer_TextLabel = new JLabel("White Computer", SwingConstants.CENTER);
-        UILibrary.CurrentSelectedComputer_TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+         UILibrary.resizeModule.setTextBounds(UILibrary.CurrentSelectedComputer_TextLabel, 20);
         UILibrary.CurrentSelectedComputer_TextLabel.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(UILibrary.CurrentSelectedComputer_TextLabel, null, 621, 409, 187, 29); // Numbers from Figma Design
         UILibrary.CurrentSelectedComputer_TextLabel.setOpaque(false);

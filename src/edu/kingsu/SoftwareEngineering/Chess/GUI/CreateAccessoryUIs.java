@@ -176,14 +176,14 @@ public class CreateAccessoryUIs {
 		UILibrary.resizeModule.setVariableBounds(endLabel, getImage("EndGameFrame.png"));
 
 		JLabel TextLabel = new JLabel("Game Over", SwingConstants.CENTER);
-		TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+		UILibrary.resizeModule.setTextBounds(TextLabel, 20);
 		TextLabel.setForeground(UILibrary.TextColor_White);
 		UILibrary.resizeModule.setVariableBounds(TextLabel, null, 62, 24, 566, 34); // Numbers from Figma Design
 		TextLabel.setOpaque(false);
 		endLabel.add(TextLabel);
 
 		endTitle = new JLabel("YOU WIN!", SwingConstants.CENTER);
-		endTitle.setFont(new Font("Source Sans Pro", Font.BOLD, 50));
+		UILibrary.resizeModule.setTextBounds(endTitle, 50);
 		endTitle.setForeground(UILibrary.TextColor_White);
 		UILibrary.resizeModule.setVariableBounds(endTitle, null, 62, 64, 566, 71); // Numbers from Figma Design
 		endTitle.setOpaque(false);

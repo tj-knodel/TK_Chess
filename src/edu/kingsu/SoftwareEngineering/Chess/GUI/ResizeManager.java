@@ -1,6 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.GUI;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
@@ -229,6 +230,40 @@ public class ResizeManager implements ComponentListener {
         }
     }
 
+    
+    /**
+     *  Holds info UI Text Labels, resizes text auto-magically
+     */
+    class UIText_Label {
+
+        /**
+         * UI Component itself, holds the text
+         */
+        public JComponent selfComponent;
+
+        /**
+         * Original Text Size
+         */
+        public int originalTextSize;
+
+        /**
+         * Sets class variables
+         * @param self UI Component which holds the text
+         * @param textSize original text size
+         */
+        UIText_Label(JComponent self, int textSize) {
+            this.selfComponent = self;
+            this.originalTextSize = textSize;
+        }
+
+        /**
+         * Auto scales the size of the image when the JFrame is resized
+         */
+        public void updateSize() {
+            selfComponent.setFont(new Font("Source Sans Pro", Font.BOLD, scale_X(originalTextSize)));
+        }
+    }
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
@@ -246,6 +281,14 @@ public class ResizeManager implements ComponentListener {
      * Table which holds all the UIElements labels whose images needs to be resized
      */
     private ArrayList<UIImage_Label> Gui_Labels;
+
+    /**
+     * Table which holds all the UIElements labels whose text needs to be resized
+     */
+    private ArrayList<UIText_Label> Gui_Text;
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
 
     /**
      * Think of this method as `setBounds` for UIComponents
@@ -278,6 +321,16 @@ public class ResizeManager implements ComponentListener {
         UIImage_Label label = new UIImage_Label(self, image);
         Gui_Labels.add(label);
         return label;
+    }
+
+     /**
+     * Sets the images inside of UI element labels  to be resized when its container is resized
+     * @param self UI element which holds image
+     * @param originalSize to be resized
+     */   
+    public void setTextBounds(JComponent self, int originalSize) {
+        UIText_Label label = new UIText_Label(self, originalSize);
+        Gui_Text.add(label);
     }
 
     // -----------------------------------------------------
@@ -324,6 +377,13 @@ public class ResizeManager implements ComponentListener {
             UIImage_Label element = Gui_Labels.get(i);
             element.updateSize();
         }
+
+        // Text
+        for (int i = 0; i < Gui_Text.size(); ++i) {
+            UIText_Label element = Gui_Text.get(i);
+            element.updateSize();
+        }
+
 
         // Repaints each chess tile, this is done twice because some functions need to be called before and after the UIBoard itself is resized
         for (int row = 0; row < 8; ++row) {
@@ -398,5 +458,6 @@ public class ResizeManager implements ComponentListener {
         GuiComponents = new ArrayList<UIElement>();
         Gui_Buttons = new ArrayList<UIImage_Button>();
         Gui_Labels = new ArrayList<UIImage_Label>();
+        Gui_Text = new ArrayList<UIText_Label>();
     }
 }

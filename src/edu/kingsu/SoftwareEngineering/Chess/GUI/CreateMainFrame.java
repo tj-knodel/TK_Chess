@@ -24,7 +24,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 
-
 /**
  * Creates the Main Chess Frame
  * 
@@ -99,13 +98,14 @@ public class CreateMainFrame {
         JTextArea MovesLabel = new JTextArea(""); // 150 lines
         UILibrary.resizeModule.setVariableBounds(MovesLabel, null, 984, 209, 372, 531); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
-        MovesLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
+        UILibrary.resizeModule.setTextBounds(MovesLabel, 22);
         MovesLabel.setForeground(UILibrary.TextColor_White);
         MovesLabel.setEditable(false);
         MovesLabel.setHighlighter(null);
         UILibrary.MovesLabel = MovesLabel;
         //UILibrary.MainFrame.add(MovesLabel);
-        UILibrary.MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        UILibrary.MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         UILibrary.resizeModule.setVariableBounds(UILibrary.MovesLabel_ScrollPane, null, 984, 209, 372, 531);
         UILibrary.MainFrame.add(UILibrary.MovesLabel_ScrollPane);
         UILibrary.MovesLabel_ScrollPane.setVisible(true);
@@ -119,7 +119,7 @@ public class CreateMainFrame {
         JTextField EnterMove_TextField = new JTextField("To enter a move click here");
         UILibrary.resizeModule.setVariableBounds(EnterMove_TextField, null, 935, 880, 470, 49); // Numbers from Figma Design
         EnterMove_TextField.setBackground(UILibrary.ForegroundColor);
-        EnterMove_TextField.setFont(new Font("Source Sans Pro", Font.BOLD, 20));
+        UILibrary.resizeModule.setTextBounds(EnterMove_TextField, 20);
         EnterMove_TextField.setForeground(UILibrary.TextColor_Gray);
         EnterMove_TextField.setHorizontalAlignment(JTextField.CENTER);
         EnterMove_TextField.setBorder(BorderFactory.createEmptyBorder());
@@ -127,27 +127,26 @@ public class CreateMainFrame {
         UILibrary.EnterMove_TextField = EnterMove_TextField;
 
         UILibrary.WhiteTimer = new JLabel("WHITE TIME: 6:43", SwingConstants.LEFT);
-        UILibrary.WhiteTimer.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
+        UILibrary.resizeModule.setTextBounds(UILibrary.WhiteTimer, 22);
         UILibrary.WhiteTimer.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(UILibrary.WhiteTimer, null, 57, 28, 253, 50); // Numbers from Figma Design
         UILibrary.WhiteTimer.setOpaque(false);
         UILibrary.MainFrame.add(UILibrary.WhiteTimer);
 
         UILibrary.BlackTimer = new JLabel("BLACK TIME: 4:56", SwingConstants.RIGHT);
-        UILibrary.BlackTimer.setFont(new Font("Source Sans Pro", Font.BOLD, 22));
+        UILibrary.resizeModule.setTextBounds(UILibrary.BlackTimer, 22);
         UILibrary.BlackTimer.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(UILibrary.BlackTimer, null, 644, 28, 253, 50); // Numbers from Figma Design
         UILibrary.BlackTimer.setOpaque(false);
         UILibrary.MainFrame.add(UILibrary.BlackTimer);
 
         UILibrary.PlayerTurn = new JLabel("WHITE'S TURN", SwingConstants.CENTER);
-        UILibrary.PlayerTurn.setFont(new Font("Source Sans Pro", Font.BOLD, 26));
+        UILibrary.resizeModule.setTextBounds(UILibrary.PlayerTurn, 26);
         UILibrary.PlayerTurn.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(UILibrary.PlayerTurn, null, 1010, 28, 319, 50); // Numbers from Figma Design
         UILibrary.PlayerTurn.setOpaque(false);
         UILibrary.MainFrame.add(UILibrary.PlayerTurn);
     }
-
 
     /**
      * Adds a focus listener to move text input
@@ -155,15 +154,15 @@ public class CreateMainFrame {
      */
     private void addTextFieldFocusListener() {
         // Add a focus listener
-         UILibrary.EnterMove_TextField.addFocusListener(new FocusListener() {
+        UILibrary.EnterMove_TextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                     UILibrary.EnterMove_TextField.setText("");
+                UILibrary.EnterMove_TextField.setText("");
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                     UILibrary.EnterMove_TextField.setText("To enter a move click here");
+                UILibrary.EnterMove_TextField.setText("To enter a move click here");
             }
         });
     }
@@ -224,108 +223,112 @@ public class CreateMainFrame {
         // ---- GAME -------
         JMenu Game_JMenu = new JMenu("Game"); // button on the bar
         bar.add(Game_JMenu);
-        Game_JMenu.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(Game_JMenu, 14);
         Game_JMenu.setForeground(UILibrary.TextColor_White);
 
         JMenuItem NewGame_Item = new JMenuItem("New Game");
-        NewGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
-        NewGame_Item.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        UILibrary.resizeModule.setTextBounds(NewGame_Item, 14);
+        NewGame_Item
+                .setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         Game_JMenu.add(NewGame_Item);
         UILibrary.NewGame_JMenuItem = NewGame_Item;
 
         JMenuItem LoadGame_Item = new JMenuItem("Open Game");
-        LoadGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
-        LoadGame_Item.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        UILibrary.resizeModule.setTextBounds(LoadGame_Item, 14);
+        LoadGame_Item
+                .setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         Game_JMenu.add(LoadGame_Item);
         UILibrary.LoadGame_JMenuItem = LoadGame_Item;
 
         JMenuItem SaveGame_Item = new JMenuItem("Save Game");
-        SaveGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
-        SaveGame_Item.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        UILibrary.resizeModule.setTextBounds(SaveGame_Item, 14);
+        SaveGame_Item
+                .setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         Game_JMenu.add(SaveGame_Item);
         UILibrary.SaveGame_JMenuItem = SaveGame_Item;
 
         JMenuItem RestartGame_Item = new JMenuItem("Restart Game");
-        RestartGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
-        RestartGame_Item.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        UILibrary.resizeModule.setTextBounds(RestartGame_Item, 14);
+        RestartGame_Item
+                .setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         Game_JMenu.add(RestartGame_Item);
         UILibrary.RestartGame_JMenuItem = RestartGame_Item;
 
         JMenuItem ResumeGame_Item = new JMenuItem("Resume Game");
-        ResumeGame_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(ResumeGame_Item, 14);
         Game_JMenu.add(ResumeGame_Item);
         UILibrary.ResumeGame_JMenuItem = ResumeGame_Item;
 
         // ---- BoardAppearance -------
         JMenu Appearance_JMenu = new JMenu("Board Appearance"); // button on the bar
         bar.add(Appearance_JMenu);
-        Appearance_JMenu.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(Appearance_JMenu, 14);
         Appearance_JMenu.setForeground(UILibrary.TextColor_White);
 
         JMenuItem Possible_Item = new JMenuItem("Toggle Possible Moves");
-        Possible_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(Possible_Item, 14);
         Appearance_JMenu.add(Possible_Item);
         UILibrary.TogglePossibleMoves_JMenuItem = Possible_Item;
 
         JMenuItem Previous_Item = new JMenuItem("Toggle Previous Moves");
-        Previous_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(Previous_Item, 14);
         Appearance_JMenu.add(Previous_Item);
         UILibrary.TogglePreviousMoves_JMenuItem = Previous_Item;
 
         JMenuItem Coordinates_Item = new JMenuItem("Toggle Coordinates");
-        Coordinates_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(Coordinates_Item, 14);
         Appearance_JMenu.add(Coordinates_Item);
         UILibrary.ToggleCoordinates_JMenuItem = Coordinates_Item;
 
         JMenuItem Appearance_Item = new JMenuItem("Set Board Appearance");
-        Appearance_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(Appearance_Item, 14);
         Appearance_JMenu.add(Appearance_Item);
         UILibrary.SetBoardAppearance_JMenuItem = Appearance_Item;
 
         JMenuItem FlipBoard = new JMenuItem("Flip Chess Board");
-        FlipBoard.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(FlipBoard, 14);
         Appearance_JMenu.add(FlipBoard);
         UILibrary.FlipBoard_JMenuItem = FlipBoard;
 
         // ---- Set Computer Strength -------
         JMenu ComputerStrength_JMenu = new JMenu("Set Computer Strength"); // button on the bar
         bar.add(ComputerStrength_JMenu);
-        ComputerStrength_JMenu.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(ComputerStrength_JMenu, 14);
         ComputerStrength_JMenu.setForeground(UILibrary.TextColor_White);
 
         JMenuItem AiEasy_Item = new JMenuItem("Easy");
-        AiEasy_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(AiEasy_Item, 14);
         ComputerStrength_JMenu.add(AiEasy_Item);
         UILibrary.SetAIStrengthEasy_JMenuItem = AiEasy_Item;
 
         JMenuItem AiMedium_Item = new JMenuItem("Medium");
-        AiMedium_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(AiMedium_Item, 14);
         ComputerStrength_JMenu.add(AiMedium_Item);
         UILibrary.SetAIStrengthMedium_JMenuItem = AiMedium_Item;
 
         JMenuItem AiMax_Item = new JMenuItem("Max");
-        AiMax_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(AiMax_Item, 14);
         ComputerStrength_JMenu.add(AiMax_Item);
         UILibrary.SetAIStrengthMax_JMenuItem = AiMax_Item;
 
         JMenuItem StrengthSlider_Item = new JMenuItem("Show Strength Slider");
-        StrengthSlider_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(StrengthSlider_Item, 14);
         ComputerStrength_JMenu.add(StrengthSlider_Item);
         UILibrary.ShowAIStrengthSlider_JMenuItem = StrengthSlider_Item;
 
         // ---- Help -------
         JMenu Help_JMenu = new JMenu("Help"); // button on the bar
         bar.add(Help_JMenu);
-        Help_JMenu.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(Help_JMenu, 14);
         Help_JMenu.setForeground(UILibrary.TextColor_White);
 
         JMenuItem About_Item = new JMenuItem("About");
-        About_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(About_Item, 14);
         Help_JMenu.add(About_Item);
         UILibrary.About_JMenuItem = About_Item;
 
         JMenuItem Help_Item = new JMenuItem("Help");
-        Help_Item.setFont(new Font("Source Sans Pro", Font.BOLD, 14));
+        UILibrary.resizeModule.setTextBounds(Help_Item, 14);
         Help_JMenu.add(Help_Item);
         UILibrary.Help_JMenuItem = Help_Item;
     }
@@ -340,11 +343,11 @@ public class CreateMainFrame {
      */
     private static JLabel boardLabels[] = new JLabel[16];
 
-        /**
-     * Array of board coordinates, for when black is on the bottom\n
-     * boardLabels[0]-> boardLabels[7] hold the coordinates 1-8
-     * boardLabels[8]-> boardLabels[15] hold the coordinates a-h
-     */
+    /**
+    * Array of board coordinates, for when black is on the bottom\n
+    * boardLabels[0]-> boardLabels[7] hold the coordinates 1-8
+    * boardLabels[8]-> boardLabels[15] hold the coordinates a-h
+    */
     private static JLabel boardLabels_Reverse[] = new JLabel[16];
 
     /**
@@ -388,7 +391,7 @@ public class CreateMainFrame {
         UILibrary.resizeModule.setVariableBounds(boardLabels[15], null, 836, 929, 28, 40); // Numbers from Figma Design
 
         for (JLabel label : boardLabels) {
-            label.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
+            UILibrary.resizeModule.setTextBounds(label, 24);
             label.setBackground(UILibrary.ForegroundColor);
             label.setForeground(UILibrary.TextColor_White);
             UILibrary.MainFrame.add(label);
@@ -431,7 +434,7 @@ public class CreateMainFrame {
         UILibrary.resizeModule.setVariableBounds(boardLabels_Reverse[15], null, 92, 929, 28, 40); // Numbers from Figma Design
 
         for (JLabel label : boardLabels_Reverse) {
-            label.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
+            UILibrary.resizeModule.setTextBounds(label, 24);
             label.setBackground(UILibrary.ForegroundColor);
             label.setForeground(UILibrary.TextColor_White);
             UILibrary.MainFrame.add(label);
@@ -452,8 +455,7 @@ public class CreateMainFrame {
     /**
      * Are the coordinates visible around the board
      */
-     private boolean areCoordsVisible = true;
-
+    private boolean areCoordsVisible = true;
 
     /**
      * Sets the board orientation
@@ -481,7 +483,7 @@ public class CreateMainFrame {
             }
 
         } else {
-          
+
             for (JLabel label : boardLabels) {
                 label.setVisible(false);
             }
@@ -519,7 +521,7 @@ public class CreateMainFrame {
         }
         for (JLabel label : boardLabels_Reverse) {
             label.setVisible(areCoordsVisible && !whiteOnBottom);
-            
+
         }
     }
 

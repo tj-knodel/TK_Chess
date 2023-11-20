@@ -50,14 +50,14 @@ public class CreateStartFrame {
 
         // Text Labels
         JLabel TitleLabel = new JLabel("New Chess Game", SwingConstants.CENTER);
-        TitleLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 65));
+        UILibrary.resizeModule.setTextBounds(TitleLabel, 65);
         TitleLabel.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(TitleLabel, null, 437, 50, 566, 86); // Numbers from Figma Design
         TitleLabel.setOpaque(false);
         UILibrary.NewGameFrame.add(TitleLabel);
 
         JLabel TextLabel = new JLabel("Select a Game Mode:", SwingConstants.CENTER);
-        TextLabel.setFont(new Font("Source Sans Pro", Font.BOLD, 55));
+        UILibrary.resizeModule.setTextBounds(TextLabel, 55);
         TextLabel.setForeground(UILibrary.TextColor_White);
         UILibrary.resizeModule.setVariableBounds(TextLabel, null, 426, 230, 588, 63); // Numbers from Figma Design
         TextLabel.setOpaque(false);
