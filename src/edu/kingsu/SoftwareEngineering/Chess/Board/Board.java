@@ -3,6 +3,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Board;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
@@ -128,8 +129,6 @@ public class Board {
 
     private MoveResult lastMoveResult;
 
-    ArrayList<PGNMove> moves;
-
     /**
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
@@ -248,15 +247,21 @@ public class Board {
      */
     public void loadPGNFile(File file) {
         PGNReader reader = new PGNReader();
-        moves = reader.getMovesFromFile(file.getAbsolutePath());
-        for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
-            //            System.out.println("Applying move: " + move.getMoveString());
-            //            JOptionPane.showConfirmDialog(null, move.getMoveString());
-            MoveResult result = applyPGNMove(move, true);
-            if (!result.wasSuccessful) {
-                JOptionPane.showConfirmDialog(null, "Could not apply move: " + move.getMoveString());
-            }
+        ArrayList<PGNMove> moves = reader.getMovesFromFile(file.getAbsolutePath());
+//        for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
+//            //            System.out.println("Applying move: " + move.getMoveString());
+//            //            JOptionPane.showConfirmDialog(null, move.getMoveString());
+//            MoveResult result = applyPGNMove(move, true);
+//            if (!result.wasSuccessful) {
+//                JOptionPane.showConfirmDialog(null, "Could not apply move: " + move.getMoveString());
+//            }
+//        }
+        algebraicNotationMovesList.clear();
+        for(PGNMove m : moves) {
+            algebraicNotationMovesList.add(m.getMoveString());
         }
+        undoMove();
+        redoMove();
     }
 
     /**
@@ -302,8 +307,10 @@ public class Board {
         // a certain index. The undoMoveCount is that index, and when
         // it is incremented, we go to X amount moves less than the moves that
         // were made.
-        if (algebraicNotationMovesList.size() - undoMoveCount <= 0)
+        if (algebraicNotationMovesList.size() - undoMoveCount <= 0) {
+            System.out.println("CAN'T");
             return false;
+        }
         return undoOrRedoMove(true);
     }
 
@@ -339,15 +346,20 @@ public class Board {
         else
             undoMoveCount--;
         algebraicRepresentation = new StringBuilder();
-        if (this.moves != null) {
-            for (int i = 0; i < moves.size() - undoMoveCount; i++) {
-                MoveResult result = applyMoveAlgebraicNotation(moves.get(i).getMoveString(), false, true, false);
-            }
-        } else {
-            for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-                MoveResult result = applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true, false);
-            }
+        ArrayList<String> movesList = new ArrayList<>();
+        movesList.addAll(algebraicNotationMovesList);
+        for (int i = 0; i < movesList.size() - undoMoveCount; i++) {
+            MoveResult result = applyMoveAlgebraicNotation(movesList.get(i), false, true, false);
         }
+//        if (this.moves != null) {
+//            for (int i = 0; i < moves.size() - undoMoveCount; i++) {
+//                MoveResult result = applyMoveAlgebraicNotation(moves.get(i).getMoveString(), false, true, false);
+//            }
+//        } else {
+//            for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
+//                MoveResult result = applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true, false);
+//            }
+//        }
         return true;
     }
 
@@ -442,7 +454,7 @@ public class Board {
             pieceLocation = getBoardLocationsForTeamForPieceToTargetLocationForColumn(team,
                     pieceId, boardLocation,
                     (int) notationString.charAt(0) - 'a');
-            System.out.println(notationString + " " + pieceLocation.size());
+//            System.out.println(notationString + " " + pieceLocation.size());
         }
         if (pieceLocation.size() != 1)
             return result;
@@ -750,6 +762,7 @@ public class Board {
      * @param moveString The PGN notation of the current move.
      */
     private void handleMoveOverrideNotation(StringBuilder moveString) {
+
         ArrayList<String> newList = new ArrayList<>();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
             newList.add(algebraicNotationMovesList.get(i));
