@@ -20,4 +20,8 @@ public class BoardLocation {
         this.column = column;
         this.row = row;
     }
+
+    public boolean isEqual(BoardLocation other) {
+        return other.row == row && other.column == column;
+    }
 }

@@ -147,7 +147,7 @@ public class AIPlayer extends Player {
             start_move = team_pieces.get(idx);
             piece = pieces[start_move.row][start_move.column];
 
-            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(piece, start_move, true);
+            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(pieces, piece, start_move, true);
             System.out.println(possible_moves.size());
             if (possible_moves.isEmpty()) {
                 System.out.println("removing index");

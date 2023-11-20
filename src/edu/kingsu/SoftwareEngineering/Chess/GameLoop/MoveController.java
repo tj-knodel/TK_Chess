@@ -80,7 +80,7 @@ public class MoveController {
             Piece piece = board.getBoard()[firstClick.row][firstClick.column];
             if (piece.getTeam() != board.getTeamTurn())
                 return false;
-            possibleMoves = board.getPossibleMoves(piece, firstClick, true);
+            possibleMoves = board.getPossibleMoves(board.getBoard(), piece, firstClick, true);
             isFirstClick = false;
             return false;
         } else if (!isFirstClick) {

@@ -53,7 +53,7 @@ public class King extends Piece {
             return false;
         Piece[][] boardCopy = board.getBoard();
         // Only ever one king per team.
-        BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+        BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING).get(0);
         Piece pieceOne = boardCopy[kingLocation.row][kingLocation.column + 1];
         Piece pieceTwo = boardCopy[kingLocation.row][kingLocation.column + 2];
         if (!(pieceOne instanceof EmptyPiece && pieceTwo instanceof EmptyPiece))
@@ -81,7 +81,7 @@ public class King extends Piece {
             return false;
         Piece[][] boardCopy = board.getBoard();
         // Only ever one king per team.
-        BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(team, Piece.KING).get(0);
+        BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING).get(0);
         Piece pieceOne = boardCopy[kingLocation.row][kingLocation.column - 1];
         Piece pieceTwo = boardCopy[kingLocation.row][kingLocation.column - 2];
         Piece pieceThree = boardCopy[kingLocation.row][kingLocation.column - 3];
