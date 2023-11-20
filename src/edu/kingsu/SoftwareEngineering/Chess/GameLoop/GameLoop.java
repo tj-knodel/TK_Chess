@@ -212,6 +212,7 @@ public class GameLoop {
             setPlayerClickListeners();
         }
         ChessUIManager.showMainFrame();
+        redrawUI();
         if (aiVsAi || aiTeam == board.getTeamTurn()) {
             runAI();
         }

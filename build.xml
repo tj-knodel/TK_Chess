@@ -31,13 +31,19 @@
     <path refid="classpath.base"/>
   </path>
 
+  <path id="classpath">
+    <!-- <pathelement location="${user.home}/.ant/lib/flatlaf.jar"/> -->
+  </path>
+
   <available classname="org.junit.runner.Runner" property="junit.installed"/>
   <available classname="org.hamcrest.SelfDescribing" property="hamcrest.installed"/>
+  <!-- <available classname="com.formdev.flatlaf.FlatDarkLaf" property="flatlaf.installed"/> -->
 
   <condition property="libs.installed">
     <and>
       <isset property="junit.installed"/>
       <isset property="hamcrest.installed"/>
+      <!-- <isset property="flatlaf.installed"/> -->
     </and>
   </condition>
 
@@ -55,6 +61,7 @@
     <get dest="${user.home}/.ant/lib/hamcrest-core.jar" src="http://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" unless:set="hamcrest.installed"/>
     <get dest="${user.home}/.ant/lib/ant-junit.jar" src="http://search.maven.org/remotecontent?filepath=org/apache/ant/ant-junit/1.9.6/ant-junit-1.9.6.jar" unless:set="junit.installed"/>
     <get dest="${user.home}/.ant/lib/junit.jar" src="http://search.maven.org/remotecontent?filepath=junit/junit/4.12/junit-4.12.jar" unless:set="junit.installed"/>
+    <!-- <get dest="${user.home}/.ant/lib/flatlaf.jar" src="https://repo1.maven.org/maven2/com/formdev/flatlaf/3.2.5/flatlaf-3.2.5.jar" unless:set="flatlaf.installed"/> -->
 
     <fail message="Required Libraries installed. Please run the build again"/>
   </target>
@@ -77,6 +84,7 @@
             verbose="${verbose.output}"
             includeantruntime="false"
     >
+      <classpath refid="classpath"/>
     </javac>
   </target>
 
@@ -88,11 +96,12 @@
       <manifest>
         <attribute name="Main-Class" value="${Main-Class}"/>
       </manifest>
+      <!-- <zipfileset includes="**/*.*" src="${user.home}/.ant/lib/flatlaf.jar"/> -->
     </jar>
   </target>
 
   <target name="run" depends="jar" description="Run the application">
-    <java jar="${jar.file}" fork="true">
+    <java jar="${jar.file}" fork="true" classpath="classpath">
     </java>
   </target>
 
