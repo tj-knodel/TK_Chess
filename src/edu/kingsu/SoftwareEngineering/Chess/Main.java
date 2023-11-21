@@ -1,6 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess;
 
- //import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.FlatDarkLaf;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
@@ -23,7 +23,7 @@ public class Main {
 		// Board b = new Board();
 
 		// new GUIStarter();
-		//FlatDarkLaf.setup();
+		FlatDarkLaf.setup();
 		new GameLoop();
 	}
 
