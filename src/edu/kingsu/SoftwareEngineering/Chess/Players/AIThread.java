@@ -1,11 +1,8 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
 
-import javax.swing.JOptionPane;
-
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
 
 /**
  * A wrapper to store an AIPlayer
@@ -37,7 +34,7 @@ public class AIThread implements Runnable {
             e.printStackTrace();
         }
         Move aiMove = aiPlayer.getMove(board);
-        MoveResult result = board.applyMove(aiMove.piece, aiMove.start, aiMove.end, true, true);
+        MoveResult result = board.applyMoveUpdateGUI(aiMove.piece, aiMove.start, aiMove.end);
         if(!result.wasSuccessful) {
 //            JOptionPane.showConfirmDialog(null, "NOT SUCCESSFUL");
         }

@@ -2,7 +2,6 @@ package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
@@ -19,40 +18,6 @@ import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
  * @version 1.0.0
  */
 public class Board {
-
-    /**
-     * The board locations from a string. So "a1" would return a BoardLocation
-     * with row = 7 and column = 0
-     */
-    private static final HashMap<String, BoardLocation> BOARD_LOCATIONS_FROM_STRING;
-
-    static {
-        BOARD_LOCATIONS_FROM_STRING = new HashMap<>();
-        for (int i = 0; i < 8; i++) {
-            BOARD_LOCATIONS_FROM_STRING.put("a" + (i + 1), new BoardLocation(0, (7 - i)));
-        }
-        for (int i = 0; i < 8; i++) {
-            BOARD_LOCATIONS_FROM_STRING.put("b" + (i + 1), new BoardLocation(1, (7 - i)));
-        }
-        for (int i = 0; i < 8; i++) {
-            BOARD_LOCATIONS_FROM_STRING.put("c" + (i + 1), new BoardLocation(2, (7 - i)));
-        }
-        for (int i = 0; i < 8; i++) {
-            BOARD_LOCATIONS_FROM_STRING.put("d" + (i + 1), new BoardLocation(3, (7 - i)));
-        }
-        for (int i = 0; i < 8; i++) {
-            BOARD_LOCATIONS_FROM_STRING.put("e" + (i + 1), new BoardLocation(4, (7 - i)));
-        }
-        for (int i = 0; i < 8; i++) {
-            BOARD_LOCATIONS_FROM_STRING.put("f" + (i + 1), new BoardLocation(5, (7 - i)));
-        }
-        for (int i = 0; i < 8; i++) {
-            BOARD_LOCATIONS_FROM_STRING.put("g" + (i + 1), new BoardLocation(6, (7 - i)));
-        }
-        for (int i = 0; i < 8; i++) {
-            BOARD_LOCATIONS_FROM_STRING.put("h" + (i + 1), new BoardLocation(7, (7 - i)));
-        }
-    }
 
     /**
      * The representation of the board as a 2D-array
@@ -162,8 +127,8 @@ public class Board {
 
     public Piece[][] cloneBoard2DArray(Piece[][] board) {
         Piece[][] r = new Piece[board.length][board[0].length];
-        for(int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board[i].length; j++) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
                 r[i][j] = board[i][j].copy(board[i][j].getTeam());
             }
         }
@@ -339,12 +304,10 @@ public class Board {
      * @param pieceMoving The chess piece being moved.
      * @param startMove   The starting move of the piece.
      * @param endMove     The target location of the piece.
-     * @param extraCheck  Should algebraicNotation be overridden.
      * @return True if the move was successful.
      */
-    public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean extraCheck,
-                                boolean doNotation) {
-        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, doNotation, true);
+    public MoveResult applyMoveUpdateGUI(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+        return applyMoveInternal(pieceMoving, startMove, endMove, true);
     }
 
     /**
@@ -364,88 +327,53 @@ public class Board {
      * @param pieceMoving      The chess piece being moved.
      * @param startMove        The starting move of the piece.
      * @param endMove          The target location of the piece.
-     * @param overrideNotation If algebraicNotation should be overriden
      * @return True if the move was successful.
      */
-    private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-                                         boolean overrideNotation, boolean doNotation, boolean updateGUI) {
-        String moveNotation = pgnHelper.getPGNNotationFromMove(startMove, endMove);
+    private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean updateGUI) {
         MoveResult result = new MoveResult();
         if (getIsPaused()) {
             return result;
         }
-        int team = pieceMoving.getTeam();
-        if (team != getTeamTurn()) {
+        if (pieceMoving.getTeam() != getTeamTurn()) {
             return result;
         }
-
-        int piecesMoveToSameLocation = getNumberOfPiecesMovingToSameLocation(board, pieceMoving, endMove, team);
+        int piecesMoveToSameLocation = getNumberOfPiecesMovingToSameLocation(board, pieceMoving, endMove, pieceMoving.getTeam());
         if (piecesMoveToSameLocation == 0) {
             return result;
         }
 
-        StringBuilder moveString = new StringBuilder();
-//        handleMoveCreateBasicNotation(pieceMoving, startMove, endMove, piecesMoveToSameLocation, moveString);
-
-        // Checks if we can castle, apply the correct one and set the chess notation correctly.
-        boolean castle = false;
-        if (getIsMoveCastling(startMove, endMove)) {
-            castle = true;
-            moveString = new StringBuilder();
-            if (getIsMoveCastlingLongSide(startMove, endMove)) {
-                applyCastlingLongSide(board, pieceMoving, startMove, endMove);
-                moveString.append("O-O-O");
-            } else {
-                applyCastlingShortSide(board, pieceMoving, startMove, endMove);
-                moveString.append("O-O");
-            }
-        } else {
+//        BoardLocation[] locations = pgnHelper.getBoardLocationsFromPGN(moveNotation, pieceMoving.getTeam());
+//        if (locations[0] == null || locations[1] == null)
+//            return result;
+//        if (!startMove.isEqual(locations[0]) || !endMove.isEqual(locations[1]))
+//            return result;
+        String moveNotation = pgnHelper.getPGNNotationFromMove(startMove, endMove);
+        if(moveNotation.equalsIgnoreCase("O-O-O"))
+            applyCastlingLongSide(board, pieceMoving, startMove, endMove);
+        else if(moveNotation.equalsIgnoreCase("O-O"))
+            applyCastlingShortSide(board, pieceMoving, startMove, endMove);
+        else
             applyMoveNormal(board, pieceMoving, startMove, endMove);
-        }
 
-        // Check if the king is in check, or checkmate.
-        // Update the PGN notation if necessary and the return result.
-        int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-        if (checkKingInCheck(board, otherTeam)) {
-            if (!castle) {
-                moveString.append("+");
-            }
-            if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
-                if (!castle) {
-                    moveString.append("+");
-                }
-                result.isCheckmate = true;
-                result.checkmateTeam = otherTeam;
-            }
-        } else {
-            if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
-                result.isStalemate = true;
-                result.checkmateTeam = otherTeam;
-            }
-        }
-        if (getCanPieceBePromoted(pieceMoving, endMove)) {
-            String promotedPieceValue = "";
-            if (!updateGUI) {
-                if (algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).contains("=")) {
-                    promotedPieceValue = algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).split("=")[1];
-                }
-                else {
-                    promotedPieceValue = gameLoop.getPromotionPiece();
-                }
-            } else {
-                promotedPieceValue = gameLoop.getPromotionPiece();
-            }
-            moveString.append("=").append(promotedPieceValue);
-            int pieceIdFromString = Piece.PIECE_ID_FROM_STRING.get(promotedPieceValue);
-            Piece newPiece = Piece.createPieceFromTeam(pieceIdFromString, team);
-            board[endMove.row][endMove.column] = newPiece;
-        }
+        checkStalemateAndCheckmate(pieceMoving, result);
+//        if (getCanPieceBePromoted(pieceMoving, endMove)) {
+//            String promotedPieceValue = "";
+//            if (!updateGUI) {
+//                if (algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).contains("=")) {
+//                    promotedPieceValue = algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).split("=")[1];
+//                }
+//                else {
+//                    promotedPieceValue = gameLoop.getPromotionPiece();
+//                }
+//            } else {
+//                promotedPieceValue = gameLoop.getPromotionPiece();
+//            }
+//            int pieceIdFromString = Piece.PIECE_ID_FROM_STRING.get(promotedPieceValue);
+//            Piece newPiece = Piece.createPieceFromTeam(pieceIdFromString, pieceMoving.getTeam());
+//            board[endMove.row][endMove.column] = newPiece;
+//        }
 
-        handleMoveDoNotation(moveString);
-
-        if (overrideNotation) {
-            handleMoveOverrideNotation(moveString);
-        }
+        handleMoveDoNotation(moveNotation);
 
         result.wasSuccessful = true;
         currentMoveLocation = new BoardLocation(endMove.column, endMove.row);
@@ -455,21 +383,42 @@ public class Board {
         return result;
     }
 
+    private void checkStalemateAndCheckmate(Piece pieceMoving, MoveResult result) {
+        // Check if the king is in check, or checkmate.
+        // Update the PGN notation if necessary and the return result.
+        int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        if (checkKingInCheck(board, otherTeam)) {
+            if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
+                result.isCheckmate = true;
+                result.checkmateTeam = otherTeam;
+            }
+        } else {
+            if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
+                result.isStalemate = true;
+                result.checkmateTeam = otherTeam;
+            }
+        }
+    }
+
+    public String getPromotionPiece() {
+        return gameLoop.getPromotionPiece();
+    }
+
     /**
      * Handles the notation updating of the current move.
      *
      * @param moveString The chess notation of the current move.
      */
-    private void handleMoveDoNotation(StringBuilder moveString) {
+    private void handleMoveDoNotation(String moveString) {
         if (firstMove) {
             firstMove = false;
-            algebraicRepresentation.append(moveCount).append(". ").append(moveString.toString());
-            gameLoop.updateChessNotationLabel(moveCount + ". " + moveString.toString());
+            algebraicRepresentation.append(moveCount).append(". ").append(moveString);
+            gameLoop.updateChessNotationLabel(moveCount + ". " + moveString);
         } else {
             moveCount++;
             firstMove = true;
-            algebraicRepresentation.append(" ").append(moveString.toString()).append("\n");
-            gameLoop.updateChessNotationLabel(" " + moveString.toString() + "\n");
+            algebraicRepresentation.append(" ").append(moveString).append("\n");
+            gameLoop.updateChessNotationLabel(" " + moveString + "\n");
         }
     }
 
@@ -479,12 +428,12 @@ public class Board {
      *
      * @param moveString The PGN notation of the current move.
      */
-    private void handleMoveOverrideNotation(StringBuilder moveString) {
+    private void handleMoveOverrideNotation(String moveString) {
         ArrayList<String> newList = new ArrayList<>();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
             newList.add(algebraicNotationMovesList.get(i));
         }
-        newList.add(moveString.toString());
+        newList.add(moveString);
         algebraicNotationMovesList.clear();
         algebraicNotationMovesList.addAll(newList);
         undoMoveCount = 0;
@@ -670,9 +619,9 @@ public class Board {
     /**
      * Gets the possible moves by calling the piece's getPossibleMoves function.
      *
-     * @param board The board to get the possible moves on.
-     * @param piece The piece to get the possible moves from.
-     * @param location The starting location.
+     * @param board      The board to get the possible moves on.
+     * @param piece      The piece to get the possible moves from.
+     * @param location   The starting location.
      * @param extraCheck If the piece's extraCheck should be on.
      * @return An ArrayList of BoardLocations for all the possible moves a piece can move to.
      */
@@ -718,8 +667,8 @@ public class Board {
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeamWithoutCheckKingInCheck(Piece[][] board, int team, boolean extraCheck) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
-        for(BoardLocation loc : getBoardLocationsForTeam(board, team)) {
-            for(BoardLocation possibleLoc : board[loc.row][loc.column].getPossibleMoves(this, board, loc, extraCheck)) {
+        for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
+            for (BoardLocation possibleLoc : board[loc.row][loc.column].getPossibleMoves(this, board, loc, extraCheck)) {
                 possibleMoves.add(possibleLoc);
             }
         }
@@ -736,8 +685,8 @@ public class Board {
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeamWithCheckKingInCheck(Piece[][] board, int team, boolean extraCheck) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
-        for(BoardLocation loc : getBoardLocationsForTeam(board, team)) {
-            for(BoardLocation possibleLoc : getPossibleMoves(board, board[loc.row][loc.column], loc, extraCheck)) {
+        for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
+            for (BoardLocation possibleLoc : getPossibleMoves(board, board[loc.row][loc.column], loc, extraCheck)) {
                 possibleMoves.add(possibleLoc);
             }
         }
@@ -753,8 +702,8 @@ public class Board {
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeamForPiece(Piece[][] board, int team, int pieceId, boolean extraCheck) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
-        for(BoardLocation loc : getBoardLocationsForTeamForPiece(board, team, pieceId)) {
-            for(BoardLocation possibleMove : getPossibleMoves(board, board[loc.row][loc.column], loc, extraCheck)) {
+        for (BoardLocation loc : getBoardLocationsForTeamForPiece(board, team, pieceId)) {
+            for (BoardLocation possibleMove : getPossibleMoves(board, board[loc.row][loc.column], loc, extraCheck)) {
                 possibleMoves.add(possibleMove);
             }
         }
@@ -763,8 +712,8 @@ public class Board {
 
     public ArrayList<BoardLocation> getPossibleMovesForTeam(Piece[][] board, int team) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
-        for(BoardLocation loc : getBoardLocationsForTeam(board, team)) {
-            for(BoardLocation possibleMove : getPossibleMoves(board, board[loc.row][loc.column], loc, false)) {
+        for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
+            for (BoardLocation possibleMove : getPossibleMoves(board, board[loc.row][loc.column], loc, false)) {
                 possibleMoves.add(possibleMove);
             }
         }
@@ -775,7 +724,7 @@ public class Board {
      * Gets all the board locations a specific team's pieces are at.
      *
      * @param board The board 2d-array to check.
-     * @param team The team to find the pieces for.
+     * @param team  The team to find the pieces for.
      * @return An ArrayList of BoardLocations of the pieces to check.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeam(Piece[][] board, int team) {
@@ -800,8 +749,8 @@ public class Board {
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPiece(Piece[][] board, int team, int pieceId) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
-        for(BoardLocation loc : getBoardLocationsForTeam(board, team)) {
-            if(board[loc.row][loc.column].getPieceID() == pieceId) {
+        for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
+            if (board[loc.row][loc.column].getPieceID() == pieceId) {
                 locations.add(loc);
             }
         }
@@ -841,8 +790,8 @@ public class Board {
      * @return ArrayList of BoardLocations of all locations of the pieces for the team.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocationForRow(Piece[][] board, int team, int pieceId,
-                                                                                              BoardLocation targetLocation,
-                                                                                              int row) {
+                                                                                           BoardLocation targetLocation,
+                                                                                           int row) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
         for (BoardLocation location : getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
                 targetLocation)) {

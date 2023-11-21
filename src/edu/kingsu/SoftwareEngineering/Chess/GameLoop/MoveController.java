@@ -40,7 +40,7 @@ public class MoveController {
      */
     public MoveResult sendMovesToBoard(Board board) {
         Piece pieceMoving = board.getBoard()[firstClick.row][firstClick.column];
-        return board.applyMove(pieceMoving, firstClick, secondClick, true, true);
+        return board.applyMoveUpdateGUI(pieceMoving, firstClick, secondClick);
     }
 
     /**
