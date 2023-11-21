@@ -238,6 +238,23 @@ public class Board {
     }
 
     /**
+     * Load a file of the PGN format but don't
+     * start at the end. Have it started from the beginning.
+     *
+     * @param file The file to load.
+     */
+    public void loadPGNFileFromStart(File file) {
+        PGNReader reader = new PGNReader();
+        ArrayList<PGNMove> moves = reader.getMovesFromFile(file.getAbsolutePath());
+        algebraicNotationMovesList.clear();
+        for (PGNMove m : moves) {
+            algebraicNotationMovesList.add(m.getMoveString());
+        }
+        undoMoveCount = algebraicNotationMovesList.size() - 1;
+        undoMove();
+    }
+
+    /**
      * Get the last move location.
      *
      * @return The last move location.
