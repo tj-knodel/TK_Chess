@@ -21,22 +21,6 @@ import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
 public class Board {
 
     /**
-     * The Board locations in the indexing that the Piece[][] board uses.
-     * This way we can get the string representation of the location
-     * by using the BoardLocation in the applyMove function.
-     */
-    private static final String[][] BOARD_LOCATIONS = {
-            {"a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8"},
-            {"a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7"},
-            {"a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6"},
-            {"a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5"},
-            {"a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4"},
-            {"a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3"},
-            {"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2"},
-            {"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"},
-    };
-
-    /**
      * The board locations from a string. So "a1" would return a BoardLocation
      * with row = 7 and column = 0
      */
@@ -125,6 +109,8 @@ public class Board {
 
     private MoveResult lastMoveResult;
 
+    private PGNHelper pgnHelper;
+
     /**
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
@@ -132,6 +118,7 @@ public class Board {
     public Board(GameLoop gameLoop) {
         // board = new Piece[8][8];
         algebraicRepresentation = new StringBuilder();
+        this.pgnHelper = new PGNHelper(this);
         algebraicNotationMovesList = new ArrayList<>();
         undoMoveCount = 0;
         firstMove = true;
@@ -139,17 +126,6 @@ public class Board {
         isPaused = false;
         this.gameLoop = gameLoop;
         initializeBoard();
-
-        // TODO: Example of loading a PGN game.
-        /*
-         * This can be used for many things, loading a game, recreating a game with a different game mode, etc.
-         */
-
-        // PGNReader reader = new PGNReader();
-        // for (PGNMove move : reader.getMovesFromFile("my-test/stalemate.pgn")) {
-        //     applyPGNMove(move, true);
-        //     // applyMoveAlgebraicNotation(move.getMoveString(), true);
-        // }
     }
 
     /**
@@ -182,6 +158,16 @@ public class Board {
      */
     public Board copy() {
         return new Board(board, moveCount, algebraicRepresentation, gameLoop);
+    }
+
+    public Piece[][] cloneBoard2DArray(Piece[][] board) {
+        Piece[][] r = new Piece[board.length][board[0].length];
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[i].length; j++) {
+                r[i][j] = board[i][j].copy(board[i][j].getTeam());
+            }
+        }
+        return r;
     }
 
     /**
@@ -244,14 +230,6 @@ public class Board {
     public void loadPGNFile(File file) {
         PGNReader reader = new PGNReader();
         ArrayList<PGNMove> moves = reader.getMovesFromFile(file.getAbsolutePath());
-//        for (PGNMove move : reader.getMovesFromFile(file.getAbsolutePath())) {
-//            //            System.out.println("Applying move: " + move.getMoveString());
-//            //            JOptionPane.showConfirmDialog(null, move.getMoveString());
-//            MoveResult result = applyPGNMove(move, true);
-//            if (!result.wasSuccessful) {
-//                JOptionPane.showConfirmDialog(null, "Could not apply move: " + move.getMoveString());
-//            }
-//        }
         algebraicNotationMovesList.clear();
         for (PGNMove m : moves) {
             algebraicNotationMovesList.add(m.getMoveString());
@@ -287,22 +265,12 @@ public class Board {
         return undoMoveCount == algebraicNotationMovesList.size();
     }
 
-    public void resetNotation() {
-        this.algebraicNotationMovesList = new ArrayList<>();
-        this.algebraicRepresentation = new StringBuilder();
-    }
-
     /**
      * Undos a move on the board.
      *
      * @return True if successful, false if otherwise.
      */
     public boolean undoMove() {
-        // This function basically rebuilds the board from scratch,
-        // and it will take the current moves that are made, up to
-        // a certain index. The undoMoveCount is that index, and when
-        // it is incremented, we go to X amount moves less than the moves that
-        // were made.
         if (algebraicNotationMovesList.size() - undoMoveCount <= 0) {
             System.out.println("CAN'T");
             return false;
@@ -316,9 +284,6 @@ public class Board {
      * @return True if successful, false if otherwise.
      */
     public boolean redoMove() {
-        // Decrements the undoMoveCount, which makes the array go one further
-        // in redoing, which allows us to redo more moves until we reach the limit
-        // which is back to the most recent version of the game.
         if (undoMoveCount <= 0)
             return false;
         return undoOrRedoMove(false);
@@ -345,17 +310,9 @@ public class Board {
         ArrayList<String> movesList = new ArrayList<>();
         movesList.addAll(algebraicNotationMovesList);
         for (int i = 0; i < movesList.size() - undoMoveCount; i++) {
-            MoveResult result = applyMoveAlgebraicNotation(movesList.get(i), false, true, false);
+            // TODO: Use PGNHelper
+//            MoveResult result = applyMoveAlgebraicNotation(movesList.get(i), false, true, false);
         }
-//        if (this.moves != null) {
-//            for (int i = 0; i < moves.size() - undoMoveCount; i++) {
-//                MoveResult result = applyMoveAlgebraicNotation(moves.get(i).getMoveString(), false, true, false);
-//            }
-//        } else {
-//            for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
-//                MoveResult result = applyMoveAlgebraicNotation(algebraicNotationMovesList.get(i), false, true, false);
-//            }
-//        }
         return true;
     }
 
@@ -372,226 +329,6 @@ public class Board {
             }
         }
         return copiedBoard;
-    }
-
-    /**
-     * Applies a move based on the PGNMove class.
-     *
-     * @param move       The move to do.
-     * @param extraCheck Should the algebraicNotation be overriden. Keep false unless you know why to make true.
-     * @return MoveResult of the moved that is applied.
-     */
-    public MoveResult applyPGNMove(PGNMove move, boolean extraCheck) {
-        // if (move.hasComment()) {
-        //     System.out.println("Comment: " + move.getComment() + ", for move: " + move.getMoveString());
-        // }
-        return applyMoveAlgebraicNotation(move.getMoveString(), extraCheck, true, false);
-    }
-
-    /**
-     * Applys a move based on the algebraic notation.
-     *
-     * @param notation   The notation to apply a move to. Example, Nf3 moves Knight to f3 if possible.
-     * @param extraCheck If algebraic notation should be overriden. Make it true if not known how it works.
-     * @return True if move was successful.
-     */
-    public MoveResult applyMoveAlgebraicNotation(String notation, boolean extraCheck, boolean doNotation,
-                                                 boolean updateGUI) {
-        MoveResult result = new MoveResult();
-        int team = (firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
-        // Replace the + sign in the PGN notation as the board doesn't care
-        // what the notation says as it has its own rules.
-        String notationString = notation.replace("+", "");
-        boolean capture = notation.contains("x");
-        notationString = notationString.replace("x", "");
-        if (notationString.equalsIgnoreCase("O-O")) {
-            return applyMoveAlgebraicNotationCastlingShortSide(extraCheck, team, updateGUI);
-        } else if (notationString.equalsIgnoreCase("O-O-O")) {
-            return applyMoveAlgebraicNotationCastlingLongSide(extraCheck, team, updateGUI);
-        } else if (notationString.contains("=")) {
-            return applyMoveAlgebraicNotationPromotion(notationString, team, result, updateGUI);
-        }
-        // Piece moving without pawn.
-        if (notationString.length() == 2) {
-            return applyMoveAlgebraicNotationPawnBasic(extraCheck, doNotation, notationString, team, result, updateGUI);
-        } else if (notationString.length() == 3) {
-            if (Character.isUpperCase(notationString.charAt(0))) {
-                return applyMoveAlgebraicNotationPiece(extraCheck, doNotation, notationString, team, result, updateGUI);
-            } else {
-                if (capture) {
-                }
-                //                System.out.println(notationString);
-                return applyMoveAlgebraicNotationCaptureWithPawn(extraCheck, doNotation, notationString, team,
-                        result, updateGUI);
-                //                return applyMoveAlgebraicNotationPawn(extraCheck, doNotation, notationString, team, result);
-            }
-        } else if (notationString.length() == 4) {
-            if (Character.isUpperCase(notationString.charAt(0))) {
-                return applyMoveAlgebraicNotationCaptureWithPiece(extraCheck, doNotation, notationString, team, result,
-                        updateGUI);
-            } else {
-                return applyMoveAlgebraicNotationCaptureWithPawn(extraCheck, doNotation, notationString, team, result,
-                        updateGUI);
-            }
-        }
-        return result;
-    }
-
-    private MoveResult applyMoveAlgebraicNotationCaptureWithPawn(boolean extraCheck, boolean doNotation,
-                                                                 String notationString, int team, MoveResult result, boolean updateGUI) {
-        //        JOptionPane.showConfirmDialog(null, notationString);
-        int pieceId = Piece.PAWN;//Piece.PIECE_ID_FROM_STRING.get(notationString.substring(1, 2));
-        String locationString = notationString.substring(1);
-        BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-        ArrayList<BoardLocation> pieceLocation;
-        pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
-                boardLocation);
-        if (pieceLocation.size() != 1) {
-            pieceLocation = getBoardLocationsForTeamForPieceToTargetLocationForColumn(board, team,
-                    pieceId, boardLocation,
-                    (int) notationString.charAt(0) - 'a');
-//            System.out.println(notationString + " " + pieceLocation.size());
-        }
-        if (pieceLocation.size() != 1)
-            return result;
-        Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-        return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation, updateGUI);
-    }
-
-    private MoveResult applyMoveAlgebraicNotationCaptureWithPiece(boolean extraCheck, boolean doNotation,
-                                                                  String notationString, int team, MoveResult result, boolean updateGUI) {
-        int pieceId = Piece.PIECE_ID_FROM_STRING.get(notationString.substring(0, 1));
-        String locationString = notationString.substring(2);
-        BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-        // ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(team, pieceId,
-        //         boardLocation);
-        ArrayList<BoardLocation> pieceLocation = new ArrayList<>();
-        if (Character.isDigit(notationString.charAt(1))) {
-            //            JOptionPane.showConfirmDialog(null, 8 - (notationString.charAt(1) - '0'));
-            pieceLocation = getBoardLocationsForTeamForPieceForRow(board, team, pieceId,
-                    8 - (notationString.charAt(1) - '0'));
-        } else {
-            pieceLocation = getBoardLocationsForTeamForPieceToTargetLocationForColumn(board, team, pieceId,
-                    boardLocation, notationString.charAt(1) - 'a');
-            if (pieceLocation.size() != 1)
-                pieceLocation = getBoardLocationsForTeamForPieceForColumn(board, team, pieceId,
-                        notationString.charAt(1) - 'a');
-        }
-        if (pieceLocation.size() != 1)
-            return result;
-        Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-        return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation, updateGUI);
-    }
-
-    private MoveResult applyMoveAlgebraicNotationPawn(boolean extraCheck, boolean doNotation, String notationString,
-                                                      int team, MoveResult result, boolean updateGUI) {
-        int pieceId = Piece.PAWN;
-        String locationString = notationString.substring(1);
-        BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-        ArrayList<BoardLocation> pieceLocationCheck = getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
-                boardLocation);
-        if (pieceLocationCheck.size() != 1) {
-            ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceForColumn(board, team, pieceId,
-                    notationString.charAt(0) - 'a');
-            if (pieceLocation.size() != 1)
-                return result;
-            Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-            return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation,
-                    updateGUI);
-        }
-        Piece pieceToMove = getBoard()[pieceLocationCheck.get(0).row][pieceLocationCheck.get(0).column];
-        return applyMoveInternal(pieceToMove, pieceLocationCheck.get(0), boardLocation, extraCheck, doNotation,
-                updateGUI);
-    }
-
-    private MoveResult applyMoveAlgebraicNotationPiece(boolean extraCheck, boolean doNotation, String notationString,
-                                                       int team, MoveResult result, boolean updateGUI) {
-        int pieceId = Piece.PIECE_ID_FROM_STRING.get(notationString.substring(0, 1));
-        String locationString = notationString.substring(1);
-        BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-        ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
-                boardLocation);
-        if (pieceLocation.size() != 1)
-            return result;
-        Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-        return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation, updateGUI);
-    }
-
-    private MoveResult applyMoveAlgebraicNotationPawnBasic(boolean extraCheck, boolean doNotation,
-                                                           String notationString, int team, MoveResult result, boolean updateGUI) {
-        int pieceId = Piece.PAWN;
-        BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(notationString);
-        ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
-                boardLocation);
-        if (pieceLocation.size() != 1)
-            return result;
-        Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-        return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, extraCheck, doNotation, updateGUI);
-    }
-
-    private MoveResult applyMoveAlgebraicNotationPromotion(String notationString, int team, MoveResult result,
-                                                           boolean updateGUI) {
-        String[] moves = notationString.split("=");
-        int pieceId = Piece.PAWN;
-        String locationString = moves[0].substring(moves[0].length() - 2);
-        BoardLocation boardLocation = BOARD_LOCATIONS_FROM_STRING.get(locationString);
-        ArrayList<BoardLocation> pieceLocation = getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
-                boardLocation);
-        if (pieceLocation.size() != 1)
-            return result;
-        Piece pieceToMove = getBoard()[pieceLocation.get(0).row][pieceLocation.get(0).column];
-        if (!(boardLocation.row == 0 || boardLocation.row == 7))
-            return result;
-        if (!(pieceToMove instanceof Pawn))
-            return result;
-        return applyMoveInternal(pieceToMove, pieceLocation.get(0), boardLocation, false, true, updateGUI);
-    }
-
-    private MoveResult applyMoveAlgebraicNotationCastlingLongSide(boolean extraCheck, int team, boolean updateGUI) {
-        // Only ever one king
-        BoardLocation kingLocation = getBoardLocationsForTeamForPiece(board, team, Piece.KING).get(0);
-        BoardLocation endLocation = new BoardLocation(kingLocation.column - 4, kingLocation.row);
-        return applyMove(updateGUI, getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation,
-                extraCheck);
-    }
-
-    private MoveResult applyMoveAlgebraicNotationCastlingShortSide(boolean extraCheck, int team, boolean updateGUI) {
-        // Only ever one king
-        BoardLocation kingLocation = getBoardLocationsForTeamForPiece(board, team, Piece.KING).get(0);
-        BoardLocation endLocation = new BoardLocation(kingLocation.column + 3, kingLocation.row);
-        return applyMove(updateGUI, getBoard()[kingLocation.row][kingLocation.column], kingLocation, endLocation,
-                extraCheck);
-    }
-
-    /**
-     * Applies a move based on the algebraic notation.
-     * Will override notation.
-     *
-     * @param notation The notation to apply a move to. Example, Nf3 moves Knight to f3 if possible.
-     * @return True if move was successful.
-     */
-    public MoveResult applyMoveAlgebraicNotation(String notation) {
-        return applyMoveAlgebraicNotation(notation, true, true, true);
-    }
-
-    /**
-     * Check if a move can be applied, then do it.
-     * Will also generate algebraic notation for the move in here
-     * and apply it to the algebraicNotation StringBuilder.
-     *
-     * @param pieceMoving The chess piece being moved.
-     * @param startMove   The starting move of the piece.
-     * @param endMove     The target location of the piece.
-     * @return True if the move was successful.
-     */
-    private MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-                                 boolean extraCheck) {
-        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, true);
-    }
-
-    private MoveResult applyMove(boolean updateGUI, Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-                                 boolean extraCheck) {
-        return applyMoveInternal(pieceMoving, startMove, endMove, extraCheck, false, updateGUI);
     }
 
     /**
@@ -632,45 +369,51 @@ public class Board {
      */
     private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
                                          boolean overrideNotation, boolean doNotation, boolean updateGUI) {
+        String moveNotation = pgnHelper.getPGNNotationFromMove(startMove, endMove);
         MoveResult result = new MoveResult();
-        if (getIsPaused())
+        if (getIsPaused()) {
             return result;
+        }
         int team = pieceMoving.getTeam();
-        if (team != getTeamTurn())
+        if (team != getTeamTurn()) {
             return result;
+        }
 
         int piecesMoveToSameLocation = getNumberOfPiecesMovingToSameLocation(board, pieceMoving, endMove, team);
-        if (piecesMoveToSameLocation == 0)
+        if (piecesMoveToSameLocation == 0) {
             return result;
+        }
 
         StringBuilder moveString = new StringBuilder();
-        handleMoveCreateBasicNotation(pieceMoving, startMove, endMove, piecesMoveToSameLocation, moveString);
+//        handleMoveCreateBasicNotation(pieceMoving, startMove, endMove, piecesMoveToSameLocation, moveString);
 
         // Checks if we can castle, apply the correct one and set the chess notation correctly.
         boolean castle = false;
-        if (handleMoveCheckIsCastling(startMove, endMove)) {
+        if (getIsMoveCastling(startMove, endMove)) {
             castle = true;
             moveString = new StringBuilder();
-            if (handleMoveCheckCastlingLongSide(startMove, endMove)) {
-                handleMoveDoCastlingLongSide(pieceMoving, startMove, endMove);
+            if (getIsMoveCastlingLongSide(startMove, endMove)) {
+                applyCastlingLongSide(board, pieceMoving, startMove, endMove);
                 moveString.append("O-O-O");
             } else {
-                handleMoveDoCastlingShortSide(pieceMoving, startMove, endMove);
+                applyCastlingShortSide(board, pieceMoving, startMove, endMove);
                 moveString.append("O-O");
             }
         } else {
-            handleMoveNormal(pieceMoving, startMove, endMove);
+            applyMoveNormal(board, pieceMoving, startMove, endMove);
         }
 
         // Check if the king is in check, or checkmate.
         // Update the PGN notation if necessary and the return result.
         int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         if (checkKingInCheck(board, otherTeam)) {
-            if (!castle)
+            if (!castle) {
                 moveString.append("+");
+            }
             if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
-                if (!castle)
+                if (!castle) {
                     moveString.append("+");
+                }
                 result.isCheckmate = true;
                 result.checkmateTeam = otherTeam;
             }
@@ -680,13 +423,15 @@ public class Board {
                 result.checkmateTeam = otherTeam;
             }
         }
-        if (handleMoveShouldPromote(pieceMoving, endMove)) {
+        if (getCanPieceBePromoted(pieceMoving, endMove)) {
             String promotedPieceValue = "";
             if (!updateGUI) {
-                if (algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).contains("="))
+                if (algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).contains("=")) {
                     promotedPieceValue = algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).split("=")[1];
-                else
+                }
+                else {
                     promotedPieceValue = gameLoop.getPromotionPiece();
+                }
             } else {
                 promotedPieceValue = gameLoop.getPromotionPiece();
             }
@@ -695,21 +440,17 @@ public class Board {
             Piece newPiece = Piece.createPieceFromTeam(pieceIdFromString, team);
             board[endMove.row][endMove.column] = newPiece;
         }
-        //        if (doNotation)
+
         handleMoveDoNotation(moveString);
 
-        // Reset the array of algebraic notations as we need to do this
-        // because if the player undos a move, and then makes a different move
-        // we need to delete the future redos as they lose those moves
-        // as they are not valid anymore.
         if (overrideNotation) {
             handleMoveOverrideNotation(moveString);
         }
+
         result.wasSuccessful = true;
         currentMoveLocation = new BoardLocation(endMove.column, endMove.row);
         lastMoveLocation = new BoardLocation(startMove.column, startMove.row);
         lastMoveResult = result;
-//        if (updateGUI)
         gameLoop.sendUpdateBoardState(updateGUI);
         return result;
     }
@@ -733,32 +474,12 @@ public class Board {
     }
 
     /**
-     * Handles the move part to create the basic chess notation.
-     *
-     * @param pieceMoving              The piece moving.
-     * @param startMove                The start location.
-     * @param endMove                  The end location.
-     * @param piecesMoveToSameLocation How many pieces move to the same location.
-     * @param moveString               The current move notation to modify.
-     */
-    private void handleMoveCreateBasicNotation(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-                                               int piecesMoveToSameLocation, StringBuilder moveString) {
-        // If only found one, just do basic chess notation
-        if (piecesMoveToSameLocation == 1) {
-            handleMoveNotationSinglePiece(pieceMoving, startMove, endMove, moveString);
-        } else if (piecesMoveToSameLocation >= 2) {
-            handleMoveNotationMultiplePieces(pieceMoving, startMove, endMove, moveString);
-        }
-    }
-
-    /**
      * Handles the move part to override the chess notation
      * when a move is applied.
      *
      * @param moveString The PGN notation of the current move.
      */
     private void handleMoveOverrideNotation(StringBuilder moveString) {
-
         ArrayList<String> newList = new ArrayList<>();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
             newList.add(algebraicNotationMovesList.get(i));
@@ -777,7 +498,7 @@ public class Board {
      * @param endMove     The end move location.
      * @return True if promotion should occur.
      */
-    private static boolean handleMoveShouldPromote(Piece pieceMoving, BoardLocation endMove) {
+    private static boolean getCanPieceBePromoted(Piece pieceMoving, BoardLocation endMove) {
         return pieceMoving instanceof Pawn && (endMove.row == 0 || endMove.row == 7);
     }
 
@@ -788,7 +509,7 @@ public class Board {
      * @param startMove   The start location.
      * @param endMove     The end location.
      */
-    private void handleMoveNormal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+    private void applyMoveNormal(Piece[][] board, Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         board[endMove.row][endMove.column] = pieceMoving;
         board[endMove.row][endMove.column].moved();
         board[startMove.row][startMove.column] = new EmptyPiece();
@@ -803,7 +524,7 @@ public class Board {
      * @param startMove   The start location.
      * @param endMove     The end location.
      */
-    private void handleMoveDoCastlingShortSide(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+    private void applyCastlingShortSide(Piece[][] board, Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         Rook rookCopy = (Rook) board[endMove.row][endMove.column]
                 .copy(board[endMove.row][endMove.column].getTeam());
         board[startMove.row][startMove.column + 2] = pieceMoving;
@@ -824,7 +545,7 @@ public class Board {
      * @param startMove   The start location.
      * @param endMove     The end location.
      */
-    private void handleMoveDoCastlingLongSide(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
+    private void applyCastlingLongSide(Piece[][] board, Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         Rook rookCopy = (Rook) board[endMove.row][endMove.column]
                 .copy(board[endMove.row][endMove.column].getTeam());
         board[startMove.row][startMove.column - 2] = pieceMoving;
@@ -845,7 +566,7 @@ public class Board {
      * @param endMove   The end move location.
      * @return True if castling long side.
      */
-    private static boolean handleMoveCheckCastlingLongSide(BoardLocation startMove, BoardLocation endMove) {
+    public boolean getIsMoveCastlingLongSide(BoardLocation startMove, BoardLocation endMove) {
         return Math.abs(startMove.column - endMove.column) == 4;
     }
 
@@ -856,91 +577,10 @@ public class Board {
      * @param endMove   The end location of the move.
      * @return True if castling is requested and valid.
      */
-    private boolean handleMoveCheckIsCastling(BoardLocation startMove, BoardLocation endMove) {
+    public boolean getIsMoveCastling(BoardLocation startMove, BoardLocation endMove) {
         return (board[startMove.row][startMove.column] instanceof King
                 && board[endMove.row][endMove.column] instanceof Rook)
                 && board[startMove.row][startMove.column].getTeam() == board[endMove.row][endMove.column].getTeam();
-    }
-
-    /**
-     * Handles the move part with multiple pieces for the
-     * chess notation.
-     *
-     * @param pieceMoving The piece moving.
-     * @param startMove   The start move location.
-     * @param endMove     The end move location.
-     * @param moveString  The string to modify the notation.
-     */
-    private void handleMoveNotationMultiplePieces(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-                                                  StringBuilder moveString) {
-        // Check if it should put row, or column
-        boolean putRow = handleMoveNotationShouldHaveRow(pieceMoving, startMove, endMove);
-        // Add the row or column after the piece id
-        String locationIfNeeded = "";
-        if (putRow) {
-            locationIfNeeded = BOARD_LOCATIONS[startMove.row][startMove.column].substring(1, 2);
-        } else {
-            locationIfNeeded = BOARD_LOCATIONS[startMove.row][startMove.column].substring(0, 1);
-        }
-        if (!(pieceMoving instanceof Pawn)) {
-            moveString.append(Piece.chessNotationValue.get(pieceMoving.getPieceID()));
-            moveString.append(locationIfNeeded);
-        }
-        if (!(board[endMove.row][endMove.column] instanceof EmptyPiece)) {
-            if (pieceMoving instanceof Pawn)
-                moveString.append(BOARD_LOCATIONS[startMove.row][startMove.column].charAt(0));
-            moveString.append("x");
-        }
-        moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
-    }
-
-    /**
-     * Checks if the notation should put the row or column
-     * if more than one piece can move to a location.
-     *
-     * @param pieceMoving The piece moving.
-     * @param startMove   The start move.
-     * @return True if the row should be put in the notation.
-     */
-    private boolean handleMoveNotationShouldHaveRow(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
-        boolean putRow = false;
-        //        ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPiece(pieceMoving.getTeam(), pieceMoving.getPieceID());
-        //        for (BoardLocation location : pieceLocations) {
-        //            if (location.column == startMove.column && location.row == startMove.row)
-        //                continue;
-        //            if (location.column == startMove.column)
-        //                putRow = true;
-        //        }
-        ArrayList<BoardLocation> pieceLocations = getBoardLocationsForTeamForPieceToTargetLocation(board,
-                pieceMoving.getTeam(), pieceMoving.getPieceID(), endMove);
-        for (BoardLocation location : pieceLocations) {
-            if (location.column == startMove.column && location.row == startMove.row)
-                continue;
-            if (location.column == startMove.column)
-                putRow = true;
-        }
-        return putRow;
-    }
-
-    /**
-     * Handles the move part to create the notation for a single piece moving.
-     *
-     * @param pieceMoving The piece moving.
-     * @param startMove   The start location.
-     * @param endMove     The end location.
-     * @param moveString  The current move notation to modify.
-     */
-    private void handleMoveNotationSinglePiece(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
-                                               StringBuilder moveString) {
-        if (!(pieceMoving instanceof Pawn)) {
-            moveString.append(Piece.chessNotationValue.get(pieceMoving.getPieceID()));
-        }
-        if (!(board[endMove.row][endMove.column] instanceof EmptyPiece)) {
-            if (pieceMoving instanceof Pawn)
-                moveString.append(BOARD_LOCATIONS[startMove.row][startMove.column].charAt(0));
-            moveString.append("x");
-        }
-        moveString.append(BOARD_LOCATIONS[endMove.row][endMove.column]);
     }
 
     /**
@@ -951,11 +591,11 @@ public class Board {
      * @param team        The team that is associated with the piece.
      * @return The number of pieces on that team of a type that can move to the same location.
      */
-    private int getNumberOfPiecesMovingToSameLocation(Piece[][] board, Piece pieceMoving, BoardLocation endMove, int team) {
+    public int getNumberOfPiecesMovingToSameLocation(Piece[][] board, Piece pieceMoving, BoardLocation endMove, int team) {
         int piecesMoveToSameLocation = 0;
         // Get all pieces of type that can move to the "endMove" location
         for (BoardLocation location : getPossibleMovesForTeamForPiece(board, team, pieceMoving.getPieceID(), true)) {
-            if (location.row == endMove.row && location.column == endMove.column) {
+            if (location.isEqual(endMove)) {
                 piecesMoveToSameLocation++;
             }
         }
@@ -972,8 +612,8 @@ public class Board {
      * @param endMove     Desired end location of the piece.
      */
     public void simulateApplyMove(Piece[][] board, Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
-        if (handleMoveCheckIsCastling(startMove, endMove)) {
-            if (handleMoveCheckCastlingLongSide(startMove, endMove)) {
+        if (getIsMoveCastling(startMove, endMove)) {
+            if (getIsMoveCastlingLongSide(startMove, endMove)) {
                 Rook rookCopy = (Rook) board[endMove.row][endMove.column]
                         .copy(board[endMove.row][endMove.column].getTeam());
                 board[startMove.row][startMove.column - 2] = pieceMoving;
@@ -1052,7 +692,7 @@ public class Board {
     public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, Piece piece, BoardLocation location,
                                                      boolean extraCheck) {
         int team = piece.getTeam();
-        Piece[][] boardCopy = getBoard();
+        Piece[][] boardCopy = cloneBoard2DArray(board);
         ArrayList<BoardLocation> returnVal = new ArrayList<>();
         ArrayList<BoardLocation> pieceMoves = getPossibleMovesForPiece(board, piece, location, extraCheck);
         for (BoardLocation move : pieceMoves) {
@@ -1063,7 +703,7 @@ public class Board {
             } else {
                 returnVal.add(move);
             }
-            boardCopy = getBoard();
+            boardCopy = cloneBoard2DArray(board);
         }
         return returnVal;
     }
@@ -1115,6 +755,16 @@ public class Board {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
         for(BoardLocation loc : getBoardLocationsForTeamForPiece(board, team, pieceId)) {
             for(BoardLocation possibleMove : getPossibleMoves(board, board[loc.row][loc.column], loc, extraCheck)) {
+                possibleMoves.add(possibleMove);
+            }
+        }
+        return possibleMoves;
+    }
+
+    public ArrayList<BoardLocation> getPossibleMovesForTeam(Piece[][] board, int team) {
+        ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
+        for(BoardLocation loc : getBoardLocationsForTeam(board, team)) {
+            for(BoardLocation possibleMove : getPossibleMoves(board, board[loc.row][loc.column], loc, false)) {
                 possibleMoves.add(possibleMove);
             }
         }
@@ -1175,6 +825,28 @@ public class Board {
         for (BoardLocation location : getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
                 targetLocation)) {
             if (location.column == column)
+                locations.add(new BoardLocation(location.column, location.row));
+        }
+        return locations;
+    }
+
+    /**
+     * Gets the locations of pieces for a team on the board that
+     * can move to a target location where the piece is on
+     * a specific column.
+     *
+     * @param board   The board to get the pieces locations for.
+     * @param team    The team to get the moves for.
+     * @param pieceId The piece to get locations for.
+     * @return ArrayList of BoardLocations of all locations of the pieces for the team.
+     */
+    public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocationForRow(Piece[][] board, int team, int pieceId,
+                                                                                              BoardLocation targetLocation,
+                                                                                              int row) {
+        ArrayList<BoardLocation> locations = new ArrayList<>();
+        for (BoardLocation location : getBoardLocationsForTeamForPieceToTargetLocation(board, team, pieceId,
+                targetLocation)) {
+            if (location.row == row)
                 locations.add(new BoardLocation(location.column, location.row));
         }
         return locations;

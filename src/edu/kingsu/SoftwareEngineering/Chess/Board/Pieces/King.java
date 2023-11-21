@@ -37,6 +37,10 @@ public class King extends Piece {
         return Piece.KING;
     }
 
+    public boolean getInCheck() {
+        return inCheck;
+    }
+
     /**
      * {@inheritDoc}
      */

@@ -24,4 +24,12 @@ public class BoardLocation {
     public boolean isEqual(BoardLocation other) {
         return other.row == row && other.column == column;
     }
+
+    @Override
+    public String toString() {
+        return "BoardLocation{" +
+                "column=" + column +
+                ", row=" + row +
+                '}';
+    }
 }

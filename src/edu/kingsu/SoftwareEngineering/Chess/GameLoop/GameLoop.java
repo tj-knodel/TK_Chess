@@ -150,7 +150,7 @@ public class GameLoop {
             String input = UILibrary.EnterMove_TextField.getText();
             if (aiTeam == board.getTeamTurn())
                 return;
-            MoveResult result = board.applyMoveAlgebraicNotation(input);
+//            MoveResult result = board.applyMoveAlgebraicNotation(input);
             redrawUI();
         });
 

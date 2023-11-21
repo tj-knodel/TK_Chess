@@ -174,7 +174,7 @@ public abstract class Piece {
     /**
      * Gets the chess notation value of a piece to a string.
      */
-    public final static HashMap<Integer, String> chessNotationValue;
+    public final static HashMap<Integer, String> CHESS_NOTATION_VALUE;
 
     public static final HashMap<String, Integer> PIECE_ID_FROM_STRING;
 
@@ -194,13 +194,13 @@ public abstract class Piece {
     }
 
     static {
-        chessNotationValue = new HashMap<>();
-        chessNotationValue.put(PAWN, "P");
-        chessNotationValue.put(ROOK, "R");
-        chessNotationValue.put(KNIGHT, "N");
-        chessNotationValue.put(BISHOP, "B");
-        chessNotationValue.put(QUEEN, "Q");
-        chessNotationValue.put(KING, "K");
+        CHESS_NOTATION_VALUE = new HashMap<>();
+        CHESS_NOTATION_VALUE.put(PAWN, "");
+        CHESS_NOTATION_VALUE.put(ROOK, "R");
+        CHESS_NOTATION_VALUE.put(KNIGHT, "N");
+        CHESS_NOTATION_VALUE.put(BISHOP, "B");
+        CHESS_NOTATION_VALUE.put(QUEEN, "Q");
+        CHESS_NOTATION_VALUE.put(KING, "K");
 
         PIECE_ID_FROM_STRING = new HashMap<>();
         PIECE_ID_FROM_STRING.put("N", Piece.KNIGHT);
