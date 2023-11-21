@@ -6,7 +6,7 @@ public class MoveResult {
     public boolean isStalemate;
     public boolean isPromotion;
     public BoardLocation promotionLocation;
-    public int promoteTeam;
+    public String notation;
     public int checkmateTeam;
     public int stalemateTeam;
 
@@ -18,5 +18,6 @@ public class MoveResult {
         this.isStalemate = false;
         this.checkmateTeam = -1;
         this.stalemateTeam = -1;
+        this.notation = "";
     }
 }

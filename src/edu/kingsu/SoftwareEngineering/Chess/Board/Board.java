@@ -275,8 +275,7 @@ public class Board {
         ArrayList<String> movesList = new ArrayList<>();
         movesList.addAll(algebraicNotationMovesList);
         for (int i = 0; i < movesList.size() - undoMoveCount; i++) {
-            // TODO: Use PGNHelper
-//            MoveResult result = applyMoveAlgebraicNotation(movesList.get(i), false, true, false);
+            applyMovePGNNotation(movesList.get(i));
         }
         return true;
     }
@@ -307,7 +306,25 @@ public class Board {
      * @return True if the move was successful.
      */
     public MoveResult applyMoveUpdateGUI(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
-        return applyMoveInternal(pieceMoving, startMove, endMove, true);
+        MoveResult result = applyMoveInternal(pieceMoving, startMove, endMove);
+        overrideNotation(result.notation);
+        gameLoop.redrawUI();
+        return result;
+    }
+
+    public MoveResult applyMovePGNNotation(String notation) {
+        BoardLocation[] locations = pgnHelper.getBoardLocationsFromPGN(notation, getTeamTurn());
+        BoardLocation startMove = locations[0];
+        BoardLocation endMove = locations[1];
+        Piece pieceMoving = board[startMove.row][startMove.column];
+        return applyMoveInternal(pieceMoving, startMove, endMove);
+    }
+
+    public MoveResult applyMovePGNNotationOverride(String notation) {
+        MoveResult result = applyMovePGNNotation(notation);
+        overrideNotation(notation);
+        gameLoop.redrawUI();
+        return result;
     }
 
     /**
@@ -329,24 +346,16 @@ public class Board {
      * @param endMove          The target location of the piece.
      * @return True if the move was successful.
      */
-    private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove, boolean updateGUI) {
+    private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         MoveResult result = new MoveResult();
-        if (getIsPaused()) {
+        if(!canMoveBeDone(pieceMoving.getTeam(), result))
             return result;
-        }
-        if (pieceMoving.getTeam() != getTeamTurn()) {
-            return result;
-        }
+
         int piecesMoveToSameLocation = getNumberOfPiecesMovingToSameLocation(board, pieceMoving, endMove, pieceMoving.getTeam());
         if (piecesMoveToSameLocation == 0) {
             return result;
         }
 
-//        BoardLocation[] locations = pgnHelper.getBoardLocationsFromPGN(moveNotation, pieceMoving.getTeam());
-//        if (locations[0] == null || locations[1] == null)
-//            return result;
-//        if (!startMove.isEqual(locations[0]) || !endMove.isEqual(locations[1]))
-//            return result;
         String moveNotation = pgnHelper.getPGNNotationFromMove(startMove, endMove);
         if(moveNotation.equalsIgnoreCase("O-O-O"))
             applyCastlingLongSide(board, pieceMoving, startMove, endMove);
@@ -355,32 +364,33 @@ public class Board {
         else
             applyMoveNormal(board, pieceMoving, startMove, endMove);
 
-        checkStalemateAndCheckmate(pieceMoving, result);
-//        if (getCanPieceBePromoted(pieceMoving, endMove)) {
-//            String promotedPieceValue = "";
-//            if (!updateGUI) {
-//                if (algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).contains("=")) {
-//                    promotedPieceValue = algebraicNotationMovesList.get(algebraicNotationMovesList.size() - undoMoveCount - 1).split("=")[1];
-//                }
-//                else {
-//                    promotedPieceValue = gameLoop.getPromotionPiece();
-//                }
-//            } else {
-//                promotedPieceValue = gameLoop.getPromotionPiece();
-//            }
-//            int pieceIdFromString = Piece.PIECE_ID_FROM_STRING.get(promotedPieceValue);
-//            Piece newPiece = Piece.createPieceFromTeam(pieceIdFromString, pieceMoving.getTeam());
-//            board[endMove.row][endMove.column] = newPiece;
-//        }
+        if(moveNotation.contains("=")) {
+            int pieceIdFromString = Piece.PIECE_ID_FROM_STRING.get(moveNotation.split("=")[1]);
+            Piece newPiece = Piece.createPieceFromTeam(pieceIdFromString, pieceMoving.getTeam());
+            board[endMove.row][endMove.column] = newPiece;
+        }
 
-        handleMoveDoNotation(moveNotation);
+        checkStalemateAndCheckmate(pieceMoving, result);
+
+        updateNotation(moveNotation);
 
         result.wasSuccessful = true;
-        currentMoveLocation = new BoardLocation(endMove.column, endMove.row);
-        lastMoveLocation = new BoardLocation(startMove.column, startMove.row);
+        currentMoveLocation = endMove;
+        lastMoveLocation = startMove;
         lastMoveResult = result;
-        gameLoop.sendUpdateBoardState(updateGUI);
+        result.notation = moveNotation;
+        gameLoop.sendUpdateBoardState();
         return result;
+    }
+
+    private boolean canMoveBeDone(int team, MoveResult result) {
+        if (getIsPaused()) {
+            return false;
+        }
+        if (team != getTeamTurn()) {
+            return false;
+        }
+        return true;
     }
 
     private void checkStalemateAndCheckmate(Piece pieceMoving, MoveResult result) {
@@ -409,7 +419,7 @@ public class Board {
      *
      * @param moveString The chess notation of the current move.
      */
-    private void handleMoveDoNotation(String moveString) {
+    private void updateNotation(String moveString) {
         if (firstMove) {
             firstMove = false;
             algebraicRepresentation.append(moveCount).append(". ").append(moveString);
@@ -428,7 +438,7 @@ public class Board {
      *
      * @param moveString The PGN notation of the current move.
      */
-    private void handleMoveOverrideNotation(String moveString) {
+    private void overrideNotation(String moveString) {
         ArrayList<String> newList = new ArrayList<>();
         for (int i = 0; i < algebraicNotationMovesList.size() - undoMoveCount; i++) {
             newList.add(algebraicNotationMovesList.get(i));

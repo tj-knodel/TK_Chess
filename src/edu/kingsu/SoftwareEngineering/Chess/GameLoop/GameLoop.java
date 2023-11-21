@@ -150,7 +150,7 @@ public class GameLoop {
             String input = UILibrary.EnterMove_TextField.getText();
             if (aiTeam == board.getTeamTurn())
                 return;
-//            MoveResult result = board.applyMoveAlgebraicNotation(input);
+            MoveResult result = board.applyMovePGNNotationOverride(input);
             redrawUI();
         });
 
@@ -229,7 +229,8 @@ public class GameLoop {
         ChessUIManager.showMainFrame();
         this.board = new Board(this);
         this.aiTeam = aiTeam;
-        sendUpdateBoardState(true);
+        redrawUI();
+        sendUpdateBoardState();
         resetGUIAndListeners();
     }
 
@@ -307,9 +308,7 @@ public class GameLoop {
         ChessUIManager.clearMovesLabel();
     }
 
-    public void sendUpdateBoardState(boolean redrawGUI) {
-        if (redrawGUI)
-            redrawUI();
+    public void sendUpdateBoardState() {
         MoveResult result = board.getLastMoveResult();
         if (result != null) {
             if (result.isCheckmate) {
@@ -335,7 +334,7 @@ public class GameLoop {
         }
     }
 
-    private void redrawUI() {
+    public void redrawUI() {
         if (!board.isAtStart()) {
             BoardLocation lastMove = board.getLastMoveLocation();
             BoardLocation currentMove = board.getCurrentMoveLocation();

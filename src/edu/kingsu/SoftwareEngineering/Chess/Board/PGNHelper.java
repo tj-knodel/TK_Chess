@@ -41,11 +41,29 @@ public class PGNHelper {
     public BoardLocation[] getBoardLocationsFromPGN(String notation, int team) {
         BoardLocation[] locations = new BoardLocation[2];
         notation = notation.replace("+", "");
+
+        if(notation.equalsIgnoreCase("O-O")) {
+            BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING).get(0);
+            locations[0] = kingLocation;
+            locations[1] = new BoardLocation(kingLocation.column + 3, kingLocation.row);
+            return locations;
+        } else if(notation.equalsIgnoreCase("O-O-O")) {
+            BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING).get(0);
+            locations[0] = kingLocation;
+            locations[1] = new BoardLocation(kingLocation.column - 4, kingLocation.row);
+            return locations;
+        }
+
         // Pawn move
-        if(notation.length() == 2)
+        if(notation.length() == 2 || (notation.contains("=") && notation.length() == 4)) {
             return getBoardLocationsForPawnMove(notation, team, locations);
-        else if(notation.length() == 4 && Character.isLowerCase(notation.charAt(0)))
+        }
+        else if(notation.length() == 4 && Character.isLowerCase(notation.charAt(0)) && !notation.contains("="))
             return getBoardLocationsForPawnMoveForColumn(notation, team, locations, notation.charAt(0) - 'a');
+        else if(notation.length() == 6 && Character.isLowerCase(notation.charAt(0)) && notation.contains("=")) {
+            notation = notation.substring(0, notation.length() - 2);
+            return getBoardLocationsForPawnMoveForColumn(notation, team, locations, notation.charAt(0) - 'a');
+        }
 
         // All other pieces move
         if(notation.length() == 3) {
@@ -105,11 +123,11 @@ public class PGNHelper {
     }
 
     private BoardLocation[] getBoardLocationsForPawnMove(String notation, int team, BoardLocation[] locations) {
-        ArrayList<BoardLocation> pawnLoc = board.getBoardLocationsForTeamForPieceToTargetLocation(board.getBoard(), team, Piece.PAWN, BOARD_LOCATIONS_FROM_STRING.get(notation));
+        ArrayList<BoardLocation> pawnLoc = board.getBoardLocationsForTeamForPieceToTargetLocation(board.getBoard(), team, Piece.PAWN, BOARD_LOCATIONS_FROM_STRING.get(notation.substring(0, 2)));
         if(pawnLoc.size() != 1)
             return locations;
         locations[0] = pawnLoc.get(0);
-        locations[1] = BOARD_LOCATIONS_FROM_STRING.get(notation);
+        locations[1] = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(0, 2));
         return locations;
     }
 
