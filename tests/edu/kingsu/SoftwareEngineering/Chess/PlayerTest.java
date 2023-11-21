@@ -16,7 +16,7 @@ public class PlayerTest {
      */
     @Before
     public void setupPlayer() {
-        testBoard = new Board();
+        testBoard = new Board(null);
         // initialize the AI with a difficulty of 1.
         testAI = new AIPlayer(1, Team.BLACK_TEAM);
     }

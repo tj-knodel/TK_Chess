@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.Random;
 
 import javax.swing.*;
@@ -38,13 +39,19 @@ public class GameLoop {
     private int aiTeam;
     private boolean aiVsAi = false;
     private GameType gameType;
+    private Timer whiteTimer;
+    private Timer blackTimer;
 
     public GameLoop() {
         this.aiTeam = -1;
         this.moveController = new MoveController();
+        this.whiteTimer = new Timer(this, Team.WHITE_TEAM);
+        this.blackTimer = new Timer(this, Team.BLACK_TEAM);
         guiStarter = new GUIStarter();
         resetGUIAndListeners();
         ChessUIManager.showNewGameFrame();
+        UILibrary.WhiteTimer.setText("");
+        UILibrary.BlackTimer.setText("");
 
         UILibrary.WhitePlayer_VS_BlackPlayer_Button.addActionListener(e -> {
             this.gameType = GameType.PLAYER_VS_PLAYER;
@@ -296,6 +303,7 @@ public class GameLoop {
         if (aiTeam == board.getTeamTurn())
             return "R";
         else {
+            JOptionPane.showConfirmDialog(null, "");
             return "R";
         }
     }
@@ -324,6 +332,13 @@ public class GameLoop {
             aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         }
         String teamName = (board.getTeamTurn() == Team.WHITE_TEAM) ? "WHITE'S TURN" : "BLACK'S TURN";
+//        if(board.getTeamTurn() == Team.WHITE_TEAM) {
+//            blackTimer.stopTimer();
+//            whiteTimer.startTimer();
+//        } else {
+//            whiteTimer.stopTimer();
+//            blackTimer.startTimer();
+//        }
         UILibrary.PlayerTurn.setText(teamName);
         runAI();
     }
@@ -359,92 +374,4 @@ public class GameLoop {
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         UILibrary.MainFrame.repaint();
     }
-
-    //    /**
-    //     * Checks if the game is in a non-playable state.
-    //     * Checkmate or stalemate is checked.
-    //     * @param result The MoveResult to check.
-    //     */
-    //    public void checkGameState(MoveResult result) {
-    //        lastMoveResult = result;
-    //        if (result.wasSuccessful) {
-    //            sendUpdateBoardState();
-    //            if (result.isCheckmate) {
-    //                ChessUIManager.ShowEndGameFrame(
-    //                        ((result.checkmateTeam == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
-    //                UILibrary.StepBackwards_Button.removeActionListener(this);
-    //                UILibrary.StepForwards_Button.removeActionListener(this);
-    //            } else if (result.isStalemate) {
-    //                ChessUIManager.ShowEndGameFrame("Stalemate!");
-    //                UILibrary.StepBackwards_Button.removeActionListener(this);
-    //                UILibrary.StepForwards_Button.removeActionListener(this);
-    //            } else if (result.isPromotion) {
-    //                guiStarter.chessUIManager.showUpgradeFrame(result.promoteTeam == Team.WHITE_TEAM);
-    //            }
-    //            // gameMode.switchTeam();
-    //        }
-    //    }
-
-    //        UILibrary.StepBackwards_Button.addActionListener(e -> {
-    //            if (board.undoMove()) {
-    //                gameMode.switchTeam();
-    //            }
-    //            BoardLocation lastMove = board.getLastMoveLocation();
-    //            BoardLocation currentMove = board.getCurrentMoveLocation();
-    //            for (int r = 0; r < 8; r++) {
-    //                for (int c = 0; c < 8; c++) {
-    //                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-    //                }
-    //            }
-    //            if (!board.isAtStart()) {
-    //                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-    //                        .setPreviousMoveSquareVisibility(true);
-    //                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-    //                        .setPreviousMoveSquareVisibility(true);
-    //            }
-    //            sendUpdateBoardState();
-    //        });
-    //
-    //        UILibrary.StepForwards_Button.addActionListener(e -> {
-    //            if (board.redoMove()) {
-    //                gameMode.switchTeam();
-    //            }
-    //            BoardLocation lastMove = board.getLastMoveLocation();
-    //            BoardLocation currentMove = board.getCurrentMoveLocation();
-    //            for (int r = 0; r < 8; r++) {
-    //                for (int c = 0; c < 8; c++) {
-    //                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-    //                }
-    //            }
-    //            if (!board.isAtStart()) {
-    //                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-    //                        .setPreviousMoveSquareVisibility(true);
-    //                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-    //                        .setPreviousMoveSquareVisibility(true);
-    //            }
-    //            sendUpdateBoardState();
-    //        });
-
-    //    @Override
-    //    public void actionPerformed(ActionEvent e) {
-    //        if (e.getSource() == UILibrary.EnterMove_TextField) {
-    //            String input = UILibrary.EnterMove_TextField.getText();
-    //            MoveResult result = board.applyMoveAlgebraicNotation(input);
-    //            BoardLocation lastMove = board.getLastMoveLocation();
-    //            BoardLocation currentMove = board.getCurrentMoveLocation();
-    //            for (int r = 0; r < 8; r++) {
-    //                for (int c = 0; c < 8; c++) {
-    //                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-    //                }
-    //            }
-    //            if (!board.isAtStart()) {
-    //                guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-    //                        .setPreviousMoveSquareVisibility(true);
-    //                guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-    //                        .setPreviousMoveSquareVisibility(true);
-    //            }
-    //            checkGameState(result);
-    //            UILibrary.EnterMove_TextField.setText("");
-    //        }
-    //    }
 }
