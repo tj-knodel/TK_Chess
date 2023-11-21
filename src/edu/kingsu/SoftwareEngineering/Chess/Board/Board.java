@@ -237,7 +237,6 @@ public class Board {
      */
     public boolean undoMove() {
         if (algebraicNotationMovesList.size() - undoMoveCount <= 0) {
-            System.out.println("CAN'T");
             return false;
         }
         return undoOrRedoMove(true);
@@ -272,11 +271,12 @@ public class Board {
         else
             undoMoveCount--;
         algebraicRepresentation = new StringBuilder();
-        ArrayList<String> movesList = new ArrayList<>();
-        movesList.addAll(algebraicNotationMovesList);
+        ArrayList<String> movesList = new ArrayList<>(algebraicNotationMovesList);
         for (int i = 0; i < movesList.size() - undoMoveCount; i++) {
             applyMovePGNNotation(movesList.get(i));
         }
+        gameLoop.redrawUI();
+        gameLoop.sendUpdateBoardState();
         return true;
     }
 

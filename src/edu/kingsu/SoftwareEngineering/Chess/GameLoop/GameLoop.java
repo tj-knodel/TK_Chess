@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
-import javax.swing.JFileChooser;
+import javax.swing.*;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
@@ -323,6 +323,8 @@ public class GameLoop {
         if (aiVsAi) {
             aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         }
+        String teamName = (board.getTeamTurn() == Team.WHITE_TEAM) ? "WHITE'S TURN" : "BLACK'S TURN";
+        UILibrary.PlayerTurn.setText(teamName);
         runAI();
     }
 
