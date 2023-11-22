@@ -309,6 +309,10 @@ public class GameLoop {
             return "Q";
         else {
             String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
+            if(result == null) {
+                System.out.println("NULL");
+                return "P";
+            }
             return String.valueOf(result.charAt(0));
         }
     }
@@ -324,11 +328,11 @@ public class GameLoop {
     public void sendUpdateBoardState() {
         MoveResult result = board.getLastMoveResult();
         if (result != null) {
-            if (result.isCheckmate) {
+            if (result.isCheckmate()) {
                 ChessUIManager.ShowEndGameFrame(
-                        ((result.checkmateTeam == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
+                        ((result.getCheckmateTeam() == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
                 board.setIsPaused(true);
-            } else if (result.isStalemate) {
+            } else if (result.isStalemate()) {
                 ChessUIManager.ShowEndGameFrame("Stalemate!");
                 board.setIsPaused(true);
             }

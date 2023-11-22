@@ -188,6 +188,8 @@ public abstract class Piece {
                 return new Knight(team);
             case Piece.QUEEN:
                 return new Queen(team);
+            case Piece.PAWN:
+                return new Pawn(team);
             default:
                 return new EmptyPiece();
         }
@@ -204,6 +206,7 @@ public abstract class Piece {
 
         PIECE_ID_FROM_STRING = new HashMap<>();
         PIECE_ID_FROM_STRING.put("N", Piece.KNIGHT);
+        PIECE_ID_FROM_STRING.put("P", Piece.PAWN);
         PIECE_ID_FROM_STRING.put("K", Piece.KING);
         PIECE_ID_FROM_STRING.put("Q", Piece.QUEEN);
         PIECE_ID_FROM_STRING.put("B", Piece.BISHOP);

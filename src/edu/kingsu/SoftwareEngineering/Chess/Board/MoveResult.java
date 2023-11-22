@@ -9,43 +9,43 @@ public class MoveResult {
     /**
      * Was a move successful or not.
      */
-    public boolean isSuccessful;
+    private boolean isSuccessful;
 
     /**
      * If the move results in checkmate.
      */
-    public boolean isCheckmate;
+    private boolean isCheckmate;
 
     /**
      * If the move results in stalemate.
      */
-    public boolean isStalemate;
+    private boolean isStalemate;
 
     /**
      * If the move results in promotion.
      */
-    public boolean isPromotion;
+    private boolean isPromotion;
 
     /**
      * The location for the piece being promoted.
      * @see BoardLocation
      */
-    public BoardLocation promotionLocation;
+    private BoardLocation promotionLocation;
 
     /**
      * The notation of the current move in PGN format.
      */
-    public String notation;
+    private String notation;
 
     /**
      * The team that is in checkmate.
      */
-    public int checkmateTeam;
+    private int checkmateTeam;
 
     /**
      * The team that is in stalemate.
      */
-    public int stalemateTeam;
+    private int stalemateTeam;
 
     /**
      * Constructor to set defaults.

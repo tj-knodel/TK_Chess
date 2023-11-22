@@ -1,5 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess;
 
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -16,7 +17,7 @@ public class BoardTest {
     private Piece[][] kingPawnStart;
     @Before
     public void setup() {
-        testBoard = new Board(null);
+        testBoard = new Board((GameLoop) null);
         startState = new Piece[][]{
             {new Rook(0), new Knight(0), new Bishop(0), new Queen(0), new King(0), new Bishop(0), new Knight(0),
                     new Rook(0)},
@@ -174,6 +175,6 @@ public class BoardTest {
         BoardLocation start_loc = new BoardLocation(4, 6);
         BoardLocation end_loc = new BoardLocation(4, 4);
         Piece piece = testBoard.getBoard()[6][4];
-        Assert.assertTrue(testBoard.applyMove(piece, start_loc, end_loc).isSuccessful);
+        Assert.assertTrue(testBoard.applyMove(piece, start_loc, end_loc).isSuccessful());
     }
 }

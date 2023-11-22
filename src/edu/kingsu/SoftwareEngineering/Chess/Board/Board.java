@@ -138,12 +138,34 @@ public class Board {
     }
 
     /**
+     * Creates a new board from a different board object.
+     * Deep copies everything except references to helper classes.
+     * @param board The other board to create from.
+     */
+    public Board(Board board) {
+        this.algebraicNotationMovesList = board.algebraicNotationMovesList;
+        this.algebraicRepresentation = board.algebraicRepresentation;
+        this.board = cloneBoard2DArray(board.board);
+        this.currentMoveLocation = board.currentMoveLocation;
+        this.currentTeam = board.currentTeam;
+        this.firstMove = board.firstMove;
+        this.gameLoop = board.gameLoop;
+        this.isPaused = board.isPaused;
+        this.lastMoveLocation = board.lastMoveLocation;
+        this.lastMoveResult = board.lastMoveResult;
+        this.lastPieceMoveId = board.lastPieceMoveId;
+        this.moveCount = board.moveCount;
+        this.pgnHelper = board.pgnHelper;
+        this.undoMoveCount = board.undoMoveCount;
+    }
+
+    /**
      * Returns a copy of the board as a Board object
      *
      * @return a deep copy of the board
      */
     public Board copy() {
-        return new Board(board, moveCount, algebraicRepresentation, gameLoop);
+        return new Board(this);
     }
 
     /**
@@ -341,7 +363,7 @@ public class Board {
             if (result.isSuccessful()) {
                 updateNotation(result.getNotation());
             } else {
-                JOptionPane.showConfirmDialog(null, "Could not apply move: " + movesList.get(i));
+//                JOptionPane.showConfirmDialog(null, "Could not apply move: " + movesList.get(i));
             }
         }
         gameLoop.redrawUI();
@@ -382,7 +404,6 @@ public class Board {
         updateNotation(result.getNotation());
         gameLoop.redrawUI();
         gameLoop.sendUpdateBoardState();
-        //        switchTeam();
         return result;
     }
 
@@ -459,7 +480,6 @@ public class Board {
      */
     public MoveResult applyMove(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         MoveResult result = applyMoveInternal(pieceMoving, startMove, endMove, false, "");
-        // switchTeam();
         return result;
     }
 

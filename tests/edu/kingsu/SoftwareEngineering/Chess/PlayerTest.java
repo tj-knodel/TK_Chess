@@ -1,5 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess;
 
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.Assert;
@@ -15,7 +16,7 @@ public class PlayerTest {
      */
     @Before
     public void setupPlayer() {
-        testBoard = new Board(null);
+        testBoard = new Board((GameLoop) null);
         // initialize the AI with a difficulty of 1.
         testAI = new AIPlayer(1, Team.BLACK_TEAM);
     }
@@ -35,6 +36,6 @@ public class PlayerTest {
     @Test
     public void testValidMove() {
         Move test_move = testAI.getMove(testBoard);
-        Assert.assertTrue(testBoard.applyMove(test_move.piece, test_move.start, test_move.end).isSuccessful);
+        Assert.assertTrue(testBoard.applyMove(test_move.piece, test_move.start, test_move.end).isSuccessful());
     }
 }

@@ -11,6 +11,7 @@ import java.util.HashMap;
 /**
  * The class to help with generating moves from PGN,
  * and taking moves and creating the PGN.
+ *
  * @author Daniell Buchner
  * @version 0.2.0
  */
@@ -22,25 +23,27 @@ public class PGNHelper {
      * by using the BoardLocation in the applyMove function.
      */
     private static final String[][] BOARD_LOCATIONS = {
-            { "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8" },
-            { "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7" },
-            { "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6" },
-            { "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5" },
-            { "a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4" },
-            { "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3" },
-            { "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2" },
-            { "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1" },
+            {"a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8"},
+            {"a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7"},
+            {"a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6"},
+            {"a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5"},
+            {"a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4"},
+            {"a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3"},
+            {"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2"},
+            {"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"},
     };
 
     /**
      * The board locations from a string. So "a1" would return a BoardLocation
      * with row = 7 and column = 0
+     *
      * @see BoardLocation
      */
     private static final HashMap<String, BoardLocation> BOARD_LOCATIONS_FROM_STRING;
 
     /**
      * The Board class reference to call helper functions.
+     *
      * @see Board
      */
     private final Board board;
@@ -52,8 +55,9 @@ public class PGNHelper {
 
     /**
      * The constructor to create a PGNHelper object.
-     * @see Board
+     *
      * @param board The board class to reference.
+     * @see Board
      */
     public PGNHelper(Board board) {
         this.board = board;
@@ -62,27 +66,20 @@ public class PGNHelper {
     /**
      * Gets the board locations (start move and end move) for a given
      * input PGN notation for a given team.
-     * @see BoardLocation
+     *
      * @param notation The notation to apply.
-     * @param team The team it get the locations for.
+     * @param team     The team it get the locations for.
      * @return The BoardLocation array of size 2 containing the start and end move.
+     * @see BoardLocation
      */
     public BoardLocation[] getBoardLocationsFromPGN(String notation, int team) {
         BoardLocation[] locations = new BoardLocation[2];
         notation = notation.replace("+", "");
 
         if (notation.equalsIgnoreCase("O-O")) {
-            BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING)
-                    .get(0);
-            locations[0] = kingLocation;
-            locations[1] = new BoardLocation(kingLocation.column + 3, kingLocation.row);
-            return locations;
+            return getBoardLocationsForCastling(team, +3, locations);
         } else if (notation.equalsIgnoreCase("O-O-O")) {
-            BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING)
-                    .get(0);
-            locations[0] = kingLocation;
-            locations[1] = new BoardLocation(kingLocation.column - 4, kingLocation.row);
-            return locations;
+            return getBoardLocationsForCastling(team, -4, locations);
         }
 
         // Pawn move
@@ -123,17 +120,34 @@ public class PGNHelper {
     }
 
     /**
-     * Gets the board locations for a piece for a given row and a target location.
+     * Do the castling locations from PGN notation.
      * @see BoardLocation
-     * @param notation The PGN notation inputted (could be modified before this point).
-     * @param team The team to check.
+     * @param team The team to castle for.
+     * @param columnAmount The amount to go left or right for castling long or short side.
      * @param locations The locations out variable to modify.
-     * @param row The row to check.
-     * @param targetLocation The target location to move to.
      * @return The BoardLocation 2d array.
      */
+    private BoardLocation[] getBoardLocationsForCastling(int team, int columnAmount, BoardLocation[] locations) {
+        BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING)
+                .get(0);
+        locations[0] = kingLocation;
+        locations[1] = new BoardLocation(kingLocation.column - columnAmount, kingLocation.row);
+        return locations;
+    }
+
+    /**
+     * Gets the board locations for a piece for a given row and a target location.
+     *
+     * @param notation       The PGN notation inputted (could be modified before this point).
+     * @param team           The team to check.
+     * @param locations      The locations out variable to modify.
+     * @param row            The row to check.
+     * @param targetLocation The target location to move to.
+     * @return The BoardLocation 2d array.
+     * @see BoardLocation
+     */
     private BoardLocation[] getBoardLocationsForPieceMoveRow(String notation, int team, BoardLocation[] locations,
-            int row, BoardLocation targetLocation) {
+                                                             int row, BoardLocation targetLocation) {
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(String.valueOf(notation.charAt(0)));
         ArrayList<BoardLocation> pieceLoc = board.getBoardLocationsForTeamForPieceToTargetLocationForRow(
                 board.getBoard(), team, pieceId, targetLocation, row);
@@ -142,15 +156,16 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a piece for a given column.
-     * @see BoardLocation
-     * @param notation The PGN notation inputted (could be modified before this point).
-     * @param team The team to check.
+     *
+     * @param notation  The PGN notation inputted (could be modified before this point).
+     * @param team      The team to check.
      * @param locations The locations out variable to modify.
-     * @param column The column to check.
+     * @param column    The column to check.
      * @return The BoardLocation 2d array.
+     * @see BoardLocation
      */
     private BoardLocation[] getBoardLocationsForPieceMoveColumn(String notation, int team, BoardLocation[] locations,
-            int column) {
+                                                                int column) {
         BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(2));
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(String.valueOf(notation.charAt(0)));
         ArrayList<BoardLocation> pieceLoc = board.getBoardLocationsForTeamForPieceToTargetLocationForColumn(
@@ -160,11 +175,12 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a piece moving (non pawn).
-     * @see BoardLocation
-     * @param notation The PGN notation.
-     * @param team The team to check for.
+     *
+     * @param notation  The PGN notation.
+     * @param team      The team to check for.
      * @param locations The locations out variable to modify.
      * @return The BoardLocation 2d array.
+     * @see BoardLocation
      */
     private BoardLocation[] getBoardLocationsForPieceMove(String notation, int team, BoardLocation[] locations) {
         BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(1));
@@ -176,11 +192,12 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a pawn moving.
-     * @see BoardLocation
-     * @param notation The PGN notation to check.
-     * @param team The team to check.
+     *
+     * @param notation  The PGN notation to check.
+     * @param team      The team to check.
      * @param locations The locations out variable to modify.
      * @return The BoardLocation 2d array.
+     * @see BoardLocation
      */
     private BoardLocation[] getBoardLocationsForPawnMove(String notation, int team, BoardLocation[] locations) {
         BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(0, 2));
@@ -192,11 +209,12 @@ public class PGNHelper {
     /**
      * Handles returning and setting the values for the
      * board locations from a PGN input.
-     * @see BoardLocation
-     * @param pieceLoc The pieceLoc arraylist of BoardLocations.
-     * @param locations The locations 2d-array of BoardLocations to return.
+     *
+     * @param pieceLoc       The pieceLoc arraylist of BoardLocations.
+     * @param locations      The locations 2d-array of BoardLocations to return.
      * @param targetLocation The target location to set locations[1] to.
      * @return The locations 2d-array.
+     * @see BoardLocation
      */
     private BoardLocation[] handleLocations(ArrayList<BoardLocation> pieceLoc, BoardLocation[] locations, BoardLocation targetLocation) {
         if (pieceLoc.size() != 1)
@@ -208,15 +226,16 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a pawn in a specific column.
-     * @see BoardLocation
-     * @param notation The PGN notation to check.
-     * @param team The team to check.
+     *
+     * @param notation  The PGN notation to check.
+     * @param team      The team to check.
      * @param locations The locations out variable to modify.
-     * @param column The column to check for.
+     * @param column    The column to check for.
      * @return The BoardLocation 2d array.
+     * @see BoardLocation
      */
     private BoardLocation[] getBoardLocationsForPawnMoveForColumn(String notation, int team, BoardLocation[] locations,
-            int column) {
+                                                                  int column) {
         BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(2));
         ArrayList<BoardLocation> pawnLoc = board.getBoardLocationsForTeamForPieceToTargetLocation(board.getBoard(),
                 team, Piece.PAWN, targetLocation);
@@ -237,6 +256,7 @@ public class PGNHelper {
 
     /**
      * Is the notation capturing a piece or not.
+     *
      * @param notation The notation to check.
      * @return True if it is capturing a piece.
      */
@@ -246,10 +266,11 @@ public class PGNHelper {
 
     /**
      * Given a start move and an end move, give the PGN notation of the move.
-     * @see BoardLocation
+     *
      * @param startMove The start move location.
-     * @param endMove The end move location.
+     * @param endMove   The end move location.
      * @return A string containing the PGN notation of a move.
+     * @see BoardLocation
      */
     public String getPGNNotationFromMove(BoardLocation startMove, BoardLocation endMove) {
         Piece[][] boardCopy = board.getBoard();
@@ -268,16 +289,17 @@ public class PGNHelper {
     /**
      * Gets the PGN notation from a move where multiple pieces can move
      * to the same location.
+     *
+     * @param boardCopy The Piece[][] to check against.
+     * @param piece     The piece that is moving.
+     * @param startMove The start location.
+     * @param endMove   The end location.
+     * @return A string of the PGN move.
      * @see BoardLocation
      * @see Piece
-     * @param boardCopy The Piece[][] to check against.
-     * @param piece The piece that is moving.
-     * @param startMove The start location.
-     * @param endMove The end location.
-     * @return A string of the PGN move.
      */
     private String getPGNNotationFromMoveMultiplePieces(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-            BoardLocation endMove) {
+                                                        BoardLocation endMove) {
         boolean shouldPutRowInNotation = board.getBoardLocationsForTeamForPieceToTargetLocationForColumn(boardCopy,
                 piece.getTeam(), piece.getPieceID(), endMove, startMove.column).size() > 1;
         String moveString = Piece.CHESS_NOTATION_VALUE.get(piece.getPieceID());
@@ -293,17 +315,18 @@ public class PGNHelper {
      * Gets the PGN notation of the end part. Will calculate anything after
      * the piece value and location is put in. Basically does the last two thirds
      * of the notation calculation.
-     * @see BoardLocation
-     * @see Piece
-     * @param boardCopy The Piece[][] to check against.
-     * @param piece The piece that is moving.
-     * @param startMove The start location.
-     * @param endMove The end location.
+     *
+     * @param boardCopy  The Piece[][] to check against.
+     * @param piece      The piece that is moving.
+     * @param startMove  The start location.
+     * @param endMove    The end location.
      * @param moveString The current PGN notation to modify.
      * @return A string of the PGN move.
+     * @see BoardLocation
+     * @see Piece
      */
     private String getEndPGNNotationFromMove(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-            BoardLocation endMove, String moveString) {
+                                             BoardLocation endMove, String moveString) {
         if (isCapturing(boardCopy, startMove, endMove)) {
             if (boardCopy[startMove.row][startMove.column] instanceof Pawn)
                 moveString += BOARD_LOCATIONS[startMove.row][startMove.column].charAt(0);
@@ -314,7 +337,7 @@ public class PGNHelper {
             if (promotionPiece != null) {
                 moveString += "=" + promotionPiece;
             } else {
-                moveString += "=" + board.getPromotionPiece();
+                moveString += "=" + board.getPromotionPiece();;
             }
         }
         moveString = getCheckAndCheckmateFromMove(boardCopy, piece, startMove, endMove, moveString);
@@ -324,27 +347,29 @@ public class PGNHelper {
     /**
      * Gets the PGN notation of a single piece move. So a move
      * where only one piece can go to that location.
+     *
+     * @param boardCopy The Piece[][] to check against.
+     * @param piece     The piece that is moving.
+     * @param startMove The start location.
+     * @param endMove   The end location.
+     * @return A string of the PGN move.
      * @see BoardLocation
      * @see Piece
-     * @param boardCopy The Piece[][] to check against.
-     * @param piece The piece that is moving.
-     * @param startMove The start location.
-     * @param endMove The end location.
-     * @return A string of the PGN move.
      */
     private String getPGNNotationFromMoveSinglePiece(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-            BoardLocation endMove) {
+                                                     BoardLocation endMove) {
         String moveString = Piece.CHESS_NOTATION_VALUE.get(piece.getPieceID());
         return getEndPGNNotationFromMove(boardCopy, piece, startMove, endMove, moveString);
     }
 
     /**
      * Is the move currently in a promoting pawn state.
-     * @see BoardLocation
-     * @see Piece
-     * @param piece The piece moving.
+     *
+     * @param piece   The piece moving.
      * @param endMove The end location.
      * @return True if the pawn can be promoted.
+     * @see BoardLocation
+     * @see Piece
      */
     private boolean isPromoting(Piece piece, BoardLocation endMove) {
         return (endMove.row == 0 || endMove.row == 7) && piece instanceof Pawn;
@@ -352,11 +377,12 @@ public class PGNHelper {
 
     /**
      * Is the move currently capturing another piece.
-     * @see BoardLocation
-     * @see Piece
-     * @param board The Piece[][] to check against.
+     *
+     * @param board   The Piece[][] to check against.
      * @param endMove The end location.
      * @return
+     * @see BoardLocation
+     * @see Piece
      */
     private boolean isCapturing(Piece[][] board, BoardLocation startMove, BoardLocation endMove) {
         return !(board[endMove.row][endMove.column] instanceof EmptyPiece) || isEnPassant(board, startMove, endMove);
@@ -364,12 +390,13 @@ public class PGNHelper {
 
     /**
      * Checks if the move is en-passant.
+     *
+     * @param board     The Piece[][] to check.
+     * @param startMove The start location.
+     * @param endMove   The end location.
+     * @return True if en-passant was done.
      * @see BoardLocation
      * @see Piece
-     * @param board The Piece[][] to check.
-     * @param startMove The start location.
-     * @param endMove The end location.
-     * @return True if en-passant was done.
      */
     public boolean isEnPassant(Piece[][] board, BoardLocation startMove, BoardLocation endMove) {
         if (this.board.getLastPieceMovedId() != Piece.PAWN || this.board.getCurrentMoveLocation() == null)
@@ -386,17 +413,18 @@ public class PGNHelper {
     /**
      * Checks from a given move and simulates to see if this move
      * will cause a check, or checkmate.
-     * @see BoardLocation
-     * @see Piece
-     * @param boardCopy The Piece[][] to check against.
-     * @param piece The piece that is moving.
-     * @param startMove The start location.
-     * @param endMove The end location.
+     *
+     * @param boardCopy  The Piece[][] to check against.
+     * @param piece      The piece that is moving.
+     * @param startMove  The start location.
+     * @param endMove    The end location.
      * @param moveString The current PGN notation to modify.
      * @return A string containing the PGN notation.
+     * @see BoardLocation
+     * @see Piece
      */
     private String getCheckAndCheckmateFromMove(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-            BoardLocation endMove, String moveString) {
+                                                BoardLocation endMove, String moveString) {
         if (isOtherTeamInCheck(boardCopy, piece, startMove, endMove)) {
             moveString += "+";
             int otherTeam = (piece.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
@@ -408,16 +436,17 @@ public class PGNHelper {
 
     /**
      * Checks if the other team is in check by simulating a move.
+     *
+     * @param boardCopy The Piece[][] to check against.
+     * @param piece     The piece moving.
+     * @param startMove The start location.
+     * @param endMove   The end location.
+     * @return True if the other team's king is in check.
      * @see BoardLocation
      * @see Piece
-     * @param boardCopy The Piece[][] to check against.
-     * @param piece The piece moving.
-     * @param startMove The start location.
-     * @param endMove The end location.
-     * @return True if the other team's king is in check.
      */
     private boolean isOtherTeamInCheck(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-            BoardLocation endMove) {
+                                       BoardLocation endMove) {
         board.simulateApplyMove(boardCopy, piece, startMove, endMove);
         int otherTeam = (piece.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(boardCopy, otherTeam, Piece.KING).get(0);
@@ -454,6 +483,7 @@ public class PGNHelper {
 
     /**
      * Sets the promotion piece to a value.
+     *
      * @param promotionPiece The value to set the promotion piece to.
      */
     public void setPromotionPiece(String promotionPiece) {
