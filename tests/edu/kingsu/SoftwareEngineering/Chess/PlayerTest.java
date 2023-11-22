@@ -2,7 +2,6 @@ package edu.kingsu.SoftwareEngineering.Chess;
 
 import org.junit.Test;
 import org.junit.Before;
-import org.junit.After;
 import org.junit.Assert;
 import edu.kingsu.SoftwareEngineering.Chess.Board.*;
 import edu.kingsu.SoftwareEngineering.Chess.Players.*;
@@ -36,6 +35,6 @@ public class PlayerTest {
     @Test
     public void testValidMove() {
         Move test_move = testAI.getMove(testBoard);
-        Assert.assertTrue(testBoard.applyMove(test_move.piece, test_move.start, test_move.end).wasSuccessful);
+        Assert.assertTrue(testBoard.applyMove(test_move.piece, test_move.start, test_move.end).isSuccessful);
     }
 }

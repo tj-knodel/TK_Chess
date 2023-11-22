@@ -1,7 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -16,7 +15,6 @@ import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
  * The Board class handles all the logic in chess. It handles
  * generation of algebraic notation (PGN format), loading algebraic notation (PGN format),
  * and handles game states if the game is won or not.
- *
  * @author Daniell Buchner
  * @version 1.0.0
  */
@@ -42,6 +40,9 @@ public class Board {
      */
     private ArrayList<String> algebraicNotationMovesList;
 
+    /**
+     * How far should the undo moves be done.
+     */
     private int undoMoveCount;
 
     /**
@@ -49,6 +50,9 @@ public class Board {
      */
     private boolean firstMove;
 
+    /**
+     * The current team's turn.
+     */
     private int currentTeam;
 
     /**
@@ -334,8 +338,8 @@ public class Board {
         ArrayList<String> movesList = new ArrayList<>(algebraicNotationMovesList);
         for (int i = 0; i < movesList.size() - undoMoveCount; i++) {
             MoveResult result = applyMovePGNNotation(movesList.get(i));
-            if (result.wasSuccessful) {
-                updateNotation(result.notation);
+            if (result.isSuccessful()) {
+                updateNotation(result.getNotation());
             } else {
                 JOptionPane.showConfirmDialog(null, "Could not apply move: " + movesList.get(i));
             }
@@ -347,7 +351,7 @@ public class Board {
 
     /**
      * Gets a deep copy of the board
-     *
+     * @see Piece
      * @return A Piece[][] deep copy.
      */
     public Piece[][] getBoard() {
@@ -364,7 +368,9 @@ public class Board {
      * Check if a move can be applied, then do it.
      * Will also generate algebraic notation for the move in here
      * and apply it to the algebraicNotation StringBuilder.
-     *
+     * @see MoveResult
+     * @see Piece
+     * @see BoardLocation
      * @param pieceMoving The chess piece being moved.
      * @param startMove   The starting move of the piece.
      * @param endMove     The target location of the piece.
@@ -372,8 +378,8 @@ public class Board {
      */
     public MoveResult applyMoveUpdateGUI(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
         MoveResult result = applyMoveInternal(pieceMoving, startMove, endMove, false, "");
-        overrideNotation(result.notation);
-        updateNotation(result.notation);
+        overrideNotation(result.getNotation());
+        updateNotation(result.getNotation());
         gameLoop.redrawUI();
         gameLoop.sendUpdateBoardState();
         //        switchTeam();
@@ -382,7 +388,7 @@ public class Board {
 
     /**
      * Applies a move from PGN notation.
-     *
+     * @see MoveResult
      * @param notation The notation to apply the move to.
      * @return The MoveResult of the move that was applied.
      */
@@ -405,15 +411,15 @@ public class Board {
 
     /**
      * Applies the PGN move but overrides notation and redraws the UI.
-     *
+     * @see MoveResult
      * @param notation The notation to apply.
      * @return The MoveResult of the move that was applied.
      */
     public MoveResult applyMovePGNNotationOverride(String notation) {
         MoveResult result = applyMovePGNNotation(notation);
-        if (result.wasSuccessful) {
+        if (result.isSuccessful()) {
             overrideNotation(notation);
-            updateNotation(result.notation);
+            updateNotation(result.getNotation());
             gameLoop.redrawUI();
             gameLoop.sendUpdateBoardState();
         }
@@ -426,9 +432,12 @@ public class Board {
      * @return The turn of the current team.
      */
     public int getTeamTurn() {
-        return currentTeam; //(firstMove) ? Team.WHITE_TEAM : Team.BLACK_TEAM;
+        return currentTeam;
     }
 
+    /**
+     * Switches the current team to be the other team.
+     */
     private void switchTeam() {
         if (currentTeam == Team.WHITE_TEAM) {
             currentTeam = Team.BLACK_TEAM;
@@ -458,7 +467,9 @@ public class Board {
      * Check if a move can be applied, then do it.
      * Will also generate algebraic notation for the move in here
      * and apply it to the algebraicNotation StringBuilder.
-     *
+     * @see BoardLocation
+     * @see Piece
+     * @see MoveResult
      * @param pieceMoving The chess piece being moved.
      * @param startMove   The starting move of the piece.
      * @param endMove     The target location of the piece.
@@ -497,11 +508,11 @@ public class Board {
 
         checkStalemateAndCheckmate(pieceMoving, result);
 
-        result.wasSuccessful = true;
+        result.setSuccessful(true);
         currentMoveLocation = endMove;
         lastMoveLocation = startMove;
         lastMoveResult = result;
-        result.notation = moveNotation;
+        result.setNotation(moveNotation);
         lastPieceMoveId = pieceMoving.getPieceID();
         switchTeam();
 
@@ -526,7 +537,8 @@ public class Board {
 
     /**
      * Checks for stalemate and checkmate based on the piece.
-     *
+     * @see Piece
+     * @see MoveResult
      * @param pieceMoving The piece that was moving.
      * @param result      The MoveResult to modify.
      */
@@ -536,13 +548,13 @@ public class Board {
         int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         if (checkKingInCheck(board, otherTeam)) {
             if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
-                result.isCheckmate = true;
-                result.checkmateTeam = otherTeam;
+                result.setCheckmate(true);
+                result.setCheckmateTeam(otherTeam);
             }
         } else {
             if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
-                result.isStalemate = true;
-                result.checkmateTeam = otherTeam;
+                result.setStalemate(true);
+                result.setStalemateTeam(otherTeam);
             }
         }
     }
@@ -598,7 +610,8 @@ public class Board {
 
     /**
      * Handle the move with en-passant.
-     * 
+     * @see BoardLocation
+     * @see Piece
      * @param board The Piece[][] to apply to.
      * @param pieceMoving The piece moving.
      * @param startMove The start location.
@@ -613,7 +626,8 @@ public class Board {
 
     /**
      * Handle the move normally by just doing the move.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board The Piece[][] to apply to.
      * @param pieceMoving The piece moving.
      * @param startMove   The start location.
@@ -629,7 +643,8 @@ public class Board {
      * Handles the move part to actually apply the move
      * to the board and change the pieces for the king
      * and rook.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param pieceMoving The piece that is moving.
      * @param startMove   The start location.
      * @param endMove     The end location.
@@ -651,7 +666,8 @@ public class Board {
      * Handles the move part to actually apply the move
      * to the board and change the pieces for the king
      * and rook.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param pieceMoving The piece that is moving.
      * @param startMove   The start location.
      * @param endMove     The end location.
@@ -673,7 +689,7 @@ public class Board {
      * Handles the move part to check if
      * the move is long side castling O-O-O, or
      * short side castling.
-     *
+     * @see BoardLocation
      * @param startMove The start move location.
      * @param endMove   The end move location.
      * @return True if castling long side.
@@ -684,7 +700,7 @@ public class Board {
 
     /**
      * Handles the move part to check if castling is requested.
-     *
+     * @see BoardLocation
      * @param startMove The start location of the move.
      * @param endMove   The end location of the move.
      * @return True if castling is requested and valid.
@@ -697,7 +713,8 @@ public class Board {
 
     /**
      * Gets the number of pieces that can move to the same location.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param pieceMoving The piece that is moving.
      * @param endMove     The location of the target move location.
      * @param team        The team that is associated with the piece.
@@ -718,7 +735,8 @@ public class Board {
     /**
      * Will "simulate" a move. Essentially it applys the same logic as applyMove
      * but it does it with a board passed in.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board       The board to apply the move to.
      * @param pieceMoving The piece moving.
      * @param startMove   Starting location of the piece.
@@ -743,7 +761,8 @@ public class Board {
      * This checks if the king is in check for a board that is passed in as a parameter.
      * It takes the piece that is "moving" and checking any piece from the other team
      * results in a team being in check.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board The board to check if the king is in check.
      * @param team  The team to check for their king being in check.
      * @return True if the king is in check, false otherwise.
@@ -765,7 +784,8 @@ public class Board {
 
     /**
      * Gets the possible moves by calling the piece's getPossibleMoves function.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board      The board to get the possible moves on.
      * @param piece      The piece to get the possible moves from.
      * @param location   The starting location.
@@ -780,7 +800,8 @@ public class Board {
     /**
      * Returns all possible moves for the current piece that will
      * not allow the king to be in check.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board    The board to check for the locations on.
      * @param piece    The piece to get the possible moves for.
      * @param location The location that the piece is at.
@@ -808,7 +829,8 @@ public class Board {
     /**
      * Gets all the possible moves for a specific team, ignoring
      * if the king is in check afterward.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
      * @return Arraylist of BoardLocations for the possible moves a team can make.
@@ -828,7 +850,8 @@ public class Board {
     /**
      * Gets all the possible moves for a specific team if
      * the king will not be in check afterward.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
      * @return Arraylist of BoardLocations for the possible moves a team can make.
@@ -846,7 +869,8 @@ public class Board {
 
     /**
      * Gets all possible moves for a specific piece on the board
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param team    The team to get the moves for.
      * @param pieceId The specific piece to get the moves for.
      * @return ArrayList of BoardLocations of all possible moves of all pieces of certain type for team.
@@ -864,7 +888,8 @@ public class Board {
 
     /**
      * Gets all the board locations a specific team's pieces are at.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board The board 2d-array to check.
      * @param team  The team to find the pieces for.
      * @return An ArrayList of BoardLocations of the pieces to check.
@@ -883,7 +908,8 @@ public class Board {
 
     /**
      * Gets the locations of pieces for a team on the board.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board   The board to get the pieces locations for.
      * @param team    The team to get the moves for.
      * @param pieceId The piece to get locations for.
@@ -903,7 +929,8 @@ public class Board {
      * Gets the locations of pieces for a team on the board that
      * can move to a target location where the piece is on
      * a specific column.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board   The board to get the pieces locations for.
      * @param team    The team to get the moves for.
      * @param pieceId The piece to get locations for.
@@ -926,7 +953,8 @@ public class Board {
      * Gets the locations of pieces for a team on the board that
      * can move to a target location where the piece is on
      * a specific column.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board   The board to get the pieces locations for.
      * @param team    The team to get the moves for.
      * @param pieceId The piece to get locations for.
@@ -947,7 +975,8 @@ public class Board {
 
     /**
      * Gets the locations of pieces for a team on the board.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board   The board to get the pieces locations for.
      * @param team    The team to get the moves for.
      * @param pieceId The piece to get locations for.
@@ -969,7 +998,8 @@ public class Board {
     /**
      * Gets the board locations for a team's set of pieces that
      * fall within a specific column.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board   The board to check.
      * @param team    The team to get the pieces from.
      * @param pieceId The piece id to check.
@@ -990,7 +1020,8 @@ public class Board {
     /**
      * Gets the board locations for a team's set of pieces that
      * fall within a specific row.
-     *
+     * @see BoardLocation
+     * @see Piece
      * @param board   The board to check.
      * @param team    The team to get the pieces from.
      * @param pieceId The piece id to check.

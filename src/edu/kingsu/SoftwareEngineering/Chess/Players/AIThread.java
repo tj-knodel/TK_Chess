@@ -35,7 +35,7 @@ public class AIThread implements Runnable {
         }
         Move aiMove = aiPlayer.getMove(board);
         MoveResult result = board.applyMoveUpdateGUI(aiMove.piece, aiMove.start, aiMove.end);
-        if(!result.wasSuccessful) {
+        if(!result.isSuccessful) {
 //            JOptionPane.showConfirmDialog(null, "NOT SUCCESSFUL");
         }
     }

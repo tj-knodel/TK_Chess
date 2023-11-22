@@ -12,7 +12,7 @@ import java.util.HashMap;
  * The class to help with generating moves from PGN,
  * and taking moves and creating the PGN.
  * @author Daniell Buchner
- * @version 0.1.0
+ * @version 0.2.0
  */
 public class PGNHelper {
 
@@ -35,11 +35,13 @@ public class PGNHelper {
     /**
      * The board locations from a string. So "a1" would return a BoardLocation
      * with row = 7 and column = 0
+     * @see BoardLocation
      */
     private static final HashMap<String, BoardLocation> BOARD_LOCATIONS_FROM_STRING;
 
     /**
      * The Board class reference to call helper functions.
+     * @see Board
      */
     private final Board board;
 
@@ -50,6 +52,7 @@ public class PGNHelper {
 
     /**
      * The constructor to create a PGNHelper object.
+     * @see Board
      * @param board The board class to reference.
      */
     public PGNHelper(Board board) {
@@ -59,6 +62,7 @@ public class PGNHelper {
     /**
      * Gets the board locations (start move and end move) for a given
      * input PGN notation for a given team.
+     * @see BoardLocation
      * @param notation The notation to apply.
      * @param team The team it get the locations for.
      * @return The BoardLocation array of size 2 containing the start and end move.
@@ -120,6 +124,7 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a piece for a given row and a target location.
+     * @see BoardLocation
      * @param notation The PGN notation inputted (could be modified before this point).
      * @param team The team to check.
      * @param locations The locations out variable to modify.
@@ -137,6 +142,7 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a piece for a given column.
+     * @see BoardLocation
      * @param notation The PGN notation inputted (could be modified before this point).
      * @param team The team to check.
      * @param locations The locations out variable to modify.
@@ -154,6 +160,7 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a piece moving (non pawn).
+     * @see BoardLocation
      * @param notation The PGN notation.
      * @param team The team to check for.
      * @param locations The locations out variable to modify.
@@ -169,6 +176,7 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a pawn moving.
+     * @see BoardLocation
      * @param notation The PGN notation to check.
      * @param team The team to check.
      * @param locations The locations out variable to modify.
@@ -184,6 +192,7 @@ public class PGNHelper {
     /**
      * Handles returning and setting the values for the
      * board locations from a PGN input.
+     * @see BoardLocation
      * @param pieceLoc The pieceLoc arraylist of BoardLocations.
      * @param locations The locations 2d-array of BoardLocations to return.
      * @param targetLocation The target location to set locations[1] to.
@@ -199,6 +208,7 @@ public class PGNHelper {
 
     /**
      * Gets the board locations for a pawn in a specific column.
+     * @see BoardLocation
      * @param notation The PGN notation to check.
      * @param team The team to check.
      * @param locations The locations out variable to modify.
@@ -236,6 +246,7 @@ public class PGNHelper {
 
     /**
      * Given a start move and an end move, give the PGN notation of the move.
+     * @see BoardLocation
      * @param startMove The start move location.
      * @param endMove The end move location.
      * @return A string containing the PGN notation of a move.
@@ -257,6 +268,8 @@ public class PGNHelper {
     /**
      * Gets the PGN notation from a move where multiple pieces can move
      * to the same location.
+     * @see BoardLocation
+     * @see Piece
      * @param boardCopy The Piece[][] to check against.
      * @param piece The piece that is moving.
      * @param startMove The start location.
@@ -280,6 +293,8 @@ public class PGNHelper {
      * Gets the PGN notation of the end part. Will calculate anything after
      * the piece value and location is put in. Basically does the last two thirds
      * of the notation calculation.
+     * @see BoardLocation
+     * @see Piece
      * @param boardCopy The Piece[][] to check against.
      * @param piece The piece that is moving.
      * @param startMove The start location.
@@ -309,6 +324,8 @@ public class PGNHelper {
     /**
      * Gets the PGN notation of a single piece move. So a move
      * where only one piece can go to that location.
+     * @see BoardLocation
+     * @see Piece
      * @param boardCopy The Piece[][] to check against.
      * @param piece The piece that is moving.
      * @param startMove The start location.
@@ -323,6 +340,8 @@ public class PGNHelper {
 
     /**
      * Is the move currently in a promoting pawn state.
+     * @see BoardLocation
+     * @see Piece
      * @param piece The piece moving.
      * @param endMove The end location.
      * @return True if the pawn can be promoted.
@@ -333,6 +352,8 @@ public class PGNHelper {
 
     /**
      * Is the move currently capturing another piece.
+     * @see BoardLocation
+     * @see Piece
      * @param board The Piece[][] to check against.
      * @param endMove The end location.
      * @return
@@ -343,6 +364,8 @@ public class PGNHelper {
 
     /**
      * Checks if the move is en-passant.
+     * @see BoardLocation
+     * @see Piece
      * @param board The Piece[][] to check.
      * @param startMove The start location.
      * @param endMove The end location.
@@ -363,6 +386,8 @@ public class PGNHelper {
     /**
      * Checks from a given move and simulates to see if this move
      * will cause a check, or checkmate.
+     * @see BoardLocation
+     * @see Piece
      * @param boardCopy The Piece[][] to check against.
      * @param piece The piece that is moving.
      * @param startMove The start location.
@@ -383,6 +408,8 @@ public class PGNHelper {
 
     /**
      * Checks if the other team is in check by simulating a move.
+     * @see BoardLocation
+     * @see Piece
      * @param boardCopy The Piece[][] to check against.
      * @param piece The piece moving.
      * @param startMove The start location.
@@ -425,10 +452,17 @@ public class PGNHelper {
         }
     }
 
+    /**
+     * Sets the promotion piece to a value.
+     * @param promotionPiece The value to set the promotion piece to.
+     */
     public void setPromotionPiece(String promotionPiece) {
         this.promotionPiece = promotionPiece;
     }
 
+    /**
+     * Sets the promotion piece to null.
+     */
     public void resetPromotionPiece() {
         this.promotionPiece = null;
     }

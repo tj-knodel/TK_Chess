@@ -5,7 +5,6 @@ import org.junit.Before;
 
 import java.util.ArrayList;
 
-import org.junit.After;
 import org.junit.Assert;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.*;
@@ -175,6 +174,6 @@ public class BoardTest {
         BoardLocation start_loc = new BoardLocation(4, 6);
         BoardLocation end_loc = new BoardLocation(4, 4);
         Piece piece = testBoard.getBoard()[6][4];
-        Assert.assertTrue(testBoard.applyMove(piece, start_loc, end_loc).wasSuccessful);
+        Assert.assertTrue(testBoard.applyMove(piece, start_loc, end_loc).isSuccessful);
     }
 }
