@@ -348,8 +348,12 @@ public class PGNHelper {
      * @return True if en-passant was done.
      */
     public boolean isEnPassant(Piece[][] board, BoardLocation startMove, BoardLocation endMove) {
+        if (this.board.getLastPieceMovedId() != Piece.PAWN || this.board.getCurrentMoveLocation() == null)
+            return false;
         Piece pieceMoving = board[startMove.row][startMove.column];
         if (!(pieceMoving instanceof Pawn))
+            return false;
+        if (startMove.row != this.board.getCurrentMoveLocation().row)
             return false;
         int targetRow = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? endMove.row + 1 : endMove.row - 1;
         return board[targetRow][endMove.column] instanceof Pawn;

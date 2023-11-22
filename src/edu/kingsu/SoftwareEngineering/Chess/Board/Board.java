@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
@@ -55,9 +57,9 @@ public class Board {
     private BoardLocation lastMoveLocation;
 
     /**
-     * The last move start location of the last applied move.
+     * The last piece that moved id.
      */
-    private BoardLocation lastMoveStartLocation;
+    private int lastPieceMoveId;
 
     /**
      * The location of the currently applied move.
@@ -334,6 +336,8 @@ public class Board {
             MoveResult result = applyMovePGNNotation(movesList.get(i));
             if (result.wasSuccessful) {
                 updateNotation(result.notation);
+            } else {
+                JOptionPane.showConfirmDialog(null, "Could not apply move: " + movesList.get(i));
             }
         }
         gameLoop.redrawUI();
@@ -383,16 +387,19 @@ public class Board {
      * @return The MoveResult of the move that was applied.
      */
     public MoveResult applyMovePGNNotation(String notation) {
+        MoveResult result = new MoveResult();
         BoardLocation[] locations = pgnHelper.getBoardLocationsFromPGN(notation, getTeamTurn());
         BoardLocation startMove = locations[0];
         BoardLocation endMove = locations[1];
+        if (startMove == null || endMove == null) {
+            return result;
+        }
         Piece pieceMoving = board[startMove.row][startMove.column];
         String promotionPiece = null;
         if (notation.contains("=")) {
             promotionPiece = notation.split("=")[1];
         }
-        MoveResult result = applyMoveInternal(pieceMoving, startMove, endMove, true, promotionPiece);
-        //        switchTeam();
+        result = applyMoveInternal(pieceMoving, startMove, endMove, true, promotionPiece);
         return result;
     }
 
@@ -410,7 +417,6 @@ public class Board {
             gameLoop.redrawUI();
             gameLoop.sendUpdateBoardState();
         }
-        //        switchTeam();
         return result;
     }
 
@@ -424,17 +430,6 @@ public class Board {
     }
 
     private void switchTeam() {
-        //        if(!firstMove) {
-        //            if(currentTeam == Team.WHITE_TEAM) {
-        //                currentTeam = Team.BLACK_TEAM;
-        //            } else {
-        //                currentTeam = Team.WHITE_TEAM;
-        ////                moveCount++;
-        //            }
-        //        } else {
-        //            firstMove = false;
-        //        }
-
         if (currentTeam == Team.WHITE_TEAM) {
             currentTeam = Team.BLACK_TEAM;
         } else {
@@ -507,6 +502,7 @@ public class Board {
         lastMoveLocation = startMove;
         lastMoveResult = result;
         result.notation = moveNotation;
+        lastPieceMoveId = pieceMoving.getPieceID();
         switchTeam();
 
         return result;
@@ -558,6 +554,14 @@ public class Board {
      */
     public String getPromotionPiece() {
         return gameLoop.getPromotionPiece();
+    }
+
+    /**
+     * Gets the id of the last moved piece.
+     * @return The id of the last moved piece.
+     */
+    public int getLastPieceMovedId() {
+        return lastPieceMoveId;
     }
 
     /**
