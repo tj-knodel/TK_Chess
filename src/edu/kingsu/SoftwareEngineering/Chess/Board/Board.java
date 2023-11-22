@@ -55,6 +55,11 @@ public class Board {
     private BoardLocation lastMoveLocation;
 
     /**
+     * The last move start location of the last applied move.
+     */
+    private BoardLocation lastMoveStartLocation;
+
+    /**
      * The location of the currently applied move.
      */
     private BoardLocation currentMoveLocation;
@@ -484,6 +489,8 @@ public class Board {
             applyCastlingLongSide(board, pieceMoving, startMove, endMove);
         else if (moveNotation.equalsIgnoreCase("O-O"))
             applyCastlingShortSide(board, pieceMoving, startMove, endMove);
+        else if (pgnHelper.isEnPassant(board, startMove, endMove))
+            applyMoveEnPassant(board, pieceMoving, startMove, endMove);
         else
             applyMoveNormal(board, pieceMoving, startMove, endMove);
 
@@ -586,8 +593,24 @@ public class Board {
     }
 
     /**
+     * Handle the move with en-passant.
+     * 
+     * @param board The Piece[][] to apply to.
+     * @param pieceMoving The piece moving.
+     * @param startMove The start location.
+     * @param endMove The end location.
+     */
+    private void applyMoveEnPassant(Piece[][] board, Piece pieceMoving, BoardLocation startMove,
+            BoardLocation endMove) {
+        applyMoveNormal(board, pieceMoving, startMove, endMove);
+        int targetRow = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? endMove.row + 1 : endMove.row - 1;
+        board[targetRow][endMove.column] = new EmptyPiece();
+    }
+
+    /**
      * Handle the move normally by just doing the move.
      *
+     * @param board The Piece[][] to apply to.
      * @param pieceMoving The piece moving.
      * @param startMove   The start location.
      * @param endMove     The end location.

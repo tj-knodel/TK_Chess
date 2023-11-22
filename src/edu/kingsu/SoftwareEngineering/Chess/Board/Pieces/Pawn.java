@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
+import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 
 /**
  * @author Daniell Buchner
@@ -94,6 +95,36 @@ public class Pawn extends Piece {
             }
         }
 
+        // Special move
+        BoardLocation lastPieceMoveLocation = boardClass.getCurrentMoveLocation();
+        if (lastPieceMoveLocation != null) {
+            Piece lastMovePiece = board[lastPieceMoveLocation.row][lastPieceMoveLocation.column];
+            if (lastMovePiece instanceof Pawn
+                    && Math.abs(boardClass.getLastMoveLocation().row - lastPieceMoveLocation.row) == 2) {
+                endMove = new BoardLocation(startMove.column, startMove.row);
+                int targetRow = 0;
+                if (team == Team.WHITE_TEAM)
+                    targetRow = startMove.row - 1;
+                else
+                    targetRow = startMove.row + 1;
+                if (lastPieceMoveLocation.row == endMove.row) {
+                    if (lastPieceMoveLocation.column == endMove.column - 1) {
+                        endMove = new BoardLocation(startMove.column - 1, targetRow);
+                        moveValid = IsMoveValidWithoutPiece(board, endMove);
+                        if (moveValid.isInBoard) {
+                            moves.add(new BoardLocation(startMove.column - 1, targetRow));
+                        }
+                    } else if (lastPieceMoveLocation.column == endMove.column + 1) {
+                        endMove = new BoardLocation(startMove.column + 1, targetRow);
+                        moveValid = IsMoveValidWithoutPiece(board, endMove);
+                        if (moveValid.isInBoard) {
+                            moves.add(new BoardLocation(startMove.column + 1, targetRow));
+                        }
+                    }
+                }
+            }
+        }
+
         // Up Right/Down Right
         endMove = new BoardLocation(startMove.column, startMove.row);
         if (team == 0) {
@@ -137,42 +168,6 @@ public class Pawn extends Piece {
                 }
             }
         }
-
-        // if (!hasMoved) {
-        //     endMove = new BoardLocation(startMove.column, startMove.row);
-        //     if (team == 0)
-        //         endMove.row += 2;
-        //     else if (team == 1)
-        //         endMove.row -= 2;
-
-        //     moveValid = IsMoveValidWithoutPiece(board, endMove);
-        //     if (moveValid.isInBoard) {
-        //         if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-        //             if (moveValid.isEmptySpace) {
-        //                 moves.add(new BoardLocation(endMove.column, endMove.row));
-        //             }
-        //             if (moveValid.isOtherTeam) {
-        //                 moves.add(new BoardLocation(endMove.column, endMove.row));
-        //             }
-        //         }
-        //     }
-        // }
-        //
-        // if (endMove.row < board.length && endMove.row >= 0) {
-        // moves.add(endMove);
-        // }
-        //
-        // if (!hasMoved) {
-        // Move endMove2 = new Move(startMove.column, startMove.row);
-        // if (team == 0)
-        // endMove2.row += 2;
-        // else if (team == 1)
-        // endMove2.row -= 2;
-        //
-        // if (endMove2.row < board.length && endMove2.row >= 0) {
-        // moves.add(endMove2);
-        // }
-        // }
         return moves;
     }
 
