@@ -106,8 +106,8 @@ public class PGNHelper {
             notation = notation.replace("x", "");
             return getBoardLocationsForPieceMove(notation, team, locations);
         } else if (notation.length() == 5 && isNotationCapturing(notation)) {
-            BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(2));
             notation = notation.replace("x", "");
+            BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(2));
             if (Character.isDigit(notation.charAt(1))) {
                 return getBoardLocationsForPieceMoveRow(notation, team, locations, (8 - (notation.charAt(1) - '0')),
                         targetLocation);
