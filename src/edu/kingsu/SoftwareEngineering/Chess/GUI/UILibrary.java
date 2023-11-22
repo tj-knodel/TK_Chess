@@ -184,26 +184,22 @@ public abstract class UILibrary {
   public static JLabel UpgradePieceFrame;
 
   /**
-   * In Upgrade frame Popup shown in MainFrame;
-   * Button to upgrade to upgrade to the queen
+   *TEMP
    */
   public static JButton UpgradeQueenButton;
 
-    /**
-   * In Upgrade frame Popup shown in MainFrame;
-   * Button to upgrade to upgrade to the Bishop
+  /**
+   *TEMP
    */
   public static JButton UpgradeBishopButton;
   
-    /**
-   * In Upgrade frame Popup shown in MainFrame;
-   * Button to upgrade to upgrade to the Rook
+  /**
+   *TEMP
    */
   public static JButton UpgradeRookButton;
   
-    /**
-   * In Upgrade frame Popup shown in MainFrame;
-   * Button to upgrade to upgrade to the Knight
+  /**
+   *TEMP
    */
   public static JButton UpgradeKnightButton;
 
