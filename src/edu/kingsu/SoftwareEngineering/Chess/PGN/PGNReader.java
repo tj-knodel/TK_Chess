@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * The class responsible for construction moves
@@ -57,52 +58,59 @@ public class PGNReader {
             e.printStackTrace();
         }
 
-        String comment = "";
-        int paren = 0;
-        int inComment = 0;
-        System.out.println(allMoves);
-        for (String str : allMoves.split(" ")) {
-            if (str.isEmpty())
+        int parenCounter = 0;
+        int dollarSign = 0;
+
+        String moveOnlyString = "";
+
+        for (char c : allMoves.toCharArray()) {
+            if (c == '(') {
+                parenCounter++;
                 continue;
-            if (str.endsWith("."))
+            }else if (c == '$') {
+                dollarSign++;
                 continue;
-            if (str.startsWith("{"))
-                inComment++;
-            else if (str.endsWith("}"))
-                inComment--;
-            // if (inComment > 0)
-            //     comment += str;
-            else if (str.startsWith("("))
-                paren++;
-            else if (str.endsWith(")"))
-                paren--;
-            else if (str.startsWith("$"))
+            } else if (c == ')') {
+                parenCounter--;
                 continue;
-            else if (inComment == 0 && paren == 0 && !str.endsWith("}")) {
-                moves.add(new PGNMove(str));
-                System.out.println(str);
             }
-            // System.out.println(str);
-            // if (str.isEmpty())
-            //     continue;
-            // if (str.endsWith(".")) {
-            //     continue;
-            // } else if (str.startsWith("{") || str.startsWith("(")) {
-            //     inComment = true;
-            // }
-            // if (inComment) {
-            //     comment += str + " ";
-            //     if (str.endsWith("}") || str.endsWith(")")) {
-            //         inComment = false;
-            //         moves.get(moves.size() - 1).setComment(comment.replace("{", "").replace("}", ""));
-            //     }
-            // } else if (!str.endsWith(".")) {
-            //     moves.add(new PGNMove(str));
-            // }
+            if (dollarSign > 0 && c != ' ') {
+                continue;
+            } else if (c == ' ' && dollarSign > 0) {
+                dollarSign = 0;
+            }
+            if (parenCounter == 0 && dollarSign == 0) {
+                moveOnlyString += c;
+            }
         }
-        // for (PGNMove m : moves) {
-        //     System.out.println(m.getMoveString());
-        // }
+
+        String comment = "";
+        boolean inComment = false;
+
+        moveOnlyString = moveOnlyString.replace(".", ". ");
+        for (String str : moveOnlyString.split(" ")) {
+            if (str.isEmpty()) {
+                continue;
+            }
+            if (str.endsWith(".")) {
+                continue;
+            } else if (str.startsWith("{")) {
+                inComment = true;
+            }
+            if (inComment) {
+                comment += str + " ";
+                if (str.endsWith("}")) {
+                    inComment = false;
+                    moves.get(moves.size() - 1).setComment(comment.replace("{", "").replace("}", ""));
+                }
+             } else if (!str.endsWith(".")) {
+                 moves.add(new PGNMove(str.replace("#", "")));
+             }
+        }
+
+//        for(PGNMove move : moves) {
+//            System.out.println("Move: " + move.getMoveString() + " Comment: " + move.getComment());
+//        }
 
         return moves;
     }

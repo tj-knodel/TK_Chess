@@ -1,6 +1,7 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
@@ -326,8 +327,9 @@ public class Board {
         ArrayList<String> movesList = new ArrayList<>(algebraicNotationMovesList);
         for (int i = 0; i < movesList.size() - undoMoveCount; i++) {
             MoveResult result = applyMovePGNNotation(movesList.get(i));
-            if (result.wasSuccessful)
+            if (result.wasSuccessful) {
                 updateNotation(result.notation);
+            }
         }
         gameLoop.redrawUI();
         gameLoop.sendUpdateBoardState();

@@ -41,6 +41,7 @@ public class GameLoop {
     private GameType gameType;
     private Timer whiteTimer;
     private Timer blackTimer;
+    private String promote = null;
 
     public GameLoop() {
         this.aiTeam = -1;
@@ -99,16 +100,20 @@ public class GameLoop {
 
         UILibrary.UpgradeQueenButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
+            promote = "Q";
         });
         UILibrary.UpgradeBishopButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
+            promote = "B";
         });
         UILibrary.UpgradeRookButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
+            promote = "R";
         });
 
         UILibrary.UpgradeKnightButton.addActionListener(e -> {
             UILibrary.UpgradePieceFrame.setVisible(false);
+            promote = "K";
         });
 
         UILibrary.StepBackwards_Button.addActionListener(e -> {
@@ -301,10 +306,9 @@ public class GameLoop {
 
     public String getPromotionPiece() {
         if (aiTeam == board.getTeamTurn())
-            return "R";
+            return "Q";
         else {
-            JOptionPane.showConfirmDialog(null, "");
-            return "R";
+            return "Q";
         }
     }
 
@@ -332,13 +336,13 @@ public class GameLoop {
             aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         }
         String teamName = (board.getTeamTurn() == Team.WHITE_TEAM) ? "WHITE'S TURN" : "BLACK'S TURN";
-//        if(board.getTeamTurn() == Team.WHITE_TEAM) {
-//            blackTimer.stopTimer();
-//            whiteTimer.startTimer();
-//        } else {
-//            whiteTimer.stopTimer();
-//            blackTimer.startTimer();
-//        }
+        //        if(board.getTeamTurn() == Team.WHITE_TEAM) {
+        //            blackTimer.stopTimer();
+        //            whiteTimer.startTimer();
+        //        } else {
+        //            whiteTimer.stopTimer();
+        //            blackTimer.startTimer();
+        //        }
         UILibrary.PlayerTurn.setText(teamName);
         runAI();
     }
