@@ -132,11 +132,7 @@ public class PGNHelper {
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(String.valueOf(notation.charAt(0)));
         ArrayList<BoardLocation> pieceLoc = board.getBoardLocationsForTeamForPieceToTargetLocationForRow(
                 board.getBoard(), team, pieceId, targetLocation, row);
-        if (pieceLoc.size() != 1)
-            return locations;
-        locations[0] = pieceLoc.get(0);
-        locations[1] = targetLocation;
-        return locations;
+        return handleLocations(pieceLoc, locations, targetLocation);
     }
 
     /**
@@ -153,11 +149,7 @@ public class PGNHelper {
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(String.valueOf(notation.charAt(0)));
         ArrayList<BoardLocation> pieceLoc = board.getBoardLocationsForTeamForPieceToTargetLocationForColumn(
                 board.getBoard(), team, pieceId, targetLocation, column);
-        if (pieceLoc.size() != 1)
-            return locations;
-        locations[0] = pieceLoc.get(0);
-        locations[1] = targetLocation;
-        return locations;
+        return handleLocations(pieceLoc, locations, targetLocation);
     }
 
     /**
@@ -172,11 +164,7 @@ public class PGNHelper {
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(String.valueOf(notation.charAt(0)));
         ArrayList<BoardLocation> pieceLoc = board.getBoardLocationsForTeamForPieceToTargetLocation(board.getBoard(),
                 team, pieceId, targetLocation);
-        if (pieceLoc.size() != 1)
-            return locations;
-        locations[0] = pieceLoc.get(0);
-        locations[1] = targetLocation;
-        return locations;
+        return handleLocations(pieceLoc, locations, targetLocation);
     }
 
     /**
@@ -187,12 +175,25 @@ public class PGNHelper {
      * @return The BoardLocation 2d array.
      */
     private BoardLocation[] getBoardLocationsForPawnMove(String notation, int team, BoardLocation[] locations) {
+        BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(0, 2));
         ArrayList<BoardLocation> pawnLoc = board.getBoardLocationsForTeamForPieceToTargetLocation(board.getBoard(),
-                team, Piece.PAWN, BOARD_LOCATIONS_FROM_STRING.get(notation.substring(0, 2)));
-        if (pawnLoc.size() != 1)
+                team, Piece.PAWN, targetLocation);
+        return handleLocations(pawnLoc, locations, targetLocation);
+    }
+
+    /**
+     * Handles returning and setting the values for the
+     * board locations from a PGN input.
+     * @param pieceLoc The pieceLoc arraylist of BoardLocations.
+     * @param locations The locations 2d-array of BoardLocations to return.
+     * @param targetLocation The target location to set locations[1] to.
+     * @return The locations 2d-array.
+     */
+    private BoardLocation[] handleLocations(ArrayList<BoardLocation> pieceLoc, BoardLocation[] locations, BoardLocation targetLocation) {
+        if (pieceLoc.size() != 1)
             return locations;
-        locations[0] = pawnLoc.get(0);
-        locations[1] = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(0, 2));
+        locations[0] = pieceLoc.get(0);
+        locations[1] = targetLocation;
         return locations;
     }
 

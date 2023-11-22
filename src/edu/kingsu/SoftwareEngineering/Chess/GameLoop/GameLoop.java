@@ -98,23 +98,23 @@ public class GameLoop {
             resumeGame();
         });
 
-        UILibrary.UpgradeQueenButton.addActionListener(e -> {
-            UILibrary.UpgradePieceFrame.setVisible(false);
-            promote = "Q";
-        });
-        UILibrary.UpgradeBishopButton.addActionListener(e -> {
-            UILibrary.UpgradePieceFrame.setVisible(false);
-            promote = "B";
-        });
-        UILibrary.UpgradeRookButton.addActionListener(e -> {
-            UILibrary.UpgradePieceFrame.setVisible(false);
-            promote = "R";
-        });
-
-        UILibrary.UpgradeKnightButton.addActionListener(e -> {
-            UILibrary.UpgradePieceFrame.setVisible(false);
-            promote = "K";
-        });
+//        UILibrary.UpgradeQueenButton.addActionListener(e -> {
+//            UILibrary.UpgradePieceFrame.setVisible(false);
+//            promote = "Q";
+//        });
+//        UILibrary.UpgradeBishopButton.addActionListener(e -> {
+//            UILibrary.UpgradePieceFrame.setVisible(false);
+//            promote = "B";
+//        });
+//        UILibrary.UpgradeRookButton.addActionListener(e -> {
+//            UILibrary.UpgradePieceFrame.setVisible(false);
+//            promote = "R";
+//        });
+//
+//        UILibrary.UpgradeKnightButton.addActionListener(e -> {
+//            UILibrary.UpgradePieceFrame.setVisible(false);
+//            promote = "K";
+//        });
 
         UILibrary.StepBackwards_Button.addActionListener(e -> {
             if (aiVsAi)
@@ -308,7 +308,8 @@ public class GameLoop {
         if (aiTeam == board.getTeamTurn())
             return "Q";
         else {
-            return "Q";
+            String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
+            return String.valueOf(result.charAt(0));
         }
     }
 
