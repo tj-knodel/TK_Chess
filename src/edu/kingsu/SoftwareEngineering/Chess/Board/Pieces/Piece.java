@@ -12,7 +12,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
  * besides the piece id for the pieces to access.
  *
  * @author Daniell Buchner
- * @version 1.2.0
+ * @version 1.3.0
  */
 public abstract class Piece {
 
@@ -83,6 +83,7 @@ public abstract class Piece {
 
     /**
      * Checks if a move is within the bounds of the board.
+     * @see BoardLocation
      * @param board The board to check in.
      * @param move The location that is desired to be checked.
      * @return True if within the bounds, false otherwise.
@@ -95,7 +96,7 @@ public abstract class Piece {
      * Check if there is a piece from the other team at that location,
      * or if you cannot move there. It just validates that the move can
      * be done theoretically.
-     * 
+     * @see BoardLocation
      * @param board The board the game is currently on
      * @param move  The location to move to
      * @return MoveValidity class representing the desired move.
@@ -176,8 +177,17 @@ public abstract class Piece {
      */
     public final static HashMap<Integer, String> CHESS_NOTATION_VALUE;
 
+    /**
+     * Gets the piece id from a string. So "P" would give Piece.PAWN id.
+     */
     public static final HashMap<String, Integer> PIECE_ID_FROM_STRING;
 
+    /**
+     * Creates a piece class from an id and team.
+     * @param pieceId The piece to create.
+     * @param team The team to assign it.
+     * @return The Piece that was created.
+     */
     public static Piece createPieceFromTeam(int pieceId, int team) {
         switch (pieceId) {
             case Piece.BISHOP:
@@ -190,6 +200,8 @@ public abstract class Piece {
                 return new Queen(team);
             case Piece.PAWN:
                 return new Pawn(team);
+            case Piece.KING:
+                return new King(team);
             default:
                 return new EmptyPiece();
         }
