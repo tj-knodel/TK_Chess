@@ -22,6 +22,7 @@ public class Board {
      * The representation of the board as a 2D-array
      * of pieces. This is build from the PGN format or
      * built from scratch based on the board.
+     * @see Piece
      */
     private Piece[][] board;
 
@@ -50,6 +51,7 @@ public class Board {
 
     /**
      * The last move location of the last applied move.
+     * @see BoardLocation
      */
     private BoardLocation lastMoveLocation;
 
@@ -60,6 +62,7 @@ public class Board {
 
     /**
      * The location of the currently applied move.
+     * @see BoardLocation
      */
     private BoardLocation currentMoveLocation;
 
@@ -71,6 +74,7 @@ public class Board {
     /**
      * The GameLoop for the board to keep track of.
      * Used to call methods to follow the MVC pattern.
+     * @see GameLoop
      */
     private final GameLoop gameLoop;
 
@@ -81,20 +85,22 @@ public class Board {
 
     /**
      * The last move result of a successful move.
+     * @see MoveResult
      */
     private MoveResult lastMoveResult;
 
     /**
      * The PGNHelper class to help with PGN notation.
+     * @see PGNHelper
      */
     private PGNHelper pgnHelper;
 
     /**
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
+     * @see GameLoop
      */
     public Board(GameLoop gameLoop) {
-        // board = new Piece[8][8];
         this.algebraicRepresentation = new StringBuilder();
         this.pgnHelper = new PGNHelper(this);
         this.algebraicNotationMovesList = new ArrayList<>();
@@ -108,7 +114,8 @@ public class Board {
 
     /**
      * Creates a new board from the data taken from a different board
-     *
+     * @see Piece
+     * @see GameLoop
      * @param pieces       the array of pieces and their position
      * @param moveCount    the amount of moves made
      * @param algebraicRep the current sequence of moves in a StringBuilder
@@ -199,7 +206,7 @@ public class Board {
 
     /**
      * Checks if two boards are equal to one another.
-     *
+     * @see Piece
      * @param board The Piece[][] to check.
      * @return True if they are equal.
      */
@@ -236,7 +243,7 @@ public class Board {
 
     /**
      * Gets the last move result.
-     *
+     * @see MoveResult
      * @return The MoveResult of the last move.
      */
     public MoveResult getLastMoveResult() {
@@ -278,7 +285,7 @@ public class Board {
 
     /**
      * Get the last move location.
-     *
+     * @see BoardLocation
      * @return The last move location.
      */
     public BoardLocation getLastMoveLocation() {
@@ -287,7 +294,7 @@ public class Board {
 
     /**
      * Get the current move location.
-     *
+     * @see BoardLocation
      * @return The current move location.
      */
     public BoardLocation getCurrentMoveLocation() {
