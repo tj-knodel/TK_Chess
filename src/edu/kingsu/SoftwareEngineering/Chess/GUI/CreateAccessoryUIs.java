@@ -2,11 +2,13 @@ package edu.kingsu.SoftwareEngineering.Chess.GUI;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Creates Miscellaneous accessory frames;
@@ -130,21 +132,28 @@ public class CreateAccessoryUIs {
 		UILibrary.UpgradePieceFrame.add(upgradeRookButton);
 		UILibrary.UpgradePieceFrame.add(upgradeKnightButton);
 		UILibrary.UpgradePieceFrame.add(upgradeBishopButton);
-		UILibrary.UpgradeQueenButton = upgradeQueenButton;
-		UILibrary.UpgradeRookButton = upgradeRookButton;
-		UILibrary.UpgradeKnightButton = upgradeKnightButton;
-		UILibrary.UpgradeBishopButton = upgradeBishopButton;
 
 		UILibrary.MainFrame.add(UILibrary.UpgradePieceFrame);
 		UILibrary.UpgradePieceFrame.setVisible(false);
 	}
+
+	// -----------------------------------------------------
+	// -----------------------------------------------------
+
+	private void removeActionListeners(JButton button) {
+		for (ActionListener listener : button.getActionListeners()) {
+			button.removeActionListener(listener);
+		}
+	}
+
+	private String chosenPiece;
 
 	/**
 	 * Shows the upgrade piece frame
 	 * 
 	 * @param isWhite true = upgrading a white piece, false = upgrading a black piece
 	 */
-	public void showUpgradeFrame(boolean isWhite) {
+	public String showUpgradeFrame(boolean isWhite) {
 		String text = (isWhite) ? "white" : "black";
 
 		assignImage("queen_" + text + ".png", 89, upgradeQueenButton);
@@ -152,8 +161,39 @@ public class CreateAccessoryUIs {
 		assignImage("knight_" + text + ".png", 393, upgradeKnightButton);
 		assignImage("bishop_" + text + ".png", 541, upgradeBishopButton);
 		UILibrary.UpgradePieceFrame.setVisible(true);
-	}
 
+		
+		// Add the action Listeners
+		chosenPiece = null;
+		upgradeQueenButton.addActionListener(e -> {
+			chosenPiece = "Queen";
+		});
+		upgradeRookButton.addActionListener(e -> {
+			chosenPiece = "Rook";
+		});
+		upgradeKnightButton.addActionListener(e -> {
+			chosenPiece = "Knight";
+		});
+		upgradeBishopButton.addActionListener(e -> {
+			chosenPiece = "Bishop";
+		});
+
+		// Wait until a button is clicked
+		try {
+			do {
+				Thread.sleep(50);
+			} while (chosenPiece == null);
+		} catch (Exception e) {}
+		
+
+		// Button was clicked, remove the action listeners
+		removeActionListeners(upgradeQueenButton);
+		removeActionListeners(upgradeRookButton);
+		removeActionListeners(upgradeKnightButton);
+		removeActionListeners(upgradeBishopButton);
+
+		return chosenPiece;
+	}
 
 	// -----------------------------------------------------
 	// -----------------------------------------------------
