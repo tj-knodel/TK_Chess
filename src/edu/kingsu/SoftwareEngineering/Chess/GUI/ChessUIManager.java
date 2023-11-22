@@ -115,7 +115,6 @@ public class ChessUIManager {
     public static void showMainFrame() {
         UILibrary.MainFrame.setVisible(true);
         UILibrary.NewGameFrame.setVisible(false);
-        UILibrary.SetAIStrengthSliderFrame.setVisible(false);
     }
 
     /**
@@ -124,18 +123,9 @@ public class ChessUIManager {
      */
     public static void showNewGameFrame() {
         UILibrary.NewGameFrame.setVisible(true);
-        UILibrary.SetAIStrengthSliderFrame.setVisible(false);
         UILibrary.MainFrame.setVisible(false);
     }
 
-    /**
-     * Shows the Slider Frame in the chess JFrame
-     */
-    public static void showSliderFrame() {
-        UILibrary.SetAIStrengthSliderFrame.setVisible(true);
-        UILibrary.MainFrame.setVisible(false);
-        UILibrary.NewGameFrame.setVisible(false);
-    }
 
     // ----------------------------------------------------------------------------------------------------------
     // -----------------Managing Changing the Computer Difficulty Slider
@@ -152,22 +142,6 @@ public class ChessUIManager {
         return new ImageIcon(getClass().getClassLoader().getResource(imageToGet));
     }
 
-    /**
-     * Sets the image description of what color computer Ai your changing in the UI
-     * 
-     * @param isWhite true if the computer AI is playing white, false if playing
-     *                black
-     */
-    public void setSliderFrameToColor(boolean isWhite) {
-        if (isWhite) {
-            UILibrary.CurrentSelectedComputer_ImageLabel.image = getImage("computer_white.png");
-            UILibrary.CurrentSelectedComputer_TextLabel.setText("White Computer");
-        } else {
-            UILibrary.CurrentSelectedComputer_ImageLabel.image = getImage("computer_black.png");
-            UILibrary.CurrentSelectedComputer_TextLabel.setText("Black Computer");
-        }
-        UILibrary.resizeModule.resizeEverything();
-    }
 
 
     /**

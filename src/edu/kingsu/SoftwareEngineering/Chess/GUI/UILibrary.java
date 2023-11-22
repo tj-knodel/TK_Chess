@@ -146,36 +146,6 @@ public abstract class UILibrary {
    */
   public static JButton LearnChessButton;
 
-  // ----- Set Ai Strength Slider Frame -----------------
-  /**
-   * Located in the Set AI Strength Frame;
-   * JButton which confirms the user slider selection
-   */
-  public static JButton ConfirmSliderButton;
-
-  /**
-   * Located in the Set AI Strength Frame;
-   * JButton which cancels the user slider selection
-   */
-  public static JButton CancelSliderButton;
-
-  /**
-   * Located in the Set AI Strength Frame;
-   * JButton which confirms the user slider selection
-   */
-  public static JSlider SetAiStrengthSlider;
-
-  /**
-   * Located in the Set AI Strength Frame;
-   * JLabel (image) which informs the user which color AI they are changing
-   */
-  public static UIImage_Label CurrentSelectedComputer_ImageLabel;
-
-  /**
-   * Located in the Set AI Strength Frame;
-   * JLabel (text) which informs the user which color AI they are changing
-   */
-  public static JLabel CurrentSelectedComputer_TextLabel;
 
   /**
    * Popup shown in MainFrame;

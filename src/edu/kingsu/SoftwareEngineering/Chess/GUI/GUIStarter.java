@@ -22,7 +22,6 @@ public class GUIStarter {
         UILibrary.resizeModule = new ResizeManager();
         new CreateMainFrame(); // Create the frame
         new CreateStartFrame();
-        new CreateCompSliderFrame();
         chessUIManager = new ChessUIManager(new CreateAccessoryUIs());
         new AboutMenu();
         new ChangeBoardAppearance();
@@ -32,17 +31,14 @@ public class GUIStarter {
         // Frame Configuration
         UILibrary.ChessJFrame.add(UILibrary.NewGameFrame);
         UILibrary.ChessJFrame.add(UILibrary.MainFrame);
-        UILibrary.ChessJFrame.add(UILibrary.SetAIStrengthSliderFrame);
         UILibrary.NewGameFrame.setVisible(false);
         UILibrary.MainFrame.setVisible(false);
-        UILibrary.SetAIStrengthSliderFrame.setVisible(false);
 
         // Show UI
         UILibrary.ChessJFrame.setVisible(true);
 
         //ChessUIManager.showNewGameFrame();
         ChessUIManager.showMainFrame();
-        //ChessUIManager.showSliderFrame();
     }
 
 }

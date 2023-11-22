@@ -83,16 +83,16 @@ public class GameLoop {
 
         UILibrary.ShowAIStrengthSlider_JMenuItem.addActionListener(e -> {
             board.setIsPaused(true);
-            ChessUIManager.showSliderFrame();
+            //ChessUIManager.showSliderFrame();
         });
 
-        UILibrary.CancelSliderButton.addActionListener(e -> {
-            resumeGame();
-        });
-
-        UILibrary.ConfirmSliderButton.addActionListener(e -> {
-            resumeGame();
-        });
+       // UILibrary.CancelSliderButton.addActionListener(e -> {
+       //     resumeGame();
+      // });
+//
+       // UILibrary.ConfirmSliderButton.addActionListener(e -> {
+       //     resumeGame();
+       // });
 
         //        UILibrary.UpgradeQueenButton.addActionListener(e -> {
         //            UILibrary.UpgradePieceFrame.setVisible(false);
