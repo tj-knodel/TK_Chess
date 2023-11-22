@@ -2,15 +2,12 @@ package edu.kingsu.SoftwareEngineering.Chess.GUI;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Timer;
 
 /**
  * Creates Miscellaneous accessory frames;
@@ -153,54 +150,7 @@ public class CreateAccessoryUIs {
 	 * Shows the upgrade piece frame
 	 * 
 	 * @param isWhite true = upgrading a white piece, false = upgrading a black piece
-	 * /
-	public String showUpgradeFrame(boolean isWhite) {
-		String text = (isWhite) ? "white" : "black";
-	
-		assignImage("queen_" + text + ".png", 89, upgradeQueenButton);
-		assignImage("rook_" + text + ".png", 231, upgradeRookButton);
-		assignImage("knight_" + text + ".png", 393, upgradeKnightButton);
-		assignImage("bishop_" + text + ".png", 541, upgradeBishopButton);
-		System.out.println("Set visible");
-		UILibrary.UpgradePieceFrame.setVisible(true);
-		System.out.println("Set visible true");
-		UILibrary.ChessJFrame.repaint();
-	
-		// Add the action Listeners
-		chosenPiece = null;
-	
-		upgradeQueenButton.addActionListener(e -> {
-			chosenPiece = "Queen";
-		});
-		upgradeRookButton.addActionListener(e -> {
-			chosenPiece = "Rook";
-		});
-		upgradeKnightButton.addActionListener(e -> {
-			chosenPiece = "Knight";
-		});
-		upgradeBishopButton.addActionListener(e -> {
-			chosenPiece = "Bishop";
-			notify();
-		});
-	
-		// Wait until a button is clicked
-		System.out.println("Wait");
-	
-		try	{
-			wait();
-		} catch (Exception e) {}
-	
-		// Button was clicked, remove the action listeners
-		System.out.println("Clicked");
-		UILibrary.UpgradePieceFrame.setVisible(false);
-		removeActionListeners(upgradeQueenButton);
-		removeActionListeners(upgradeRookButton);
-		removeActionListeners(upgradeKnightButton);
-		removeActionListeners(upgradeBishopButton);
-	
-		return chosenPiece;
-	}
-	*/
+	 */
 	private Object[] options = { "QUEEN", "ROOK", "BISHOP", "KNIGHT" };
 	public String showUpgradeFrame(boolean isWhite) {
 
