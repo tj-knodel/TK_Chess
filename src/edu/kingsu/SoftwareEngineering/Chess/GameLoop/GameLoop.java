@@ -6,7 +6,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.Random;
 
 import javax.swing.*;
@@ -19,8 +18,6 @@ import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
-import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNMove;
-import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
 import edu.kingsu.SoftwareEngineering.Chess.Players.AIPlayer;
 import edu.kingsu.SoftwareEngineering.Chess.Players.AIThread;
 
@@ -41,7 +38,6 @@ public class GameLoop {
     private GameType gameType;
     private Timer whiteTimer;
     private Timer blackTimer;
-    private String promote = null;
 
     public GameLoop() {
         this.aiTeam = -1;
@@ -98,23 +94,23 @@ public class GameLoop {
             resumeGame();
         });
 
-//        UILibrary.UpgradeQueenButton.addActionListener(e -> {
-//            UILibrary.UpgradePieceFrame.setVisible(false);
-//            promote = "Q";
-//        });
-//        UILibrary.UpgradeBishopButton.addActionListener(e -> {
-//            UILibrary.UpgradePieceFrame.setVisible(false);
-//            promote = "B";
-//        });
-//        UILibrary.UpgradeRookButton.addActionListener(e -> {
-//            UILibrary.UpgradePieceFrame.setVisible(false);
-//            promote = "R";
-//        });
-//
-//        UILibrary.UpgradeKnightButton.addActionListener(e -> {
-//            UILibrary.UpgradePieceFrame.setVisible(false);
-//            promote = "K";
-//        });
+        //        UILibrary.UpgradeQueenButton.addActionListener(e -> {
+        //            UILibrary.UpgradePieceFrame.setVisible(false);
+        //            promote = "Q";
+        //        });
+        //        UILibrary.UpgradeBishopButton.addActionListener(e -> {
+        //            UILibrary.UpgradePieceFrame.setVisible(false);
+        //            promote = "B";
+        //        });
+        //        UILibrary.UpgradeRookButton.addActionListener(e -> {
+        //            UILibrary.UpgradePieceFrame.setVisible(false);
+        //            promote = "R";
+        //        });
+        //
+        //        UILibrary.UpgradeKnightButton.addActionListener(e -> {
+        //            UILibrary.UpgradePieceFrame.setVisible(false);
+        //            promote = "K";
+        //        });
 
         UILibrary.StepBackwards_Button.addActionListener(e -> {
             if (aiVsAi)
@@ -309,7 +305,7 @@ public class GameLoop {
             return "Q";
         else {
             String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
-            if(result == null) {
+            if (result == null) {
                 System.out.println("NULL");
                 return "P";
             }

@@ -3,8 +3,6 @@ package edu.kingsu.SoftwareEngineering.Chess.Board;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
@@ -44,11 +42,6 @@ public class Board {
      * How far should the undo moves be done.
      */
     private int undoMoveCount;
-
-    /**
-     * The boolean flipping for PGN format string.
-     */
-    private boolean firstMove;
 
     /**
      * The current team's turn.
@@ -102,14 +95,13 @@ public class Board {
      */
     public Board(GameLoop gameLoop) {
         // board = new Piece[8][8];
-        algebraicRepresentation = new StringBuilder();
+        this.algebraicRepresentation = new StringBuilder();
         this.pgnHelper = new PGNHelper(this);
-        algebraicNotationMovesList = new ArrayList<>();
+        this.algebraicNotationMovesList = new ArrayList<>();
         this.currentTeam = Team.WHITE_TEAM;
-        undoMoveCount = 0;
-        firstMove = true;
-        moveCount = 1;
-        isPaused = false;
+        this.undoMoveCount = 0;
+        this.moveCount = 1;
+        this.isPaused = false;
         this.gameLoop = gameLoop;
         initializeBoard();
     }
@@ -124,9 +116,6 @@ public class Board {
     public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep, GameLoop gameLoop) {
         algebraicRepresentation = new StringBuilder();//algebraicRep;
         algebraicNotationMovesList = new ArrayList<>();
-        if (moveCount >= 1) {
-            firstMove = false;
-        }
         this.moveCount = moveCount;
         this.gameLoop = gameLoop;
         board = new Piece[8][8];
@@ -148,7 +137,6 @@ public class Board {
         this.board = cloneBoard2DArray(board.board);
         this.currentMoveLocation = board.currentMoveLocation;
         this.currentTeam = board.currentTeam;
-        this.firstMove = board.firstMove;
         this.gameLoop = board.gameLoop;
         this.isPaused = board.isPaused;
         this.lastMoveLocation = board.lastMoveLocation;
@@ -350,7 +338,6 @@ public class Board {
         initializeBoard();
         ChessUIManager.clearMovesLabel();
         currentTeam = Team.WHITE_TEAM;
-        firstMove = true;
         moveCount = 1;
         if (isUndo)
             undoMoveCount++;
@@ -363,7 +350,7 @@ public class Board {
             if (result.isSuccessful()) {
                 updateNotation(result.getNotation());
             } else {
-//                JOptionPane.showConfirmDialog(null, "Could not apply move: " + movesList.get(i));
+                //                JOptionPane.showConfirmDialog(null, "Could not apply move: " + movesList.get(i));
             }
         }
         gameLoop.redrawUI();

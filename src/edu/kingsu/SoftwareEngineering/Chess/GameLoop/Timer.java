@@ -16,7 +16,6 @@ public class Timer implements java.lang.Runnable {
     Thread thread;
     private boolean running = false;
     List<Integer> seconds = Collections.synchronizedList(new ArrayList<>());
-    private GameLoop gameLoop;
     private int team;
 
     public Timer(GameLoop gameLoop, int team) {
@@ -24,7 +23,6 @@ public class Timer implements java.lang.Runnable {
         this.seconds.add(0);
         thread = new Thread(this);
         resetTimer();
-        this.gameLoop = gameLoop;
         this.team = team;
     }
 
@@ -32,7 +30,9 @@ public class Timer implements java.lang.Runnable {
         return seconds.get(0);
     }
 
-    public int getMinutes() { return seconds.get(1); }
+    public int getMinutes() {
+        return seconds.get(1);
+    }
 
     public void resetTimer() {
         seconds.set(0, 0);
@@ -58,16 +58,15 @@ public class Timer implements java.lang.Runnable {
 
                 Thread.sleep(1000L);
                 seconds.set(0, seconds.get(0) + 1);
-                if(seconds.get(0) == 60) {
+                if (seconds.get(0) == 60) {
                     seconds.set(1, seconds.get(1) + 1);
                     seconds.set(0, 0);
                 }
-                if(team == Team.WHITE_TEAM) {
+                if (team == Team.WHITE_TEAM) {
                     UILibrary.WhiteTimer.setText("WHITE TIME: " + toString());
                 } else {
                     UILibrary.BlackTimer.setText("BLACK TIME: " + toString());
                 }
-//                System.out.println(seconds.get(0) + " second has passed");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -80,7 +79,6 @@ public class Timer implements java.lang.Runnable {
         try {
             thread.join();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
