@@ -78,15 +78,8 @@ public class ChessUIManager {
      * 
      * @param isWhite true if the upgrading player is playing white, false otherwise
      */
-    public void showUpgradeFrame(boolean isWhite) {
-        accessoryUI.showUpgradeFrame(isWhite);
-    }
-
-    /**
-     * Hides the upgrade frame for when a player is upgrading a piece
-     */
-    public void hideUpgradeFrame() {
-        UILibrary.UpgradePieceFrame.setVisible(false);
+    public String showUpgradeFrame(boolean isWhite) {
+        return accessoryUI.showUpgradeFrame(isWhite);
     }
 
     // --------------------------------------------------------
