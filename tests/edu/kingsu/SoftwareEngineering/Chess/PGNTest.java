@@ -4,6 +4,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.PGNHelper;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class PGNTest {
 
     @Before
     public void setup() {
-        this.board = new Board(null);
+        this.board = new Board((GameLoop) null);
         this.pgnHelper = new PGNHelper(board);
 
     }

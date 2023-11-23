@@ -42,8 +42,8 @@ public class GameLoop {
     public GameLoop() {
         this.aiTeam = -1;
         this.moveController = new MoveController();
-        this.whiteTimer = new Timer(this, Team.WHITE_TEAM);
-        this.blackTimer = new Timer(this, Team.BLACK_TEAM);
+        this.whiteTimer = new Timer(Team.WHITE_TEAM);
+        this.blackTimer = new Timer(Team.BLACK_TEAM);
         guiStarter = new GUIStarter();
         resetGUIAndListeners();
         ChessUIManager.showNewGameFrame();
@@ -85,32 +85,6 @@ public class GameLoop {
             board.setIsPaused(true);
             //ChessUIManager.showSliderFrame();
         });
-
-       // UILibrary.CancelSliderButton.addActionListener(e -> {
-       //     resumeGame();
-      // });
-//
-       // UILibrary.ConfirmSliderButton.addActionListener(e -> {
-       //     resumeGame();
-       // });
-
-        //        UILibrary.UpgradeQueenButton.addActionListener(e -> {
-        //            UILibrary.UpgradePieceFrame.setVisible(false);
-        //            promote = "Q";
-        //        });
-        //        UILibrary.UpgradeBishopButton.addActionListener(e -> {
-        //            UILibrary.UpgradePieceFrame.setVisible(false);
-        //            promote = "B";
-        //        });
-        //        UILibrary.UpgradeRookButton.addActionListener(e -> {
-        //            UILibrary.UpgradePieceFrame.setVisible(false);
-        //            promote = "R";
-        //        });
-        //
-        //        UILibrary.UpgradeKnightButton.addActionListener(e -> {
-        //            UILibrary.UpgradePieceFrame.setVisible(false);
-        //            promote = "K";
-        //        });
 
         UILibrary.StepBackwards_Button.addActionListener(e -> {
             if (aiVsAi)
@@ -238,6 +212,15 @@ public class GameLoop {
         this.board = new Board(this);
         this.aiTeam = aiTeam;
         redrawUI();
+        UILibrary.WhiteTimer.setText("WHITE TIME: 0:0");
+        UILibrary.BlackTimer.setText("BLACK TIME: 0:0");
+        whiteTimer.stopTimer();
+        blackTimer.stopTimer();
+        whiteTimer = new Timer(Team.WHITE_TEAM);
+        blackTimer = new Timer(Team.BLACK_TEAM);
+        whiteTimer.startTimer();
+        blackTimer.startTimer();
+        blackTimer.pause();
         sendUpdateBoardState();
         resetGUIAndListeners();
     }
@@ -337,13 +320,13 @@ public class GameLoop {
             aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         }
         String teamName = (board.getTeamTurn() == Team.WHITE_TEAM) ? "WHITE'S TURN" : "BLACK'S TURN";
-        //        if(board.getTeamTurn() == Team.WHITE_TEAM) {
-        //            blackTimer.stopTimer();
-        //            whiteTimer.startTimer();
-        //        } else {
-        //            whiteTimer.stopTimer();
-        //            blackTimer.startTimer();
-        //        }
+        if(board.getTeamTurn() == Team.WHITE_TEAM) {
+            whiteTimer.unpause();
+            blackTimer.pause();
+        } else if(board.getTeamTurn() == Team.BLACK_TEAM) {
+            blackTimer.unpause();
+            whiteTimer.pause();
+        }
         UILibrary.PlayerTurn.setText(teamName);
         runAI();
     }

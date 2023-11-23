@@ -1,5 +1,6 @@
 package edu.kingsu.SoftwareEngineering.Chess;
 
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -18,7 +19,7 @@ public class BoardInternalTest {
 
     @Before
     public void setup() {
-        this.board = new Board(null);
+        this.board = new Board((GameLoop) null);
     }
 
     @Test

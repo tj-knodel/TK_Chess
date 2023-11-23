@@ -23,14 +23,14 @@ public class PGNHelper {
      * by using the BoardLocation in the applyMove function.
      */
     private static final String[][] BOARD_LOCATIONS = {
-            {"a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8"},
-            {"a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7"},
-            {"a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6"},
-            {"a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5"},
-            {"a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4"},
-            {"a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3"},
-            {"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2"},
-            {"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"},
+            { "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8" },
+            { "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7" },
+            { "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6" },
+            { "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5" },
+            { "a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4" },
+            { "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3" },
+            { "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2" },
+            { "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1" },
     };
 
     /**
@@ -147,7 +147,7 @@ public class PGNHelper {
      * @see BoardLocation
      */
     private BoardLocation[] getBoardLocationsForPieceMoveRow(String notation, int team, BoardLocation[] locations,
-                                                             int row, BoardLocation targetLocation) {
+            int row, BoardLocation targetLocation) {
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(String.valueOf(notation.charAt(0)));
         ArrayList<BoardLocation> pieceLoc = board.getBoardLocationsForTeamForPieceToTargetLocationForRow(
                 board.getBoard(), team, pieceId, targetLocation, row);
@@ -165,7 +165,7 @@ public class PGNHelper {
      * @see BoardLocation
      */
     private BoardLocation[] getBoardLocationsForPieceMoveColumn(String notation, int team, BoardLocation[] locations,
-                                                                int column) {
+            int column) {
         BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(2));
         int pieceId = Piece.PIECE_ID_FROM_STRING.get(String.valueOf(notation.charAt(0)));
         ArrayList<BoardLocation> pieceLoc = board.getBoardLocationsForTeamForPieceToTargetLocationForColumn(
@@ -216,7 +216,8 @@ public class PGNHelper {
      * @return The locations 2d-array.
      * @see BoardLocation
      */
-    private BoardLocation[] handleLocations(ArrayList<BoardLocation> pieceLoc, BoardLocation[] locations, BoardLocation targetLocation) {
+    private BoardLocation[] handleLocations(ArrayList<BoardLocation> pieceLoc, BoardLocation[] locations,
+            BoardLocation targetLocation) {
         if (pieceLoc.size() != 1)
             return locations;
         locations[0] = pieceLoc.get(0);
@@ -235,7 +236,7 @@ public class PGNHelper {
      * @see BoardLocation
      */
     private BoardLocation[] getBoardLocationsForPawnMoveForColumn(String notation, int team, BoardLocation[] locations,
-                                                                  int column) {
+            int column) {
         BoardLocation targetLocation = BOARD_LOCATIONS_FROM_STRING.get(notation.substring(2));
         ArrayList<BoardLocation> pawnLoc = board.getBoardLocationsForTeamForPieceToTargetLocation(board.getBoard(),
                 team, Piece.PAWN, targetLocation);
@@ -299,7 +300,7 @@ public class PGNHelper {
      * @see Piece
      */
     private String getPGNNotationFromMoveMultiplePieces(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-                                                        BoardLocation endMove) {
+            BoardLocation endMove) {
         boolean shouldPutRowInNotation = board.getBoardLocationsForTeamForPieceToTargetLocationForColumn(boardCopy,
                 piece.getTeam(), piece.getPieceID(), endMove, startMove.column).size() > 1;
         String moveString = Piece.CHESS_NOTATION_VALUE.get(piece.getPieceID());
@@ -326,7 +327,7 @@ public class PGNHelper {
      * @see Piece
      */
     private String getEndPGNNotationFromMove(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-                                             BoardLocation endMove, String moveString) {
+            BoardLocation endMove, String moveString) {
         if (isCapturing(boardCopy, startMove, endMove)) {
             if (boardCopy[startMove.row][startMove.column] instanceof Pawn)
                 moveString += BOARD_LOCATIONS[startMove.row][startMove.column].charAt(0);
@@ -337,7 +338,7 @@ public class PGNHelper {
             if (promotionPiece != null) {
                 moveString += "=" + promotionPiece;
             } else {
-                moveString += "=" + board.getPromotionPiece();;
+                moveString += "=" + board.getPromotionPiece();
             }
         }
         moveString = getCheckAndCheckmateFromMove(boardCopy, piece, startMove, endMove, moveString);
@@ -357,7 +358,7 @@ public class PGNHelper {
      * @see Piece
      */
     private String getPGNNotationFromMoveSinglePiece(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-                                                     BoardLocation endMove) {
+            BoardLocation endMove) {
         String moveString = Piece.CHESS_NOTATION_VALUE.get(piece.getPieceID());
         return getEndPGNNotationFromMove(boardCopy, piece, startMove, endMove, moveString);
     }
@@ -424,7 +425,7 @@ public class PGNHelper {
      * @see Piece
      */
     private String getCheckAndCheckmateFromMove(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-                                                BoardLocation endMove, String moveString) {
+            BoardLocation endMove, String moveString) {
         if (isOtherTeamInCheck(boardCopy, piece, startMove, endMove)) {
             moveString += "+";
             int otherTeam = (piece.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
@@ -446,7 +447,7 @@ public class PGNHelper {
      * @see Piece
      */
     private boolean isOtherTeamInCheck(Piece[][] boardCopy, Piece piece, BoardLocation startMove,
-                                       BoardLocation endMove) {
+            BoardLocation endMove) {
         board.simulateApplyMove(boardCopy, piece, startMove, endMove);
         int otherTeam = (piece.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(boardCopy, otherTeam, Piece.KING).get(0);
