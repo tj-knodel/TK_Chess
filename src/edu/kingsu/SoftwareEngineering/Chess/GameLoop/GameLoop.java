@@ -44,6 +44,10 @@ public class GameLoop {
         this.moveController = new MoveController();
         this.whiteTimer = new Timer(Team.WHITE_TEAM);
         this.blackTimer = new Timer(Team.BLACK_TEAM);
+        whiteTimer.startTimer();
+        blackTimer.startTimer();
+        whiteTimer.pause();
+        blackTimer.pause();
         guiStarter = new GUIStarter();
         resetGUIAndListeners();
         ChessUIManager.showNewGameFrame();
@@ -214,12 +218,9 @@ public class GameLoop {
         redrawUI();
         UILibrary.WhiteTimer.setText("WHITE TIME: 0:0");
         UILibrary.BlackTimer.setText("BLACK TIME: 0:0");
-        whiteTimer.stopTimer();
-        blackTimer.stopTimer();
-        whiteTimer = new Timer(Team.WHITE_TEAM);
-        blackTimer = new Timer(Team.BLACK_TEAM);
-        whiteTimer.startTimer();
-        blackTimer.startTimer();
+        whiteTimer.resetTimer();
+        blackTimer.resetTimer();
+        whiteTimer.unpause();
         blackTimer.pause();
         sendUpdateBoardState();
         resetGUIAndListeners();
