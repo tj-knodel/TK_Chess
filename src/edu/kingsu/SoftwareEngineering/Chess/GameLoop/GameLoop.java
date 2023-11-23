@@ -44,6 +44,10 @@ public class GameLoop {
         this.moveController = new MoveController();
         this.whiteTimer = new Timer(Team.WHITE_TEAM);
         this.blackTimer = new Timer(Team.BLACK_TEAM);
+        whiteTimer.startTimer();
+        whiteTimer.pause();
+        blackTimer.startTimer();
+        blackTimer.pause();
         guiStarter = new GUIStarter();
         resetGUIAndListeners();
         ChessUIManager.showNewGameFrame();
@@ -214,12 +218,9 @@ public class GameLoop {
         redrawUI();
         UILibrary.WhiteTimer.setText("WHITE TIME: 0:0");
         UILibrary.BlackTimer.setText("BLACK TIME: 0:0");
-        whiteTimer.stopTimer();
-        blackTimer.stopTimer();
-        whiteTimer = new Timer(Team.WHITE_TEAM);
-        blackTimer = new Timer(Team.BLACK_TEAM);
-        whiteTimer.startTimer();
-        blackTimer.startTimer();
+        whiteTimer.resetTimer();
+        blackTimer.resetTimer();
+        whiteTimer.pause();
         blackTimer.pause();
         sendUpdateBoardState();
         resetGUIAndListeners();
@@ -320,10 +321,10 @@ public class GameLoop {
             aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         }
         String teamName = (board.getTeamTurn() == Team.WHITE_TEAM) ? "WHITE'S TURN" : "BLACK'S TURN";
-        if(board.getTeamTurn() == Team.WHITE_TEAM) {
+        if (board.getTeamTurn() == Team.WHITE_TEAM) {
             whiteTimer.unpause();
             blackTimer.pause();
-        } else if(board.getTeamTurn() == Team.BLACK_TEAM) {
+        } else if (board.getTeamTurn() == Team.BLACK_TEAM) {
             blackTimer.unpause();
             whiteTimer.pause();
         }
