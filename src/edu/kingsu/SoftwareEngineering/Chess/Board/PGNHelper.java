@@ -8,6 +8,8 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 /**
  * The class to help with generating moves from PGN,
  * and taking moves and creating the PGN.
@@ -131,7 +133,7 @@ public class PGNHelper {
         BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING)
                 .get(0);
         locations[0] = kingLocation;
-        locations[1] = new BoardLocation(kingLocation.column - columnAmount, kingLocation.row);
+        locations[1] = new BoardLocation(kingLocation.column + columnAmount, kingLocation.row);
         return locations;
     }
 

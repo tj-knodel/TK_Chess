@@ -45,8 +45,8 @@ public class GameLoop {
         this.whiteTimer = new Timer(Team.WHITE_TEAM);
         this.blackTimer = new Timer(Team.BLACK_TEAM);
         whiteTimer.startTimer();
-        blackTimer.startTimer();
         whiteTimer.pause();
+        blackTimer.startTimer();
         blackTimer.pause();
         guiStarter = new GUIStarter();
         resetGUIAndListeners();
@@ -137,7 +137,10 @@ public class GameLoop {
             if (aiTeam == board.getTeamTurn())
                 return;
             MoveResult result = board.applyMovePGNNotationOverride(input);
+            if (!result.isSuccessful())
+                JOptionPane.showMessageDialog(null, "The notation " + input + " is incorrect!", "Invalid Move!", JOptionPane.INFORMATION_MESSAGE);
             redrawUI();
+            UILibrary.EnterMove_TextField.setText("");
         });
 
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
@@ -216,14 +219,111 @@ public class GameLoop {
         this.board = new Board(this);
         this.aiTeam = aiTeam;
         redrawUI();
-        UILibrary.WhiteTimer.setText("WHITE TIME: 0:0");
-        UILibrary.BlackTimer.setText("BLACK TIME: 0:0");
+        UILibrary.WhiteTimer.setText("WHITE TIME: 00:00");
+        UILibrary.BlackTimer.setText("BLACK TIME: 00:00");
         whiteTimer.resetTimer();
         blackTimer.resetTimer();
-        whiteTimer.unpause();
+        whiteTimer.pause();
         blackTimer.pause();
         sendUpdateBoardState();
         resetGUIAndListeners();
+    }
+
+    public void sendUpdateBoardState() {
+        MoveResult result = board.getLastMoveResult();
+        if (result != null) {
+            if (result.isCheckmate()) {
+                ChessUIManager.ShowEndGameFrame(
+                        ((result.getCheckmateTeam() == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
+                board.setIsPaused(true);
+            } else if (result.isStalemate()) {
+                ChessUIManager.ShowEndGameFrame("Stalemate!");
+                board.setIsPaused(true);
+            }
+        }
+        if (aiVsAi) {
+            aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
+        }
+        String teamName = (board.getTeamTurn() == Team.WHITE_TEAM) ? "WHITE'S TURN" : "BLACK'S TURN";
+        if (board.getTeamTurn() == Team.WHITE_TEAM) {
+            whiteTimer.unpause();
+            blackTimer.pause();
+        } else if (board.getTeamTurn() == Team.BLACK_TEAM) {
+            blackTimer.unpause();
+            whiteTimer.pause();
+        }
+        UILibrary.PlayerTurn.setText(teamName);
+        runAI();
+    }
+
+    private void runAI() {
+        if (aiTeam == board.getTeamTurn()) {
+            AIThread ai = new AIThread(new AIPlayer(2, aiTeam), board, guiStarter);
+            Thread runningThread = new Thread(ai);
+            runningThread.start();
+        }
+    }
+
+    public void redrawUI() {
+        if (!board.isAtStart()) {
+            BoardLocation lastMove = board.getLastMoveLocation();
+            BoardLocation currentMove = board.getCurrentMoveLocation();
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    if (!moveController.getIsFirstClick()) {
+                        if (r == moveController.getFirstClickLocation().row
+                                && c == moveController.getFirstClickLocation().column)
+                            continue;
+                    }
+                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+                }
+            }
+            guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
+                    .setPreviousMoveSquareVisibility(true);
+            guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
+                    .setPreviousMoveSquareVisibility(true);
+        }
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        UILibrary.MainFrame.repaint();
+    }
+
+    public String getPromotionPiece() {
+        if (aiTeam == board.getTeamTurn())
+            return "Q";
+        else {
+            String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
+            if (result == null) {
+                System.out.println("NULL");
+                return "P";
+            }
+            return String.valueOf(result.charAt(0));
+        }
+    }
+
+    public void updateChessNotationLabel(String value) {
+        ChessUIManager.appendMovesLabel(value);
+    }
+
+    public void clearChessNotationLabel() {
+        ChessUIManager.clearMovesLabel();
+    }
+
+    private void resetGUIAndListeners() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
+                for (MouseListener adapter : chessTile.getMouseListeners()) {
+                    chessTile.removeMouseListener(adapter);
+                }
+            }
+        }
+
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+            }
+        }
     }
 
     private void setPlayerClickListeners() {
@@ -265,102 +365,5 @@ public class GameLoop {
                 });
             }
         }
-    }
-
-    private void resetGUIAndListeners() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
-                for (MouseListener adapter : chessTile.getMouseListeners()) {
-                    chessTile.removeMouseListener(adapter);
-                }
-            }
-        }
-
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-            }
-        }
-    }
-
-    public String getPromotionPiece() {
-        if (aiTeam == board.getTeamTurn())
-            return "Q";
-        else {
-            String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
-            if (result == null) {
-                System.out.println("NULL");
-                return "P";
-            }
-            return String.valueOf(result.charAt(0));
-        }
-    }
-
-    public void updateChessNotationLabel(String value) {
-        ChessUIManager.appendMovesLabel(value);
-    }
-
-    public void clearChessNotationLabel() {
-        ChessUIManager.clearMovesLabel();
-    }
-
-    public void sendUpdateBoardState() {
-        MoveResult result = board.getLastMoveResult();
-        if (result != null) {
-            if (result.isCheckmate()) {
-                ChessUIManager.ShowEndGameFrame(
-                        ((result.getCheckmateTeam() == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
-                board.setIsPaused(true);
-            } else if (result.isStalemate()) {
-                ChessUIManager.ShowEndGameFrame("Stalemate!");
-                board.setIsPaused(true);
-            }
-        }
-        if (aiVsAi) {
-            aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-        }
-        String teamName = (board.getTeamTurn() == Team.WHITE_TEAM) ? "WHITE'S TURN" : "BLACK'S TURN";
-        if(board.getTeamTurn() == Team.WHITE_TEAM) {
-            whiteTimer.unpause();
-            blackTimer.pause();
-        } else if(board.getTeamTurn() == Team.BLACK_TEAM) {
-            blackTimer.unpause();
-            whiteTimer.pause();
-        }
-        UILibrary.PlayerTurn.setText(teamName);
-        runAI();
-    }
-
-    private void runAI() {
-        if (aiTeam == board.getTeamTurn()) {
-            AIThread ai = new AIThread(new AIPlayer(2, aiTeam), board, guiStarter);
-            Thread runningThread = new Thread(ai);
-            runningThread.start();
-        }
-    }
-
-    public void redrawUI() {
-        if (!board.isAtStart()) {
-            BoardLocation lastMove = board.getLastMoveLocation();
-            BoardLocation currentMove = board.getCurrentMoveLocation();
-            for (int r = 0; r < 8; r++) {
-                for (int c = 0; c < 8; c++) {
-                    if (!moveController.getIsFirstClick()) {
-                        if (r == moveController.getFirstClickLocation().row
-                                && c == moveController.getFirstClickLocation().column)
-                            continue;
-                    }
-                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-                }
-            }
-            guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-                    .setPreviousMoveSquareVisibility(true);
-            guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-                    .setPreviousMoveSquareVisibility(true);
-        }
-
-        guiStarter.chessUIManager.drawBoard(board.getBoard());
-        UILibrary.MainFrame.repaint();
     }
 }

@@ -3,6 +3,8 @@ package edu.kingsu.SoftwareEngineering.Chess.Board;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
@@ -357,7 +359,6 @@ public class Board {
             if (result.isSuccessful()) {
                 updateNotation(result.getNotation());
             } else {
-                //                JOptionPane.showConfirmDialog(null, "Could not apply move: " + movesList.get(i));
             }
         }
         gameLoop.redrawUI();
