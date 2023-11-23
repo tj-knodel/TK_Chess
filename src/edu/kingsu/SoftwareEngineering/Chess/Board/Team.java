@@ -23,7 +23,7 @@ public class Team {
      * @param team The team to get the other team from.
      * @return The other team.
      */
-    public int getOtherTeam(int team) {
+    public static int getOtherTeam(int team) {
         return (team == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
     }
 }

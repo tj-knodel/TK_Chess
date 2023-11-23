@@ -18,7 +18,8 @@ public class Timer implements java.lang.Runnable {
     List<Integer> seconds = Collections.synchronizedList(new ArrayList<>());
     private int team;
 
-    public Timer(GameLoop gameLoop, int team) {
+    public Timer(int team) {
+        this.seconds.add(0);
         this.seconds.add(0);
         this.seconds.add(0);
         thread = new Thread(this);
@@ -34,9 +35,22 @@ public class Timer implements java.lang.Runnable {
         return seconds.get(1);
     }
 
+    public void pause() {
+        this.seconds.set(2, 1);
+    }
+
+    public void unpause() {
+        this.seconds.set(2, 0);
+    }
+
     public void resetTimer() {
         seconds.set(0, 0);
         seconds.set(1, 0);
+        seconds.set(2, 0);
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public void startTimer() {
@@ -57,6 +71,8 @@ public class Timer implements java.lang.Runnable {
             try {
 
                 Thread.sleep(1000L);
+                if(seconds.get(2) == 1)
+                    continue;
                 seconds.set(0, seconds.get(0) + 1);
                 if (seconds.get(0) == 60) {
                     seconds.set(1, seconds.get(1) + 1);
@@ -79,7 +95,7 @@ public class Timer implements java.lang.Runnable {
         try {
             thread.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
