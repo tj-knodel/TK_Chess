@@ -1,12 +1,11 @@
 package edu.kingsu.SoftwareEngineering.Chess.GUI;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * Creates the Frame which holds the slider frame.
@@ -16,109 +15,75 @@ import java.awt.Font;
  */
 public class CreateCompSliderFrame {
 
+    // -----------------------------------------------------
+    // -----------------------------------------------------
 
-    /**
-     * Gets the image from the local jar File
-     * 
-     * @param imageToGet Name of the image + type
-     * @return The image
-     */
-    public ImageIcon getImage(String imageToGet) {
-        return new ImageIcon(getClass().getClassLoader().getResource(imageToGet));
+    static private JSlider createSlider(final JOptionPane optionPane, int min, int max) {
+        JSlider slider = new JSlider(min, max);
+        slider.setMajorTickSpacing(25);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        ChangeListener changeListener = new ChangeListener() {
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider theSlider = (JSlider) changeEvent.getSource();
+                if (!theSlider.getValueIsAdjusting()) {
+                    optionPane.setInputValue((Integer) theSlider.getValue());
+                }
+            }
+        };
+
+        slider.addChangeListener(changeListener);
+        return slider;
+    }
+
+    private JDialog createJDialog(JOptionPane optionPane, int min, int max, String body) {
+        JFrame parent = new JFrame();
+
+        JSlider slider = createSlider(optionPane, min, max);
+        optionPane.setMessage(new Object[] { body, slider });
+        optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        return optionPane.createDialog(parent, "AI Slider");
     }
 
     // -----------------------------------------------------
     // -----------------------------------------------------
 
-    /**
-     * Creates the JLabel Change AI Strength Slider Frame
-     */
-    private void CreateSliderContentPanel() {
-        UILibrary.SetAIStrengthSliderFrame = new JLabel();
-        UILibrary.SetAIStrengthSliderFrame.setLayout(null);
-        UILibrary.resizeModule.setVariableBounds(UILibrary.SetAIStrengthSliderFrame, null, 0,0,UILibrary.uiSize_X, UILibrary.uiSize_Y);
-        UILibrary.SetAIStrengthSliderFrame.setBackground(UILibrary.BackgroundColor);
+    public Integer showAISlider() {
+
+        JOptionPane optionPane = new JOptionPane();
+        JDialog dialog = createJDialog(optionPane, 0, 100, "Set AI Strength Slider");
+        dialog.setVisible(true); // This line yields until input is closed
+
+        if (optionPane.getValue() == null || optionPane.getValue() == (Integer) 2) { // null means "X" button, 2 as an "Object" means "Cancel"
+            System.out.println("Cancel");
+            return null;
+        } else { // User Pressed Ok
+            System.out.println("Selected " + optionPane.getInputValue());
+            return (Integer)optionPane.getInputValue();
+        }
     }
+
 
     // -----------------------------------------------------
     // -----------------------------------------------------
 
-    /**
-     * Creates, Needed JLabel titles, slider itself, and confirm / cancel buttons
-     */
-    private void createUIElements() {
+    public Integer showAISliderTimeOut() {
 
-        // Text Labels
-        JLabel TitleLabel = new JLabel("Set Computer Chess AI Strength", SwingConstants.CENTER);
-        UILibrary.resizeModule.setTextBounds(TitleLabel, 55);
-        TitleLabel.setForeground(UILibrary.TextColor_White);
-        UILibrary.resizeModule.setVariableBounds( TitleLabel, null, 175, 159, 1089, 63); // Numbers from Figma Design
-        TitleLabel.setOpaque(false);
-        UILibrary.SetAIStrengthSliderFrame.add(TitleLabel);
+        JOptionPane optionPane = new JOptionPane();
+        JDialog dialog = createJDialog(optionPane, 2, 20, "Set AI Max AI Computation Time (seconds)");
+        dialog.setVisible(true); // This line yields until input is closed
 
-        JLabel EasyLabel = new JLabel("EASY", SwingConstants.CENTER);
-        UILibrary.resizeModule.setTextBounds(EasyLabel, 20);
-        EasyLabel.setForeground(UILibrary.TextColor_White);
-        UILibrary.resizeModule.setVariableBounds(EasyLabel, null, 199, 616, 102, 30); // Numbers from Figma Design
-        EasyLabel.setOpaque(false);
-        UILibrary.SetAIStrengthSliderFrame.add(EasyLabel);
-
-        JLabel MaxLabel = new JLabel("MAX", SwingConstants.CENTER);
-        UILibrary.resizeModule.setTextBounds(MaxLabel, 20);
-        MaxLabel.setForeground(UILibrary.TextColor_White);
-        UILibrary.resizeModule.setVariableBounds(MaxLabel, null, 1149, 616, 102, 30); // Numbers from Figma Design
-        MaxLabel.setOpaque(false);
-        UILibrary.SetAIStrengthSliderFrame.add(MaxLabel);
-
-        JLabel MediumLabel = new JLabel("MEDIUM", SwingConstants.CENTER);
-        UILibrary.resizeModule.setTextBounds(MediumLabel, 20);
-        MediumLabel.setForeground(UILibrary.TextColor_White);
-        UILibrary.resizeModule.setVariableBounds(MediumLabel, null, 669, 616, 102, 30); // Numbers from Figma Design
-        MediumLabel.setOpaque(false);
-        UILibrary.SetAIStrengthSliderFrame.add(MediumLabel);
-
-        JLabel SliderBackground = new JLabel("", SwingConstants.CENTER);
-        UILibrary.resizeModule.setVariableBounds(SliderBackground, null, 184, 463, 1071, 197); // Numbers from Figma Design
-        UILibrary.resizeModule.setVariableBounds(SliderBackground, getImage("SliderBackground.png"));
-        UILibrary.SetAIStrengthSliderFrame.add(SliderBackground);
-
-        UILibrary.ConfirmSliderButton = new JButton();
-        UILibrary.resizeModule.setVariableBounds(UILibrary.ConfirmSliderButton, null, 527, 700, 185, 59); // Numbers from Figma Design
-        UILibrary.resizeModule.setVariableBounds(UILibrary.ConfirmSliderButton, getImage("ConfirmButton.png"));
-        UILibrary.SetAIStrengthSliderFrame.add(UILibrary.ConfirmSliderButton);
-        UILibrary.ConfirmSliderButton.setOpaque(false);
-        UILibrary.ConfirmSliderButton.setContentAreaFilled(false);
-        UILibrary.ConfirmSliderButton.setBorderPainted(false);
-
-        UILibrary.CancelSliderButton = new JButton();
-        UILibrary.resizeModule.setVariableBounds(UILibrary.CancelSliderButton, null, 727, 700, 185, 59); // Numbers from Figma Design
-        UILibrary.resizeModule.setVariableBounds(UILibrary.CancelSliderButton, getImage("CancelButton.png"));
-        UILibrary.SetAIStrengthSliderFrame.add(UILibrary.CancelSliderButton);
-        UILibrary.CancelSliderButton.setOpaque(false);
-        UILibrary.CancelSliderButton.setContentAreaFilled(false);
-        UILibrary.CancelSliderButton.setBorderPainted(false);
-
-        JLabel CurrentSelectedComputer_ImageLabel = new JLabel();
-        UILibrary.resizeModule.setVariableBounds(CurrentSelectedComputer_ImageLabel, null, 659, 276, 112, 105); // Numbers from Figma Design
-        UILibrary.CurrentSelectedComputer_ImageLabel = UILibrary.resizeModule.setVariableBounds(CurrentSelectedComputer_ImageLabel, getImage("computer_white.png"));
-        UILibrary.SetAIStrengthSliderFrame.add( CurrentSelectedComputer_ImageLabel);
-
-        UILibrary.CurrentSelectedComputer_TextLabel = new JLabel("White Computer", SwingConstants.CENTER);
-         UILibrary.resizeModule.setTextBounds(UILibrary.CurrentSelectedComputer_TextLabel, 20);
-        UILibrary.CurrentSelectedComputer_TextLabel.setForeground(UILibrary.TextColor_White);
-        UILibrary.resizeModule.setVariableBounds(UILibrary.CurrentSelectedComputer_TextLabel, null, 621, 409, 187, 29); // Numbers from Figma Design
-        UILibrary.CurrentSelectedComputer_TextLabel.setOpaque(false);
-        UILibrary.SetAIStrengthSliderFrame.add(UILibrary.CurrentSelectedComputer_TextLabel);
-
-        UILibrary.SetAiStrengthSlider = new JSlider(JSlider.HORIZONTAL);
-        UILibrary.resizeModule.setVariableBounds(UILibrary.SetAiStrengthSlider, null, 250, 551, 950, 29);
-        UILibrary.SetAiStrengthSlider.setBackground(UILibrary.ForegroundColor);
-        UILibrary.SetAiStrengthSlider.setForeground(UILibrary.TextColor_Gray);
-        UILibrary.SetAIStrengthSliderFrame.add(UILibrary.SetAiStrengthSlider);
-        
+        if (optionPane.getValue() == null || optionPane.getValue() == (Integer) 2) { // null means "X" button, 2 as an "Object" means "Cancel"
+            System.out.println("Cancel");
+            return null;
+        } else { // User Pressed Ok
+            System.out.println("Selected " + optionPane.getInputValue());
+            return (Integer)optionPane.getInputValue();
+        }
     }
 
-  
 
     // -----------------------------------------------------
     // -----------------------------------------------------
@@ -127,8 +92,7 @@ public class CreateCompSliderFrame {
      * Creates the AI Strength Slider Frame by calling its associated functions
      */
     public CreateCompSliderFrame() {
-        CreateSliderContentPanel();
-        createUIElements();
     }
+
 
 }
