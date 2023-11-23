@@ -12,8 +12,15 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
  */
 public class Rook extends Piece {
 
+    /**
+     * Has the rook moved or not.
+     */
     private boolean hasMoved;
 
+    /**
+     * Creates a rook based on a team.
+     * @param team
+     */
     public Rook(int team) {
         super(team);
         hasMoved = false;
@@ -46,6 +53,10 @@ public class Rook extends Piece {
         return rook;
     }
 
+    /**
+     * Gets if the rook has moved or not.
+     * @return True if the rook has moved.
+     */
     public boolean hasMoved() {
         return hasMoved;
     }

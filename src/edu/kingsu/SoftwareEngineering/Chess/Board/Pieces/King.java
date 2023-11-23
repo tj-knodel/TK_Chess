@@ -8,13 +8,24 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
  * @author Daniell Buchner
- * @version 1.1.0
+ * @version 1.2.0
  */
 public class King extends Piece {
 
-    boolean hasMoved = false;
+    /**
+     * Has the king moved yet or not.
+     */
+    private boolean hasMoved = false;
+
+    /**
+     * Is the king currently in check.
+     */
     public boolean inCheck = false;
 
+    /**
+     * Creates a king for a team.
+     * @param team The team the king should be.
+     */
     public King(int team) {
         super(team);
         // picking an arbitrarily high value.
@@ -37,6 +48,10 @@ public class King extends Piece {
         return Piece.KING;
     }
 
+    /**
+     * Gets if the king is in check.
+     * @return True if the king is in check.
+     */
     public boolean getInCheck() {
         return inCheck;
     }
@@ -52,6 +67,11 @@ public class King extends Piece {
         return k;
     }
 
+    /**
+     * Checks if you can castle short side.
+     * @param board The board to check on.
+     * @return True if you can castle short side.
+     */
     private boolean canCastleShortSide(Board board) {
         if (hasMoved)
             return false;
@@ -80,6 +100,11 @@ public class King extends Piece {
         return true;
     }
 
+    /**
+     * Checks if you can castle long side.
+     * @param board The board to check on.
+     * @return True if you can casle long side.
+     */
     private boolean canCastleLongSide(Board board) {
         if (hasMoved)
             return false;
