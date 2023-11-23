@@ -59,7 +59,15 @@ public class Timer implements java.lang.Runnable {
 
     @Override
     public String toString() {
-        return getMinutes() + ":" + getSeconds();
+        String output = "";
+        if(getMinutes() < 10)
+            output += "0";
+        output += getMinutes();
+        output += ":";
+        if(getSeconds() < 10)
+            output += "0";
+        output += getSeconds();
+        return output;
     }
 
     /*A singular time function that shifts the timer to each team whenever a successful move is made */

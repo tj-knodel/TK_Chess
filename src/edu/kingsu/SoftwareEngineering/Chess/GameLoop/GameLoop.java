@@ -137,7 +137,10 @@ public class GameLoop {
             if (aiTeam == board.getTeamTurn())
                 return;
             MoveResult result = board.applyMovePGNNotationOverride(input);
+            if (!result.isSuccessful())
+                JOptionPane.showMessageDialog(null, "The notation " + input + " is incorrect!", "Invalid Move!", JOptionPane.INFORMATION_MESSAGE);
             redrawUI();
+            UILibrary.EnterMove_TextField.setText("");
         });
 
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
@@ -216,93 +219,14 @@ public class GameLoop {
         this.board = new Board(this);
         this.aiTeam = aiTeam;
         redrawUI();
-        UILibrary.WhiteTimer.setText("WHITE TIME: 0:0");
-        UILibrary.BlackTimer.setText("BLACK TIME: 0:0");
+        UILibrary.WhiteTimer.setText("WHITE TIME: 00:00");
+        UILibrary.BlackTimer.setText("BLACK TIME: 00:00");
         whiteTimer.resetTimer();
         blackTimer.resetTimer();
         whiteTimer.pause();
         blackTimer.pause();
         sendUpdateBoardState();
         resetGUIAndListeners();
-    }
-
-    private void setPlayerClickListeners() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
-                chessTile.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        if (aiTeam == board.getTeamTurn())
-                            return;
-                        if (moveController.chessTileClick(board, chessTile.row,
-                                chessTile.column)) {
-                            MoveResult result = moveController.sendMovesToBoard(board);
-                        }
-                        if (!moveController.getIsFirstClick()) {
-                            var moves = moveController.getAllPossibleMoves();
-                            for (BoardLocation location : moves) {
-                                guiStarter.chessUIManager.boardTiles[location.row][location.column]
-                                        .setPossibleMoveCircleVisibility(true);
-                            }
-                            guiStarter.chessUIManager.boardTiles[moveController
-                                    .getFirstClickLocation().row][moveController.getFirstClickLocation().column]
-                                    .setPreviousMoveSquareVisibility(true);
-                            redrawUI();
-                        } else {
-                            for (int r = 0; r < 8; r++) {
-                                for (int c = 0; c < 8; c++) {
-                                    guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
-                                }
-                            }
-                            guiStarter.chessUIManager.boardTiles[moveController
-                                    .getFirstClickLocation().row][moveController.getFirstClickLocation().column]
-                                    .setPreviousMoveSquareVisibility(false);
-                            redrawUI();
-                        }
-                        redrawUI();
-                    }
-                });
-            }
-        }
-    }
-
-    private void resetGUIAndListeners() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
-                for (MouseListener adapter : chessTile.getMouseListeners()) {
-                    chessTile.removeMouseListener(adapter);
-                }
-            }
-        }
-
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-            }
-        }
-    }
-
-    public String getPromotionPiece() {
-        if (aiTeam == board.getTeamTurn())
-            return "Q";
-        else {
-            String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
-            if (result == null) {
-                System.out.println("NULL");
-                return "P";
-            }
-            return String.valueOf(result.charAt(0));
-        }
-    }
-
-    public void updateChessNotationLabel(String value) {
-        ChessUIManager.appendMovesLabel(value);
-    }
-
-    public void clearChessNotationLabel() {
-        ChessUIManager.clearMovesLabel();
     }
 
     public void sendUpdateBoardState() {
@@ -362,5 +286,84 @@ public class GameLoop {
 
         guiStarter.chessUIManager.drawBoard(board.getBoard());
         UILibrary.MainFrame.repaint();
+    }
+
+    public String getPromotionPiece() {
+        if (aiTeam == board.getTeamTurn())
+            return "Q";
+        else {
+            String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
+            if (result == null) {
+                System.out.println("NULL");
+                return "P";
+            }
+            return String.valueOf(result.charAt(0));
+        }
+    }
+
+    public void updateChessNotationLabel(String value) {
+        ChessUIManager.appendMovesLabel(value);
+    }
+
+    public void clearChessNotationLabel() {
+        ChessUIManager.clearMovesLabel();
+    }
+
+    private void resetGUIAndListeners() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
+                for (MouseListener adapter : chessTile.getMouseListeners()) {
+                    chessTile.removeMouseListener(adapter);
+                }
+            }
+        }
+
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+            }
+        }
+    }
+
+    private void setPlayerClickListeners() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessTileUI chessTile = guiStarter.chessUIManager.boardTiles[j][i];
+                chessTile.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        if (aiTeam == board.getTeamTurn())
+                            return;
+                        if (moveController.chessTileClick(board, chessTile.row,
+                                chessTile.column)) {
+                            MoveResult result = moveController.sendMovesToBoard(board);
+                        }
+                        if (!moveController.getIsFirstClick()) {
+                            var moves = moveController.getAllPossibleMoves();
+                            for (BoardLocation location : moves) {
+                                guiStarter.chessUIManager.boardTiles[location.row][location.column]
+                                        .setPossibleMoveCircleVisibility(true);
+                            }
+                            guiStarter.chessUIManager.boardTiles[moveController
+                                    .getFirstClickLocation().row][moveController.getFirstClickLocation().column]
+                                    .setPreviousMoveSquareVisibility(true);
+                            redrawUI();
+                        } else {
+                            for (int r = 0; r < 8; r++) {
+                                for (int c = 0; c < 8; c++) {
+                                    guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
+                                }
+                            }
+                            guiStarter.chessUIManager.boardTiles[moveController
+                                    .getFirstClickLocation().row][moveController.getFirstClickLocation().column]
+                                    .setPreviousMoveSquareVisibility(false);
+                            redrawUI();
+                        }
+                        redrawUI();
+                    }
+                });
+            }
+        }
     }
 }
