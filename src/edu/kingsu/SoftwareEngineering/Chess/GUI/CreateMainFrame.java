@@ -100,6 +100,7 @@ public class CreateMainFrame {
         MovesLabel.setForeground(UILibrary.TextColor_White);
         MovesLabel.setEditable(false);
         MovesLabel.setHighlighter(null);
+        MovesLabel.setLineWrap(true);
         UILibrary.MovesLabel = MovesLabel;
         //UILibrary.MainFrame.add(MovesLabel);
         UILibrary.MovesLabel_ScrollPane = new JScrollPane(MovesLabel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
