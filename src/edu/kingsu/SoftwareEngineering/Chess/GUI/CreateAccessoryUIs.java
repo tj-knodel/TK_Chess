@@ -88,13 +88,16 @@ public class CreateAccessoryUIs {
 	// -----------------------------------------------------
 	// -----------------------------------------------------
 
-	/* 
 	/**
+	 * Selection Options for the GUI  
+	*/
+	private Object[] options = { "QUEEN", "ROOK", "BISHOP", "KNIGHT" };
+
+		/**
 	 * Shows the upgrade piece frame
 	 * 
 	 * @param isWhite true = upgrading a white piece, false = upgrading a black piece
 	 */
-	private Object[] options = { "QUEEN", "ROOK", "BISHOP", "KNIGHT" };
 	public String showUpgradeFrame(boolean isWhite) {
 
         int response = JOptionPane.showOptionDialog(null, "Choose a piece to upgrade your pawn to.", "Upgrade Chess Piece",
