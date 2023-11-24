@@ -139,6 +139,10 @@ public class CreateAccessoryUIs {
 	// -----------------------------------------------------
 	// -----------------------------------------------------
 
+	/**
+	 * Removes all the action listeners from the specified JButton
+	 * @param button Button to remove action listeners from
+	 */
 	private void removeActionListeners(JButton button) {
 		for (ActionListener listener : button.getActionListeners()) {
 			button.removeActionListener(listener);

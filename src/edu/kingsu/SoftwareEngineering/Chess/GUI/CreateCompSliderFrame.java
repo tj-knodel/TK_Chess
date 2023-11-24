@@ -18,9 +18,15 @@ public class CreateCompSliderFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Create a Slider Object
+     * @param optionPane Used to submit value
+     * @param min slider start value
+     * @param max slider end value
+     */
     static private JSlider createSlider(final JOptionPane optionPane, int min, int max) {
         JSlider slider = new JSlider(min, max);
-        slider.setMajorTickSpacing(25);
+        slider.setMajorTickSpacing(max / 4);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
 
@@ -37,6 +43,12 @@ public class CreateCompSliderFrame {
         return slider;
     }
 
+    /**
+     * Create a JDialog Popup
+     * @param min slider start value
+     * @param max slider end value
+     * @param body Body Text
+     */
     private JDialog createJDialog(JOptionPane optionPane, int min, int max, String body) {
         JFrame parent = new JFrame();
 
@@ -50,6 +62,10 @@ public class CreateCompSliderFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Shows the AI Slider
+     * @return New selected value, 0-100 or null if cancel
+     */
     public Integer showAISlider() {
 
         JOptionPane optionPane = new JOptionPane();
@@ -69,6 +85,10 @@ public class CreateCompSliderFrame {
     // -----------------------------------------------------
     // -----------------------------------------------------
 
+    /**
+     * Shows the time out slider
+     * @return New selected value 2-20 or null if cancel
+     */
     public Integer showAISliderTimeOut() {
 
         JOptionPane optionPane = new JOptionPane();

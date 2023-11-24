@@ -17,12 +17,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
 
 /**
  * Creates the Main Chess Frame

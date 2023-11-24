@@ -4,8 +4,6 @@ import java.awt.Color;
 
 import javax.swing.*;
 
-import edu.kingsu.SoftwareEngineering.Chess.GUI.ResizeManager.UIImage_Label;
-
 /**
  * This file does not contain any real "functional" code, its more of a
  * library for all common variables and allows certain variables to be
@@ -152,26 +150,6 @@ public abstract class UILibrary {
    * JLabel which shows when the user upgrades a piece
    */
   public static JLabel UpgradePieceFrame;
-
-  /**
-   *TEMP
-   */
-  public static JButton UpgradeQueenButton;
-
-  /**
-   *TEMP
-   */
-  public static JButton UpgradeBishopButton;
-  
-  /**
-   *TEMP
-   */
-  public static JButton UpgradeRookButton;
-  
-  /**
-   *TEMP
-   */
-  public static JButton UpgradeKnightButton;
 
   /**
    * Popup shown in MainFrame;
