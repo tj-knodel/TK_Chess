@@ -121,7 +121,7 @@ public class AIPlayer extends Player {
         ArrayList<Move> moves = new ArrayList<Move>();
         Piece[][] pieces = board.getBoard();
         for (BoardLocation l : pieceLocations) {
-            ArrayList<BoardLocation> possibleDestinations = board.getPossibleMoves(pieces, pieces[l.row][l.column], l, true);
+            ArrayList<BoardLocation> possibleDestinations = board.getPossibleMoves(pieces, pieces[l.row][l.column], l, false);
             for (BoardLocation l_prime : possibleDestinations) {
                 Piece[][] copy = copyPieces(pieces);
                 board.simulateApplyMove(copy, pieces[l.row][l.column], l, l_prime);
@@ -162,7 +162,7 @@ public class AIPlayer extends Player {
             for (int j = 0; j < pieces[i].length; j++) {
                 int pieceScore = pieces[i][j].getValue();
                 if (pieces[i][j].getTeam() == Team.WHITE_TEAM) {
-                    score += pieceScore * 10.0;
+                    score += pieceScore * 100.0;
                     switch (pieces[i][j].getPieceName().charAt(0)) {
                         case 'P':
                             score += pawnTable[i][j];
@@ -214,6 +214,9 @@ public class AIPlayer extends Player {
         }
         // System.out.println("Total score is " + score);
         double num_moves = board.getPossibleMovesForTeamWithCheckKingInCheck(pieces, colour, true).size();
+        if (num_moves == 0.0) {
+            System.out.println("AAAAAAAAAAAAAAAAAA");
+        }
         double mobilitywt = 1.0;
 
         if (colour == Team.WHITE_TEAM) {
@@ -308,7 +311,7 @@ public class AIPlayer extends Player {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j, i);
                         ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
-                                true);
+                                false);
                         // System.out.println("Amount of moves for this piece is " + moves.size());
                         // Find the maximum move and store the piece and the location in a move
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
@@ -331,7 +334,7 @@ public class AIPlayer extends Player {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j, i);
                         ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
-                                true);
+                                false);
                         // System.out.println("Amount of moves for this piece is " + moves.size());
                         // Find the maximum move and store the piece and the location in a move
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
@@ -354,7 +357,8 @@ public class AIPlayer extends Player {
      * @return the score for the current iteration of the minimax.
      */
     private double minimaxAB(Board board, Piece[][] pieces, double alpha, double beta, int depth, int player) {
-        if (depth <= 0 || System.currentTimeMillis() - start_time >= 5000) {
+        double score = 0;
+        if (depth <= 0 || System.currentTimeMillis() - start_time >= 5000 || board.getBoardLocationsForTeamForPiece(pieces, colour, Piece.KING).isEmpty()) {
             // System.out.println(calcScore(pieces));
             return calcScore(board, pieces);
         }
@@ -363,8 +367,6 @@ public class AIPlayer extends Player {
         double cur_alpha = alpha;
         double cur_beta = beta;
 
-        // the score of the board is declared here
-        double score = 0;
         // System.out.println("Going down a level!");
         if (player == Team.WHITE_TEAM) {
             // set score to some negative number more than is possible
@@ -378,13 +380,17 @@ public class AIPlayer extends Player {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j, i);
                         ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
-                                true);
+                                false);
                         // System.out.println("Amount of moves for this piece is " + moves.size());
                         // Find the maximum move and store the piece and the location in a move
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
                         for (BoardLocation l : moves) {
                             Piece[][] copy = copyPieces(pieces);
                             board.simulateApplyMove(copy, pieces[i][j], pieceLocation, l);
+                            if (board.getBoardLocationsForTeamForPiece(copy, Team.BLACK_TEAM, Piece.KING).size() == 0) {
+                                // captured the king
+                                System.out.println("Captured the black king!");
+                            }
                             score = Math.max(score, minimaxAB(board, copy, cur_alpha, cur_beta, depth - 1, Team.BLACK_TEAM));
                             cur_alpha = Math.max(cur_alpha, score);
                             if (score >= cur_beta) {
@@ -405,13 +411,17 @@ public class AIPlayer extends Player {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j, i);
                         ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
-                                true);
+                                false);
                         // System.out.println("Amount of moves for this piece is " + moves.size());
                         // Find the maximum move and store the piece and the location in a move
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
                         for (BoardLocation l : moves) {
                             Piece[][] copy = copyPieces(pieces);
                             board.simulateApplyMove(copy, pieces[i][j], pieceLocation, l);
+                            if (board.getBoardLocationsForTeamForPiece(copy, Team.WHITE_TEAM, Piece.KING).size() == 0) {
+                                // captured the king
+                                System.out.println("Captured the whiteking!");
+                            }
                             score = Math.min(score, minimaxAB(board, copy, cur_alpha, cur_beta, depth - 1, Team.WHITE_TEAM));
                             cur_beta = Math.min(cur_beta, score);
                             if (score <= cur_alpha) {

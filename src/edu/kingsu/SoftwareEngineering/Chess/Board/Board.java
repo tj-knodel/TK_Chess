@@ -782,7 +782,11 @@ public class Board {
      * @return True if the king is in check, false otherwise.
      */
     private boolean checkKingInCheck(Piece[][] board, int team) {
-        BoardLocation kingLocation = getBoardLocationsForTeamForPiece(board, team, Piece.KING).get(0);
+
+        var locations = getBoardLocationsForTeamForPiece(board, team, Piece.KING);
+        if(locations.size() == 0)
+            return true;
+        BoardLocation kingLocation = locations.get(0);
         King kingPieceOtherTeam = (King) board[kingLocation.row][kingLocation.column];
         kingPieceOtherTeam.inCheck = false;
         int otherTeam = (team == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
