@@ -94,6 +94,7 @@ public class CreateMainFrame {
         UILibrary.StepForwards_Button = StepForwards_Button;
 
         JTextArea MovesLabel = new JTextArea(""); // 150 lines
+        MovesLabel.setWrapStyleWord(true);
         UILibrary.resizeModule.setVariableBounds(MovesLabel, null, 984, 209, 372, 531); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
         UILibrary.resizeModule.setTextBounds(MovesLabel, 22);
