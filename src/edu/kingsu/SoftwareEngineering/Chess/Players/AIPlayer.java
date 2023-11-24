@@ -58,7 +58,7 @@ public class AIPlayer extends Player {
             for (BoardLocation l_prime : possibleDestinations) {
                 Piece[][] copy = copyPieces(pieces);
                 board.simulateApplyMove(copy, pieces[l.row][l.column], l, l_prime);
-                moves.add(new Move(pieces[l.row][l.column], l, l_prime, minimax(board, copy, difficulty - 1, colour)));
+                moves.add(new Move(pieces[l.row][l.column], l, l_prime, minimaxAB(board, copy, -200, 200, difficulty - 1, colour)));
             }
         }
 
@@ -217,6 +217,84 @@ public class AIPlayer extends Player {
                             Piece[][] copy = copyPieces(pieces);
                             board.simulateApplyMove(copy, pieces[i][j], pieceLocation, l);
                             score = Math.min(score, minimax(board, copy, depth - 1, Team.WHITE_TEAM));
+                        }
+                    }
+                }
+            }
+            // System.out.println("This is the score so far " + score);
+            return score;
+        }
+
+    }
+
+     /**
+     * The minimax algorithm with AB pruning algorithm for the AI player
+     * @return the score for the current iteration of the minimax.
+     */
+    private int minimaxAB(Board board, Piece[][] pieces, int alpha, int beta, int depth, int player) {
+        if (depth <= 0) {
+            // System.out.println(calcScore(pieces));
+            return calcScore(pieces);
+        }
+        // JOptionPane.showConfirmDialog(null, "Got here with team: " + board.getTeamTurn());
+
+        int cur_alpha = alpha;
+        int cur_beta = beta;
+
+        // the score of the board is declared here
+        int score = 0;
+        // System.out.println("Going down a level!");
+        if (player == Team.WHITE_TEAM) {
+            // set score to some negative number more than is possible
+            score = -200;
+            // get the white team pieces
+            //ArrayList<BoardLocation> white_pieces = board.
+
+            for (int i = 0; i < pieces.length; i++) {
+                for (int j = 0; j < pieces[i].length; j++) {
+                    if (pieces[i][j].getTeam() == Team.WHITE_TEAM) {
+                        // Get all the moves for this piece
+                        BoardLocation pieceLocation = new BoardLocation(j, i);
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
+                                true);
+                        // System.out.println("Amount of moves for this piece is " + moves.size());
+                        // Find the maximum move and store the piece and the location in a move
+                        //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
+                        for (BoardLocation l : moves) {
+                            Piece[][] copy = copyPieces(pieces);
+                            board.simulateApplyMove(copy, pieces[i][j], pieceLocation, l);
+                            score = Math.max(score, minimaxAB(board, copy, cur_alpha, cur_beta, depth - 1, Team.BLACK_TEAM));
+                            cur_alpha = Math.max(cur_alpha, score);
+                            if (score >= cur_beta) {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            // System.out.println("This is the score so far " + score);
+            return score;
+        } else {
+            // set score to some positive number that is more than is possible in the game
+            score = 200;
+            for (int i = 0; i < pieces.length; i++) {
+                for (int j = 0; j < pieces[i].length; j++) {
+                    if (pieces[i][j].getTeam() == Team.BLACK_TEAM) {
+                        // Get all the moves for this piece
+                        BoardLocation pieceLocation = new BoardLocation(j, i);
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
+                                true);
+                        // System.out.println("Amount of moves for this piece is " + moves.size());
+                        // Find the maximum move and store the piece and the location in a move
+                        //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
+                        for (BoardLocation l : moves) {
+                            Piece[][] copy = copyPieces(pieces);
+                            board.simulateApplyMove(copy, pieces[i][j], pieceLocation, l);
+                            score = Math.min(score, minimaxAB(board, copy, cur_alpha, cur_beta, depth - 1, Team.WHITE_TEAM));
+                            cur_beta = Math.min(cur_beta, score);
+                            if (score <= cur_alpha) {
+                                break;
+                            }
                         }
                     }
                 }
