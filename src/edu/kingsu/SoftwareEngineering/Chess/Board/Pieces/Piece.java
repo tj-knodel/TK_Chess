@@ -134,10 +134,10 @@ public abstract class Piece {
     /**
      * Gets all possible moves for a piece at any given location.
      *
-     * @param boardClass
+     * @param boardClass The board class to reference.
      * @param board      The board to get possible moves for.
      * @param startMove  The starting location of the piece.
-     * @param extraCheck
+     * @param extraCheck Should special checks be checked. Example checking if castling is possible.
      * @return ArrayList of BoardLocations of possible moves.
      */
     public abstract ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board,

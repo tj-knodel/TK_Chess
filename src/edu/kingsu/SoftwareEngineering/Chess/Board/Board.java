@@ -101,6 +101,7 @@ public class Board {
      * The Board constructor.
      * For now just creates the board and initializes with two player game.
      * @see GameLoop
+     * @param gameLoop The GameLoop to reference.
      */
     public Board(GameLoop gameLoop) {
         this.algebraicRepresentation = new StringBuilder();
@@ -118,9 +119,10 @@ public class Board {
      * Creates a new board from the data taken from a different board
      * @see Piece
      * @see GameLoop
-     * @param pieces       the array of pieces and their position
-     * @param moveCount    the amount of moves made
-     * @param algebraicRep the current sequence of moves in a StringBuilder
+     * @param pieces       The array of pieces and their position
+     * @param moveCount    The amount of moves made
+     * @param algebraicRep The current sequence of moves in a StringBuilder
+     * @param gameLoop     The GameLoop to reference.
      */
     public Board(Piece[][] pieces, int moveCount, StringBuilder algebraicRep, GameLoop gameLoop) {
         algebraicRepresentation = new StringBuilder();//algebraicRep;
@@ -256,7 +258,9 @@ public class Board {
      * Gets the undo move count.
      * @return The undo move count.
      */
-    public int getUndoMoveCount() { return undoMoveCount; }
+    public int getUndoMoveCount() {
+        return undoMoveCount;
+    }
 
     /**
      * Load a file of the PGN format.
@@ -279,6 +283,7 @@ public class Board {
      * start at the end. Have it started from the beginning.
      *
      * @param file The file to load.
+     * @return The ArrayList of PGNMoves to keep track of.
      */
     public ArrayList<PGNMove> loadPGNFileFromStart(File file) {
         PGNReader reader = new PGNReader();
@@ -495,6 +500,8 @@ public class Board {
      * @param pieceMoving The chess piece being moved.
      * @param startMove   The starting move of the piece.
      * @param endMove     The target location of the piece.
+     * @param hasPromotionPiece Does the move being applied already know which piece is being promoted to.
+     * @param promotionPiece The single character as a string representing the piece to promote to.
      * @return True if the move was successful.
      */
     private MoveResult applyMoveInternal(Piece pieceMoving, BoardLocation startMove, BoardLocation endMove,
@@ -667,6 +674,7 @@ public class Board {
      * and rook.
      * @see BoardLocation
      * @see Piece
+     * @param board       The Piece[][] to apply to.
      * @param pieceMoving The piece that is moving.
      * @param startMove   The start location.
      * @param endMove     The end location.
@@ -690,6 +698,7 @@ public class Board {
      * and rook.
      * @see BoardLocation
      * @see Piece
+     * @param board       The Piece[][] to apply to.
      * @param pieceMoving The piece that is moving.
      * @param startMove   The start location.
      * @param endMove     The end location.
@@ -737,6 +746,7 @@ public class Board {
      * Gets the number of pieces that can move to the same location.
      * @see BoardLocation
      * @see Piece
+     * @param board       The Piece[][] to apply to.
      * @param pieceMoving The piece that is moving.
      * @param endMove     The location of the target move location.
      * @param team        The team that is associated with the piece.
@@ -827,6 +837,7 @@ public class Board {
      * @param board    The board to check for the locations on.
      * @param piece    The piece to get the possible moves for.
      * @param location The location that the piece is at.
+     * @param extraCheck Should special moves be checked on pieces.
      * @return An ArrayList of BoardLocations of where a piece can move to.
      */
     public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, Piece piece, BoardLocation location,
@@ -855,6 +866,7 @@ public class Board {
      * @see Piece
      * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
+     * @param extraCheck Should special moves be checked on pieces.
      * @return Arraylist of BoardLocations for the possible moves a team can make.
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeamWithoutCheckKingInCheck(Piece[][] board, int team,
@@ -876,6 +888,7 @@ public class Board {
      * @see Piece
      * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
+     * @param extraCheck Should special moves be checked on pieces.
      * @return Arraylist of BoardLocations for the possible moves a team can make.
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeamWithCheckKingInCheck(Piece[][] board, int team,
@@ -893,8 +906,10 @@ public class Board {
      * Gets all possible moves for a specific piece on the board
      * @see BoardLocation
      * @see Piece
+     * @param board   The Piecep[][] to check for.
      * @param team    The team to get the moves for.
      * @param pieceId The specific piece to get the moves for.
+     * @param extraCheck Should special moves be checked on pieces.
      * @return ArrayList of BoardLocations of all possible moves of all pieces of certain type for team.
      */
     public ArrayList<BoardLocation> getPossibleMovesForTeamForPiece(Piece[][] board, int team, int pieceId,
@@ -956,6 +971,8 @@ public class Board {
      * @param board   The board to get the pieces locations for.
      * @param team    The team to get the moves for.
      * @param pieceId The piece to get locations for.
+     * @param targetLocation The target location to check for.
+     * @param column The column to check for.
      * @return ArrayList of BoardLocations of all locations of the pieces for the team.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocationForColumn(Piece[][] board, int team,

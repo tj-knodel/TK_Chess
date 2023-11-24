@@ -381,11 +381,12 @@ public class PGNHelper {
     /**
      * Is the move currently capturing another piece.
      *
-     * @param board   The Piece[][] to check against.
-     * @param endMove The end location.
-     * @return
      * @see BoardLocation
      * @see Piece
+     * @param board   The Piece[][] to check against.
+     * @param endMove The end location.
+     * @param startMove The start location.
+     * @return If is capturing a piece.
      */
     private boolean isCapturing(Piece[][] board, BoardLocation startMove, BoardLocation endMove) {
         return !(board[endMove.row][endMove.column] instanceof EmptyPiece) || isEnPassant(board, startMove, endMove);

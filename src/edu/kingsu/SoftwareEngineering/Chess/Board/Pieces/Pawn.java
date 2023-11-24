@@ -13,13 +13,25 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
  */
 public class Pawn extends Piece {
 
+    /**
+     * Has the pawn moved once or not.
+     */
     private boolean hasMoved = false;
 
+    /**
+     * Creates a pawn with a specific team.
+     * @param team The team the pawn should be with.
+     */
     public Pawn(int team) {
         super(team);
         value = 1;
     }
 
+    /**
+     * Creates a pawn with a specific team.
+     * @param team The team the pawn should be with.
+     * @param hasMoved Has the pawn moved or not.
+     */
     public Pawn(int team, boolean hasMoved) {
         super(team);
         this.hasMoved = hasMoved;

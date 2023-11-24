@@ -13,6 +13,10 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
  */
 public class Bishop extends Piece {
 
+    /**
+     * Create a Bishop piece with a team.
+     * @param team The team to set.
+     */
     public Bishop(int team) {
         super(team);
         value = 3;
@@ -46,7 +50,8 @@ public class Bishop extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove,
+            boolean extraCheck) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
         // Up Left

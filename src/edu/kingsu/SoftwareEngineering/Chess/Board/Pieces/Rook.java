@@ -19,7 +19,7 @@ public class Rook extends Piece {
 
     /**
      * Creates a rook based on a team.
-     * @param team
+     * @param team The team to set to.
      */
     public Rook(int team) {
         super(team);

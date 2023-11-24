@@ -16,15 +16,10 @@ import java.util.Stack;
  */
 public class PGNReader {
 
-    private String metaData;
-    private String lastReadFile;
-
     /**
      * Public constructor to just initialize member variables.
      */
     public PGNReader() {
-        this.metaData = null;
-        this.lastReadFile = null;
     }
 
     /**
@@ -35,7 +30,6 @@ public class PGNReader {
      * @return The ArrayList of PGNMove class of the moves in sequence.
      */
     public ArrayList<PGNMove> getMovesFromFile(String filePath) {
-        this.lastReadFile = filePath;
         ArrayList<PGNMove> moves = new ArrayList<>();
         String allMoves = "";
 
@@ -113,9 +107,9 @@ public class PGNReader {
             }
         }
 
-//        for(PGNMove move : moves) {
-//            System.out.println("Move: " + move.getMoveString() + " Comment: " + move.getComment());
-//        }
+        //        for(PGNMove move : moves) {
+        //            System.out.println("Move: " + move.getMoveString() + " Comment: " + move.getComment());
+        //        }
 
         return moves;
     }

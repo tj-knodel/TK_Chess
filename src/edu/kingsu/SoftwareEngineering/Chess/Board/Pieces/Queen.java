@@ -12,6 +12,10 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
  */
 public class Queen extends Piece {
 
+    /**
+     * Creates a queen for a specific team.
+     * @param team The team this piece should be associated with.
+     */
     public Queen(int team) {
         super(team);
         value = 9;
@@ -45,7 +49,8 @@ public class Queen extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove, boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove,
+            boolean extraCheck) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
         //////////////////////////

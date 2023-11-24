@@ -8,7 +8,15 @@ package edu.kingsu.SoftwareEngineering.Chess.PGN;
  * @version 0.1.0
  */
 public class PGNMove {
+
+    /**
+     * The PGN notation for a specific move.
+     */
     private String moveString;
+
+    /**
+     * The comment associated with that move.
+     */
     private String comment;
 
     /**
