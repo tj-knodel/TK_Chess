@@ -158,18 +158,16 @@ public class CreateAccessoryUIs {
 	private Object[] options = { "QUEEN", "ROOK", "BISHOP", "KNIGHT" };
 	public String showUpgradeFrame(boolean isWhite) {
 
-		Object result = JOptionPane.showInputDialog(null, "Choose a Piece to upgrade to.", "Upgrade Chess Piece",
-            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-		
-		System.out.println("Result: " + result + "\n");
+        int response = JOptionPane.showOptionDialog(null, "Choose a piece to upgrade your pawn to.", "Upgrade Chess Piece",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
 
-		if (result == options[0])
+		if (response == 0)
 			return "Queen";
-		else if (result == options[1])
+		else if (response == 1)
 			return "Rook";
-		else if (result == options[2])
+		else if (response == 2)
 			return "Bishop";
-		else if (result == options[3])
+		else if (response == 3)
 			return "Knight";
 		else
 			return null;
