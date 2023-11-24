@@ -90,7 +90,6 @@ public class GameLoop {
         });
 
         UILibrary.ShowAIStrengthSlider_JMenuItem.addActionListener(e -> {
-            board.setIsPaused(true);
             //ChessUIManager.showSliderFrame();
         });
 
@@ -151,6 +150,7 @@ public class GameLoop {
 
         UILibrary.NewGame_JMenuItem.addActionListener(e -> {
             board.setIsPaused(true);
+            pauseTimers();
             ChessUIManager.showNewGameFrame();
         });
 
@@ -224,6 +224,7 @@ public class GameLoop {
             resetGUIAndListeners();
             setPlayerClickListeners();
         }
+        switchTimers();
         ChessUIManager.showMainFrame();
         redrawUI();
         if (aiVsAi || aiTeam == board.getTeamTurn()) {
@@ -233,38 +234,63 @@ public class GameLoop {
 
     private void createGame(int aiTeam) {
         ChessUIManager.HideEndGameFrame();
-        aiVsAi = false;
-        clearChessNotationLabel();
         ChessUIManager.showMainFrame();
+        clearChessNotationLabel();
+        aiVsAi = false;
         this.board = new Board(this);
         this.aiTeam = aiTeam;
         redrawUI();
-        UILibrary.WhiteTimer.setText("WHITE TIME: 00:00");
-        UILibrary.BlackTimer.setText("BLACK TIME: 00:00");
-        whiteTimer.resetTimer();
-        blackTimer.resetTimer();
-        whiteTimer.pause();
-        blackTimer.pause();
+        resetTimers();
         sendUpdateBoardState();
         resetGUIAndListeners();
     }
 
+    private void resetTimers() {
+        UILibrary.WhiteTimer.setText("WHITE TIME: 00:00");
+        UILibrary.BlackTimer.setText("BLACK TIME: 00:00");
+        whiteTimer.resetTimer();
+        blackTimer.resetTimer();
+        pauseTimers();
+    }
+
+    private void pauseTimers() {
+        whiteTimer.pause();
+        blackTimer.pause();
+    }
+
     public void sendUpdateBoardState() {
         MoveResult result = board.getLastMoveResult();
-        if (result != null) {
-            if (result.isCheckmate()) {
-                ChessUIManager.ShowEndGameFrame(
-                        ((result.getCheckmateTeam() == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
-                board.setIsPaused(true);
-            } else if (result.isStalemate()) {
-                ChessUIManager.ShowEndGameFrame("Stalemate!");
-                board.setIsPaused(true);
-            }
-        }
+        if (result != null)
+            checkEndGameState(result);
         if (aiVsAi) {
             aiTeam = (aiTeam == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         }
         String teamName = (board.getTeamTurn() == Team.WHITE_TEAM) ? "WHITE'S TURN" : "BLACK'S TURN";
+        switchTimers();
+        UILibrary.PlayerTurn.setText(teamName);
+        runAI();
+    }
+
+    private void checkEndGameState(MoveResult result) {
+        if (result.isCheckmate()) {
+            showCheckmatePopup(result);
+        } else if (result.isStalemate()) {
+            showStalemateScreen();
+        }
+    }
+
+    private void showStalemateScreen() {
+        ChessUIManager.ShowEndGameFrame("Stalemate!");
+        board.setIsPaused(true);
+    }
+
+    private void showCheckmatePopup(MoveResult result) {
+        ChessUIManager.ShowEndGameFrame(
+                ((result.getCheckmateTeam() == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
+        board.setIsPaused(true);
+    }
+
+    private void switchTimers() {
         if (board.getTeamTurn() == Team.WHITE_TEAM) {
             whiteTimer.unpause();
             blackTimer.pause();
@@ -272,8 +298,6 @@ public class GameLoop {
             blackTimer.unpause();
             whiteTimer.pause();
         }
-        UILibrary.PlayerTurn.setText(teamName);
-        runAI();
     }
 
     private void setCommentString() {
@@ -287,6 +311,8 @@ public class GameLoop {
     }
 
     private void runAI() {
+        if(board.getIsPaused())
+            return;
         if (aiTeam == board.getTeamTurn()) {
             AIThread ai = new AIThread(new AIPlayer(2, aiTeam), board, guiStarter);
             Thread runningThread = new Thread(ai);
@@ -323,10 +349,8 @@ public class GameLoop {
             return "Q";
         else {
             String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
-            if (result == null) {
-                System.out.println("NULL");
+            if (result == null)
                 return "P";
-            }
             return String.valueOf(result.charAt(0));
         }
     }
@@ -370,7 +394,7 @@ public class GameLoop {
                             MoveResult result = moveController.sendMovesToBoard(board);
                         }
                         if (!moveController.getIsFirstClick()) {
-                            var moves = moveController.getAllPossibleMoves();
+                            ArrayList<BoardLocation> moves = moveController.getAllPossibleMoves();
                             for (BoardLocation location : moves) {
                                 guiStarter.chessUIManager.boardTiles[location.row][location.column]
                                         .setPossibleMoveCircleVisibility(true);
