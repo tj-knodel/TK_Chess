@@ -253,6 +253,12 @@ public class Board {
     }
 
     /**
+     * Gets the undo move count.
+     * @return The undo move count.
+     */
+    public int getUndoMoveCount() { return undoMoveCount; }
+
+    /**
      * Load a file of the PGN format.
      *
      * @param file The file to load.
@@ -274,7 +280,7 @@ public class Board {
      *
      * @param file The file to load.
      */
-    public void loadPGNFileFromStart(File file) {
+    public ArrayList<PGNMove> loadPGNFileFromStart(File file) {
         PGNReader reader = new PGNReader();
         ArrayList<PGNMove> moves = reader.getMovesFromFile(file.getAbsolutePath());
         algebraicNotationMovesList.clear();
@@ -283,6 +289,7 @@ public class Board {
         }
         undoMoveCount = algebraicNotationMovesList.size() - 1;
         undoMove();
+        return moves;
     }
 
     /**

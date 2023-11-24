@@ -67,7 +67,7 @@ public class PGNReader {
             if (c == '(') {
                 parenCounter++;
                 continue;
-            }else if (c == '$') {
+            } else if (c == '$') {
                 dollarSign++;
                 continue;
             } else if (c == ')') {
@@ -82,6 +82,8 @@ public class PGNReader {
             if (parenCounter == 0 && dollarSign == 0) {
                 moveOnlyString += c;
             }
+            if (c == '\n')
+                moveOnlyString += "\n";
         }
 
         String comment = "";
@@ -98,14 +100,17 @@ public class PGNReader {
                 inComment = true;
             }
             if (inComment) {
-                comment += str + " ";
+                if (str.equalsIgnoreCase(";"))
+                    comment += "\n";
+                else
+                    comment += str + " ";
                 if (str.endsWith("}")) {
                     inComment = false;
                     moves.get(moves.size() - 1).setComment(comment.replace("{", "").replace("}", ""));
                 }
-             } else if (!str.endsWith(".")) {
-                 moves.add(new PGNMove(str.replace("#", "")));
-             }
+            } else if (!str.endsWith(".")) {
+                moves.add(new PGNMove(str.replace("#", "")));
+            }
         }
 
 //        for(PGNMove move : moves) {

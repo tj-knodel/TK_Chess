@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
+import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNMove;
 import edu.kingsu.SoftwareEngineering.Chess.Players.AIPlayer;
 import edu.kingsu.SoftwareEngineering.Chess.Players.AIThread;
 
@@ -38,10 +40,12 @@ public class GameLoop {
     private GameType gameType;
     private Timer whiteTimer;
     private Timer blackTimer;
+    private ArrayList<PGNMove> tutorialMoves;
 
     public GameLoop() {
         this.aiTeam = -1;
         this.moveController = new MoveController();
+        this.tutorialMoves = new ArrayList<>();
         this.whiteTimer = new Timer(Team.WHITE_TEAM);
         this.blackTimer = new Timer(Team.BLACK_TEAM);
         whiteTimer.startTimer();
@@ -94,6 +98,7 @@ public class GameLoop {
             if (aiVsAi)
                 return;
             this.board.undoMove();
+            setCommentString();
             redrawUI();
         });
 
@@ -101,6 +106,7 @@ public class GameLoop {
             if (aiVsAi)
                 return;
             this.board.redoMove();
+            setCommentString();
             redrawUI();
         });
 
@@ -179,6 +185,20 @@ public class GameLoop {
             setPlayerClickListeners();
             ChessUIManager.HideEndGameFrame();
         });
+
+        UILibrary.LearnChessButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser(".");
+            int returnValue = fileChooser.showSaveDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                this.board = new Board(this);
+                tutorialMoves = board.loadPGNFileFromStart(file);
+                this.gameType = GameType.TUTORIAL;
+                clearChessNotationLabel();
+                ChessUIManager.showMainFrame();
+                redrawUI();
+            }
+        });
     }
 
     private void restartGame() {
@@ -254,6 +274,16 @@ public class GameLoop {
         }
         UILibrary.PlayerTurn.setText(teamName);
         runAI();
+    }
+
+    private void setCommentString() {
+        if (gameType == GameType.TUTORIAL) {
+            String comment = tutorialMoves.get(tutorialMoves.size() - board.getUndoMoveCount() - 1).getComment();
+            if (comment != null) {
+                clearChessNotationLabel();
+                ChessUIManager.appendMovesLabel(comment);
+            }
+        }
     }
 
     private void runAI() {
