@@ -23,9 +23,6 @@ public class ChangeBoardAppearance {
         // Create chooser
         JFileChooser chooser = new JFileChooser();
         chooser.setPreferredSize(new Dimension(700, 700));
-
-        // Following few lines from
-        // http://www.java2s.com/Tutorial/Java/0240__Swing/SelectadirectorywithaJFileChooser.htm
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
 
@@ -72,7 +69,7 @@ public class ChangeBoardAppearance {
     /**
      * Array of Strings, default options for board appearance
      */
-    Object[] possibleValues = { "Blue", "Chaos", "Clash", "Custom Theme" };
+    Object[] possibleValues = { "Blue", "Chaos", "Clash", "Wood", "Custom Theme" };
 
     /**
      *  Shows a JOption Pane and allows the user to select from a default option or custom appearance
@@ -99,13 +96,15 @@ public class ChangeBoardAppearance {
             Object chosenAppearance = chooseFromDefaultOptions();
 
             // Filter through default options
-            if (chosenAppearance   != possibleValues[3] && chosenAppearance != null) {
+            if (chosenAppearance   != possibleValues[4] && chosenAppearance != null) {
                 if (chosenAppearance == possibleValues[0]) { // Blue
                     UILibrary.boardAppearanceFolder = "BoardImages_Blue/";
                 } else if (chosenAppearance == possibleValues[1]) { // Chaos
                      UILibrary.boardAppearanceFolder = "BoardImages_Chaos/";
                 }  else if (chosenAppearance == possibleValues[2]) { // Clash
                      UILibrary.boardAppearanceFolder = "BoardImages_Clash/";
+                }  else if (chosenAppearance == possibleValues[3]) { // Clash
+                     UILibrary.boardAppearanceFolder = "BoardImages_Wood/";
                 } 
                 UILibrary.isAbsoluteFilePath = false;
                 UILibrary.resizeModule.resizeEverything();
