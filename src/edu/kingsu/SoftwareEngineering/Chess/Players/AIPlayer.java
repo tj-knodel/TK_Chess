@@ -58,7 +58,8 @@ public class AIPlayer extends Player {
             for (BoardLocation l_prime : possibleDestinations) {
                 Piece[][] copy = copyPieces(pieces);
                 board.simulateApplyMove(copy, pieces[l.row][l.column], l, l_prime);
-                moves.add(new Move(pieces[l.row][l.column], l, l_prime, minimaxAB(board, copy, -200, 200, difficulty - 1, colour)));
+                System.out.println("thinking");
+                moves.add(new Move(pieces[l.row][l.column], l, l_prime, minimaxAB(board, copy, -200, 200, difficulty - 1, (colour == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM)));
             }
         }
 
