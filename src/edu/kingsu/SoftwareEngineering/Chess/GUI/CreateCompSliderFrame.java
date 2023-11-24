@@ -24,6 +24,7 @@ public class CreateCompSliderFrame {
      * @param min slider start value
      * @param max slider end value
      * @param tickSpacing Major Tick Spacing of the slider
+     * @return slider ui element
      */
     static private JSlider createSlider(final JOptionPane optionPane, int min, int max, int tickSpacing) {
         JSlider slider = new JSlider(min, max);
@@ -66,6 +67,7 @@ public class CreateCompSliderFrame {
      * @param max slider end value
      * @param body Body Text
      * @param tickSpacing Major Tick spacing on the slider
+     * @return UI element
      */
     private JDialog createJDialog(JOptionPane optionPane, int min, int max, String body, int tickSpacing) {
         JFrame parent = new JFrame();

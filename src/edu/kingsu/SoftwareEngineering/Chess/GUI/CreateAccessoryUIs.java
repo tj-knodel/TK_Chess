@@ -45,57 +45,6 @@ public class CreateAccessoryUIs {
 	// -----------------------------------------------------
 
 	/**
-	 * Max size a piece can be in pixels X; in the upgrade piece frame
-	 */
-	private static int maxUpgradePieceSize_X = 120;
-
-	/**
-	 * Max size a piece can be in pixels Y; in the upgrade piece frame
-	 */
-	private static int maxUpgradePieceSize_Y = 140;
-
-	/**
-	 * Show the specific piece in the tile
-	 * Resizes and positions the image to fit perfectly within the tile
-	 * 
-	 * @param imageString
-	 */
-	private void assignImage(String imageString, int xPos, JButton upgradeButton) {
-
-		ImageIcon imageToDisplay = getBoardImage(imageString);
-
-		// Following Sizing is copy-paste from ImageViewer
-		int original_X_size = imageToDisplay.getIconWidth();
-		int original_Y_size = imageToDisplay.getIconHeight();
-		int newHeight = original_Y_size;
-		int newWidth = original_X_size;
-
-		// Maintain Aspect Ratio, Following 2 if statements taken from
-		// "https://stackoverflow.com/questions/10245220/"
-		if (original_X_size > maxUpgradePieceSize_X) {
-			newWidth = maxUpgradePieceSize_X;
-			newHeight = (newWidth * original_Y_size) / original_X_size;
-		}
-		if (newHeight > maxUpgradePieceSize_Y) {
-			newHeight = maxUpgradePieceSize_Y;
-			newWidth = (newHeight * original_X_size) / original_Y_size;
-		}
-
-		int xPosition = UILibrary.resizeModule.scale_X(xPos - (newWidth / 2));
-		int yPosition = UILibrary.resizeModule.scale_Y(154 - newHeight);
-		newWidth = UILibrary.resizeModule.scale_X(newWidth);
-		newHeight = UILibrary.resizeModule.scale_Y(newHeight);
-
-		upgradeButton.setVisible(true);
-		upgradeButton.setIcon(new ImageIcon(
-				getBoardImage(imageString).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT)));
-		upgradeButton.setBounds(xPosition, yPosition, newWidth, newHeight);
-		upgradeButton.setOpaque(false);
-		upgradeButton.setContentAreaFilled(false);
-		upgradeButton.setBorderPainted(false);
-	}
-
-	/**
 	 * JButton associated for choosing to upgrade to a queen
 	 */
 	private static JButton upgradeQueenButton;
@@ -138,16 +87,6 @@ public class CreateAccessoryUIs {
 
 	// -----------------------------------------------------
 	// -----------------------------------------------------
-
-	/**
-	 * Removes all the action listeners from the specified JButton
-	 * @param button Button to remove action listeners from
-	 */
-	private void removeActionListeners(JButton button) {
-		for (ActionListener listener : button.getActionListeners()) {
-			button.removeActionListener(listener);
-		}
-	}
 
 	/* 
 	/**

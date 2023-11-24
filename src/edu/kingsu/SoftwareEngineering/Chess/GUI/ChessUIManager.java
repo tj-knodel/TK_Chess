@@ -77,6 +77,7 @@ public class ChessUIManager {
      * Shows the upgrade frame for when a player is upgrading a piece
      * 
      * @param isWhite true if the upgrading player is playing white, false otherwise
+     * @return Piece upgraded to or null
      */
     public String showUpgradeFrame(boolean isWhite) {
         return accessoryUI.showUpgradeFrame(isWhite);
@@ -167,6 +168,7 @@ public class ChessUIManager {
      * Constructor 1
      * For use with board and upgrade frame
      * Initializes connections between board and gui
+     * @param accessoryUI Needed to get images from non-static
      */
     public ChessUIManager(CreateAccessoryUIs accessoryUI) {
         boardTiles = CreateMainFrame.createChessBoard();

@@ -61,6 +61,7 @@ public class ResizeManager implements ComponentListener {
      * Scales the x value to the current size of the JFrame
      * 
      * @param requestedSize Size in pixels to scale
+     * @param originalSize Original Parent size
      * @return scaled size
      */
     public int scale_X(int requestedSize, double originalSize) {
@@ -77,6 +78,7 @@ public class ResizeManager implements ComponentListener {
      * Scales the y value to the current size of the JFrame
      * 
      * @param requestedSize Size in pixels to scale
+     * @param originalSize Original Parent size
      * @return scaled size
      */
     public int scale_Y(int requestedSize, double originalSize) {
@@ -316,6 +318,7 @@ public class ResizeManager implements ComponentListener {
      * Sets the images inside of UI element labels  to be resized when its container is resized
      * @param self UI element which holds image
      * @param image image to be resized
+     * @return UILabel object, if needed to change image
      */   
     public UIImage_Label setVariableBounds(JLabel self, ImageIcon image) {
         UIImage_Label label = new UIImage_Label(self, image);

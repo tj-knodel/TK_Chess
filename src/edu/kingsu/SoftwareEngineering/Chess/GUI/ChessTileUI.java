@@ -23,7 +23,34 @@ public class ChessTileUI extends JLayeredPane {
      * Used to specify pieces to display
      */
     public static enum PIECES_ENUM {
-        Pawn, Rook, Knight, Bishop, Queen, King, None
+        /**
+         * Pawn
+         */
+        Pawn, 
+        /**
+         * Rook
+         */
+        Rook, 
+        /**
+         * Knight
+         */
+        Knight, 
+        /**
+         * Bishop
+         */
+        Bishop, 
+        /**
+         * Queen
+         */
+        Queen, 
+        /**
+         * King
+         */
+        King, 
+        /**
+         * No Piece, Blank Square
+         */
+        None
     }
 
     /**
@@ -121,7 +148,7 @@ public class ChessTileUI extends JLayeredPane {
      * Show the specific piece in the tile
      * Resizes and positions the image to fit perfectly within the tile
      * 
-     * @param imageString
+     * @param imageString Name of the image
      */
     private void assignImage(String imageString) {
         if (imageString.equals("")) {
