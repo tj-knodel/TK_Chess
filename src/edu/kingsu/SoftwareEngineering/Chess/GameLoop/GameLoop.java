@@ -350,7 +350,7 @@ public class GameLoop {
 
     private void runAI() {
         if (aiTeam == board.getTeamTurn()) {
-            AIThread ai = new AIThread(new AIPlayer(2, aiTeam), board, guiStarter);
+            AIThread ai = new AIThread(new AIPlayer(4, aiTeam), board, guiStarter);
             Thread runningThread = new Thread(ai);
             runningThread.start();
         }
