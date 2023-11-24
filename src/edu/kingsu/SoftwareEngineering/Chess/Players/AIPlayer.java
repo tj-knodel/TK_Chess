@@ -14,12 +14,78 @@ import javax.swing.JOptionPane;
  */
 public class AIPlayer extends Player {
 
+    // The piece-square tables!
+    private static double[][] pawnTable = { {0,  0,  0,  0,  0,  0,  0,  0  },
+                                            {50, 50, 50, 50, 50, 50, 50, 50 },
+                                            {10, 10, 20, 30, 30, 20, 10, 10 },
+                                            {5,  5, 10, 25, 25, 10,  5,  5  },
+                                            {0,  0,  0, 20, 20,  0,  0,  0  },
+                                            {5, -5,-10,  0,  0,-10, -5,  5  },
+                                            {5, 10, 10,-20,-20, 10, 10,  5  },
+                                            {0,  0,  0,  0,  0,  0,  0,  0  }};
+    
+    private static double[][] knightTable ={{-50,-40,-30,-30,-30,-30,-40,-50 },
+                                            {-40,-20,  0,  0,  0,  0,-20,-40 },
+                                            {-30,  0, 10, 15, 15, 10,  0,-30 },
+                                            {-30,  5, 15, 20, 20, 15,  5,-30 },
+                                            {-30,  0, 15, 20, 20, 15,  0,-30 },
+                                            {-30,  5, 10, 15, 15, 10,  5,-30 },
+                                            {-40,-20,  0,  5,  5,  0,-20,-40 },
+                                            {-50,-40,-30,-30,-30,-30,-40,-50 }};
+
+    private static double[][] bishopTable = { {-20,-10,-10,-10,-10,-10,-10,-20 },
+                                              {-10,  0,  0,  0,  0,  0,  0,-10 },
+                                              {-10,  0,  5, 10, 10,  5,  0,-10 },
+                                              {-10,  5,  5, 10, 10,  5,  5,-10 },
+                                              {-10,  0, 10, 10, 10, 10,  0,-10 },
+                                              {-10, 10, 10, 10, 10, 10, 10,-10 },
+                                              {-10,  5,  0,  0,  0,  0,  5,-10 },
+                                              {-20,-10,-10,-10,-10,-10,-10,-20 }};
+
+    private static double[][] rookTable = { {0,  0,  0,  0,  0,  0,  0,  0  },
+                                            {5, 10, 10, 10, 10, 10, 10,  5  },
+                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
+                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
+                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
+                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
+                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
+                                            {0,  0,  0,  5,  5,  0,  0,  0} };
+
+    private static double[][] queenTable = { {-20,-10,-10, -5, -5,-10,-10,-20},
+                                             {-10,  0,  0,  0,  0,  0,  0,-10 },
+                                             {-10,  0,  5,  5,  5,  5,  0,-10 },
+                                             {-5,  0,  5,  5,  5,  5,  0, -5  },
+                                             {0,  0,  5,  5,  5,  5,  0, -5   },
+                                             {-10,  5,  5,  5,  5,  5,  0,-10 },
+                                             {-10,  0,  5,  0,  0,  0,  0,-10 },
+                                             {-20,-10,-10, -5, -5,-10,-10,-20 }};
+
+    private static double[][] kingMidTable =  { {-30,-40,-40,-50,-50,-40,-40,-30},
+                                             {-30,-40,-40,-50,-50,-40,-40,-30},
+                                             {-30,-40,-40,-50,-50,-40,-40,-30},
+                                             {-30,-40,-40,-50,-50,-40,-40,-30},
+                                             {-20,-30,-30,-40,-40,-30,-30,-20},
+                                             {-10,-20,-20,-20,-20,-20,-20,-10},
+                                             {20, 20,  0,  0,  0,  0, 20, 20 },
+                                             {20, 30, 10,  0,  0, 10, 30, 20  } };
+
+    private static double[][] kingEndTable = {{-50,-40,-30,-20,-20,-30,-40,-50},
+                                              {-30,-20,-10,  0,  0,-10,-20,-30},
+                                              {-30,-10, 20, 30, 30, 20,-10,-30},
+                                              {-30,-10, 30, 40, 40, 30,-10,-30},
+                                              {-30,-10, 30, 40, 40, 30,-10,-30},
+                                              {-30,-10, 20, 30, 30, 20,-10,-30},
+                                              {-30,-30,  0,  0,  0,  0,-30,-30},
+                                              {-50,-30,-30,-30,-30,-30,-30,-50}};
+
     // just a note
     /*
      * We can make this multithreaded without changing this class by making a special AIThread object
      * that contains an AIPlayer 
      */
     private int difficulty;
+
+    private long start_time;
 
     /**
      * Creates a new AIPlayer with the given difficulty level
@@ -50,6 +116,7 @@ public class AIPlayer extends Player {
     public Move getMove(Board board) {
         // return randomMove(board);
         // get the piece locations
+        start_time = System.currentTimeMillis();
         ArrayList<BoardLocation> pieceLocations = board.getBoardLocationsForTeam(board.getBoard(), colour);
         ArrayList<Move> moves = new ArrayList<Move>();
         Piece[][] pieces = board.getBoard();
@@ -64,17 +131,17 @@ public class AIPlayer extends Player {
         }
 
         Move bestMove = null;
-        int bestScore;
+        double bestScore = 0;
         if (colour == Team.WHITE_TEAM) {
-            bestScore = -200;
+            bestScore = -20000;
             for (Move m : moves) {
                 if (m.score > bestScore) {
                     bestMove = m;
                     bestScore = m.score;
                 }
             }
-        } else {
-            bestScore = 200;
+        } else if (colour == Team.BLACK_TEAM) {
+            bestScore = 20000;
             for (Move m : moves) {
                 if (m.score < bestScore) {
                     bestMove = m;
@@ -89,20 +156,74 @@ public class AIPlayer extends Player {
     /**
      * Helper function that gets the current score of the board
      */
-    private int calcScore(Piece[][] board) {
-        int score = 0;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                int pieceScore = board[i][j].getValue();
-                if (board[i][j].getTeam() == Team.WHITE_TEAM) {
-                    score += pieceScore;
-                } else if (board[i][j].getTeam() == Team.BLACK_TEAM) {
-                    score -= pieceScore;
+    private double calcScore(Board board, Piece[][] pieces) {
+        double score = 0;
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                int pieceScore = pieces[i][j].getValue();
+                if (pieces[i][j].getTeam() == Team.WHITE_TEAM) {
+                    score += pieceScore * 10.0;
+                    switch (pieces[i][j].getPieceName().charAt(0)) {
+                        case 'P':
+                            score += pawnTable[i][j];
+                            break;
+                        case 'N':
+                            score += knightTable[i][j];
+                            break;
+                        case 'B':
+                            score += bishopTable[i][j];
+                            break;
+                        case 'R':
+                            score += rookTable[i][j];
+                            break;
+                        case 'Q':
+                            score += queenTable[i][j];
+                            break;
+                        case 'K':
+                            score += kingMidTable[i][j];
+                            break;
+                        default:
+                            break;
+                    }
+                } else if (pieces[i][j].getTeam() == Team.BLACK_TEAM) {
+                    score -= pieceScore * 10.0;
+                    switch (pieces[i][j].getPieceName().charAt(0)) {
+                        case 'P':
+                            score += -pawnTable[7 - i][j];
+                            break;
+                        case 'N':
+                            score += -knightTable[7 - i][j];
+                            break;
+                        case 'B':
+                            score += -bishopTable[7 - i][j];
+                            break;
+                        case 'R':
+                            score += -rookTable[7 - i][j];
+                            break;
+                        case 'Q':
+                            score += -queenTable[7 - i][j];
+                            break;
+                        case 'K':
+                            score += -kingMidTable[7- i][j];
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
         // System.out.println("Total score is " + score);
-        return score;
+        double num_moves = board.getPossibleMovesForTeamWithCheckKingInCheck(pieces, colour, true).size();
+        double mobilitywt = 1.0;
+
+        if (colour == Team.WHITE_TEAM) {
+            num_moves *= mobilitywt;
+        }
+        else if (colour == Team.BLACK_TEAM) {
+            num_moves *= -mobilitywt;
+        }
+
+        return score + num_moves;
     }
 
     private Move randomMove(Board board) {
@@ -165,19 +286,19 @@ public class AIPlayer extends Player {
      * The minimax algorithm for the AI player
      * @return the score for the current iteration of the minimax.
      */
-    private int minimax(Board board, Piece[][] pieces, int depth, int player) {
+    private double minimax(Board board, Piece[][] pieces, int depth, int player) {
         if (depth <= 0) {
             // System.out.println(calcScore(pieces));
-            return calcScore(pieces);
+            return calcScore(board, pieces);
         }
         // JOptionPane.showConfirmDialog(null, "Got here with team: " + board.getTeamTurn());
 
         // the score of the board is declared here
-        int score = 0;
+        double score = 0;
         // System.out.println("Going down a level!");
         if (player == Team.WHITE_TEAM) {
             // set score to some negative number more than is possible
-            score = -200;
+            score = -20000;
             // get the white team pieces
             //ArrayList<BoardLocation> white_pieces = board.
 
@@ -203,7 +324,7 @@ public class AIPlayer extends Player {
             return score;
         } else {
             // set score to some positive number that is more than is possible in the game
-            score = 200;
+            score = 20000;
             for (int i = 0; i < pieces.length; i++) {
                 for (int j = 0; j < pieces[i].length; j++) {
                     if (pieces[i][j].getTeam() == Team.BLACK_TEAM) {
@@ -232,22 +353,22 @@ public class AIPlayer extends Player {
      * The minimax algorithm with AB pruning algorithm for the AI player
      * @return the score for the current iteration of the minimax.
      */
-    private int minimaxAB(Board board, Piece[][] pieces, int alpha, int beta, int depth, int player) {
-        if (depth <= 0) {
+    private double minimaxAB(Board board, Piece[][] pieces, double alpha, double beta, int depth, int player) {
+        if (depth <= 0 || System.currentTimeMillis() - start_time >= 5000) {
             // System.out.println(calcScore(pieces));
-            return calcScore(pieces);
+            return calcScore(board, pieces);
         }
         // JOptionPane.showConfirmDialog(null, "Got here with team: " + board.getTeamTurn());
 
-        int cur_alpha = alpha;
-        int cur_beta = beta;
+        double cur_alpha = alpha;
+        double cur_beta = beta;
 
         // the score of the board is declared here
-        int score = 0;
+        double score = 0;
         // System.out.println("Going down a level!");
         if (player == Team.WHITE_TEAM) {
             // set score to some negative number more than is possible
-            score = -200;
+            score = Double.MIN_VALUE;
             // get the white team pieces
             //ArrayList<BoardLocation> white_pieces = board.
 
@@ -277,7 +398,7 @@ public class AIPlayer extends Player {
             return score;
         } else {
             // set score to some positive number that is more than is possible in the game
-            score = 200;
+            score = Double.MAX_VALUE;
             for (int i = 0; i < pieces.length; i++) {
                 for (int j = 0; j < pieces[i].length; j++) {
                     if (pieces[i][j].getTeam() == Team.BLACK_TEAM) {
@@ -303,6 +424,5 @@ public class AIPlayer extends Player {
             // System.out.println("This is the score so far " + score);
             return score;
         }
-
     }
 }
