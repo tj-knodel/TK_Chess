@@ -253,6 +253,11 @@ public abstract class UILibrary {
   public static JMenuItem ShowAIStrengthSlider_JMenuItem;
 
   /**
+   * JMenuItem which shows the Set AI Strength Frame
+   */
+  public static JMenuItem ShowAITimeOutSlider_JMenuItem;
+
+  /**
    * JMenuItem which shows the about section
    */
   public static JMenuItem About_JMenuItem;

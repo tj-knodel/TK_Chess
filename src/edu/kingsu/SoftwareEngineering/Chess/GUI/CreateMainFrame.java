@@ -314,6 +314,11 @@ public class CreateMainFrame {
         ComputerStrength_JMenu.add(StrengthSlider_Item);
         UILibrary.ShowAIStrengthSlider_JMenuItem = StrengthSlider_Item;
 
+        JMenuItem AITimeOut_Item = new JMenuItem("Set AI Time Out Length");
+        UILibrary.resizeModule.setTextBounds(AITimeOut_Item, 14);
+        ComputerStrength_JMenu.add(AITimeOut_Item);
+        UILibrary.ShowAITimeOutSlider_JMenuItem = AITimeOut_Item;
+
         // ---- Help -------
         JMenu Help_JMenu = new JMenu("Help"); // button on the bar
         bar.add(Help_JMenu);
