@@ -35,17 +35,6 @@ public class GUIStarter {
         UILibrary.MainFrame.setVisible(false);
 
 
-        ///// TEMP
-        CreateCompSliderFrame temp = new CreateCompSliderFrame();
-        UILibrary.ShowAIStrengthSlider_JMenuItem.addActionListener(e -> {
-            temp.showAISlider();
-        });
-        UILibrary.ShowAITimeOutSlider_JMenuItem.addActionListener(e -> {
-            temp.showAISliderTimeOut();
-        });
-        ///// TEMP
-
-
         // Show UI
         UILibrary.ChessJFrame.setVisible(true);
 

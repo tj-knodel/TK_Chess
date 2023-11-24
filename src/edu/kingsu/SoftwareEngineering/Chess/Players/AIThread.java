@@ -2,7 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Players;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 
 /**
  * A wrapper to store an AIPlayer
@@ -11,13 +11,13 @@ public class AIThread implements Runnable {
     private Player aiPlayer;
     private Board board;
     private Move curMove;
-    private GUIStarter guiStarter;
+    private GameLoop gameLoop;
 
-    public AIThread(AIPlayer ai, Board board, GUIStarter guiStarter) {
+    public AIThread(AIPlayer ai, Board board, GameLoop gameLoop) {
         aiPlayer = ai;
         this.board = board;
         curMove = null;
-        this.guiStarter = guiStarter;
+        this.gameLoop = gameLoop;
     }
 
     /**
@@ -28,7 +28,7 @@ public class AIThread implements Runnable {
         // simple loop to just keep checking if we need a move and update the listener.
         // curMove = aiPlayer.getMove(board);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(gameLoop.getAiThinkTimeSeconds() * 1000);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

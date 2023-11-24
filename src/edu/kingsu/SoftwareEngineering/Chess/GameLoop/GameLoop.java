@@ -15,10 +15,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
-import edu.kingsu.SoftwareEngineering.Chess.GUI.UILibrary;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.*;
 import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNMove;
 import edu.kingsu.SoftwareEngineering.Chess.Players.AIPlayer;
 import edu.kingsu.SoftwareEngineering.Chess.Players.AIThread;
@@ -41,8 +38,12 @@ public class GameLoop {
     private Timer whiteTimer;
     private Timer blackTimer;
     private ArrayList<PGNMove> tutorialMoves;
+    private int aiThinkTimeSeconds;
+    private int aiStrength;
 
     public GameLoop() {
+        this.aiThinkTimeSeconds = 1;
+        this.aiStrength = 0;
         this.aiTeam = -1;
         this.moveController = new MoveController();
         this.tutorialMoves = new ArrayList<>();
@@ -89,8 +90,15 @@ public class GameLoop {
             setPlayerClickListeners();
         });
 
+        CreateCompSliderFrame temp = new CreateCompSliderFrame();
         UILibrary.ShowAIStrengthSlider_JMenuItem.addActionListener(e -> {
-            //ChessUIManager.showSliderFrame();
+            temp.showAISlider();
+        });
+        UILibrary.ShowAITimeOutSlider_JMenuItem.addActionListener(e -> {
+            Integer value = temp.showAISliderTimeOut();
+            if(value != null) {
+                aiThinkTimeSeconds = value;
+            }
         });
 
         UILibrary.StepBackwards_Button.addActionListener(e -> {
@@ -314,7 +322,7 @@ public class GameLoop {
         if(board.getIsPaused())
             return;
         if (aiTeam == board.getTeamTurn()) {
-            AIThread ai = new AIThread(new AIPlayer(2, aiTeam), board, guiStarter);
+            AIThread ai = new AIThread(new AIPlayer(2, aiTeam), board, this);
             Thread runningThread = new Thread(ai);
             runningThread.start();
         }
@@ -361,6 +369,10 @@ public class GameLoop {
 
     public void clearChessNotationLabel() {
         ChessUIManager.clearMovesLabel();
+    }
+
+    public int getAiThinkTimeSeconds() {
+        return aiThinkTimeSeconds;
     }
 
     private void resetGUIAndListeners() {
