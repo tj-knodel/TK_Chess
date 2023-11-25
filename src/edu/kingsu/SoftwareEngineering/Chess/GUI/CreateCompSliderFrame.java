@@ -62,7 +62,8 @@ public class CreateCompSliderFrame {
     }
 
     /**
-     * Create a JDialog Popup
+     * Create a JDialog Popup 
+     * @param optionPane the JOptionPane
      * @param min slider start value
      * @param max slider end value
      * @param body Body Text

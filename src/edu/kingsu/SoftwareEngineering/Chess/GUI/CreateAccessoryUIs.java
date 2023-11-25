@@ -97,6 +97,7 @@ public class CreateAccessoryUIs {
 	 * Shows the upgrade piece frame
 	 * 
 	 * @param isWhite true = upgrading a white piece, false = upgrading a black piece
+	 * @return Name of the piece the player upgraded to, or null
 	 */
 	public String showUpgradeFrame(boolean isWhite) {
 

@@ -166,7 +166,7 @@ public class ChessUIManager {
 
     /**
      *  Sets the visibility of the Loading Icon
-     * @param isVisible
+     * @param isVisible true = load icon will be shown
      */
     public void setLoadIconVisibility(boolean isVisible) {
         loadIcon.isDrawing = isVisible;

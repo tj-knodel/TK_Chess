@@ -197,7 +197,7 @@ public abstract class UILibrary {
   public static JMenuItem RestartGame_JMenuItem;
 
   /**
-   * 
+   *  Resume the chess current game
    */
   public static JMenuItem ResumeGame_JMenuItem;
 
