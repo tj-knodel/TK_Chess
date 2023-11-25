@@ -155,6 +155,23 @@ public class ChessUIManager {
         CreateAccessoryUIs.endLabel.setVisible(false);
     }
 
+    // --------------------------------------
+    // --------Loading Icon-------------
+    // --------------------------------------
+
+    /**
+     * Load Icon Object
+     */
+    private LoadingIcon loadIcon;
+
+    /**
+     *  Sets the visibility of the Loading Icon
+     * @param isVisible
+     */
+    public void setLoadIconVisibility(boolean isVisible) {
+        loadIcon.isDrawing = isVisible;
+    }
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 
@@ -167,6 +184,8 @@ public class ChessUIManager {
     public ChessUIManager(CreateAccessoryUIs accessoryUI) {
         boardTiles = CreateMainFrame.createChessBoard();
         this.accessoryUI = accessoryUI;
+
+        loadIcon = new LoadingIcon();
     }
 
     /**
