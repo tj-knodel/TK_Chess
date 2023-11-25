@@ -2,6 +2,7 @@ package edu.kingsu.SoftwareEngineering.Chess.Players;
 
 import edu.kingsu.SoftwareEngineering.Chess.Board.*;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
+import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -87,6 +88,8 @@ public class AIPlayer extends Player {
 
     private long start_time;
 
+    private GameLoop gameLoop;
+
     /**
      * Creates a new AIPlayer with the given difficulty level
      * @param difficulty the level of depth for the AI algorithm
@@ -107,6 +110,11 @@ public class AIPlayer extends Player {
         this.colour = colour;
         this.difficulty = difficulty;
         this.name = name;
+    }
+
+    public AIPlayer(int difficulty, int colour, String name, GameLoop gameLoop) {
+        this(difficulty, colour, name);
+        this.gameLoop = gameLoop;
     }
 
     /**
@@ -359,7 +367,8 @@ public class AIPlayer extends Player {
     */
     private double minimaxAB(Board board, Piece[][] pieces, double alpha, double beta, int depth, int player) {
         double score = 0;
-        if (depth <= 0 || System.currentTimeMillis() - start_time >= 5000
+        long maxThinkTime = (gameLoop == null) ? 5000 : gameLoop.getAiThinkTimeSeconds() * 1000;
+        if (depth <= 0 || System.currentTimeMillis() - start_time >= maxThinkTime
                 || board.getBoardLocationsForTeamForPiece(pieces, colour, Piece.KING).isEmpty()) {
             // System.out.println(calcScore(pieces));
             return calcScore(board, pieces);

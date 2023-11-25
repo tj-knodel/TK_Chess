@@ -326,7 +326,8 @@ public class GameLoop {
         if (board.getIsPaused())
             return;
         if (aiTeam == board.getTeamTurn()) {
-            AIThread ai = new AIThread(new AIPlayer((int) (aiStrength / 100.0 * 10.0), aiTeam), board, this);
+            AIThread ai = new AIThread(new AIPlayer((int) (aiStrength / 100.0 * 10.0), aiTeam, "Smart AI", this), board,
+                    this);
             Thread runningThread = new Thread(ai);
             runningThread.start();
         }

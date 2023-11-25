@@ -738,7 +738,7 @@ public class Board {
      * @param endMove   The end location of the move.
      * @return True if castling is requested and valid.
      */
-    public boolean getIsMoveCastling(BoardLocation startMove, BoardLocation endMove) {
+    public boolean getIsMoveCastling(Piece[][] board, BoardLocation startMove, BoardLocation endMove) {
         return (board[startMove.row][startMove.column] instanceof King
                 && board[endMove.row][endMove.column] instanceof Rook)
                 && board[startMove.row][startMove.column].getTeam() == board[endMove.row][endMove.column].getTeam();
@@ -777,7 +777,7 @@ public class Board {
      * @param endMove     Desired end location of the piece.
      */
     public void simulateApplyMove(Piece[][] board, Piece pieceMoving, BoardLocation startMove, BoardLocation endMove) {
-        if (getIsMoveCastling(startMove, endMove)) {
+        if (getIsMoveCastling(board, startMove, endMove)) {
             if (getIsMoveCastlingLongSide(startMove, endMove)) {
                 applyCastlingLongSide(board, pieceMoving, startMove, endMove);
             } else {

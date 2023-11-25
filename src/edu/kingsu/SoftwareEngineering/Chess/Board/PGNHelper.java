@@ -278,7 +278,7 @@ public class PGNHelper {
     public String getPGNNotationFromMove(BoardLocation startMove, BoardLocation endMove) {
         Piece[][] boardCopy = board.getBoard();
         Piece piece = boardCopy[startMove.row][startMove.column];
-        if (board.getIsMoveCastling(startMove, endMove)) {
+        if (board.getIsMoveCastling(boardCopy, startMove, endMove)) {
             if (board.getIsMoveCastlingLongSide(startMove, endMove))
                 return "O-O-O";
             return "O-O";

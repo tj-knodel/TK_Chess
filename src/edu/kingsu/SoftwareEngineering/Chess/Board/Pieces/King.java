@@ -57,6 +57,10 @@ public class King extends Piece {
         return inCheck;
     }
 
+    public boolean hasMoved() {
+        return hasMoved;
+    }
+
     /**
      * {@inheritDoc}
      */
