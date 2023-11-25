@@ -1,1 +1,6 @@
-1. d4 d5 2. e3 Nf6 3. Nc3 Ng4 4. Ndx5 {The knight moves in L shapes and can jump over pieces}
+1. f3 e6
+2. g4 Qh4++ { // CHECKMATE // ;
+
+When the king is in check, and there is no possible move to take the king out
+of check, then they are in checkmate, and the opposing team wins.
+}

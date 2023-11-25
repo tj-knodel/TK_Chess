@@ -102,14 +102,12 @@ public class ChessUIManager {
      */
     public static void appendMovesLabel(String move) {
         UILibrary.MovesLabel.setText(UILibrary.MovesLabel.getText() + move);
-   }
-
-   
+    }
 
     // -----------------------------------------------------------
     // --------------Managing Which Frames are Visible------------
     // -----------------------------------------------------------
-    
+
     /**
      * Shows the Main Frame in the chess JFrame
      */
@@ -127,7 +125,6 @@ public class ChessUIManager {
         UILibrary.MainFrame.setVisible(false);
     }
 
-
     // -------------------------------------------------------------------------------
     // ------------Managing Changing the Computer Difficulty Slider Frame-------------
     // -------------------------------------------------------------------------------
@@ -141,8 +138,6 @@ public class ChessUIManager {
     public ImageIcon getImage(String imageToGet) {
         return new ImageIcon(getClass().getClassLoader().getResource(imageToGet));
     }
-
-
 
     /**
     * Show the end game frame with the desired message
@@ -159,7 +154,6 @@ public class ChessUIManager {
     public static void HideEndGameFrame() {
         CreateAccessoryUIs.endLabel.setVisible(false);
     }
-
 
     // -----------------------------------------------------
     // -----------------------------------------------------

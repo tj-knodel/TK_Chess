@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -29,13 +31,13 @@ public class PGNReader {
      * @param filePath The file to load.
      * @return The ArrayList of PGNMove class of the moves in sequence.
      */
-    public ArrayList<PGNMove> getMovesFromFile(String filePath) {
+    public ArrayList<PGNMove> getMovesFromFile(InputStream filePath) {
         ArrayList<PGNMove> moves = new ArrayList<>();
         String allMoves = "";
 
         // Right now it only reads the moves, can display the information too if needed.
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(filePath));
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("["))
@@ -88,7 +90,7 @@ public class PGNReader {
             if (str.isEmpty()) {
                 continue;
             }
-            if (str.endsWith(".")) {
+            if (str.endsWith(".") && !inComment) {
                 continue;
             } else if (str.startsWith("{")) {
                 inComment = true;
@@ -101,6 +103,7 @@ public class PGNReader {
                 if (str.endsWith("}")) {
                     inComment = false;
                     moves.get(moves.size() - 1).setComment(comment.replace("{", "").replace("}", ""));
+                    comment = "";
                 }
             } else if (!str.endsWith(".")) {
                 moves.add(new PGNMove(str.replace("#", "")));

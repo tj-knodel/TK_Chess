@@ -1,6 +1,8 @@
 package edu.kingsu.SoftwareEngineering.Chess.Board;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -269,7 +271,12 @@ public class Board {
      */
     public void loadPGNFile(File file) {
         PGNReader reader = new PGNReader();
-        ArrayList<PGNMove> moves = reader.getMovesFromFile(file.getAbsolutePath());
+        ArrayList<PGNMove> moves = null;
+        try {
+            moves = reader.getMovesFromFile(file.toURI().toURL().openStream());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         algebraicNotationMovesList.clear();
         for (PGNMove m : moves) {
             algebraicNotationMovesList.add(m.getMoveString());
@@ -285,14 +292,18 @@ public class Board {
      * @param file The file to load.
      * @return The ArrayList of PGNMoves to keep track of.
      */
-    public ArrayList<PGNMove> loadPGNFileFromStart(File file) {
+    public ArrayList<PGNMove> loadPGNFileFromStart(InputStream file) {
         PGNReader reader = new PGNReader();
-        ArrayList<PGNMove> moves = reader.getMovesFromFile(file.getAbsolutePath());
+        ArrayList<PGNMove> moves = reader.getMovesFromFile(file);
         algebraicNotationMovesList.clear();
+
+        int undoCount = 1;
         for (PGNMove m : moves) {
             algebraicNotationMovesList.add(m.getMoveString());
+            if (m.getComment() == null)
+                undoCount++;
         }
-        undoMoveCount = algebraicNotationMovesList.size() - 1;
+        undoMoveCount = algebraicNotationMovesList.size() - undoCount;
         undoMove();
         return moves;
     }

@@ -1,0 +1,19 @@
+1. e3 {Pawns can only move upwards unless they are capturing a piece. If they have not moved, they can also move two spaces only once. }
+e5 {This pawn moved two spaces, but only was allowed because the pawn did not already move once. }
+
+2. Nf3 {Knights can only move in L shaped patters. 2 spaces up, 1 left or right. They can also move the same way downwards, and horizontally. }
+Ne7 {This knight moved horizontally. }
+
+3. Ng5 {This knight moved vertically. } 
+Ng6 {The knight moved horizontally again. }
+
+4. Qg4  {Queens can move diagonally, horizontally, and vertically any amount of spaces. They are bishops, and rooks combined. }
+Bc5 {Bishops can only move diagonally on the square they are on. If they start on the black square, they remain on that square for the entire game. }
+
+5. Qa4 {The queen first moved diagonally, and then it moved horizontally. Queens are one of the best pieces in the game. }
+h5 {Black team moved their pawn two spaces, only allowed if the pawn has not moved. }
+
+6. Bb5 {White moved their bishop, see how this bishop has to stay on white pieces only. Both teams have bishops on both black and white pieces. }
+Rf8 {Rooks can only move horizontally and vertically. }
+
+7. Ke2 {Kings can move one space at a time only, no exceptions. However, they can move to any spaces next to them, even diagonally. }

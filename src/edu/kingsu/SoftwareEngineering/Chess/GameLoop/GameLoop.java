@@ -1,11 +1,13 @@
 package edu.kingsu.SoftwareEngineering.Chess.GameLoop;
 
+import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -86,6 +88,10 @@ public class GameLoop {
         UILibrary.RDMPlayer_VS_RDMComp_Button.addActionListener(e -> {
             Random random = new Random(System.currentTimeMillis());
             int aiTeam = random.nextInt(2);
+            if (aiTeam == Team.WHITE_TEAM)
+                this.gameType = GameType.WHITE_AI_VS_BLACK_PLAYER;
+            else
+                this.gameType = GameType.WHITE_PLAYER_VS_BLACK_AI;
             createGame(aiTeam);
             setPlayerClickListeners();
         });
@@ -199,17 +205,25 @@ public class GameLoop {
         });
 
         UILibrary.LearnChessButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser(".");
-            int returnValue = fileChooser.showSaveDialog(null);
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                this.board = new Board(this);
-                tutorialMoves = board.loadPGNFileFromStart(file);
-                this.gameType = GameType.TUTORIAL;
-                clearChessNotationLabel();
-                ChessUIManager.showMainFrame();
-                redrawUI();
-            }
+            // The JOption pane stuff taken from: https://stackoverflow.com/questions/43658679/show-joptionpane-with-dropdown-menu-on-the-top-of-other-windows
+            Object[] options = { "Overview", "Capturing Pieces", "Capturing Pieces Knight", "Castling", "Checking",
+                    "Checkmate", "Promotion" };
+            Object selectionObject = JOptionPane.showInputDialog(null, "Choose", "Tutorials Available",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, options, options[0]);
+
+            if (selectionObject == null)
+                return;
+            String selectedString = String.valueOf(selectionObject);
+
+            InputStream inputStream = getClass().getClassLoader()
+                    .getResourceAsStream("PGN Tutorials/" + selectedString.replace(" ", "") + ".pgn");
+            this.board = new Board(this);
+            tutorialMoves = board.loadPGNFileFromStart(inputStream);
+            this.gameType = GameType.TUTORIAL;
+            clearChessNotationLabel();
+            ChessUIManager.showMainFrame();
+            redrawUI();
         });
     }
 
@@ -333,30 +347,6 @@ public class GameLoop {
         }
     }
 
-    public void redrawUI() {
-        if (!board.isAtStart()) {
-            BoardLocation lastMove = board.getLastMoveLocation();
-            BoardLocation currentMove = board.getCurrentMoveLocation();
-            for (int r = 0; r < 8; r++) {
-                for (int c = 0; c < 8; c++) {
-                    if (!moveController.getIsFirstClick()) {
-                        if (r == moveController.getFirstClickLocation().row
-                                && c == moveController.getFirstClickLocation().column)
-                            continue;
-                    }
-                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
-                }
-            }
-            guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
-                    .setPreviousMoveSquareVisibility(true);
-            guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
-                    .setPreviousMoveSquareVisibility(true);
-        }
-
-        guiStarter.chessUIManager.drawBoard(board.getBoard());
-        UILibrary.MainFrame.repaint();
-    }
-
     public String getPromotionPiece() {
         if (aiTeam == board.getTeamTurn())
             return "Q";
@@ -397,6 +387,10 @@ public class GameLoop {
         }
     }
 
+    private GameLoop getGameLoop() {
+        return this;
+    }
+
     private void setPlayerClickListeners() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -406,35 +400,34 @@ public class GameLoop {
                     public void mousePressed(MouseEvent e) {
                         if (aiTeam == board.getTeamTurn())
                             return;
-                        if (moveController.chessTileClick(board, chessTile.row,
-                                chessTile.column)) {
-                            MoveResult result = moveController.sendMovesToBoard(board);
-                        }
-                        if (!moveController.getIsFirstClick()) {
-                            ArrayList<BoardLocation> moves = moveController.getAllPossibleMoves();
-                            for (BoardLocation location : moves) {
-                                guiStarter.chessUIManager.boardTiles[location.row][location.column]
-                                        .setPossibleMoveCircleVisibility(true);
-                            }
-                            guiStarter.chessUIManager.boardTiles[moveController
-                                    .getFirstClickLocation().row][moveController.getFirstClickLocation().column]
-                                    .setPreviousMoveSquareVisibility(true);
-                            redrawUI();
-                        } else {
-                            for (int r = 0; r < 8; r++) {
-                                for (int c = 0; c < 8; c++) {
-                                    guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
-                                }
-                            }
-                            guiStarter.chessUIManager.boardTiles[moveController
-                                    .getFirstClickLocation().row][moveController.getFirstClickLocation().column]
-                                    .setPreviousMoveSquareVisibility(false);
-                            redrawUI();
-                        }
-                        redrawUI();
+                        moveController.handleClick(board, chessTile, guiStarter, getGameLoop());
                     }
                 });
             }
         }
+    }
+
+    public void redrawUI() {
+        if (!board.isAtStart()) {
+            BoardLocation lastMove = board.getLastMoveLocation();
+            BoardLocation currentMove = board.getCurrentMoveLocation();
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    if (!moveController.getIsFirstClick()) {
+                        if (r == moveController.getFirstClickLocation().row
+                                && c == moveController.getFirstClickLocation().column)
+                            continue;
+                    }
+                    guiStarter.chessUIManager.boardTiles[r][c].setPreviousMoveSquareVisibility(false);
+                }
+            }
+            guiStarter.chessUIManager.boardTiles[lastMove.row][lastMove.column]
+                    .setPreviousMoveSquareVisibility(true);
+            guiStarter.chessUIManager.boardTiles[currentMove.row][currentMove.column]
+                    .setPreviousMoveSquareVisibility(true);
+        }
+
+        guiStarter.chessUIManager.drawBoard(board.getBoard());
+        UILibrary.MainFrame.repaint();
     }
 }

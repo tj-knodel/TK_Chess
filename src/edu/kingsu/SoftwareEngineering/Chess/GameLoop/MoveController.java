@@ -6,6 +6,8 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Board;
 import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveResult;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessTileUI;
+import edu.kingsu.SoftwareEngineering.Chess.GUI.GUIStarter;
 
 /**
  * The class that handles controlling the moves.
@@ -67,6 +69,36 @@ public class MoveController {
         return isFirstClick;
     }
 
+    public void handleClick(Board board, ChessTileUI chessTile, GUIStarter guiStarter, GameLoop gameLoop) {
+        if (chessTileClick(board, chessTile.row,
+                chessTile.column)) {
+            sendMovesToBoard(board);
+        }
+        if (!getIsFirstClick()) {
+            ArrayList<BoardLocation> moves = getAllPossibleMoves();
+            for (BoardLocation location : moves) {
+                guiStarter.chessUIManager.boardTiles[location.row][location.column]
+                        .setPossibleMoveCircleVisibility(true);
+            }
+            guiStarter.chessUIManager.boardTiles[getFirstClickLocation().row][getFirstClickLocation().column]
+                    .setPreviousMoveSquareVisibility(true);
+            gameLoop.redrawUI();
+        } else {
+            resetCircleVisibility(guiStarter);
+            guiStarter.chessUIManager.boardTiles[getFirstClickLocation().row][getFirstClickLocation().column]
+                    .setPreviousMoveSquareVisibility(false);
+            gameLoop.redrawUI();
+        }
+    }
+
+    private void resetCircleVisibility(GUIStarter guiStarter) {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                guiStarter.chessUIManager.boardTiles[r][c].setPossibleMoveCircleVisibility(false);
+            }
+        }
+    }
+
     /**
      * Does all the clicking logic.
      * @param board The board to check against.
@@ -84,19 +116,23 @@ public class MoveController {
             isFirstClick = false;
             return false;
         } else if (!isFirstClick) {
+            isFirstClick = true;
             secondClick = new BoardLocation(column, row);
-            if (secondClick.row == firstClick.row && secondClick.column == firstClick.column) {
-                isFirstClick = true;
+            if (secondClick.isEqual(firstClick)) {
                 return false;
             }
-            for (BoardLocation move : possibleMoves) {
-                if (move.row == secondClick.row && move.column == secondClick.column) {
-                    isFirstClick = true;
-                    return true;
-                }
-            }
-            isFirstClick = true;
+            if (clickedOnPossibleMove())
+                return true;
             return false;
+        }
+        return false;
+    }
+
+    private boolean clickedOnPossibleMove() {
+        for (BoardLocation move : possibleMoves) {
+            if (move.isEqual(secondClick)) {
+                return true;
+            }
         }
         return false;
     }
