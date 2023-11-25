@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
@@ -587,12 +585,12 @@ public class Board {
         // Update the PGN notation if necessary and the return result.
         int otherTeam = (pieceMoving.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
         if (checkKingInCheck(board, otherTeam)) {
-            if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
+            if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam).isEmpty()) {
                 result.setCheckmate(true);
                 result.setCheckmateTeam(otherTeam);
             }
         } else {
-            if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam, false).isEmpty()) {
+            if (getPossibleMovesForTeamWithCheckKingInCheck(board, otherTeam).isEmpty()) {
                 result.setStalemate(true);
                 result.setStalemateTeam(otherTeam);
             }
@@ -769,7 +767,7 @@ public class Board {
             int team) {
         int piecesMoveToSameLocation = 0;
         // Get all pieces of type that can move to the "endMove" location
-        for (BoardLocation location : getPossibleMovesForTeamForPiece(board, team, pieceMoving.getPieceID(), true)) {
+        for (BoardLocation location : getPossibleMovesForTeamForPiece(board, team, pieceMoving.getPieceID())) {
             if (location.isEqual(endMove)) {
                 piecesMoveToSameLocation++;
             }
@@ -814,15 +812,15 @@ public class Board {
      */
     private boolean checkKingInCheck(Piece[][] board, int team) {
 
-        var locations = getBoardLocationsForTeamForPiece(board, team, Piece.KING);
-        if (locations.size() == 0)
+        ArrayList<BoardLocation> locations = getBoardLocationsForTeamForPiece(board, team, Piece.KING);
+        if (locations.isEmpty())
             return true;
         BoardLocation kingLocation = locations.get(0);
         King kingPieceOtherTeam = (King) board[kingLocation.row][kingLocation.column];
         kingPieceOtherTeam.inCheck = false;
         int otherTeam = (team == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-        for (BoardLocation teamPossibleMoves : getPossibleMovesForTeamWithoutCheckKingInCheck(board, otherTeam,
-                false)) {
+        for (BoardLocation teamPossibleMoves : getPossibleMovesForTeamWithoutCheckKingInCheck(board, otherTeam
+        )) {
             if (teamPossibleMoves.row == kingLocation.row && teamPossibleMoves.column == kingLocation.column) {
                 kingPieceOtherTeam.inCheck = true;
                 return true;
@@ -833,36 +831,34 @@ public class Board {
 
     /**
      * Gets the possible moves by calling the piece's getPossibleMoves function.
+     *
+     * @param board    The board to get the possible moves on.
+     * @param piece    The piece to get the possible moves from.
+     * @param location The starting location.
+     * @return An ArrayList of BoardLocations for all the possible moves a piece can move to.
      * @see BoardLocation
      * @see Piece
-     * @param board      The board to get the possible moves on.
-     * @param piece      The piece to get the possible moves from.
-     * @param location   The starting location.
-     * @param extraCheck If the piece's extraCheck should be on.
-     * @return An ArrayList of BoardLocations for all the possible moves a piece can move to.
      */
-    private ArrayList<BoardLocation> getPossibleMovesForPiece(Piece[][] board, Piece piece, BoardLocation location,
-            boolean extraCheck) {
-        return piece.getPossibleMoves(this, board, location, extraCheck);
+    private ArrayList<BoardLocation> getPossibleMovesForPiece(Piece[][] board, Piece piece, BoardLocation location) {
+        return piece.getPossibleMoves(this, board, location);
     }
 
     /**
      * Returns all possible moves for the current piece that will
      * not allow the king to be in check.
-     * @see BoardLocation
-     * @see Piece
+     *
      * @param board    The board to check for the locations on.
      * @param piece    The piece to get the possible moves for.
      * @param location The location that the piece is at.
-     * @param extraCheck Should special moves be checked on pieces.
      * @return An ArrayList of BoardLocations of where a piece can move to.
+     * @see BoardLocation
+     * @see Piece
      */
-    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, Piece piece, BoardLocation location,
-            boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMoves(Piece[][] board, Piece piece, BoardLocation location) {
         int team = piece.getTeam();
         Piece[][] boardCopy = cloneBoard2DArray(board);
         ArrayList<BoardLocation> returnVal = new ArrayList<>();
-        ArrayList<BoardLocation> pieceMoves = getPossibleMovesForPiece(board, piece, location, extraCheck);
+        ArrayList<BoardLocation> pieceMoves = getPossibleMovesForPiece(board, piece, location);
         for (BoardLocation move : pieceMoves) {
             simulateApplyMove(boardCopy, boardCopy[location.row][location.column], location, move);
             BoardLocation kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
@@ -879,19 +875,18 @@ public class Board {
     /**
      * Gets all the possible moves for a specific team, ignoring
      * if the king is in check afterward.
-     * @see BoardLocation
-     * @see Piece
+     *
      * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
-     * @param extraCheck Should special moves be checked on pieces.
      * @return Arraylist of BoardLocations for the possible moves a team can make.
+     * @see BoardLocation
+     * @see Piece
      */
-    public ArrayList<BoardLocation> getPossibleMovesForTeamWithoutCheckKingInCheck(Piece[][] board, int team,
-            boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMovesForTeamWithoutCheckKingInCheck(Piece[][] board, int team) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
         for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
-            for (BoardLocation possibleLoc : board[loc.row][loc.column].getPossibleMoves(this, board, loc,
-                    extraCheck)) {
+            for (BoardLocation possibleLoc : board[loc.row][loc.column].getPossibleMoves(this, board, loc
+            )) {
                 possibleMoves.add(possibleLoc);
             }
         }
@@ -901,18 +896,17 @@ public class Board {
     /**
      * Gets all the possible moves for a specific team if
      * the king will not be in check afterward.
-     * @see BoardLocation
-     * @see Piece
+     *
      * @param board The board to check possible moves for the team.
      * @param team  The team to get all possible moves for.
-     * @param extraCheck Should special moves be checked on pieces.
      * @return Arraylist of BoardLocations for the possible moves a team can make.
+     * @see BoardLocation
+     * @see Piece
      */
-    public ArrayList<BoardLocation> getPossibleMovesForTeamWithCheckKingInCheck(Piece[][] board, int team,
-            boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMovesForTeamWithCheckKingInCheck(Piece[][] board, int team) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
         for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
-            for (BoardLocation possibleLoc : getPossibleMoves(board, board[loc.row][loc.column], loc, extraCheck)) {
+            for (BoardLocation possibleLoc : getPossibleMoves(board, board[loc.row][loc.column], loc)) {
                 possibleMoves.add(possibleLoc);
             }
         }
@@ -921,19 +915,18 @@ public class Board {
 
     /**
      * Gets all possible moves for a specific piece on the board
-     * @see BoardLocation
-     * @see Piece
+     *
      * @param board   The Piecep[][] to check for.
      * @param team    The team to get the moves for.
      * @param pieceId The specific piece to get the moves for.
-     * @param extraCheck Should special moves be checked on pieces.
      * @return ArrayList of BoardLocations of all possible moves of all pieces of certain type for team.
+     * @see BoardLocation
+     * @see Piece
      */
-    public ArrayList<BoardLocation> getPossibleMovesForTeamForPiece(Piece[][] board, int team, int pieceId,
-            boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMovesForTeamForPiece(Piece[][] board, int team, int pieceId) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
         for (BoardLocation loc : getBoardLocationsForTeamForPiece(board, team, pieceId)) {
-            for (BoardLocation possibleMove : getPossibleMoves(board, board[loc.row][loc.column], loc, extraCheck)) {
+            for (BoardLocation possibleMove : getPossibleMoves(board, board[loc.row][loc.column], loc)) {
                 possibleMoves.add(possibleMove);
             }
         }
@@ -1042,7 +1035,7 @@ public class Board {
             int pieceId, BoardLocation targetLocation) {
         ArrayList<BoardLocation> locations = new ArrayList<>();
         for (BoardLocation loc : getBoardLocationsForTeamForPiece(board, team, pieceId)) {
-            for (BoardLocation targetLoc : getPossibleMoves(board, board[loc.row][loc.column], loc, false)) {
+            for (BoardLocation targetLoc : getPossibleMoves(board, board[loc.row][loc.column], loc)) {
                 if (targetLoc.isEqual(targetLocation)) {
                     locations.add(loc);
                 }

@@ -100,7 +100,7 @@ public class King extends Piece {
             if (boardCopy[teamLoc.row][teamLoc.column] instanceof King)
                 continue;
             for (BoardLocation otherLoc : boardCopy[teamLoc.row][teamLoc.column].getPossibleMoves(board, boardCopy,
-                    teamLoc, false)) {
+                    teamLoc)) {
                 if (otherLoc.isEqual(loc1) || otherLoc.isEqual(loc2))
                     return false;
             }
@@ -161,7 +161,7 @@ public class King extends Piece {
             if (boardCopy[teamLoc.row][teamLoc.column] instanceof King)
                 continue;
             for (BoardLocation otherLoc : boardCopy[teamLoc.row][teamLoc.column].getPossibleMoves(board, boardCopy,
-                    teamLoc, false)) {
+                    teamLoc)) {
                 if (otherLoc.isEqual(loc1) || otherLoc.isEqual(loc2) || otherLoc.isEqual(loc3))
                     return false;
             }
@@ -201,8 +201,7 @@ public class King extends Piece {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove,
-            boolean extraCheck) {
+    public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
         ArrayList<BoardLocation> moves = new ArrayList<>();
         BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
         if (canCastleLongSide(boardClass)) {
@@ -210,8 +209,6 @@ public class King extends Piece {
         }
         if (canCastleShortSide(boardClass)) {
             moves.add(new BoardLocation(startMove.column + 3, startMove.row));
-        }
-        if (extraCheck) {
         }
 
         // Top Left

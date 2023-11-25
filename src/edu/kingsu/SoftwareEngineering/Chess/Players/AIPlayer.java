@@ -7,8 +7,6 @@ import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.JOptionPane;
-
 /**
  * @author Thaler Knodel
  * @version 0.1.0
@@ -129,8 +127,8 @@ public class AIPlayer extends Player {
         ArrayList<Move> moves = new ArrayList<Move>();
         Piece[][] pieces = board.getBoard();
         for (BoardLocation l : pieceLocations) {
-            ArrayList<BoardLocation> possibleDestinations = board.getPossibleMoves(pieces, pieces[l.row][l.column], l,
-                    false);
+            ArrayList<BoardLocation> possibleDestinations = board.getPossibleMoves(pieces, pieces[l.row][l.column], l
+            );
             for (BoardLocation l_prime : possibleDestinations) {
                 Piece[][] copy = copyPieces(pieces);
                 board.simulateApplyMove(copy, pieces[l.row][l.column], l, l_prime);
@@ -223,7 +221,7 @@ public class AIPlayer extends Player {
             }
         }
         // System.out.println("Total score is " + score);
-        double num_moves = board.getPossibleMovesForTeamWithCheckKingInCheck(pieces, colour, true).size();
+        double num_moves = board.getPossibleMovesForTeamWithCheckKingInCheck(pieces, colour).size();
         if (num_moves == 0.0) {
             System.out.println("AAAAAAAAAAAAAAAAAA");
         }
@@ -259,7 +257,7 @@ public class AIPlayer extends Player {
             start_move = team_pieces.get(idx);
             piece = pieces[start_move.row][start_move.column];
 
-            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(pieces, piece, start_move, true);
+            ArrayList<BoardLocation> possible_moves = board.getPossibleMoves(pieces, piece, start_move);
             System.out.println(possible_moves.size());
             if (possible_moves.isEmpty()) {
                 System.out.println("removing index");
@@ -319,8 +317,8 @@ public class AIPlayer extends Player {
                     if (pieces[i][j].getTeam() == Team.WHITE_TEAM) {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j, i);
-                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
-                                false);
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation
+                        );
                         // System.out.println("Amount of moves for this piece is " + moves.size());
                         // Find the maximum move and store the piece and the location in a move
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
@@ -342,8 +340,8 @@ public class AIPlayer extends Player {
                     if (pieces[i][j].getTeam() == Team.BLACK_TEAM) {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j, i);
-                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
-                                false);
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation
+                        );
                         // System.out.println("Amount of moves for this piece is " + moves.size());
                         // Find the maximum move and store the piece and the location in a move
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
@@ -390,8 +388,8 @@ public class AIPlayer extends Player {
                     if (pieces[i][j].getTeam() == Team.WHITE_TEAM) {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j, i);
-                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
-                                false);
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation
+                        );
                         // System.out.println("Amount of moves for this piece is " + moves.size());
                         // Find the maximum move and store the piece and the location in a move
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);
@@ -422,8 +420,8 @@ public class AIPlayer extends Player {
                     if (pieces[i][j].getTeam() == Team.BLACK_TEAM) {
                         // Get all the moves for this piece
                         BoardLocation pieceLocation = new BoardLocation(j, i);
-                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation,
-                                false);
+                        ArrayList<BoardLocation> moves = board.getPossibleMoves(pieces, pieces[i][j], pieceLocation
+                        );
                         // System.out.println("Amount of moves for this piece is " + moves.size());
                         // Find the maximum move and store the piece and the location in a move
                         //Move maxMove = getMaxMove(copy, pieces[i][j], new BoardLocation(j, i), moves);

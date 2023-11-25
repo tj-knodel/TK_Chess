@@ -8,8 +8,6 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.Piece;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
-
 /**
  * The class to help with generating moves from PGN,
  * and taking moves and creating the PGN.
@@ -432,7 +430,7 @@ public class PGNHelper {
         if (isOtherTeamInCheck(boardCopy, piece, startMove, endMove)) {
             moveString += "+";
             int otherTeam = (piece.getTeam() == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-            if (board.getPossibleMovesForTeamWithCheckKingInCheck(boardCopy, otherTeam, false).isEmpty())
+            if (board.getPossibleMovesForTeamWithCheckKingInCheck(boardCopy, otherTeam).isEmpty())
                 moveString += "+";
         }
         return moveString;

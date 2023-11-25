@@ -144,7 +144,7 @@ public class BoardTest {
 
     @Test
     public void testGetPossibleMovesForPiece() {
-        ArrayList<BoardLocation> possibleMoves = testBoard.getPossibleMoves(startState, startState[6][4], new BoardLocation(4,6), false);
+        ArrayList<BoardLocation> possibleMoves = testBoard.getPossibleMoves(startState, startState[6][4], new BoardLocation(4,6));
         Assert.assertEquals(2, possibleMoves.size());
     }
 
