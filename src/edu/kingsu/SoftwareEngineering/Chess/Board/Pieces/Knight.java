@@ -46,162 +46,26 @@ public class Knight extends Piece {
      */
     @Override
     public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
+        BoardLocation[] moveDirections = {new BoardLocation(-1, 2), new BoardLocation(-2, 1), new BoardLocation(1, 2), new BoardLocation(2, 1),
+                new BoardLocation(-1, -2), new BoardLocation(-2, -1), new BoardLocation(2, -1), new BoardLocation(1, -2)};
         ArrayList<BoardLocation> moves = new ArrayList<>();
-
-        // Up Left
-        BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
-        if (IsMoveValid(board, endMove)) {
-            endMove.row -= 2;
-            endMove.column--;
-            // Keep adding moves as long as we have empty space, otherwise add
-            // the first enemy player move and then break out of the loop.
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace)
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
+        for (BoardLocation direction : moveDirections) {
+            BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
+            if (IsMoveValid(board, endMove)) {
+                endMove.row += direction.row;
+                endMove.column += direction.column;
+                MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+                if (!moveValid.isInBoard)
+                    continue;
+                if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
+                    continue;
+                if (moveValid.isEmptySpace)
+                    moves.add(new BoardLocation(endMove.column, endMove.row));
+                if (moveValid.isOtherTeam) {
+                    moves.add(new BoardLocation(endMove.column, endMove.row));
                 }
             }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
         }
-
-        // Left Up
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        if (IsMoveValid(board, endMove)) {
-            endMove.row--;
-            endMove.column -= 2;
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace)
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                }
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-
-        // Up Right
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        if (IsMoveValid(board, endMove)) {
-            endMove.row -= 2;
-            endMove.column++;
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace)
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                }
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-
-        // Right Up
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        if (IsMoveValid(board, endMove)) {
-            endMove.row--;
-            endMove.column += 2;
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace)
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                }
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-
-        // Down Right
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        if (IsMoveValid(board, endMove)) {
-            endMove.row += 2;
-            endMove.column++;
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace)
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                }
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-
-        // Right Down
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        if (IsMoveValid(board, endMove)) {
-            endMove.row++;
-            endMove.column += 2;
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace)
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                }
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-
-        // Down Left
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        if (IsMoveValid(board, endMove)) {
-            endMove.row += 2;
-            endMove.column--;
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace)
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                }
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-
-        // Left Down
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        if (IsMoveValid(board, endMove)) {
-            endMove.row++;
-            endMove.column -= 2;
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (moveValid.isInBoard) {
-                if (!(!moveValid.isOtherTeam && !moveValid.isEmptySpace)) {
-                    if (moveValid.isEmptySpace)
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    if (moveValid.isOtherTeam) {
-                        moves.add(new BoardLocation(endMove.column, endMove.row));
-                    }
-                }
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-
         return moves;
     }
 

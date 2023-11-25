@@ -51,92 +51,25 @@ public class Bishop extends Piece {
      */
     @Override
     public ArrayList<BoardLocation> getPossibleMoves(Board boardClass, Piece[][] board, BoardLocation startMove) {
+        BoardLocation[] moveDirections = {new BoardLocation(-1, -1), new BoardLocation(1, -1), new BoardLocation(-1, 1), new BoardLocation(1, 1)};
         ArrayList<BoardLocation> moves = new ArrayList<>();
-        BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
-        // Up Left
-        while (IsMoveValid(board, endMove)) {
-            endMove.row--;
-            endMove.column--;
-            // Keep adding moves as long as we have empty space, otherwise add
-            // the first enemy player move and then break out of the loop.
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (!moveValid.isInBoard)
-                break;
-            if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
-                break;
-            if (moveValid.isEmptySpace)
-                moves.add(new BoardLocation(endMove.column, endMove.row));
-            if (moveValid.isOtherTeam) {
-                moves.add(new BoardLocation(endMove.column, endMove.row));
-                break;
+        for(BoardLocation direction : moveDirections) {
+            BoardLocation endMove = new BoardLocation(startMove.column, startMove.row);
+            while(IsMoveValid(board, endMove)) {
+                endMove.row += direction.row;
+                endMove.column += direction.column;
+                MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
+                if (!moveValid.isInBoard)
+                    break;
+                if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
+                    break;
+                if (moveValid.isEmptySpace)
+                    moves.add(new BoardLocation(endMove.column, endMove.row));
+                if (moveValid.isOtherTeam) {
+                    moves.add(new BoardLocation(endMove.column, endMove.row));
+                    break;
+                }
             }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-            // else
-            // break;
-        }
-        // Up Right
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        while (IsMoveValid(board, endMove)) {
-            endMove.row--;
-            endMove.column++;
-            // Keep adding moves as long as we have empty space, otherwise add
-            // the first enemy player move and then break out of the loop.
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (!moveValid.isInBoard)
-                break;
-            if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
-                break;
-            if (moveValid.isEmptySpace)
-                moves.add(new BoardLocation(endMove.column, endMove.row));
-            if (moveValid.isOtherTeam) {
-                moves.add(new BoardLocation(endMove.column, endMove.row));
-                break;
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-        // Down Left
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        while (IsMoveValid(board, endMove)) {
-            endMove.row++;
-            endMove.column--;
-            // Keep adding moves as long as we have empty space, otherwise add
-            // the first enemy player move and then break out of the loop.
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (!moveValid.isInBoard)
-                break;
-            if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
-                break;
-            if (moveValid.isEmptySpace)
-                moves.add(new BoardLocation(endMove.column, endMove.row));
-            if (moveValid.isOtherTeam) {
-                moves.add(new BoardLocation(endMove.column, endMove.row));
-                break;
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
-        }
-        // Down Right
-        endMove = new BoardLocation(startMove.column, startMove.row);
-        while (IsMoveValid(board, endMove)) {
-            endMove.row++;
-            endMove.column++;
-            // Keep adding moves as long as we have empty space, otherwise add
-            // the first enemy player move and then break out of the loop.
-            MoveValidity moveValid = IsMoveValidWithoutPiece(board, endMove);
-            if (!moveValid.isInBoard)
-                break;
-            if (!moveValid.isOtherTeam && !moveValid.isEmptySpace)
-                break;
-            if (moveValid.isEmptySpace)
-                moves.add(new BoardLocation(endMove.column, endMove.row));
-            if (moveValid.isOtherTeam) {
-                moves.add(new BoardLocation(endMove.column, endMove.row));
-                break;
-            }
-            // if (IsMoveValid(board, endMove))
-            // moves.add(new Move(endMove.column, endMove.row));
         }
         return moves;
     }
