@@ -92,11 +92,14 @@ public class GameLoop {
 
         CreateCompSliderFrame temp = new CreateCompSliderFrame();
         UILibrary.ShowAIStrengthSlider_JMenuItem.addActionListener(e -> {
-            temp.showAISlider();
+            Integer value = temp.showAISlider();
+            if (value != null) {
+                aiStrength = value;
+            }
         });
         UILibrary.ShowAITimeOutSlider_JMenuItem.addActionListener(e -> {
             Integer value = temp.showAISliderTimeOut();
-            if(value != null) {
+            if (value != null) {
                 aiThinkTimeSeconds = value;
             }
         });
@@ -151,7 +154,8 @@ public class GameLoop {
                 return;
             MoveResult result = board.applyMovePGNNotationOverride(input);
             if (!result.isSuccessful())
-                JOptionPane.showMessageDialog(null, "The notation " + input + " is incorrect!", "Invalid Move!", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The notation " + input + " is incorrect!", "Invalid Move!",
+                        JOptionPane.INFORMATION_MESSAGE);
             redrawUI();
             UILibrary.EnterMove_TextField.setText("");
         });
@@ -319,10 +323,10 @@ public class GameLoop {
     }
 
     private void runAI() {
-        if(board.getIsPaused())
+        if (board.getIsPaused())
             return;
         if (aiTeam == board.getTeamTurn()) {
-            AIThread ai = new AIThread(new AIPlayer(2, aiTeam), board, this);
+            AIThread ai = new AIThread(new AIPlayer((int) (aiStrength / 100.0 * 10.0), aiTeam), board, this);
             Thread runningThread = new Thread(ai);
             runningThread.start();
         }

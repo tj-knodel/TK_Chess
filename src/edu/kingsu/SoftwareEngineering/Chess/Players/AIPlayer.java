@@ -15,68 +15,68 @@ import javax.swing.JOptionPane;
 public class AIPlayer extends Player {
 
     // The piece-square tables!
-    private static double[][] pawnTable = { {0,  0,  0,  0,  0,  0,  0,  0  },
-                                            {50, 50, 50, 50, 50, 50, 50, 50 },
-                                            {10, 10, 20, 30, 30, 20, 10, 10 },
-                                            {5,  5, 10, 25, 25, 10,  5,  5  },
-                                            {0,  0,  0, 20, 20,  0,  0,  0  },
-                                            {5, -5,-10,  0,  0,-10, -5,  5  },
-                                            {5, 10, 10,-20,-20, 10, 10,  5  },
-                                            {0,  0,  0,  0,  0,  0,  0,  0  }};
-    
-    private static double[][] knightTable ={{-50,-40,-30,-30,-30,-30,-40,-50 },
-                                            {-40,-20,  0,  0,  0,  0,-20,-40 },
-                                            {-30,  0, 10, 15, 15, 10,  0,-30 },
-                                            {-30,  5, 15, 20, 20, 15,  5,-30 },
-                                            {-30,  0, 15, 20, 20, 15,  0,-30 },
-                                            {-30,  5, 10, 15, 15, 10,  5,-30 },
-                                            {-40,-20,  0,  5,  5,  0,-20,-40 },
-                                            {-50,-40,-30,-30,-30,-30,-40,-50 }};
+    private static double[][] pawnTable = { { 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 50, 50, 50, 50, 50, 50, 50, 50 },
+            { 10, 10, 20, 30, 30, 20, 10, 10 },
+            { 5, 5, 10, 25, 25, 10, 5, 5 },
+            { 0, 0, 0, 20, 20, 0, 0, 0 },
+            { 5, -5, -10, 0, 0, -10, -5, 5 },
+            { 5, 10, 10, -20, -20, 10, 10, 5 },
+            { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-    private static double[][] bishopTable = { {-20,-10,-10,-10,-10,-10,-10,-20 },
-                                              {-10,  0,  0,  0,  0,  0,  0,-10 },
-                                              {-10,  0,  5, 10, 10,  5,  0,-10 },
-                                              {-10,  5,  5, 10, 10,  5,  5,-10 },
-                                              {-10,  0, 10, 10, 10, 10,  0,-10 },
-                                              {-10, 10, 10, 10, 10, 10, 10,-10 },
-                                              {-10,  5,  0,  0,  0,  0,  5,-10 },
-                                              {-20,-10,-10,-10,-10,-10,-10,-20 }};
+    private static double[][] knightTable = { { -50, -40, -30, -30, -30, -30, -40, -50 },
+            { -40, -20, 0, 0, 0, 0, -20, -40 },
+            { -30, 0, 10, 15, 15, 10, 0, -30 },
+            { -30, 5, 15, 20, 20, 15, 5, -30 },
+            { -30, 0, 15, 20, 20, 15, 0, -30 },
+            { -30, 5, 10, 15, 15, 10, 5, -30 },
+            { -40, -20, 0, 5, 5, 0, -20, -40 },
+            { -50, -40, -30, -30, -30, -30, -40, -50 } };
 
-    private static double[][] rookTable = { {0,  0,  0,  0,  0,  0,  0,  0  },
-                                            {5, 10, 10, 10, 10, 10, 10,  5  },
-                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
-                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
-                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
-                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
-                                            {-5,  0,  0,  0,  0,  0,  0, -5 },
-                                            {0,  0,  0,  5,  5,  0,  0,  0} };
+    private static double[][] bishopTable = { { -20, -10, -10, -10, -10, -10, -10, -20 },
+            { -10, 0, 0, 0, 0, 0, 0, -10 },
+            { -10, 0, 5, 10, 10, 5, 0, -10 },
+            { -10, 5, 5, 10, 10, 5, 5, -10 },
+            { -10, 0, 10, 10, 10, 10, 0, -10 },
+            { -10, 10, 10, 10, 10, 10, 10, -10 },
+            { -10, 5, 0, 0, 0, 0, 5, -10 },
+            { -20, -10, -10, -10, -10, -10, -10, -20 } };
 
-    private static double[][] queenTable = { {-20,-10,-10, -5, -5,-10,-10,-20},
-                                             {-10,  0,  0,  0,  0,  0,  0,-10 },
-                                             {-10,  0,  5,  5,  5,  5,  0,-10 },
-                                             {-5,  0,  5,  5,  5,  5,  0, -5  },
-                                             {0,  0,  5,  5,  5,  5,  0, -5   },
-                                             {-10,  5,  5,  5,  5,  5,  0,-10 },
-                                             {-10,  0,  5,  0,  0,  0,  0,-10 },
-                                             {-20,-10,-10, -5, -5,-10,-10,-20 }};
+    private static double[][] rookTable = { { 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 5, 10, 10, 10, 10, 10, 10, 5 },
+            { -5, 0, 0, 0, 0, 0, 0, -5 },
+            { -5, 0, 0, 0, 0, 0, 0, -5 },
+            { -5, 0, 0, 0, 0, 0, 0, -5 },
+            { -5, 0, 0, 0, 0, 0, 0, -5 },
+            { -5, 0, 0, 0, 0, 0, 0, -5 },
+            { 0, 0, 0, 5, 5, 0, 0, 0 } };
 
-    private static double[][] kingMidTable =  { {-30,-40,-40,-50,-50,-40,-40,-30},
-                                             {-30,-40,-40,-50,-50,-40,-40,-30},
-                                             {-30,-40,-40,-50,-50,-40,-40,-30},
-                                             {-30,-40,-40,-50,-50,-40,-40,-30},
-                                             {-20,-30,-30,-40,-40,-30,-30,-20},
-                                             {-10,-20,-20,-20,-20,-20,-20,-10},
-                                             {20, 20,  0,  0,  0,  0, 20, 20 },
-                                             {20, 30, 10,  0,  0, 10, 30, 20  } };
+    private static double[][] queenTable = { { -20, -10, -10, -5, -5, -10, -10, -20 },
+            { -10, 0, 0, 0, 0, 0, 0, -10 },
+            { -10, 0, 5, 5, 5, 5, 0, -10 },
+            { -5, 0, 5, 5, 5, 5, 0, -5 },
+            { 0, 0, 5, 5, 5, 5, 0, -5 },
+            { -10, 5, 5, 5, 5, 5, 0, -10 },
+            { -10, 0, 5, 0, 0, 0, 0, -10 },
+            { -20, -10, -10, -5, -5, -10, -10, -20 } };
 
-    private static double[][] kingEndTable = {{-50,-40,-30,-20,-20,-30,-40,-50},
-                                              {-30,-20,-10,  0,  0,-10,-20,-30},
-                                              {-30,-10, 20, 30, 30, 20,-10,-30},
-                                              {-30,-10, 30, 40, 40, 30,-10,-30},
-                                              {-30,-10, 30, 40, 40, 30,-10,-30},
-                                              {-30,-10, 20, 30, 30, 20,-10,-30},
-                                              {-30,-30,  0,  0,  0,  0,-30,-30},
-                                              {-50,-30,-30,-30,-30,-30,-30,-50}};
+    private static double[][] kingMidTable = { { -30, -40, -40, -50, -50, -40, -40, -30 },
+            { -30, -40, -40, -50, -50, -40, -40, -30 },
+            { -30, -40, -40, -50, -50, -40, -40, -30 },
+            { -30, -40, -40, -50, -50, -40, -40, -30 },
+            { -20, -30, -30, -40, -40, -30, -30, -20 },
+            { -10, -20, -20, -20, -20, -20, -20, -10 },
+            { 20, 20, 0, 0, 0, 0, 20, 20 },
+            { 20, 30, 10, 0, 0, 10, 30, 20 } };
+
+    private static double[][] kingEndTable = { { -50, -40, -30, -20, -20, -30, -40, -50 },
+            { -30, -20, -10, 0, 0, -10, -20, -30 },
+            { -30, -10, 20, 30, 30, 20, -10, -30 },
+            { -30, -10, 30, 40, 40, 30, -10, -30 },
+            { -30, -10, 30, 40, 40, 30, -10, -30 },
+            { -30, -10, 20, 30, 30, 20, -10, -30 },
+            { -30, -30, 0, 0, 0, 0, -30, -30 },
+            { -50, -30, -30, -30, -30, -30, -30, -50 } };
 
     // just a note
     /*
@@ -121,12 +121,14 @@ public class AIPlayer extends Player {
         ArrayList<Move> moves = new ArrayList<Move>();
         Piece[][] pieces = board.getBoard();
         for (BoardLocation l : pieceLocations) {
-            ArrayList<BoardLocation> possibleDestinations = board.getPossibleMoves(pieces, pieces[l.row][l.column], l, false);
+            ArrayList<BoardLocation> possibleDestinations = board.getPossibleMoves(pieces, pieces[l.row][l.column], l,
+                    false);
             for (BoardLocation l_prime : possibleDestinations) {
                 Piece[][] copy = copyPieces(pieces);
                 board.simulateApplyMove(copy, pieces[l.row][l.column], l, l_prime);
                 System.out.println("thinking");
-                moves.add(new Move(pieces[l.row][l.column], l, l_prime, minimaxAB(board, copy, -200, 200, difficulty - 1, (colour == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM)));
+                moves.add(new Move(pieces[l.row][l.column], l, l_prime, minimaxAB(board, copy, -200, 200,
+                        difficulty - 1, (colour == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM)));
             }
         }
 
@@ -204,7 +206,7 @@ public class AIPlayer extends Player {
                             score += -queenTable[7 - i][j];
                             break;
                         case 'K':
-                            score += -kingMidTable[7- i][j];
+                            score += -kingMidTable[7 - i][j];
                             break;
                         default:
                             break;
@@ -221,8 +223,7 @@ public class AIPlayer extends Player {
 
         if (colour == Team.WHITE_TEAM) {
             num_moves *= mobilitywt;
-        }
-        else if (colour == Team.BLACK_TEAM) {
+        } else if (colour == Team.BLACK_TEAM) {
             num_moves *= -mobilitywt;
         }
 
@@ -352,13 +353,14 @@ public class AIPlayer extends Player {
 
     }
 
-     /**
-     * The minimax algorithm with AB pruning algorithm for the AI player
-     * @return the score for the current iteration of the minimax.
-     */
+    /**
+    * The minimax algorithm with AB pruning algorithm for the AI player
+    * @return the score for the current iteration of the minimax.
+    */
     private double minimaxAB(Board board, Piece[][] pieces, double alpha, double beta, int depth, int player) {
         double score = 0;
-        if (depth <= 0 || System.currentTimeMillis() - start_time >= 5000 || board.getBoardLocationsForTeamForPiece(pieces, colour, Piece.KING).isEmpty()) {
+        if (depth <= 0 || System.currentTimeMillis() - start_time >= 5000
+                || board.getBoardLocationsForTeamForPiece(pieces, colour, Piece.KING).isEmpty()) {
             // System.out.println(calcScore(pieces));
             return calcScore(board, pieces);
         }
@@ -391,7 +393,8 @@ public class AIPlayer extends Player {
                                 // captured the king
                                 System.out.println("Captured the black king!");
                             }
-                            score = Math.max(score, minimaxAB(board, copy, cur_alpha, cur_beta, depth - 1, Team.BLACK_TEAM));
+                            score = Math.max(score,
+                                    minimaxAB(board, copy, cur_alpha, cur_beta, depth - 1, Team.BLACK_TEAM));
                             cur_alpha = Math.max(cur_alpha, score);
                             if (score >= cur_beta) {
                                 break;
@@ -422,7 +425,8 @@ public class AIPlayer extends Player {
                                 // captured the king
                                 System.out.println("Captured the whiteking!");
                             }
-                            score = Math.min(score, minimaxAB(board, copy, cur_alpha, cur_beta, depth - 1, Team.WHITE_TEAM));
+                            score = Math.min(score,
+                                    minimaxAB(board, copy, cur_alpha, cur_beta, depth - 1, Team.WHITE_TEAM));
                             cur_beta = Math.min(cur_beta, score);
                             if (score <= cur_alpha) {
                                 break;

@@ -681,11 +681,12 @@ public class Board {
      */
     private void applyCastlingShortSide(Piece[][] board, Piece pieceMoving, BoardLocation startMove,
             BoardLocation endMove) {
-        Rook rookCopy = (Rook) board[endMove.row][endMove.column]
-                .copy(board[endMove.row][endMove.column].getTeam());
+        // Rook rookCopy = (Rook) board[endMove.row][endMove.column]
+        //         .copy(board[endMove.row][endMove.column].getTeam());
+        Piece piece = board[endMove.row][endMove.column];
         board[startMove.row][startMove.column + 2] = pieceMoving;
         board[startMove.row][startMove.column + 2].moved();
-        board[startMove.row][startMove.column + 1] = rookCopy;
+        board[startMove.row][startMove.column + 1] = piece;
         board[startMove.row][startMove.column + 1].moved();
 
         board[endMove.row][endMove.column] = new EmptyPiece();
@@ -705,11 +706,12 @@ public class Board {
      */
     private void applyCastlingLongSide(Piece[][] board, Piece pieceMoving, BoardLocation startMove,
             BoardLocation endMove) {
-        Rook rookCopy = (Rook) board[endMove.row][endMove.column]
-                .copy(board[endMove.row][endMove.column].getTeam());
+        // Rook rookCopy = (Rook) board[endMove.row][endMove.column]
+        //         .copy(board[endMove.row][endMove.column].getTeam());
+        Piece piece = board[endMove.row][endMove.column];
         board[startMove.row][startMove.column - 2] = pieceMoving;
         board[startMove.row][startMove.column - 2].moved();
-        board[startMove.row][startMove.column - 1] = rookCopy;
+        board[startMove.row][startMove.column - 1] = piece;
         board[startMove.row][startMove.column - 1].moved();
 
         board[endMove.row][endMove.column] = new EmptyPiece();
@@ -802,7 +804,7 @@ public class Board {
     private boolean checkKingInCheck(Piece[][] board, int team) {
 
         var locations = getBoardLocationsForTeamForPiece(board, team, Piece.KING);
-        if(locations.size() == 0)
+        if (locations.size() == 0)
             return true;
         BoardLocation kingLocation = locations.get(0);
         King kingPieceOtherTeam = (King) board[kingLocation.row][kingLocation.column];
