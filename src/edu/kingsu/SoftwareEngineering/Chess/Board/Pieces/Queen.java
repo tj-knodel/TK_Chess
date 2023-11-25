@@ -7,6 +7,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
+ * The piece class.
  * @author Daniell Buchner
  * @version 1.1.0
  */

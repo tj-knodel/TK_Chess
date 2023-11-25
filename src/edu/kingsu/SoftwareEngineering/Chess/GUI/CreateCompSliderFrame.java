@@ -47,7 +47,7 @@ public class CreateCompSliderFrame {
 
     /**
      * Update JOptionPane body with info from the slider
-     * @param sliderValuer the current value of the slider, slider.getValue();
+     * @param sliderValue the current value of the slider, slider.getValue();
      * @return String Description associated with that value
      */
     private String getTextForBody(int sliderValue) {

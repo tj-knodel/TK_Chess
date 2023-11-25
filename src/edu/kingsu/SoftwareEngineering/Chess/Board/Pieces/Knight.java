@@ -7,11 +7,16 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.BoardLocation;
 import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 
 /**
+ * The knight piece class.
  * @author Daniell Buchner
  * @version 1.1.0
  */
 public class Knight extends Piece {
 
+    /**
+     * Creates a new knight based on a team.
+     * @param team The team the knight should be associated with.
+     */
     public Knight(int team) {
         super(team);
         value = 3;

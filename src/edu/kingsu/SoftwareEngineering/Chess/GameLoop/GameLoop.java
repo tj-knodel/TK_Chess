@@ -27,22 +27,77 @@ import edu.kingsu.SoftwareEngineering.Chess.Players.AIThread;
  * functionality.
  *
  * @author Daniell Buchner
- * @version 0.1
+ * @version 1.0
  */
 public class GameLoop {
 
+    /**
+     * The GUIStarter to handle some GUI.
+     * @see GUIStarter
+     */
     private final GUIStarter guiStarter;
+
+    /**
+     * The MoveController to handle player (human) inputs.
+     * @see MoveController
+     */
     private MoveController moveController;
+
+    /**
+     * The board for the chess game.
+     * @see Board
+     */
     private Board board;
+
+    /**
+     * The team the AI is playing.
+     */
     private int aiTeam;
+
+    /**
+     * If it is AI vs AI.
+     */
     private boolean aiVsAi = false;
+
+    /**
+     * The type of game that is being played.
+     * @see GameType
+     */
     private GameType gameType;
+
+    /**
+     * The white team's timer.
+     * @see Timer
+     */
     private Timer whiteTimer;
+
+    /**
+     * The black team's timer.
+     * @see Timer
+     */
     private Timer blackTimer;
+
+    /**
+     * All the tutorial moves when loading a tutorial.
+     * @see PGNMove
+     */
     private ArrayList<PGNMove> tutorialMoves;
+
+    /**
+     * The max AI think time in seconds.
+     */
     private int aiThinkTimeSeconds;
+
+    /**
+     * The max ai strength level.
+     */
     private int aiStrength;
 
+    /**
+     * Creates a new game loop class and sets up all the listeners
+     * to the UILibrary.
+     * @see UILibrary
+     */
     public GameLoop() {
         this.aiThinkTimeSeconds = 1;
         this.aiStrength = 0;
@@ -227,6 +282,9 @@ public class GameLoop {
         });
     }
 
+    /**
+     * Restart a game based on the game type.
+     */
     private void restartGame() {
         resetGUIAndListeners();
         if (gameType == GameType.AI_VS_AI) {
@@ -244,6 +302,9 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Resumes a game.
+     */
     private void resumeGame() {
         board.setIsPaused(false);
         if (gameType != GameType.AI_VS_AI) {
@@ -258,6 +319,10 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Create a new game with or without an AI.
+     * @param aiTeam The team the AI should be. -1 for no AI.
+     */
     private void createGame(int aiTeam) {
         ChessUIManager.HideEndGameFrame();
         ChessUIManager.showMainFrame();
@@ -271,6 +336,9 @@ public class GameLoop {
         resetGUIAndListeners();
     }
 
+    /**
+     * Reset the timer values.
+     */
     private void resetTimers() {
         UILibrary.WhiteTimer.setText("WHITE TIME: 00:00");
         UILibrary.BlackTimer.setText("BLACK TIME: 00:00");
@@ -279,11 +347,17 @@ public class GameLoop {
         pauseTimers();
     }
 
+    /**
+     * Pause both timers.
+     */
     private void pauseTimers() {
         whiteTimer.pause();
         blackTimer.pause();
     }
 
+    /**
+     * Updates the turns and switches timers if the resulting move was successful.
+     */
     public void sendUpdateBoardState() {
         MoveResult result = board.getLastMoveResult();
         if (result != null)
@@ -297,6 +371,10 @@ public class GameLoop {
         runAI();
     }
 
+    /**
+     * Checks if the game is finished.
+     * @param result The last move to check against.
+     */
     private void checkEndGameState(MoveResult result) {
         if (result.isCheckmate()) {
             showCheckmatePopup(result);
@@ -305,17 +383,27 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Show the stalemate screen.
+     */
     private void showStalemateScreen() {
         ChessUIManager.ShowEndGameFrame("Stalemate!");
         board.setIsPaused(true);
     }
 
+    /**
+     * Show the checkmate popup.
+     * @param result The move result of the last move to check for which team won.
+     */
     private void showCheckmatePopup(MoveResult result) {
         ChessUIManager.ShowEndGameFrame(
                 ((result.getCheckmateTeam() == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
         board.setIsPaused(true);
     }
 
+    /**
+     * Switch the timers for how they are counting.
+     */
     private void switchTimers() {
         if (board.getTeamTurn() == Team.WHITE_TEAM) {
             whiteTimer.unpause();
@@ -326,6 +414,9 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Set the notation label to be the comment string if tutorial was selected.
+     */
     private void setCommentString() {
         if (gameType == GameType.TUTORIAL) {
             String comment = tutorialMoves.get(tutorialMoves.size() - board.getUndoMoveCount() - 1).getComment();
@@ -336,6 +427,9 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Runs the AI.
+     */
     private void runAI() {
         if (board.getIsPaused())
             return;
@@ -347,6 +441,10 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Gets the promotion piece when a pawn is promoting.
+     * @return A single character as a string of the promotion piece.
+     */
     public String getPromotionPiece() {
         if (aiTeam == board.getTeamTurn())
             return "Q";
@@ -354,22 +452,39 @@ public class GameLoop {
             String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
             if (result == null)
                 return "P";
+            if(result.equalsIgnoreCase("K"))
+                return "N";
             return String.valueOf(result.charAt(0));
         }
     }
 
+    /**
+     * Updates the chess notation label on the right of the GUI.
+     * @param value The value to add to the notation.
+     */
     public void updateChessNotationLabel(String value) {
         ChessUIManager.appendMovesLabel(value);
     }
 
+    /**
+     * Clears the notation label on the right of the GUI.
+     */
     public void clearChessNotationLabel() {
         ChessUIManager.clearMovesLabel();
     }
 
+    /**
+     * Get the max AI think time in seconds the AI should think.
+     * @return The max think time in seconds.
+     */
     public int getAiThinkTimeSeconds() {
         return aiThinkTimeSeconds;
     }
 
+    /**
+     * Resets all the GUi and event listeners
+     * to how it was when the game was in the main menu.
+     */
     private void resetGUIAndListeners() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -387,10 +502,17 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Get an instance of this class.
+     * @return This class.
+     */
     private GameLoop getGameLoop() {
         return this;
     }
 
+    /**
+     * Set the click listeners on the chess tiles for the player.
+     */
     private void setPlayerClickListeners() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -407,6 +529,9 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Redraws the GUI (updates it).
+     */
     public void redrawUI() {
         if (!board.isAtStart()) {
             BoardLocation lastMove = board.getLastMoveLocation();

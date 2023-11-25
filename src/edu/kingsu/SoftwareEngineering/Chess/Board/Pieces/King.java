@@ -8,6 +8,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 
 /**
+ * The king piece class.
  * @author Daniell Buchner
  * @version 1.2.0
  */
@@ -57,6 +58,10 @@ public class King extends Piece {
         return inCheck;
     }
 
+    /**
+     * Has the king moved or not.
+     * @return True if the king has moved.
+     */
     public boolean hasMoved() {
         return hasMoved;
     }

@@ -8,6 +8,7 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.MoveValidity;
 import edu.kingsu.SoftwareEngineering.Chess.Board.Team;
 
 /**
+ * The pawn piece class.
  * @author Daniell Buchner
  * @version 1.1.0
  */

@@ -31,6 +31,9 @@ public class MoveController {
      */
     private ArrayList<BoardLocation> possibleMoves;
 
+    /**
+     * Creates a new move controller object.
+     */
     public MoveController() {
         this.possibleMoves = new ArrayList<>();
     }
@@ -69,6 +72,17 @@ public class MoveController {
         return isFirstClick;
     }
 
+    /**
+     * Handles clicking on the board to update GUI and backend.
+     * @param board The board class to check against.
+     * @param chessTile The ChessTileUI to check for.
+     * @param guiStarter The GUIStarter to update the GUI.
+     * @param gameLoop The GameLoop to update.
+     * @see Board
+     * @see ChessTileUI
+     * @see GUIStarter
+     * @see GameLoop
+     */
     public void handleClick(Board board, ChessTileUI chessTile, GUIStarter guiStarter, GameLoop gameLoop) {
         if (chessTileClick(board, chessTile.row,
                 chessTile.column)) {
@@ -91,6 +105,11 @@ public class MoveController {
         }
     }
 
+    /**
+     * Resets all the circles move visible to be false.
+     * @param guiStarter The GUIStarter to reset to.
+     * @see GUIStarter
+     */
     private void resetCircleVisibility(GUIStarter guiStarter) {
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
@@ -128,6 +147,10 @@ public class MoveController {
         return false;
     }
 
+    /**
+     * Was move clicked on one of the possible move locations.
+     * @return True if clicked on possible move location.
+     */
     private boolean clickedOnPossibleMove() {
         for (BoardLocation move : possibleMoves) {
             if (move.isEqual(secondClick)) {
