@@ -819,8 +819,7 @@ public class Board {
         King kingPieceOtherTeam = (King) board[kingLocation.row][kingLocation.column];
         kingPieceOtherTeam.inCheck = false;
         int otherTeam = (team == Team.WHITE_TEAM) ? Team.BLACK_TEAM : Team.WHITE_TEAM;
-        for (BoardLocation teamPossibleMoves : getPossibleMovesForTeamWithoutCheckKingInCheck(board, otherTeam
-        )) {
+        for (BoardLocation teamPossibleMoves : getPossibleMovesForTeamWithoutCheckKingInCheck(board, otherTeam)) {
             if (teamPossibleMoves.row == kingLocation.row && teamPossibleMoves.column == kingLocation.column) {
                 kingPieceOtherTeam.inCheck = true;
                 return true;
@@ -885,8 +884,7 @@ public class Board {
     public ArrayList<BoardLocation> getPossibleMovesForTeamWithoutCheckKingInCheck(Piece[][] board, int team) {
         ArrayList<BoardLocation> possibleMoves = new ArrayList<>();
         for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
-            for (BoardLocation possibleLoc : board[loc.row][loc.column].getPossibleMoves(this, board, loc
-            )) {
+            for (BoardLocation possibleLoc : board[loc.row][loc.column].getPossibleMoves(this, board, loc)) {
                 possibleMoves.add(possibleLoc);
             }
         }

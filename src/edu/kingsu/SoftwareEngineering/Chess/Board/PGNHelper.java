@@ -403,6 +403,8 @@ public class PGNHelper {
     public boolean isEnPassant(Piece[][] board, BoardLocation startMove, BoardLocation endMove) {
         if (this.board.getLastPieceMovedId() != Piece.PAWN || this.board.getCurrentMoveLocation() == null)
             return false;
+        if (!(board[endMove.row][endMove.column] instanceof EmptyPiece))
+            return false;
         Piece pieceMoving = board[startMove.row][startMove.column];
         if (!(pieceMoving instanceof Pawn))
             return false;
