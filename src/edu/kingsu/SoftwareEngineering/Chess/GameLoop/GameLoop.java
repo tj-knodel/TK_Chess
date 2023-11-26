@@ -460,7 +460,7 @@ public class GameLoop {
             String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
             if (result == null)
                 return "P";
-            if (result.equalsIgnoreCase("K"))
+            if (result.equalsIgnoreCase("KNIGHT"))
                 return "N";
             return String.valueOf(result.charAt(0));
         }
