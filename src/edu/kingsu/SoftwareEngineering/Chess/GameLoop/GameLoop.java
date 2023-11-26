@@ -273,12 +273,10 @@ public class GameLoop {
 
             InputStream inputStream = getClass().getClassLoader()
                     .getResourceAsStream("PGN Tutorials/" + selectedString.replace(" ", "") + ".pgn");
-            this.board = new Board(this);
-            tutorialMoves = board.loadPGNFileFromStart(inputStream);
             this.gameType = GameType.TUTORIAL;
+            createGame(-1);
+            this.tutorialMoves = board.loadPGNFileFromStart(inputStream);
             clearChessNotationLabel();
-            ChessUIManager.showMainFrame();
-            redrawUI();
         });
     }
 
