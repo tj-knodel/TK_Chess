@@ -356,6 +356,14 @@ public class GameLoop {
     }
 
     /**
+     * Sets the loading pawn to spin.
+     * @param isLoading Should the pawn spin and be visible.
+     */
+    public void setLoadingPawn(boolean isLoading) {
+        guiStarter.chessUIManager.setLoadIconVisibility(isLoading);
+    }
+
+    /**
      * Updates the turns and switches timers if the resulting move was successful.
      */
     public void sendUpdateBoardState() {
@@ -452,7 +460,7 @@ public class GameLoop {
             String result = guiStarter.chessUIManager.showUpgradeFrame(board.getTeamTurn() == Team.WHITE_TEAM);
             if (result == null)
                 return "P";
-            if(result.equalsIgnoreCase("K"))
+            if (result.equalsIgnoreCase("K"))
                 return "N";
             return String.valueOf(result.charAt(0));
         }
