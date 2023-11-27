@@ -69,7 +69,7 @@ public class ChangeBoardAppearance {
     /**
      * Array of Strings, default options for board appearance
      */
-    Object[] possibleValues = { "Blue", "Chaos", "Clash", "Wood", "Custom Theme" };
+    Object[] possibleValues = { "Blue", "Chaos", "Clash", "Wood", "KingsU",  "Custom Theme" };
 
     /**
      *  Shows a JOption Pane and allows the user to select from a default option or custom appearance
@@ -96,15 +96,17 @@ public class ChangeBoardAppearance {
             Object chosenAppearance = chooseFromDefaultOptions();
 
             // Filter through default options
-            if (chosenAppearance   != possibleValues[4] && chosenAppearance != null) {
+            if (chosenAppearance   != possibleValues[possibleValues.length - 1] && chosenAppearance != null) {
                 if (chosenAppearance == possibleValues[0]) { // Blue
                     UILibrary.boardAppearanceFolder = "BoardImages_Blue/";
                 } else if (chosenAppearance == possibleValues[1]) { // Chaos
                      UILibrary.boardAppearanceFolder = "BoardImages_Chaos/";
                 }  else if (chosenAppearance == possibleValues[2]) { // Clash
                      UILibrary.boardAppearanceFolder = "BoardImages_Clash/";
-                }  else if (chosenAppearance == possibleValues[3]) { // Clash
+                }  else if (chosenAppearance == possibleValues[3]) { // Wood
                      UILibrary.boardAppearanceFolder = "BoardImages_Wood/";
+                }  else if (chosenAppearance == possibleValues[4]) { // KingsU
+                     UILibrary.boardAppearanceFolder = "BoardImages_KingsU/";
                 } 
                 UILibrary.isAbsoluteFilePath = false;
                 UILibrary.resizeModule.resizeEverything();
