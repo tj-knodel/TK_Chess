@@ -106,11 +106,12 @@ public class GameLoop {
         this.tutorialMoves = new ArrayList<>();
         this.whiteTimer = new Timer(Team.WHITE_TEAM);
         this.blackTimer = new Timer(Team.BLACK_TEAM);
+        this.guiStarter = new GUIStarter();
+        UILibrary.ResumeGame_Button.setVisible(false);
         whiteTimer.startTimer();
         whiteTimer.pause();
         blackTimer.startTimer();
         blackTimer.pause();
-        guiStarter = new GUIStarter();
         resetGUIAndListeners();
         ChessUIManager.showNewGameFrame();
         UILibrary.WhiteTimer.setText("");
@@ -120,24 +121,28 @@ public class GameLoop {
             this.gameType = GameType.PLAYER_VS_PLAYER;
             createGame(-1);
             setPlayerClickListeners();
+            UILibrary.ResumeGame_Button.setVisible(true);
         });
 
         UILibrary.WhitePlayer_VS_BlackComp_Button.addActionListener(e -> {
             this.gameType = GameType.WHITE_PLAYER_VS_BLACK_AI;
             createGame(Team.BLACK_TEAM);
             setPlayerClickListeners();
+            UILibrary.ResumeGame_Button.setVisible(true);
         });
 
         UILibrary.WhiteComp_VS_BlackPlayer_Button.addActionListener(e -> {
             this.gameType = GameType.WHITE_AI_VS_BLACK_PLAYER;
             createGame(Team.WHITE_TEAM);
             setPlayerClickListeners();
+            UILibrary.ResumeGame_Button.setVisible(true);
         });
 
         UILibrary.WhiteComp_VS_BlackComp_Button.addActionListener(e -> {
             this.gameType = GameType.AI_VS_AI;
             createGame(Team.WHITE_TEAM);
             aiVsAi = true;
+            UILibrary.ResumeGame_Button.setVisible(true);
         });
 
         UILibrary.RDMPlayer_VS_RDMComp_Button.addActionListener(e -> {
@@ -149,6 +154,7 @@ public class GameLoop {
                 this.gameType = GameType.WHITE_PLAYER_VS_BLACK_AI;
             createGame(aiTeam);
             setPlayerClickListeners();
+            UILibrary.ResumeGame_Button.setVisible(true);
         });
 
         CreateCompSliderFrame temp = new CreateCompSliderFrame();
