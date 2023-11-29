@@ -54,12 +54,6 @@ public abstract class UILibrary {
    */
   public static JLabel NewGameFrame;
 
-  /**
-   * A JLabel which holds all the UI elements present on the frame to set the AI
-   * strength
-   */
-  public static JLabel SetAIStrengthSliderFrame;
-
   // ----- Main Frame-------------
   /**
    * Located in the MainFrame;

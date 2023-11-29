@@ -26,7 +26,7 @@ public class CreateCompSliderFrame {
      * @param tickSpacing Major Tick Spacing of the slider
      * @return slider ui element
      */
-    static private JSlider createSlider(final JOptionPane optionPane, int min, int max, int tickSpacing) {
+    static private JSlider createSlider(JOptionPane optionPane, int min, int max, int tickSpacing) {
         JSlider slider = new JSlider(min, max);
         slider.setMajorTickSpacing(tickSpacing);
         slider.setPaintTicks(true);
