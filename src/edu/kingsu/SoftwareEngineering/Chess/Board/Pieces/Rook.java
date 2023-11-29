@@ -25,7 +25,7 @@ public class Rook extends Piece {
     public Rook(int team) {
         super(team);
         hasMoved = false;
-        value = 5;
+        value = 500;
     }
 
     /**

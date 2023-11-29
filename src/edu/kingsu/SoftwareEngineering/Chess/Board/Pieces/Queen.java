@@ -20,7 +20,7 @@ public class Queen extends Piece {
      */
     public Queen(int team) {
         super(team);
-        value = 9;
+        value = 900;
     }
 
     /**

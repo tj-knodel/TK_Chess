@@ -10,6 +10,7 @@ import edu.kingsu.SoftwareEngineering.Chess.GUI.ChessUIManager;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNMove;
 import edu.kingsu.SoftwareEngineering.Chess.PGN.PGNReader;
+import edu.kingsu.SoftwareEngineering.Chess.Players.Move;
 
 /**
  * The Board class handles all the logic in chess. It handles
@@ -860,7 +861,11 @@ public class Board {
         ArrayList<BoardLocation> pieceMoves = getPossibleMovesForPiece(board, piece, location);
         for (BoardLocation move : pieceMoves) {
             simulateApplyMove(boardCopy, boardCopy[location.row][location.column], location, move);
-            BoardLocation kingLocation = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING).get(0);
+            ArrayList<BoardLocation> locations = getBoardLocationsForTeamForPiece(boardCopy, team, Piece.KING);
+            if (locations.size() == 0) {
+                return returnVal;
+            }
+            BoardLocation kingLocation = locations.get(0);
             King kingPiece = (King) boardCopy[kingLocation.row][kingLocation.column];
             if (kingPiece.inCheck) {
             } else {
@@ -886,6 +891,16 @@ public class Board {
         for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
             for (BoardLocation possibleLoc : board[loc.row][loc.column].getPossibleMoves(this, board, loc)) {
                 possibleMoves.add(possibleLoc);
+            }
+        }
+        return possibleMoves;
+    }
+
+    public ArrayList<Move> getPossibleMovesForTeamWithoutCheckKingInCheckAsMoveClass(Piece[][] board, int team) {
+        ArrayList<Move> possibleMoves = new ArrayList<>();
+        for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
+            for (BoardLocation possibleLoc : board[loc.row][loc.column].getPossibleMoves(this, board, loc)) {
+                possibleMoves.add(new Move(board[loc.row][loc.column], loc, possibleLoc, 0));
             }
         }
         return possibleMoves;
@@ -940,7 +955,7 @@ public class Board {
      * @return An ArrayList of BoardLocations of the pieces to check.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeam(Piece[][] board, int team) {
-        ArrayList<BoardLocation> locations = new ArrayList<>();
+        ArrayList<BoardLocation> locations = new ArrayList<>(16);
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].getTeam() == team) {
