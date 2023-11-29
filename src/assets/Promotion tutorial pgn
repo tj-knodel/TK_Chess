@@ -1,0 +1,11 @@
+[Event "Promotion Tutorial]
+1. f4 d5 2. f5 Nh6 3. f6 c5 4. fxg7 e6 5. gxh8=Q {  // PROMOTION //
+
+When a pawn reaches the other side of the board, they are able to promote to 4 different pieces:
+- Queen
+- Rook
+- Bishop
+- Knight
+};
+
+
