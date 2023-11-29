@@ -5,7 +5,6 @@ import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * @author Thaler Knodel
@@ -13,7 +12,14 @@ import java.util.Random;
  */
 public class AIPlayer extends Player {
 
-    // The piece-square tables!
+    /*
+     * Piece-square tables are taken from this webpage
+     * https://www.chessprogramming.org/Simplified_Evaluation_Function
+     */
+
+     /**
+      * The piece-square table for pawns
+      */
     private static double[][] pawnTable = { { 0, 0, 0, 0, 0, 0, 0, 0 },
             { 50, 50, 50, 50, 50, 50, 50, 50 },
             { 10, 10, 20, 30, 30, 20, 10, 10 },
@@ -23,6 +29,9 @@ public class AIPlayer extends Player {
             { 5, 10, 10, -20, -20, 10, 10, 5 },
             { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
+    /**
+     * The piece-square table for knights
+     */
     private static double[][] knightTable = { { -50, -40, -30, -30, -30, -30, -40, -50 },
             { -40, -20, 0, 0, 0, 0, -20, -40 },
             { -30, 0, 10, 15, 15, 10, 0, -30 },
@@ -32,6 +41,9 @@ public class AIPlayer extends Player {
             { -40, -20, 0, 5, 5, 0, -20, -40 },
             { -50, -40, -30, -30, -30, -30, -40, -50 } };
 
+    /**
+     * The piece-square table for bishops
+     */
     private static double[][] bishopTable = { { -20, -10, -10, -10, -10, -10, -10, -20 },
             { -10, 0, 0, 0, 0, 0, 0, -10 },
             { -10, 0, 5, 10, 10, 5, 0, -10 },
@@ -41,6 +53,9 @@ public class AIPlayer extends Player {
             { -10, 5, 0, 0, 0, 0, 5, -10 },
             { -20, -10, -10, -10, -10, -10, -10, -20 } };
 
+    /**
+     * The piece-square table for rooks
+    */
     private static double[][] rookTable = { { 0, 0, 0, 0, 0, 0, 0, 0 },
             { 5, 10, 10, 10, 10, 10, 10, 5 },
             { -5, 0, 0, 0, 0, 0, 0, -5 },
@@ -50,6 +65,9 @@ public class AIPlayer extends Player {
             { -5, 0, 0, 0, 0, 0, 0, -5 },
             { 0, 0, 0, 5, 5, 0, 0, 0 } };
 
+    /**
+     * The piece-square table for queens
+     */
     private static double[][] queenTable = { { -20, -10, -10, -5, -5, -10, -10, -20 },
             { -10, 0, 0, 0, 0, 0, 0, -10 },
             { -10, 0, 5, 5, 5, 5, 0, -10 },
@@ -59,6 +77,9 @@ public class AIPlayer extends Player {
             { -10, 0, 5, 0, 0, 0, 0, -10 },
             { -20, -10, -10, -5, -5, -10, -10, -20 } };
 
+    /**
+     * The piece square table for king's, for the early and mid game
+     */
     private static double[][] kingMidTable = { { -30, -40, -40, -50, -50, -40, -40, -30 },
             { -30, -40, -40, -50, -50, -40, -40, -30 },
             { -30, -40, -40, -50, -50, -40, -40, -30 },
@@ -68,6 +89,9 @@ public class AIPlayer extends Player {
             { 20, 20, 0, 0, 0, 0, 20, 20 },
             { 20, 30, 10, 0, 0, 10, 30, 20 } };
 
+    /**
+     * The piece-square table for king's, for the late game
+     */
     private static double[][] kingEndTable = { { -50, -40, -30, -20, -20, -30, -40, -50 },
             { -30, -20, -10, 0, 0, -10, -20, -30 },
             { -30, -10, 20, 30, 30, 20, -10, -30 },
@@ -77,15 +101,19 @@ public class AIPlayer extends Player {
             { -30, -30, 0, 0, 0, 0, -30, -30 },
             { -50, -30, -30, -30, -30, -30, -30, -50 } };
 
-    // just a note
-    /*
-     * We can make this multithreaded without changing this class by making a special AIThread object
-     * that contains an AIPlayer 
+    /**
+     * The max search depth for the player
      */
     private int difficulty;
 
+    /**
+     * Used to properly time out the AI if it takes too long
+     */
     private long start_time;
 
+    /**
+     * The game loop the AI is attached to
+     */
     private GameLoop gameLoop;
 
     /**
@@ -100,7 +128,7 @@ public class AIPlayer extends Player {
 
     /**
      * Creates a new AIPlayer with the given difficulty level and gives it a specified name
-     * @param difficulty the level of depth for the AI algorithm
+     * @param difficulty the search depth for the AI search algorithm
      * @param colour the colour of the players pieces
      * @param name the name of the player
      */
@@ -110,6 +138,13 @@ public class AIPlayer extends Player {
         this.name = name;
     }
 
+    /**
+     * Creates a new AIPlayer with the given difficulty level and gives it a specified name
+     * @param difficulty the search depth for the AI search algorithm
+     * @param colour the colour of the players pieces
+     * @param name the name of the player
+     * @param gameLoop the game loop it is attached to
+     */
     public AIPlayer(int difficulty, int colour, String name, GameLoop gameLoop) {
         this(difficulty, colour, name);
         this.gameLoop = gameLoop;
@@ -117,6 +152,7 @@ public class AIPlayer extends Player {
 
     /**
      * Gets a move from the AI
+     * @param board the board to get a move for
      * @return a move
      */
     public Move getMove(Board board) {
@@ -162,7 +198,10 @@ public class AIPlayer extends Player {
     }
 
     /**
-     * Helper function that gets the current score of the board
+     * Evaluates the given board state
+     * @param board the parent board class
+     * @param pieces the array of pieces that represent a board
+     * @return the score of the board state given by pieces
      */
     private double calcScore(Board board, Piece[][] pieces) {
         double score = 0;
@@ -246,10 +285,17 @@ public class AIPlayer extends Player {
 
         return score + num_moves + num_pieces;
     }
+
     /**
-    * The minimax algorithm with AB pruning algorithm for the AI player
-    * @return the score for the current iteration of the minimax.
-    */
+     * The minimax algorithm with Alpha Beta pruning to search the board
+     * @param board the parent board class
+     * @param pieces the current state of the board
+     * @param alpha initial alpha value
+     * @param beta initial beta value
+     * @param depth the levels to search through
+     * @param player the current player being played
+     * @return the value of this branch
+     */
     private double minimaxAB(Board board, Piece[][] pieces, double alpha, double beta, int depth, int player) {
         double score = 0;
         long maxThinkTime = (gameLoop == null) ? 5000 : gameLoop.getAiThinkTimeSeconds() * 1000;
