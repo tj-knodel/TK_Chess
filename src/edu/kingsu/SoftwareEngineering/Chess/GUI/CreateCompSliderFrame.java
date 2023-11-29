@@ -31,6 +31,7 @@ public class CreateCompSliderFrame {
         slider.setMajorTickSpacing(tickSpacing);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
+        
 
         ChangeListener changeListener = new ChangeListener() {
             public void stateChanged(ChangeEvent changeEvent) {
@@ -68,9 +69,10 @@ public class CreateCompSliderFrame {
      * @param max slider end value
      * @param body Body Text
      * @param tickSpacing Major Tick spacing on the slider
+     * @param previousSliderValue set the slider to a value
      * @return UI element
      */
-    private JDialog createJDialog(JOptionPane optionPane, int min, int max, String body, int tickSpacing) {
+    private JDialog createJDialog(JOptionPane optionPane, int min, int max, String body, int tickSpacing, int previousSliderValue) {
         JFrame parent = new JFrame();
 
         JSlider slider = createSlider(optionPane, min, max, tickSpacing);
@@ -90,6 +92,7 @@ public class CreateCompSliderFrame {
             optionPane.setMessage(new Object[] { body, slider });
         }
 
+        slider.setValue(previousSliderValue);
         optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
         optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
         return optionPane.createDialog(parent, "AI Slider");
@@ -100,12 +103,13 @@ public class CreateCompSliderFrame {
 
     /**
      * Shows the AI Slider
+     * @param previousSliderValue set the slider to a value
      * @return New selected value, 0-100 or null if cancel
      */
-    public Integer showAISlider() {
+    public Integer showAISlider(int previousSliderValue) {
 
         JOptionPane optionPane = new JOptionPane();
-        JDialog dialog = createJDialog(optionPane, 0, 100, "Set AI Strength Slider", 25);
+        JDialog dialog = createJDialog(optionPane, 0, 100, "Set AI Strength Slider", 25, previousSliderValue);
         dialog.setVisible(true); // This line yields until input is closed
 
         if (optionPane.getValue() == null || optionPane.getValue() == (Integer) 2) { // null means "X" button, 2 as an "Object" means "Cancel"
@@ -122,12 +126,13 @@ public class CreateCompSliderFrame {
 
     /**
      * Shows the time out slider
+     * @param previousSliderValue set the slider to a value
      * @return New selected value 2-20 or null if cancel
      */
-    public Integer showAISliderTimeOut() {
+    public Integer showAISliderTimeOut(int previousSliderValue) {
 
         JOptionPane optionPane = new JOptionPane();
-        JDialog dialog = createJDialog(optionPane, 2, 20, "Set AI Max AI Computation Time (seconds)", 6);
+        JDialog dialog = createJDialog(optionPane, 2, 20, "Set AI Max AI Computation Time (seconds)", 6, previousSliderValue);
         dialog.setVisible(true); // This line yields until input is closed
 
         if (optionPane.getValue() == null || optionPane.getValue() == (Integer) 2) { // null means "X" button, 2 as an "Object" means "Cancel"
