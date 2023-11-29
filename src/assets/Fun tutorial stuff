@@ -1,0 +1,39 @@
+[Event "Castling Tutorial"]
+1. e4 e5 2. d3 Bd6 3. Nf3 Nf6 4. Nc3  O-O { // CASTLING //
+
+when there is a clear row between the king and the rook
+and no check against the king is made, 
+the king will move 2 spaces to the left or right. 
+While the rook either moves 3 spaces to the right or 2 spaces to the left. }
+
+
+[Event "En Passant"]
+1. e4 d5 2. e5 f5 3. exf6
+
+[Event "Check"]
+1. e4 e5 2. d3 f6 3. Qh5+ 
+
+[Event "Checkmate"]
+1. e4 Nc6 2. Qh5 h6 3. Bc4 a6 4. Qxf7#
+
+[Event "Taking Pieces"]
+1. d4 e5 2. dxe5
+
+[Event "Taking Pieces with knight"]
+1. d4 d5 2. e3 Nf6 3. Nc3 Ng4 4. Ndx5
+
+[Event "Promotion Tutorial]
+1. f4 d5 2. f5 Nh6 3. f6 c5 4. fxg7 e6 5. gxh8=Q [a-e][1-9]=[QRBN]) {  // PROMOTION //
+
+When a pawn reaches the other side of the board, they are able to promote to 4 different pieces:
+
+- Queen
+- Rook
+- Bishop
+- Knight
+}
+
+
+  
+
+
