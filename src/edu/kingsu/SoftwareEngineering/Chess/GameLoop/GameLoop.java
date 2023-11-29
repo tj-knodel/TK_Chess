@@ -159,13 +159,13 @@ public class GameLoop {
 
         CreateCompSliderFrame temp = new CreateCompSliderFrame();
         UILibrary.ShowAIStrengthSlider_JMenuItem.addActionListener(e -> {
-            Integer value = temp.showAISlider();
+            Integer value = temp.showAISlider(25);
             if (value != null) {
                 aiStrength = value;
             }
         });
         UILibrary.ShowAITimeOutSlider_JMenuItem.addActionListener(e -> {
-            Integer value = temp.showAISliderTimeOut();
+            Integer value = temp.showAISliderTimeOut(3);
             if (value != null) {
                 aiThinkTimeSeconds = value;
             }
