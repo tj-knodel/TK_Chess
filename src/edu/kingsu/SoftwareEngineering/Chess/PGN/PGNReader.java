@@ -58,7 +58,9 @@ public class PGNReader {
         int dollarSign = 0;
 
         String moveOnlyString = "";
-
+        allMoves = allMoves.replace("1/2-1/2", "");
+        allMoves = allMoves.replace("1-0", "");
+        allMoves = allMoves.replaceAll("0-1", "");
         for (char c : allMoves.toCharArray()) {
             if (c == '(') {
                 parenCounter++;
