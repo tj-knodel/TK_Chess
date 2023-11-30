@@ -23,17 +23,20 @@ public class PGNTest {
 
     @Test
     public void testA4Notation() {
-        Assert.assertEquals("a4 move notation not correct!", "a4", pgnHelper.getPGNNotationFromMove(new BoardLocation(0, 6), new BoardLocation(0, 4)));
+        Assert.assertEquals("a4 move notation not correct!", "a4",
+                pgnHelper.getPGNNotationFromMove(new BoardLocation(0, 6), new BoardLocation(0, 4)));
     }
 
     @Test
     public void testCastleShortSideNotation() {
-        Assert.assertEquals("O-O move notation not correct!", "O-O", pgnHelper.getPGNNotationFromMove(new BoardLocation(4, 7), new BoardLocation(7, 7)));
+        Assert.assertEquals("O-O move notation not correct!", "O-O",
+                pgnHelper.getPGNNotationFromMove(new BoardLocation(4, 7), new BoardLocation(7, 7)));
     }
 
     @Test
     public void testCastleLongSideNotation() {
-        Assert.assertEquals("O-O-O move notation not correct!", "O-O-O", pgnHelper.getPGNNotationFromMove(new BoardLocation(4, 7), new BoardLocation(0, 7)));
+        Assert.assertEquals("O-O-O move notation not correct!", "O-O-O",
+                pgnHelper.getPGNNotationFromMove(new BoardLocation(4, 7), new BoardLocation(0, 7)));
     }
 
     @Test
@@ -52,7 +55,20 @@ public class PGNTest {
     public void testKnightTakePawnAtE5() {
         this.board.applyMovePGNNotation("Nf3");
         this.board.applyMovePGNNotation("e5");
-        Assert.assertEquals("Nxe5 move notation not correct!", "Nxe5", pgnHelper.getPGNNotationFromMove(new BoardLocation(5, 5), new BoardLocation(4, 3)));
+        Assert.assertEquals("Nxe5 move notation not correct!", "Nxe5",
+                pgnHelper.getPGNNotationFromMove(new BoardLocation(5, 5), new BoardLocation(4, 3)));
+    }
+
+    @Test
+    public void testCastlingWithMultipleNotationCorrect() {
+        this.board.applyMovePGNNotation("e3");
+        this.board.applyMovePGNNotation("e6");
+        this.board.applyMovePGNNotation("Be2");
+        this.board.applyMovePGNNotation("Be7");
+        this.board.applyMovePGNNotation("Nf3");
+        this.board.applyMovePGNNotation("Nf6");
+        Assert.assertEquals("O-O should have been possible!", "O-O",
+                pgnHelper.getPGNNotationFromMove(new BoardLocation(4, 7), new BoardLocation(7, 7)));
     }
 
 }
