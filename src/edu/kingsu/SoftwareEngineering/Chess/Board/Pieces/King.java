@@ -83,7 +83,7 @@ public class King extends Piece {
      * @return True if you can castle short side.
      */
     private boolean canCastleShortSide(Board board) {
-        if (hasMoved)
+        if (hasMoved || inCheck)
             return false;
         Piece[][] boardCopy = board.getBoard();
         BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING).get(0);
@@ -119,7 +119,7 @@ public class King extends Piece {
      * @return True if you can casle long side.
      */
     private boolean canCastleLongSide(Board board) {
-        if (hasMoved)
+        if (hasMoved || inCheck)
             return false;
         Piece[][] boardCopy = board.getBoard();
         BoardLocation kingLocation = board.getBoardLocationsForTeamForPiece(board.getBoard(), team, Piece.KING).get(0);
