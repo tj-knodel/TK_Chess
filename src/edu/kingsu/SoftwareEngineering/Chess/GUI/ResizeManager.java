@@ -249,20 +249,26 @@ public class ResizeManager implements ComponentListener {
         public int originalTextSize;
 
         /**
+         * Original Text Size
+         */
+        public String font;
+
+        /**
          * Sets class variables
          * @param self UI Component which holds the text
          * @param textSize original text size
          */
-        UIText_Label(JComponent self, int textSize) {
+        UIText_Label(JComponent self, int textSize, String font) {
             this.selfComponent = self;
             this.originalTextSize = textSize;
+            this.font = font;
         }
 
         /**
          * Auto scales the size of the image when the JFrame is resized
          */
         public void updateSize() {
-            selfComponent.setFont(new Font("Source Sans Pro", Font.BOLD, scale_X(originalTextSize)));
+            selfComponent.setFont(new Font(font,Font.BOLD, scale_X(originalTextSize)));
         }
     }
 
@@ -332,7 +338,16 @@ public class ResizeManager implements ComponentListener {
      * @param originalSize to be resized
      */   
     public void setTextBounds(JComponent self, int originalSize) {
-        UIText_Label label = new UIText_Label(self, originalSize);
+        setTextBounds(self, originalSize, "Source Sans Pro");
+    }
+
+         /**
+     * Sets the images inside of UI element labels  to be resized when its container is resized
+     * @param self UI element which holds image
+     * @param originalSize to be resized
+     */   
+    public void setTextBounds(JComponent self, int originalSize, String font) {
+        UIText_Label label = new UIText_Label(self, originalSize, font);
         Gui_Text.add(label);
     }
 

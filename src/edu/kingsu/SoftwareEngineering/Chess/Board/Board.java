@@ -623,6 +623,11 @@ public class Board {
     private void updateNotation(String moveString) {
         if (currentTeam == Team.BLACK_TEAM) {
             algebraicRepresentation.append(moveCount).append(". ").append(moveString);
+
+             int moveStringWidth = 7; // Makes even algebraic notation columns
+             for (int i = moveString.length(); i < moveStringWidth; ++i) // Will only work if every character is the same width (MovesLabel.Font) is monospace
+                moveString += " ";
+
             gameLoop.updateChessNotationLabel(moveCount + ". " + moveString);
         } else {
             algebraicRepresentation.append(" ").append(moveString).append("\n");
