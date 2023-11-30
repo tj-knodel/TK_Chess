@@ -419,6 +419,10 @@ public class Board {
         return copiedBoard;
     }
 
+    /**
+     * Checks if a game is stalemate if the same moves are repeated.
+     * @return True if stalemate.
+     */
     public boolean isGameStalemate() {
         String lastWhiteMove = "";
         String lastBlackMove = "";
@@ -428,6 +432,8 @@ public class Board {
             String currentBlack = algebraicNotationMovesList.get(i);
             if(lastWhiteMove.equals(currentWhite) && lastBlackMove.equals(currentBlack)) {
                 sameMoveCounter++;
+            } else {
+                sameMoveCounter = 0;
             }
             lastWhiteMove = currentWhite;
             lastBlackMove = currentBlack;

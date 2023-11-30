@@ -279,7 +279,7 @@ public class GameLoop {
         });
 
         UILibrary.endViewBoardButton.addActionListener(e -> {
-//            resumeGame();
+            resumeGame();
             resetGUIAndListeners();
             setPlayerClickListeners();
             ChessUIManager.HideEndGameFrame();
