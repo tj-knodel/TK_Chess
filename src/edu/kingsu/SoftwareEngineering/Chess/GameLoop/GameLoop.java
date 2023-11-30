@@ -279,7 +279,7 @@ public class GameLoop {
         });
 
         UILibrary.endViewBoardButton.addActionListener(e -> {
-            resumeGame();
+//            resumeGame();
             resetGUIAndListeners();
             setPlayerClickListeners();
             ChessUIManager.HideEndGameFrame();
@@ -410,7 +410,7 @@ public class GameLoop {
     private void checkEndGameState(MoveResult result) {
         if (result.isCheckmate()) {
             showCheckmatePopup(result);
-        } else if (result.isStalemate()) {
+        } else if (result.isStalemate() || board.isGameStalemate()) {
             showStalemateScreen();
         }
     }
