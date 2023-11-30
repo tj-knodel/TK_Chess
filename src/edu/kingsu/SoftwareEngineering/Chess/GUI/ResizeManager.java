@@ -257,6 +257,7 @@ public class ResizeManager implements ComponentListener {
          * Sets class variables
          * @param self UI Component which holds the text
          * @param textSize original text size
+         * @param font Font of the text
          */
         UIText_Label(JComponent self, int textSize, String font) {
             this.selfComponent = self;
@@ -345,6 +346,7 @@ public class ResizeManager implements ComponentListener {
      * Sets the images inside of UI element labels  to be resized when its container is resized
      * @param self UI element which holds image
      * @param originalSize to be resized
+     * @param font font of the text
      */   
     public void setTextBounds(JComponent self, int originalSize, String font) {
         UIText_Label label = new UIText_Label(self, originalSize, font);
