@@ -29,5 +29,10 @@ public enum GameType {
     /**
      * The tutorial was selected.
      */
-    TUTORIAL
+    TUTORIAL,
+
+    /**
+     * Has the player selected the open game option.
+     */
+    LOADED_GAME
 }

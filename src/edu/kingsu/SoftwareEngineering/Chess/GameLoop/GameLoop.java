@@ -228,6 +228,7 @@ public class GameLoop {
             int returnValue = fileChooser.showSaveDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
+                this.gameType = GameType.LOADED_GAME;
                 createGame(-1);
                 board.loadPGNFile(file);
                 redrawUI();
@@ -279,9 +280,10 @@ public class GameLoop {
         });
 
         UILibrary.endViewBoardButton.addActionListener(e -> {
+            aiTeam = -1;
             resumeGame();
             resetGUIAndListeners();
-            setPlayerClickListeners();
+//            setPlayerClickListeners();
             ChessUIManager.HideEndGameFrame();
         });
 
@@ -410,7 +412,7 @@ public class GameLoop {
     private void checkEndGameState(MoveResult result) {
         if (result.isCheckmate()) {
             showCheckmatePopup(result);
-        } else if (result.isStalemate() || board.isGameStalemate()) {
+        } else if (result.isStalemate() || (board.isGameStalemate())) {
             showStalemateScreen();
         }
     }
@@ -419,6 +421,7 @@ public class GameLoop {
      * Show the stalemate screen.
      */
     private void showStalemateScreen() {
+        pauseTimers();
         ChessUIManager.ShowEndGameFrame("Stalemate!");
         board.setIsPaused(true);
     }
@@ -428,6 +431,7 @@ public class GameLoop {
      * @param result The move result of the last move to check for which team won.
      */
     private void showCheckmatePopup(MoveResult result) {
+        pauseTimers();
         ChessUIManager.ShowEndGameFrame(
                 ((result.getCheckmateTeam() == Team.WHITE_TEAM) ? "Black" : "White") + " team wins!");
         board.setIsPaused(true);

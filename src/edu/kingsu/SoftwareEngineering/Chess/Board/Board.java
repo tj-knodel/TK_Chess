@@ -425,8 +425,8 @@ public class Board {
      * @return True if stalemate.
      */
     public boolean isGameStalemate() {
-        if (algebraicNotationMovesList.size() < 10) return false;
-        int lastIndex = algebraicNotationMovesList.size() - 1;
+        if (algebraicNotationMovesList.size() - undoMoveCount < 10) return false;
+        int lastIndex = algebraicNotationMovesList.size() - 1 - undoMoveCount;
         if ((lastIndex + 1) % 2 != 0) return false;
         if ((algebraicNotationMovesList.get(lastIndex).equals(algebraicNotationMovesList.get(lastIndex - 4)) &&
                 algebraicNotationMovesList.get(lastIndex).equals(algebraicNotationMovesList.get(lastIndex - 8))) &&
