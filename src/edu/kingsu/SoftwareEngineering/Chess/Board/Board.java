@@ -744,6 +744,7 @@ public class Board {
     /**
      * Handles the move part to check if castling is requested.
      * @see BoardLocation
+     * @param board The Piece[][] to check on.
      * @param startMove The start location of the move.
      * @param endMove   The end location of the move.
      * @return True if castling is requested and valid.
@@ -896,6 +897,16 @@ public class Board {
         return possibleMoves;
     }
 
+    /**
+     * Gets all the possible moves for a specific team, ignoring
+     * if the king is in check afterward.
+     *
+     * @param board The board to check possible moves for the team.
+     * @param team  The team to get all possible moves for.
+     * @return Arraylist of Move classes for the possible moves a team can make.
+     * @see Piece
+     * @see Move
+     */
     public ArrayList<Move> getPossibleMovesForTeamWithoutCheckKingInCheckAsMoveClass(Piece[][] board, int team) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
         for (BoardLocation loc : getBoardLocationsForTeam(board, team)) {
@@ -1020,6 +1031,8 @@ public class Board {
      * @param board   The board to get the pieces locations for.
      * @param team    The team to get the moves for.
      * @param pieceId The piece to get locations for.
+     * @param targetLocation The target location to check for.
+     * @param row The row to check for.
      * @return ArrayList of BoardLocations of all locations of the pieces for the team.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocationForRow(Piece[][] board, int team,
@@ -1042,6 +1055,7 @@ public class Board {
      * @param board   The board to get the pieces locations for.
      * @param team    The team to get the moves for.
      * @param pieceId The piece to get locations for.
+     * @param targetLocation The target location to check for.
      * @return ArrayList of BoardLocations of all locations of the pieces for the team.
      */
     public ArrayList<BoardLocation> getBoardLocationsForTeamForPieceToTargetLocation(Piece[][] board, int team,

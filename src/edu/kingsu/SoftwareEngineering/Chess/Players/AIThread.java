@@ -8,11 +8,33 @@ import edu.kingsu.SoftwareEngineering.Chess.GameLoop.GameLoop;
  * A wrapper to store an AIPlayer
  */
 public class AIThread implements Runnable {
+
+    /**
+     * The AI player to get the move for.
+     */
     private Player aiPlayer;
+
+    /**
+     * The board class to reference helper functions.
+     */
     private Board board;
+
+    /**
+     * The current move.
+     */
     private Move curMove;
+
+    /**
+     * The gameloop to reference for helper functions.
+     */
     private GameLoop gameLoop;
 
+    /**
+     * Creates a new AI thread to run when requested.
+     * @param ai The AIPlayer to set to.
+     * @param board The board to reference.
+     * @param gameLoop The gameloop to reference.
+     */
     public AIThread(AIPlayer ai, Board board, GameLoop gameLoop) {
         aiPlayer = ai;
         this.board = board;
@@ -21,7 +43,7 @@ public class AIThread implements Runnable {
     }
 
     /**
-     * This function will 
+     * This function will run the ai and get the possible move.
      */
     @Override
     public void run() {
@@ -41,6 +63,10 @@ public class AIThread implements Runnable {
         }
     }
 
+    /**
+     * Get the current move of the ai's choice.
+     * @return The current move.
+     */
     public Move getMove() {
         return curMove;
     }

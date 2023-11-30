@@ -1,17 +1,26 @@
 package edu.kingsu.SoftwareEngineering.Chess.Players;
+
 import edu.kingsu.SoftwareEngineering.Chess.Board.*;
-import edu.kingsu.SoftwareEngineering.Chess.Board.Pieces.*;
 
 /**
  * @author Thaler Knodel
  * @version 0.1.0
  */
 public abstract class Player {
+
+    /**
+     * The team the player is on.
+     */
     protected int colour;
+
+    /**
+     * The name the player has.
+     */
     protected String name;
 
     /**
      * Gets a move from the player and returns it
+     * @param board The board class to reference for helper functions.
      * @return the selected move
      */
     public abstract Move getMove(Board board);
