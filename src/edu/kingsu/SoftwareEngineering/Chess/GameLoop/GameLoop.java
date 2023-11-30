@@ -228,7 +228,7 @@ public class GameLoop {
             int returnValue = fileChooser.showSaveDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                this.gameType = GameType.LOADED_GAME;
+                this.gameType = GameType.PLAYER_VS_PLAYER;
                 createGame(-1);
                 board.loadPGNFile(file);
                 redrawUI();
