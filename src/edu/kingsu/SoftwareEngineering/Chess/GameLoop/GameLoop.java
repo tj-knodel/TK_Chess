@@ -94,13 +94,18 @@ public class GameLoop {
     private int aiStrength;
 
     /**
+     * The max ai strength level from the slider interpolation.
+     */
+    private static final int MAX_AI_STRENGTH = 5;
+
+    /**
      * Creates a new game loop class and sets up all the listeners
      * to the UILibrary.
      * @see UILibrary
      */
     public GameLoop() {
-        this.aiThinkTimeSeconds = 1;
-        this.aiStrength = 0;
+        this.aiThinkTimeSeconds = 10;
+        this.aiStrength = 30;
         this.aiTeam = -1;
         this.moveController = new MoveController();
         this.tutorialMoves = new ArrayList<>();
@@ -159,13 +164,13 @@ public class GameLoop {
 
         CreateCompSliderFrame temp = new CreateCompSliderFrame();
         UILibrary.ShowAIStrengthSlider_JMenuItem.addActionListener(e -> {
-            Integer value = temp.showAISlider(25);
+            Integer value = temp.showAISlider(aiStrength);
             if (value != null) {
                 aiStrength = value;
             }
         });
         UILibrary.ShowAITimeOutSlider_JMenuItem.addActionListener(e -> {
-            Integer value = temp.showAISliderTimeOut(3);
+            Integer value = temp.showAISliderTimeOut(aiThinkTimeSeconds);
             if (value != null) {
                 aiThinkTimeSeconds = value;
             }
@@ -446,7 +451,7 @@ public class GameLoop {
         if (board.getIsPaused())
             return;
         if (aiTeam == board.getTeamTurn()) {
-            AIThread ai = new AIThread(new AIPlayer((int) (aiStrength / 100.0 * 10.0), aiTeam, "Smart AI", this), board,
+            AIThread ai = new AIThread(new AIPlayer((int) ((aiStrength / 100.0) * MAX_AI_STRENGTH), aiTeam, "Smart AI", this), board,
                     this);
             Thread runningThread = new Thread(ai);
             runningThread.start();
