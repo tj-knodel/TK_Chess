@@ -421,28 +421,18 @@ public class Board {
 
     /**
      * Checks if a game is stalemate if the same moves are repeated.
+     *
      * @return True if stalemate.
      */
     public boolean isGameStalemate() {
-        String lastWhiteMove = "";
-        String lastBlackMove = "";
-        int sameMoveCounter = 0;
-        for (int i = algebraicNotationMovesList.size() - 1; i >= 1; i -= 4) {
-            String currentWhite = algebraicNotationMovesList.get(i - 1);
-            String currentBlack = algebraicNotationMovesList.get(i);
-            if(lastWhiteMove.equals(currentWhite) && lastBlackMove.equals(currentBlack)) {
-                sameMoveCounter++;
-            } else {
-                sameMoveCounter = 0;
-            }
-            lastWhiteMove = currentWhite;
-            lastBlackMove = currentBlack;
-        }
-        System.out.println(sameMoveCounter);
-        if(sameMoveCounter >= 2) {
+        if (algebraicNotationMovesList.size() < 10) return false;
+        int lastIndex = algebraicNotationMovesList.size() - 1;
+        if ((lastIndex + 1) % 2 != 0) return false;
+        if ((algebraicNotationMovesList.get(lastIndex).equals(algebraicNotationMovesList.get(lastIndex - 4)) &&
+                algebraicNotationMovesList.get(lastIndex).equals(algebraicNotationMovesList.get(lastIndex - 8))) &&
+                algebraicNotationMovesList.get(lastIndex - 1).equals(algebraicNotationMovesList.get(lastIndex - 5)) &&
+                algebraicNotationMovesList.get(lastIndex - 1).equals(algebraicNotationMovesList.get(lastIndex - 9)))
             return true;
-        }
-
 
         return false;
     }
@@ -674,8 +664,8 @@ public class Board {
         if (currentTeam == Team.BLACK_TEAM) {
             algebraicRepresentation.append(moveCount).append(". ").append(moveString);
 
-             int moveStringWidth = 7; // Makes even algebraic notation columns
-             for (int i = moveString.length(); i < moveStringWidth; ++i) // Will only work if every character is the same width (MovesLabel.Font) is monospace
+            int moveStringWidth = 7; // Makes even algebraic notation columns
+            for (int i = moveString.length(); i < moveStringWidth; ++i) // Will only work if every character is the same width (MovesLabel.Font) is monospace
                 moveString += " ";
 
             gameLoop.updateChessNotationLabel(moveCount + ". " + moveString);
