@@ -105,7 +105,7 @@ public class GameLoop {
      */
     public GameLoop() {
         this.aiThinkTimeSeconds = 10;
-        this.aiStrength = 30;
+        this.aiStrength = 60;
         this.aiTeam = -1;
         this.moveController = new MoveController();
         this.tutorialMoves = new ArrayList<>();
@@ -174,6 +174,21 @@ public class GameLoop {
             if (value != null) {
                 aiThinkTimeSeconds = value;
             }
+        });
+
+        UILibrary.SetAIStrengthEasy_JMenuItem.addActionListener(e -> {
+            aiStrength = 0;
+            aiThinkTimeSeconds = 1;
+        });
+
+        UILibrary.SetAIStrengthMedium_JMenuItem.addActionListener(e -> {
+            aiStrength = 60;
+            aiThinkTimeSeconds = 10;
+        });
+
+        UILibrary.SetAIStrengthMax_JMenuItem.addActionListener(e -> {
+            aiStrength = 100;
+            aiThinkTimeSeconds = 20;
         });
 
         UILibrary.StepBackwards_Button.addActionListener(e -> {
