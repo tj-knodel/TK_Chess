@@ -17,6 +17,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
@@ -97,7 +98,7 @@ public class CreateMainFrame {
         MovesLabel.setWrapStyleWord(true);
         UILibrary.resizeModule.setVariableBounds(MovesLabel, null, 984, 209, 372, 531); // Numbers from Figma Design
         MovesLabel.setBackground(UILibrary.ForegroundColor);
-        UILibrary.resizeModule.setTextBounds(MovesLabel, 22);
+        UILibrary.resizeModule.setTextBounds(MovesLabel, 22, Font.MONOSPACED);
         MovesLabel.setForeground(UILibrary.TextColor_White);
         MovesLabel.setEditable(false);
         MovesLabel.setHighlighter(null);
